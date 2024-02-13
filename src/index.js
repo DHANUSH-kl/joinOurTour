@@ -8,6 +8,7 @@ import { urlencoded } from 'express';
 import path from 'path'; 
 import { fileURLToPath } from 'url';
 import { dirname } from 'path';
+import cookieParser from 'cookie-parser';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -31,21 +32,31 @@ connectDB()
 app.use(express.urlencoded({extended : true}));
 app.use(methodOverride("_method"));
 app.use(express.static(path.join(__dirname , "/public")));
+app.use(cookieParser());
 app.set("view engine" , "ejs");
 app.set("views" , path.join(__dirname , "views" ));
 app.engine("ejs",ejsMate);
 
 
-app.get("/",(req,res)=> {
-    res.render("admin/newTrip.ejs")
-})
 
-app.post("/",(req,res) => {
-    let {departure,tripTitle,totalDays,startLocation,tripDescription,} = req.body;
-    console.log(departure);
-    console.log(tripTitle);
-    console.log(totalDays);
-    console.log(startLocation);
-    console.log(tripDescription);
-    res.redirect("/");
-})
+//import routes
+
+import tripRoutes from './routes/trip.route.js';
+
+//route decleration
+
+app.use("/" , tripRoutes)
+
+// app.get("/",(req,res)=> {
+//     res.render("admin/newTrip.ejs")
+// })
+
+// app.post("/",(req,res) => {
+//     let {departure,tripTitle,totalDays,startLocation,tripDescription,} = req.body;
+//     console.log(departure);
+//     console.log(tripTitle);
+//     console.log(totalDays);
+//     console.log(startLocation);
+//     console.log(tripDescription);
+//     res.redirect("/");
+// })
