@@ -1,0 +1,7 @@
+body {
+    background-color: beige !important;
+    overflow-y: scroll !important;
+    overflow-x: hidden !important; 
+    height: 100vh !important;
+    width: 100vw !important;
+}

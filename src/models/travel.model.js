@@ -1,7 +1,7 @@
 import mongoose from "mongoose";
 
 const tripSchema = new mongoose.Schema({
-    departureDate : {
+    departure : {
         type : String,
         required : true
     },
