@@ -1,7 +1,9 @@
 import express from 'express';
 import bodyParser from 'body-parser';
-
 const app = express();
+import { storage } from '../cloudinary.js';
+import multer from 'multer';
+const upload = multer({ storage });
 
 // Use body-parser middleware to parse form data
 app.use(bodyParser.urlencoded({ extended: true }));
@@ -12,7 +14,8 @@ const showNewTrip = (req,res) => {
 }
 
 const addNewTrip = (req,res)=>{
-    let {departure,catagaries,title,description,accomodations,aboutLeader,includes} = req.body;
+    let {departure,catagaries,title,description,accomodations,aboutLeader,includes,tripImages} = req.body;
+    const url = req.files.map(file => file.path);
     console.log(departure);
     console.log(catagaries);
     console.log(title);
@@ -20,7 +23,10 @@ const addNewTrip = (req,res)=>{
     console.log(aboutLeader);
     console.log(accomodations);
     console.log(includes);
-    res.redirect("/");
+    console.log(tripImages);
+    console.log(url);
+    
+    // res.redirect("/");
 }
 
 export {showNewTrip , addNewTrip};
