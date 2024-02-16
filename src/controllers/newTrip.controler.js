@@ -14,17 +14,19 @@ const showNewTrip = (req,res) => {
 }
 
 const addNewTrip = (req,res)=>{
-    let {departure,catagaries,title,description,accomodations,aboutLeader,includes,tripImages} = req.body;
+    let {departure,catagaries,title,description,accomodations,aboutLeader,includes,location,tripImages,totalDays,stopLocation,stopDescription} = req.body;
     const url = req.files.map(file => file.path);
-    console.log(departure);
-    console.log(catagaries);
-    console.log(title);
-    console.log(description);
-    console.log(aboutLeader);
-    console.log(accomodations);
-    console.log(includes);
-    console.log(tripImages);
-    console.log(url);
+    console.log("departure ",departure);
+    console.log("catagaries ",catagaries);
+    console.log('title ',title);
+    console.log('description ',description);
+    console.log('aboutLeader ',aboutLeader);
+    console.log('accomodations ',accomodations);
+    console.log('includes ',includes);
+    console.log('totalDays ',totalDays);
+    console.log('stopLocation ',stopLocation);
+    console.log('stopDescription ',stopDescription);
+    console.log('location ',location);
     
     // res.redirect("/");
 }
