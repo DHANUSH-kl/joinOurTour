@@ -3,41 +3,44 @@ import mongoose from "mongoose";
 const tripSchema = new mongoose.Schema({
     departure : {
         type : String,
-        required : true
-    },
-    title : {
-        type : String,
-        required : true
-    },
-
-    //images 
-
-    totalDays : {
-        type : Number,
-        required : true
     },
     location : {
         type : String,
-        required : true
+    },
+    categories : {
+        type : String,
+    },
+    title : {
+        type : String,
     },
     tripDescription : {
         type : String,
-        required : true,
-        minlength: [200, "Trip description must be at least 200 characters."]
+        // minlength: [200, "Trip description must be at least 200 characters."]
+    },
+    accomodations : {
+        trype : [String]
     },
     includes : {
         type : [String]
     },
-    excludes : {
+    tripImages : {
+        type: [String],
+    },
+    totalDays : {
+        type : Number,
+    },
+    stopImages : {
+        type : [String],
+    },
+    stopLocation : {
+        type : [String],
+    },
+    stopDescription : {
         type : [String],
     },
     tripLeaderMessage : {
         type : String
     },
-    stops : {
-        type : mongoose.Schema.Types.ObjectId,
-        ref : "TripStops"
-    }
 } , {timestamps:true});
 
 

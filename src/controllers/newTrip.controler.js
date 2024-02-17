@@ -4,22 +4,27 @@ const app = express();
 import { storage } from '../cloudinary.js';
 import multer from 'multer';
 const upload = multer({ storage });
+import { Trip } from '../models/travel.model.js';
 
 // Use body-parser middleware to parse form data
 app.use(bodyParser.urlencoded({ extended: true }));
 
 
-const showNewTrip = (req,res) => {
-    res.render("admin/newTrip.ejs")
+// creating a new trip 
+
+const newTripForm = async (req,res) => {
+    res.render("admin/newTrip.ejs" );
 }
 
-const addNewTrip = (req,res)=>{
-    let {departure,catagaries,title,description,accomodations,aboutLeader,includes,location,tripImages,totalDays,stopLocation,stopDescription} = req.body;
+// posting new trip 
+
+const addNewTrip = async (req,res)=>{
+    let {departure,catagaries,title,tripDescription,accomodations,aboutLeader,includes,location,tripImages,totalDays,stopLocation,stopDescription} = req.body;
     const url = req.files.map(file => file.path);
     console.log("departure ",departure);
     console.log("catagaries ",catagaries);
     console.log('title ',title);
-    console.log('description ',description);
+    console.log('description ',tripDescription);
     console.log('aboutLeader ',aboutLeader);
     console.log('accomodations ',accomodations);
     console.log('includes ',includes);
@@ -27,8 +32,45 @@ const addNewTrip = (req,res)=>{
     console.log('stopLocation ',stopLocation);
     console.log('stopDescription ',stopDescription);
     console.log('location ',location);
+
+
+    const newTrip = new Trip ({
+        departure,
+        location,
+        catagaries,
+        title,
+        tripDescription,
+        accomodations,
+        includes,
+        totalDays,
+        stopLocation,
+        stopDescription,
+    });
+
+    await newTrip.save();
+    console.log(newTrip);
+
     
-    // res.redirect("/");
+    res.redirect("/");
 }
 
-export {showNewTrip , addNewTrip};
+// displaying all trips 
+
+const showAllTrips = async (req,res) => {
+    const allTrips = await Trip.find();
+    console.log(allTrips)
+
+    res.render( "admin/showAll" , {allTrips})
+}
+
+// showing particular trip 
+
+const showTrip = async (req,res) => {
+    let {id} = req.params;
+    const trip = await Trip.findById(id);
+    res.render("admin/trip.ejs" , {trip})
+}
+
+
+
+export { newTripForm ,showAllTrips , addNewTrip , showTrip};

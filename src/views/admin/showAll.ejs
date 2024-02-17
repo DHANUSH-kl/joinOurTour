@@ -1,0 +1,8 @@
+<% layout("./layouts/boilerplate.ejs") %>
+
+<h1>all trips</h1>
+
+
+<%for(trips of allTrips) {%>
+    <h2><a href="/allTrips/<%= trips._id %>"><%= trips.title %> </a></h2>
+<%}%>
