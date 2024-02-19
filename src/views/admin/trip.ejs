@@ -9,3 +9,7 @@
 
 <h1><%= trip.stopLocation %></h1>
 <h1><%= trip.stopDescription %></h1>
+
+<form action="/alltrips/<%= trip._id %>/editTrip" method="GET">
+    <button>Edit</button>
+</form>

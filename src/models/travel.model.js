@@ -8,7 +8,7 @@ const tripSchema = new mongoose.Schema({
         type : String,
     },
     categories : {
-        type : String,
+        type : [String],
     },
     title : {
         type : String,
@@ -18,7 +18,7 @@ const tripSchema = new mongoose.Schema({
         // minlength: [200, "Trip description must be at least 200 characters."]
     },
     accomodations : {
-        trype : [String]
+        type : [String]
     },
     includes : {
         type : [String]

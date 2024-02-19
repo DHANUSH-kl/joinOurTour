@@ -1,0 +1,229 @@
+<% if (trip) {%>
+    <% layout("./layouts/boilerplate.ejs") %>
+
+    <h1>Edit your trip</h1>
+
+    <form action="/alltrips/<%= trip._id %>/editTrip?_method=PUT" method="POST" class="col-6 offset-2 mt-5"
+        enctype="multipart/form-data">
+        <div>
+            <label for="departure" class="form-label mb-2">departure</label>
+            <input type="date" name="departure" id="departure" class="form-control " value="<%= trip.departure %>">
+        </div>
+
+        <div>
+            <label for="location" class="form-label mb-2">Enter location</label>
+            <input type="text" name="location" id="location" value="<%= trip.location %>" class="form-control ">
+        </div>
+
+
+
+        <div class="mt-3">
+            <label class="label-btns" for="one"><i class="fa-solid fa-utensils"></i> Foods</label>
+            <input type="checkbox" class="input-btns" id="one" autocomplete="off" value="<Foods>" name="catagaries[]">
+
+            <label class="label-btns" for="two"><i class="fa-solid fa-umbrella-beach"></i> Beach</label>
+            <input type="checkbox" class="input-btns" id="two" autocomplete="off" value="Beach" name="catagaries[]">
+
+            <label class="label-btns" for="three"><i class="fa-brands fa-fort-awesome"></i> Culture</label>
+            <input type="checkbox" class="input-btns" id="three" autocomplete="off" value="Culture" name="catagaries[]">
+
+            <label class="label-btns" for="four"><i class="fa-solid fa-champagne-glasses"></i> Party</label>
+            <input type="checkbox" class="input-btns" id="four" autocomplete="off" value="Party" name="catagaries[]">
+
+            <label class="label-btns" for="five"><i class="fa-solid fa-volleyball"></i> Sports</label>
+            <input type="checkbox" class="input-btns" id="five" autocomplete="off" value="Sports" name="catagaries[]">
+
+            <label class="label-btns" for="six"><i class="fa-solid fa-mountain-sun"></i> Nature</label>
+            <input type="checkbox" class="input-btns" id="six" autocomplete="off" value="Nature" name="catagaries[]">
+
+        </div>
+
+        <div class="mt-3">
+            <label for="title" class="form-label mb-2">Trip title</label>
+            <input type="text" name="title" id="title" value="<%= trip.title %>" class="form-control ">
+        </div>
+
+        <div class="input-group mt-3">
+            <span class="input-group-text">Trip description</span>
+            <textarea class="form-control" name="tripDescription"
+                aria-label="With textarea"><%= trip.description %> </textarea>
+        </div>
+        <!-- <div class="input-group mt-3">
+            <span class="input-group-text">About you</span>
+            <textarea class="form-control" name="aboutLeader" aria-label="With textarea"
+                placeholder="Introduce yourself and your expectations of the trip.."></textarea>
+        </div> -->
+
+        <div class="accomodations mt-3">
+            <label class="form-check-label" for="1">
+                Hotels
+            </label>
+            <input class="form-check-input" type="checkbox" value="Hotel" id="1" name="accomodations[]">
+
+            <label class="form-check-label" for="2">
+                Hostels
+            </label>
+            <input class="form-check-input" type="checkbox" value="Hostels" id="2" name="accomodations[]">
+
+            <label class="form-check-label" for="3">
+                Apartments
+            </label>
+            <input class="form-check-input" type="checkbox" value="Apartments" id="3" name="accomodations[]">
+
+            <label class="form-check-label" for="4">
+                Camping
+            </label>
+            <input class="form-check-input" type="checkbox" value="Camping" id="4" name="accomodations[]">
+
+            <label class="form-check-label" for="5">
+                Bed & Breakfast
+            </label>
+            <input class="form-check-input" type="checkbox" value="Bed & Breakfast" id="5" name="accomodations[]">
+        </div>
+
+        <div class="input-group mt-3 mb-3">
+            <input type="text" class="form-control" id="todoInput" placeholder="Enter includes"
+                aria-label="Example text with button addon" aria-describedby="button-addon1">
+            <button onclick="addTodo()" class="btn btn-outline-secondary" type="button" id="button-addon1">Add</button>
+        </div>
+
+        <div id="todoContainer">
+            <!-- Render existing includes -->
+            <% for (let i = 0; i < trip.includes.length; i++) { %>
+                <div class="todoItem">
+                    <input type="text" name="includes[]" value="<%= trip.includes[i] %>">
+                    <button class="deleteButton" type="button" onclick="deleteInclude(this)">Delete</button>
+                </div>
+            <% } %>
+        </div>
+
+
+        <div class="mt-3">
+            <label for="tripImages[]" class="form-label mb-2">Trip images</label>
+            <input type="file" name="tripImages[]" id="tripImages[]" class="form-control multiple ">
+        </div>
+
+        <div class="mt-3">
+            <label for="totalDays" class="form-label mb-2">Total days</label>
+            <input type="number" name="totalDays" id="totalDays" class="form-control " multiple>
+        </div>
+
+        <% if (trip && trip.stopLocation && trip.stopDescription) { %>
+            <div id="stops-container">
+                <% for (let i = 0; i < trip.stopLocation.length ; i++) { %>
+                    <div class="stop-section">
+                        <h3>Stop <%= i + 1 %></h3>
+        
+                        <label for="stopImages" class="form-label mb-2">Upload Image</label>
+                        <input type="file" name="stopImages[]" class="form-control">
+        
+                        <label for="stopLocation" class="form-label mb-2">Enter Location</label>
+                        <input type="text" name="stopLocation[]" class="form-control" value="<%= trip.stopLocation[i] %>">
+        
+                        <label for="stopDescription" class="form-label mb-2">Tell Us More</label>
+                        <input type="text" name="stopDescription[]" class="form-control" value="<%= trip.stopDescription[i] %>">
+        
+                        <button type="button" onclick="deleteStop(this)">Delete Stop</button>
+                    </div>
+                <% } %>
+            </div>
+        <% } else { %>
+            <p>Error loading Stop details. Please try again.</p>
+        <% } %>
+
+        
+
+        <button class="mt-3">SUBMIT</button>
+    </form>
+
+    <script>
+        function addTodo() {
+            // Get the value from the input field
+            var todoValue = document.getElementById('todoInput').value;
+
+
+            // Create a container div for the todo item
+            var todoContainer = document.createElement('div');
+            todoContainer.className = 'todoItem';
+
+            // Create a new input element for the todo
+            var newTodoInput = document.createElement('input');
+            newTodoInput.type = 'text';
+            newTodoInput.value = todoValue;
+            newTodoInput.name = 'includes[]';
+
+            // Create a delete button
+            var deleteButton = document.createElement('button');
+            deleteButton.className = 'deleteButton';
+            deleteButton.innerHTML = 'Delete';
+            deleteButton.onclick = function () {
+                // Remove the todo item when the delete button is clicked
+                todoContainer.remove();
+            };
+
+            // Append the new input and delete button to the todoContainer div
+            todoContainer.appendChild(newTodoInput);
+            todoContainer.appendChild(deleteButton);
+
+            // Append the todoContainer to the todoContainer div
+            document.getElementById('todoContainer').appendChild(todoContainer);
+
+            // Clear the input field for the next todo
+            document.getElementById('todoInput').value = '';
+
+
+
+
+        }
+
+
+        let stopCounter = 1;
+
+        function addStop() {
+            stopCounter++;
+
+            const stopsContainer = document.getElementById('stops-container');
+
+            const newStopSection = document.createElement('div');
+            newStopSection.className = 'stop-section';
+
+            newStopSection.innerHTML = `
+        <h3>Stop ${stopCounter}</h3>
+
+        <label for="stopImages" class="form-label mb-2">Upload Image</label>
+        <input type="file" name="stopImages[]" class="form-control">
+
+        <label for="stopLocation" class="form-label mb-2">Enter Location</label>
+        <input type="text" name="stopLocation[]" class="form-control">
+
+        <label for="stopDescription" class="form-label mb-2">Tell Us More</label>
+        <input type="text" name="stopDescription[]" class="form-control">
+
+        <button type="button" onclick="deleteStop(this)">Delete Stop</button>
+    `;
+
+            stopsContainer.appendChild(newStopSection);
+            updateStopNumbers();
+        }
+
+        function deleteStop(button) {
+            const stopsContainer = document.getElementById('stops-container');
+            const stopSection = button.parentNode;
+            stopsContainer.removeChild(stopSection);
+            stopCounter--;
+            updateStopNumbers();
+        }
+
+        function updateStopNumbers() {
+            const stops = document.getElementsByClassName('stop-section');
+            Array.from(stops).forEach((stop, index) => {
+                const stopNumber = index + 1;
+                stop.querySelector('h3').innerText = `Stop ${stopNumber}`;
+            });
+        }
+    </script>
+<%} else {%>
+    <p>Trip not found</p>
+<%}%>
+
+

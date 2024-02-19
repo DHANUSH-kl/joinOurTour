@@ -71,6 +71,15 @@ const showTrip = async (req,res) => {
     res.render("admin/trip.ejs" , {trip})
 }
 
+// edit trip 
 
+const editTripForm = async (req,res) => {
+    let {id} = req.params;
+    const trip = await Trip.findById(id);
+    console.log(id);
+    console.log(trip);
 
-export { newTripForm ,showAllTrips , addNewTrip , showTrip};
+    res.render("admin/editTrip.ejs" , {trip})
+}
+
+export { newTripForm ,showAllTrips , addNewTrip ,editTripForm, showTrip};
