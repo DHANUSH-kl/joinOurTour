@@ -48,7 +48,7 @@ const addNewTrip = async (req,res)=>{
         stopDescription,
     });
 
-    await newTrip.save();
+    // await newTrip.save();
 
     
     res.redirect("/");
