@@ -14,6 +14,7 @@ app.use(bodyParser.urlencoded({ extended: true }));
 
 const newTripForm = async (req,res) => {
     res.render("admin/newTrip.ejs" );
+    console.log(req.session)
 }
 
 // posting new trip 
@@ -48,7 +49,6 @@ const addNewTrip = async (req,res)=>{
     });
 
     await newTrip.save();
-    console.log(newTrip);
 
     
     res.redirect("/");
@@ -58,7 +58,6 @@ const addNewTrip = async (req,res)=>{
 
 const showAllTrips = async (req,res) => {
     const allTrips = await Trip.find();
-    console.log(allTrips)
 
     res.render( "admin/showAll" , {allTrips})
 }

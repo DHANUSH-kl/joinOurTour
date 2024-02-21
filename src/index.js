@@ -9,6 +9,10 @@ import path from 'path';
 import { fileURLToPath } from 'url';
 import { dirname } from 'path';
 import cookieParser from 'cookie-parser';
+import session from 'express-session';
+import passport from 'passport';
+import { Strategy as LocalStrategy } from 'passport-local';
+import {User} from "./models/user.model.js";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -30,6 +34,28 @@ connectDB()
 
 
 app.use(express.urlencoded({extended : true}));
+
+//express session
+
+
+const sessionInfo ={
+    secret : process.env.sessionSecret,
+    resave : false,
+    saveUninitialized : true
+};
+
+app.use(session(sessionInfo))
+
+app.use(passport.initialize());
+app.use(passport.session());
+
+passport.use(new LocalStrategy(User.authenticate()));
+
+passport.serializeUser(User.serializeUser());
+passport.deserializeUser(User.deserializeUser());
+
+
+
 app.use(methodOverride("_method"));
 app.use(express.static(path.join(__dirname , "/public")));
 app.use(cookieParser());
@@ -42,21 +68,13 @@ app.engine("ejs",ejsMate);
 //import routes
 
 import tripRoutes from './routes/trip.route.js';
+import leaderRoutes from './routes/leader.route.js';
+import userRoutes from './routes/user.route.js';
 
 //route decleration
 
-app.use("/" , tripRoutes)
+app.use("/" , tripRoutes);
+app.use("/leaderform" , leaderRoutes);
+app.use("/signup" , userRoutes);
 
-// app.get("/",(req,res)=> {
-//     res.render("admin/newTrip.ejs")
-// })
 
-// app.post("/",(req,res) => {
-//     let {departure,tripTitle,totalDays,startLocation,tripDescription,} = req.body;
-//     console.log(departure);
-//     console.log(tripTitle);
-//     console.log(totalDays);
-//     console.log(startLocation);
-//     console.log(tripDescription);
-//     res.redirect("/");
-// })
