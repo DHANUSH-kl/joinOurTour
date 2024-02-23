@@ -1,8 +1,247 @@
-body {
-    background-color: beige !important;
-    overflow-y: scroll !important;
-    overflow-x: hidden !important; 
-    height: 100vh !important;
-    width: 100vw !important;
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
 }
 
+body {
+    background-color: #f8f9fa;
+    overflow-y: scroll;
+    overflow-x: hidden;
+    height: 100vh;
+    width: 100vw;
+
+}
+
+form {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 4rem;
+    margin-top: 12rem;
+}
+
+.input-container {
+    position: relative;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}
+
+input {
+    width: 50%;
+    padding: 10px;
+    outline: none;
+    color: #343a40;
+    border: 2px solid #343a40;
+    border-radius: 0.3rem;
+    font-family: lato;
+    margin: 5px 0;
+    
+}
+
+input:focus {
+    background-color: #343a40;
+    color: #f8f9fa;
+    border-radius: 1rem;
+    transition: ease-in-out 0.1s;
+    border: 2px solid #f8f9fa;
+}
+
+.input-container label {
+    color: #495057;
+    position: absolute;
+    top: -30px;
+    left: 25%;
+    font-size: large;
+    font-family: lato;
+    font-size: 1.3rem;
+    font-weight: 700;
+}
+
+
+.btn {
+    width: 7rem;
+    padding: 0.5rem;
+    border: 2px solid #495057;
+    border-radius: 5px;
+    font-family: lato;
+    font-weight: 800;
+}
+.btn:hover{
+    color: white;
+    background-color: #343a40;
+    transition: 0.1s ease-in-out;
+}
+
+
+.catagaries-text {
+    font-family: lato;
+    font-size: 1.3rem;
+    font-weight: 900;
+    text-align: center;
+}
+
+.catagaries-container {
+    display: flex;
+    flex-wrap: wrap;
+    width: 100vw;
+    height: 30vh;
+    justify-content: center;
+    align-items: center;
+}
+.catagaries-container div {
+    width: 12rem;
+    height: 12rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+.catagaries-container label {
+    width: 6.5rem;
+    height: 2.5rem;
+    background-color: #343a40;
+    color: #f8f9fa;
+    font-family: lato;
+    font-weight: 800;
+    font-size: 1rem;
+    text-align: center;
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 5px;
+}
+.catagaries-container label i{
+    color: white;
+    margin-right: 1rem;
+}
+.catagaries-container input:checked label i{
+    color: #343a40;
+}
+
+.textarea-container {
+    width: 100vw;
+    height: 30vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 1rem;
+}
+.input-container-textarea {
+    width: 50%;
+    height: 50%;
+    border: 2px solid #343a40;
+    border-radius: 5px;
+    padding: 1rem;
+
+}
+.input-container-textarea::placeholder{
+    text-align: center;
+}
+
+.input-container-textarea:focus::placeholder{
+    color: white;
+}
+.input-container-textarea:focus{
+    background-color: #343a40;
+    color: #f8f9fa;
+    border-radius: 1rem;
+}
+
+.input-group-text {
+    font-family: lato;
+    font-size: 1.3rem;
+    font-weight: 900;
+    text-align: center;
+}
+
+.accomodations {
+    width: 100vw;
+    height: 40vh;
+    display: flex;
+    justify-content: center;
+    flex-wrap: nowrap;
+    gap: 1.5rem;
+    align-items: center;
+}
+
+.acc-input {
+    width: 1rem;
+}
+
+.accomodations label {
+    width: 6rem;
+    height: 4rem;
+    background-color: #343a40;
+    padding: 1rem;
+    text-align: center;
+    color: #f8f9fa;
+    border-radius: 5px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-family: lato;
+    font-weight: 800;
+}
+
+.includes-container{
+    width: 100vw;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.includes-container .btn {
+    margin-left: 1.5rem;
+}
+
+.todoItem {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 1rem;
+}
+
+.stop-section{
+    width: 100vw;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    gap: 1.5rem;
+    margin-top: 2rem;
+}
+.stop-section h3 {
+    font-family: lato;
+    font-size: 1.5rem;
+    font-weight: 800;
+}
+.stop-section label {
+    font-family: lato;
+    font-size: 1.3rem;
+    font-weight: 800;
+}
+
+.submit-btn {
+    background-color: white;
+    border: 2px solid #343a40;
+    color: #343a40;
+    font-family: lato;
+    font-weight: 600;
+    padding: 0.6rem 2rem;
+    text-align: center;
+    border-radius: 5px;
+}
+
+.submit-btn:hover{
+    background-color: #343a40;
+    color: white;
+    border-radius: 1rem;
+    transition: ease-in 0.2s;
+}
