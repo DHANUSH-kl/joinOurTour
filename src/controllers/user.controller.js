@@ -18,7 +18,6 @@ const signupUser = async(req,res) => {
         username,
         email
     });
-
     const registeredUser  = await User.register(newUser , password);
 
     console.log(registeredUser);
@@ -32,4 +31,15 @@ const signinForm = async (req,res) => {
 const signinUser = async(req,res) => {
     res.redirect("/allTrips")
 }
-export {signupForm , signupUser , signinForm , signinUser };
+
+const becomeOwnerForm = async(req,res) => {
+    res.render("user/ownerForm.ejs")
+}
+
+const postOwner = async(req,res) => {
+    const {email,secret} = req.body;
+    console.log(email,secret);
+}
+
+
+export {signupForm , signupUser , signinForm , signinUser , becomeOwnerForm , postOwner };

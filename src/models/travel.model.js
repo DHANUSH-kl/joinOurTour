@@ -4,6 +4,9 @@ const tripSchema = new mongoose.Schema({
     departure : {
         type : String,
     },
+    endDate : {
+        type : String
+    },
     location : {
         type : String,
     },
