@@ -6,6 +6,10 @@ const userSchema = new mongoose.Schema( {
         type : String,
         required : true,
     },
+    isAgent : {
+        type : Boolean,
+        default : false,
+    }
 } , {timestamps : true} )
 
 userSchema.plugin(passportLocalMongoose);

@@ -2,9 +2,10 @@ import { Router } from "express";
 const router = Router();
 import { signupForm , signupUser , signinForm , signinUser , becomeOwnerForm , postOwner } from "../controllers/user.controller.js";
 import passport from "passport";
+import { asyncWrap } from "../constants.js";
 
 router.route("/")
-    .get(signupForm)
+    .get(asyncWrap(signupForm))
     .post(signupUser)
 
 router.route("/signin")

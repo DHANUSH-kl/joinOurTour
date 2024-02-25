@@ -13,8 +13,10 @@ app.use(bodyParser.urlencoded({ extended: true }));
 // creating a new trip 
 
 const newTripForm = async (req, res) => {
-    res.render("admin/newTrip.ejs");
     console.log(req.session)
+    console.log(req.user)
+    res.render("admin/newTrip.ejs");
+    
 }
 
 // posting new trip 
@@ -39,7 +41,8 @@ const addNewTrip = async (req, res) => {
     console.log('totalDays ', totalDays);
     console.log('stopLocation ', stopLocation);
     console.log('stopDescription ', stopDescription);
-    console.log(req.body)
+
+
     // console.log("tripImages" , tripImages);
     // console.log("stopImages" , stopImages);
 
@@ -61,14 +64,15 @@ const addNewTrip = async (req, res) => {
     // await newTrip.save();
 
 
-    res.redirect("/allTrips");
+    // res.redirect("/allTrips");
 }
 
 // displaying all trips 
 
 const showAllTrips = async (req, res) => {
     const allTrips = await Trip.find();
-
+    console.log(req.user);
+    console.log(req.isAuthenticated())
     res.render("admin/showAll", { allTrips })
 }
 
@@ -85,10 +89,16 @@ const showTrip = async (req, res) => {
 const editTripForm = async (req, res) => {
     let { id } = req.params;
     const trip = await Trip.findById(id);
-    console.log(id);
-    console.log(trip);
+    // console.log(id);
+    // console.log(trip);
 
     res.render("admin/editTrip.ejs", { trip })
 }
 
-export { newTripForm, showAllTrips, addNewTrip, editTripForm, showTrip };
+const deleteTrip = async(req,res) => {
+    let {id} = req.params;
+    await Trip.findByIdAndDelete(id);
+    res.redirect("/allTrips")
+}
+
+export { newTripForm, showAllTrips, addNewTrip, editTripForm, showTrip , deleteTrip };
