@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <div class="row">
+        <div class="col-6 offset-3">
+            <form action="/admin/tripleaderform" method="POST">
+                <div>
+                    <label for="companyName" class="form-label mb-2">Name of the company</label>
+                    <input type="text" name="companyName" id="companyName" class="form-control" novalidate>
+                </div>
+                <div>
+                    <label for="companyEstablishedYear" class="form-label mb-2">Year established on</label>
+                    <input name="companyEstablishedYear" id="companyEstablishedYear" novalidate>
+                </div>
+                <div>
+                    <label for="companyContactNumber" class="form-label mb-2">Company contact number</label>
+                    <input type="text" name="companyContactNumber" id="companyContactNumber" class="form-control"
+                        novalidate>
+                </div>
+                <div>
+                    <label for="companyEmail" class="form-label mb-2">Company email id</label>
+                    <input type="text" name="companyEmail" id="companyEmail" class="form-control" novalidate>
+                </div>
+                <div>
+                    <label for="emergencyContactNumber" class="form-label mb-2">Emergency contact number</label>
+                    <input type="text" name="emergencyContactNumber" id="emergencyContactNumber" class="form-control"
+                        novalidate>
+                </div>
+                <div>
+                    <label for="aboutCompany" class="form-label mb-2">about company</label>
+                    <textarea type="text" name="aboutCompany" id="aboutCompany" novalidate></textarea>
+                </div>
+                <div class="mt-3">
+                    <label for="companyLogo" class="form-label mb-2">Company logo</label>
+                    <input type="file" name="companyLogo" id="companyLogo" class="form-control">
+                </div>
+
+                <div class="languagesKnown-container mt-3 mb-3">
+                    <input type="text" class="form-control" id="languageInput" placeholder="Enter includes"
+                        aria-label="Example text with button addon" aria-describedby="button-addon1">
+                    <button onclick="addTodo()" class="btn" type="button" id="button-addon1">Add</button>
+                </div>
+
+                <div id="languagesConatiner">
+                    <!-- Todos will be added here -->
+                </div>
+
+                <div class="mt-3">
+                    <label for="leaderInstagram" class="form-label mb-2">your Instagram account</label>
+                    <input type="text" name="leaderInstagram" id="leaderInstagram" class="form-control" novalidate>
+                </div>
+                <button class="btn btn-success mt-3">submit your details</button>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        function addTodo() {
+            // Get the value from the input field
+            var todoValue = document.getElementById('languageInput').value;
+
+            // Create a container div for the todo item
+            var todoContainer = document.createElement('div');
+            todoContainer.className = 'todoItem';
+
+            // Create a new input element for the todo
+            var newTodoInput = document.createElement('input');
+            newTodoInput.type = 'text';
+            newTodoInput.value = todoValue;
+            newTodoInput.name = 'languages[]';
+
+            // Create a delete button
+            var deleteButton = document.createElement('button');
+            deleteButton.className = 'deleteButton';
+            deleteButton.className = 'btn';
+            deleteButton.innerHTML = 'Delete';
+            deleteButton.onclick = function () {
+                // Remove the todo item when the delete button is clicked
+                todoContainer.remove();
+            };
+
+            // Append the new input and delete button to the todoContainer div
+            todoContainer.appendChild(newTodoInput);
+            todoContainer.appendChild(deleteButton);
+
+
+            // Append the todoContainer to the todoContainer div
+            document.getElementById('languagesConatiner').appendChild(todoContainer);
+
+            // Clear the input field for the next todo
+            document.getElementById('languageInput').value = '';
+        }
+    </script>
+</body>
+
+</html>

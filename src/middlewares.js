@@ -23,4 +23,16 @@ const isAgent = async (req,res,next) => {
     }
 }
 
-export {isLoggedIn , isAgent };
+const isOwner = async (req,res,next) => {
+    if(req.user){
+        let user = await User.findById(req.user._id);
+        if(user && user.isOwner == true) {
+            next();
+        }
+        else{
+            res.redirect('/signup/owner');
+        }
+    }
+}
+
+export {isLoggedIn , isAgent , isOwner };

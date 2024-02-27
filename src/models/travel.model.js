@@ -1,4 +1,5 @@
-import mongoose from "mongoose";
+import mongoose, { Schema } from "mongoose";
+import { User } from "./user.model.js";
 
 const tripSchema = new mongoose.Schema({
     departure : {
@@ -43,6 +44,10 @@ const tripSchema = new mongoose.Schema({
     },
     tripLeaderMessage : {
         type : String
+    },
+    owner : {
+        type : Schema.Types.ObjectId,
+        ref : "User"
     },
 } , {timestamps:true});
 

@@ -33,6 +33,7 @@ connectDB()
         console.log("mongoDB connection error", error);
     })
 
+    
 
 app.use(express.urlencoded({ extended: true }));
 
@@ -43,10 +44,10 @@ const sessionInfo = {
     secret: process.env.sessionSecret,
     resave: false,
     saveUninitialized: true,
-    cookie : {
-        expires : Date.now() + 7*24*60*60*1000,
-        maxAge : 7*24*60*60*1000,
-        httpOnly : true
+    cookie: {
+        expires: Date.now() + 7 * 24 * 60 * 60 * 1000,
+        maxAge: 7 * 24 * 60 * 60 * 1000,
+        httpOnly: true
     },
 };
 
@@ -71,29 +72,33 @@ app.set("view engine", "ejs");
 app.set("views", path.join(__dirname, "views"));
 app.engine("ejs", ejsMate);
 
+app.use((req, res, next) => {
+    res.locals.currUser = req.user;
+    next();
+});
 
 
 //import routes
 
 import tripRoutes from './routes/trip.route.js';
-import leaderRoutes from './routes/leader.route.js';
 import userRoutes from './routes/user.route.js';
+import adminRoutes from './routes/admin.route.js';
 
 //route decleration
 
 app.use("/", tripRoutes);
-app.use("/leaderform", leaderRoutes);
 app.use("/signup", userRoutes);
+app.use("/admin" , adminRoutes);
 
+
+// app.use((err, req, res, next) => {
+//    res.send("SOMETHING went wrong");
+// })
 
 app.use((err, req, res, next) => {
-   res.send("SOMETHING went wrong");
-})
-
-app.use((err,req,res,next) => {
-    let {statusCode = 500 , message = "something went wrong!"} = err;
+    let { statusCode = 500, message = "something went wrong!" } = err;
     res.status(statusCode).send(message);
 })
-app.all("*" , (err,req,res,next) => {
-    next(new expressError(404 , "page not found"))
+app.all("*", (err, req, res, next) => {
+    next(new expressError(404, "page not found"))
 })

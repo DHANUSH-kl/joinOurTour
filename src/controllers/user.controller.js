@@ -1,11 +1,10 @@
 import express from 'express';
 import bodyParser from 'body-parser';
-const app = express();
 import {User} from '../models/user.model.js';
 
+const app = express();
 
 app.use(bodyParser.urlencoded({ extended: true }));
-
 
 const signupForm = async (req,res) => {
     res.render("user/signupForm.ejs");
@@ -21,7 +20,7 @@ const signupUser = async(req,res) => {
     const registeredUser  = await User.register(newUser , password);
 
     console.log(registeredUser);
-    res.redirect("/allTrips")
+    // res.redirect("/")
 }
 
 const signinForm = async (req,res) => {
@@ -29,17 +28,8 @@ const signinForm = async (req,res) => {
 }
 
 const signinUser = async(req,res) => {
-    res.redirect("/allTrips")
-}
-
-const becomeOwnerForm = async(req,res) => {
-    res.render("user/ownerForm.ejs")
-}
-
-const postOwner = async(req,res) => {
-    const {email,secret} = req.body;
-    console.log(email,secret);
+    res.redirect("/")
 }
 
 
-export {signupForm , signupUser , signinForm , signinUser , becomeOwnerForm , postOwner };
+export {signupForm , signupUser , signinForm , signinUser };

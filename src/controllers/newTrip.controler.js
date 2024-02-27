@@ -13,9 +13,7 @@ app.use(bodyParser.urlencoded({ extended: true }));
 // creating a new trip 
 
 const newTripForm = async (req, res) => {
-    console.log(req.session)
-    console.log(req.user)
-    res.render("admin/newTrip.ejs");
+    res.render("trips/newTrip.ejs");
     
 }
 
@@ -23,6 +21,7 @@ const newTripForm = async (req, res) => {
 
 const addNewTrip = async (req, res) => {
     let { departure,endDate, catagaries,location, title, tripDescription, accomodations, aboutLeader, includes, totalDays, stopLocation, stopDescription } = req.body;
+    let userId = req.user._id;
     // let tripImages = req.files;
     // let stopImages = req.files;
 
@@ -47,41 +46,42 @@ const addNewTrip = async (req, res) => {
     // console.log("stopImages" , stopImages);
 
 
-    // const newTrip = new Trip({
-    //     departure,
-    //     endDate,
-    //     location,
-    //     catagaries,
-    //     title,
-    //     tripDescription,
-    //     accomodations,
-    //     includes,
-    //     totalDays,
-    //     stopLocation,
-    //     stopDescription,
-    // });
+    const newTrip = new Trip({
+        departure,
+        endDate,
+        location,
+        catagaries,
+        title,
+        tripDescription,
+        accomodations,
+        includes,
+        totalDays,
+        stopLocation,
+        stopDescription,
+        owner : userId,
+    });
 
-    // await newTrip.save();
+    console.log(newTrip);
+
+    await newTrip.save();
 
 
-    // res.redirect("/allTrips");
+    res.redirect("/");
 }
 
 // displaying all trips 
 
 const showAllTrips = async (req, res) => {
-    const allTrips = await Trip.find();
-    console.log(req.user);
-    console.log(req.isAuthenticated())
-    res.render("admin/showAll", { allTrips })
+    const allTrips = await Trip.find().populate("owner");
+    res.render("trips/showAll", { allTrips })
 }
 
 // showing particular trip 
 
 const showTrip = async (req, res) => {
     let { id } = req.params;
-    const trip = await Trip.findById(id);
-    res.render("admin/trip.ejs", { trip })
+    const trip = await Trip.findById(id).populate("owner");
+    res.render("trips/trip.ejs", { trip })
 }
 
 // edit trip 
@@ -92,13 +92,14 @@ const editTripForm = async (req, res) => {
     // console.log(id);
     // console.log(trip);
 
-    res.render("admin/editTrip.ejs", { trip })
+    res.render("trips/editTrip.ejs", { trip })
 }
 
 const deleteTrip = async(req,res) => {
     let {id} = req.params;
     await Trip.findByIdAndDelete(id);
-    res.redirect("/allTrips")
+    res.redirect("/")
 }
+
 
 export { newTripForm, showAllTrips, addNewTrip, editTripForm, showTrip , deleteTrip };
