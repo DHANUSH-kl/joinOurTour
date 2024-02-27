@@ -4,7 +4,7 @@ import { signupForm , signupUser ,  signinForm , signinUser  } from "../controll
 import passport from "passport";
 import { asyncWrap } from "../constants.js";
 
-router.route("/")
+router.route("/signup")
     .get(asyncWrap(signupForm))
     .post(signupUser)
 

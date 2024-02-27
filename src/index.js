@@ -87,7 +87,7 @@ import adminRoutes from './routes/admin.route.js';
 //route decleration
 
 app.use("/", tripRoutes);
-app.use("/signup", userRoutes);
+app.use("/user", userRoutes);
 app.use("/admin" , adminRoutes);
 
 
