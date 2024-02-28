@@ -11,7 +11,7 @@ router.route("/signup")
 router.route("/signin")
     .get(signinForm)
     .post( passport.authenticate("local" , {
-        failureRedirect : "/signup",
+        failureRedirect : "/user/signup",
     }) , signinUser)
 
 

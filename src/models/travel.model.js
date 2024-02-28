@@ -1,7 +1,6 @@
 import mongoose, { Schema } from "mongoose";
-import { User } from "./user.model.js";
 
-const tripSchema = new mongoose.Schema({
+const tripSchema = new Schema({
     departure : {
         type : String,
     },

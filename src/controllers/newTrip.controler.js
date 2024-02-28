@@ -8,7 +8,7 @@ import { Trip } from '../models/travel.model.js';
 
 // Use body-parser middleware to parse form data
 app.use(bodyParser.urlencoded({ extended: true }));
-
+app.use(multer({ storage }).any());
 
 // creating a new trip 
 
@@ -20,7 +20,7 @@ const newTripForm = async (req, res) => {
 // posting new trip 
 
 const addNewTrip = async (req, res) => {
-    let { departure,endDate, catagaries,location, title, tripDescription, accomodations, aboutLeader, includes, totalDays, stopLocation, stopDescription } = req.body;
+    let { departure,endDate, catagaries,location,tripimages ,title, tripDescription, accomodations, aboutLeader, includes, totalDays, stopLocation, stopDescription } = req.body;
     let userId = req.user._id;
     // let tripImages = req.files;
     // let stopImages = req.files;
@@ -28,18 +28,19 @@ const addNewTrip = async (req, res) => {
     // tripImages = tripImages.map(file => file.filename);
     // stopImages = stopImages.map(file => file.filename);
 
-    console.log("departure ", departure);
-    console.log("endDate ", endDate);
-    console.log('location ', location);
-    console.log("catagaries ", catagaries);
-    console.log('title ', title);
-    console.log('description ', tripDescription);
-    console.log('aboutLeader ', aboutLeader);
-    console.log('accomodations ', accomodations);
-    console.log('includes ', includes);
-    console.log('totalDays ', totalDays);
-    console.log('stopLocation ', stopLocation);
-    console.log('stopDescription ', stopDescription);
+    // console.log("departure ", departure);
+    // console.log("endDate ", endDate);
+    // console.log('location ', location);
+    // console.log("catagaries ", catagaries);
+    // console.log('title ', title);
+    // console.log('description ', tripDescription);
+    // console.log('aboutLeader ', aboutLeader);
+    // console.log('accomodations ', accomodations);
+    // console.log('includes ', includes);
+    // console.log('totalDays ', totalDays);
+    // console.log('stopLocation ', stopLocation);
+    // console.log('stopDescription ', stopDescription);
+    // console.log('tripimages ', tripimages);
 
 
     // console.log("tripImages" , tripImages);
@@ -61,9 +62,9 @@ const addNewTrip = async (req, res) => {
         owner : userId,
     });
 
-    console.log(newTrip);
-
-    await newTrip.save();
+    // console.log(newTrip);
+    console.log(req.body)
+    // await newTrip.save();
 
 
     res.redirect("/");

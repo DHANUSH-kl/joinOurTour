@@ -33,6 +33,16 @@
             <input required type="text" name="location" id="location" class="form-control ">
         </div>
 
+        <div class="input-container">
+            <label for="minTripmates" class="form-label mb-2">Mininmum tripmates</label>
+            <input min="1" required type="number" name="minTripmates" id="minTripmates" class="form-control ">
+        </div>
+
+        <div class="input-container">
+            <label for="maxTripmates" class="form-label mb-2">Maximum tripmates</label>
+            <input required min="1" type="number" name="maxTripmates" id="maxTripmates" class="form-control ">
+        </div>
+
 
         <h2 class="catagaries-text">ADD CATAGARIES</h2>
         <div class="catagaries-container">
@@ -148,6 +158,41 @@
         </div>
 
         <button type="button" class="btn" onclick="addStop()">Add Stop</button>
+
+        <div class="trip-calculator-conatiner">
+
+            <h3>Cost per tripmate</h3>
+
+
+            <div class="travel-cost-container">
+
+                <h2>Travel cost</h2>
+                <div class="train-ticket">
+                    <label for="trainTicket" class="form-label mb-2">Train ticket cost : ₹</label>
+                    <input required type="number" name="trainTicket" class="form-control">    
+                </div>
+
+                <div class="flight-ticket">
+                    <label for="flightTicket" class="form-label mb-2">Flight ticket cost : ₹</label>
+                    <input required type="number" name="flightTicket" class="form-control">    
+                </div>
+
+                <h2>Total trip cost</h2>
+
+                <div class="total-cost">
+                    <label for="totalCost" class="form-label mb-2">Total trip cost : ₹</label>
+                    <input required type="number" name="totalCost" class="form-control">    
+                </div>
+
+                <h1>Trip buffer</h1>
+                <div class="total-cost">
+                    <label for="buffer" class="form-label mb-2">Enter the buffer : %</label>
+                    <input required type="number" name="buffer" min="0" max="15" class="form-control">    
+                </div>
+
+            </div>
+
+        </div>
 
         <button class="submit-btn">SUBMIT</button>
     </form>

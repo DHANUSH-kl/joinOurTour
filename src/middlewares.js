@@ -6,7 +6,7 @@ import {User} from './models/user.model.js'
 
 const isLoggedIn = (req,res,next) => {
     if(!req.isAuthenticated()){
-        return res.redirect("/signup/signin")
+        return res.redirect("/user/signin")
     } 
     next();
 }
@@ -35,4 +35,11 @@ const isOwner = async (req,res,next) => {
     }
 }
 
-export {isLoggedIn , isAgent , isOwner };
+const hasAgentInfo = async (req,res,next) => {
+    if( !req.user.tripLeader ) {
+        res.redirect("/admin/tripleaderform");
+    }
+    next();
+}
+
+export { isLoggedIn , isAgent , isOwner , hasAgentInfo };

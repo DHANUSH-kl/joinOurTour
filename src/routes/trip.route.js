@@ -9,17 +9,17 @@ const upload = multer({ storage })
 const router = Router();
 
 router.route("/createtrip")
-    .get( isLoggedIn , isAgent , asyncWrap(newTripForm))
-    .post( upload.fields([{ name: 'tripImages', maxCount: 10 }, { name: 'stopImages', maxCount: 10 }]),addNewTrip)
+    .get(asyncWrap(newTripForm))
+    .post( asyncWrap( addNewTrip ) );
 
 router.route("/")
-    .get(showAllTrips)
+    .get(asyncWrap(showAllTrips))
     
 router.route("/:id")
-    .get(showTrip)
-    .delete(deleteTrip)
+    .get(asyncWrap(showTrip))
+    .delete(asyncWrap(deleteTrip))
 
 router.route("/:id/editTrip")
-    .get(editTripForm)
+    .get(asyncWrap(editTripForm))
 
 export default router;
