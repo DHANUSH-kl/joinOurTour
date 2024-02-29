@@ -58,9 +58,9 @@ const postTripLeader = async (req,res) => {
     };
 
     // Update the user with the tripLeader information
-    const user = await User.findByIdAndUpdate(req.user._id, { tripLeader });
-
-    console.log(user);
+    // const user = await User.findByIdAndUpdate(req.user._id, { tripLeader });
+    console.log(req.body)
+    // console.log(user);
 
 
 

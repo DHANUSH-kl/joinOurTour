@@ -13,7 +13,7 @@ const storage = new CloudinaryStorage({
     cloudinary: cloudinary,
     params: {
       folder: 'joinOurJourney',
-      allowerdFormats: ["png","jpg","jpeg"] , // supports promises as well
+      allowedFormats: ["png","jpg","jpeg"] , // supports promises as well
     },
   })
 

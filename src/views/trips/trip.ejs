@@ -13,14 +13,16 @@
 
 
 
-<% if ( currUser._id.toString() == trip.owner._id.toString() ) { %>
-    <form action="/allTrips/<%= trip._id %>/?_method=DELETE" method="POST">
+<% if ( currUser && currUser._id.toString() == trip.owner._id.toString() ) { %>
+    <form action="/<%= trip._id %>/?_method=DELETE" method="POST">
         <button>Delete</button>
     </form>
 <% } %>
 
 
+<% if ( currUser && currUser._id.toString() == trip.owner._id.toString() ) { %>
+    <form action="/<%= trip._id %>/editTrip" method="GET">
+        <button>Edit</button>
+    </form>
+<% } %>
 
-<form action="/alltrips/<%= trip._id %>/editTrip" method="GET">
-    <button>Edit</button>
-</form>

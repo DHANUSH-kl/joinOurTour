@@ -9,9 +9,9 @@ const upload = multer({ storage })
 const router = Router();
 
 router.route("/createtrip")
-    .get(asyncWrap(newTripForm))
-    .post( asyncWrap( addNewTrip ) );
-
+    .get(asyncWrap( newTripForm ) )
+    .post( upload.fields([{ name: 'tripImages', maxCount: 10 }, { name: 'stopImages', maxCount: 10 }]),(addNewTrip))
+    
 router.route("/")
     .get(asyncWrap(showAllTrips))
     

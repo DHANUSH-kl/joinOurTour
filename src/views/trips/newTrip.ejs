@@ -17,30 +17,30 @@
     <form action="/createtrip" method="POST" enctype="multipart/form-data">
         <div class="input-container">
             <label for="departure" class="form-label mb-2">departure</label>
-            <input required type="date" name="departure" id="departure" class="form-control tripDate"
+            <input  type="date" name="departure" id="departure" class="form-control tripDate"
                 onchange="calculateDurationAndAddStops()">
         </div>
 
         <div class="input-container">
             <label for="endDate" class="form-label mb-2">end date</label>
-            <input required type="date" name="endDate" id="endDate" class="form-control "
+            <input  type="date" name="endDate" id="endDate" class="form-control "
                 onchange="calculateDurationAndAddStops()">
         </div>
         <button type="button" class="btn" id="addStopBtn" onclick="addStop()">Add Stop</button>
 
         <div class="input-container">
             <label for="location" class="form-label mb-2">Enter location</label>
-            <input required type="text" name="location" id="location" class="form-control ">
+            <input  type="text" name="location" id="location" class="form-control ">
         </div>
 
         <div class="input-container">
             <label for="minTripmates" class="form-label mb-2">Mininmum tripmates</label>
-            <input min="1" required type="number" name="minTripmates" id="minTripmates" class="form-control ">
+            <input min="1"  type="number" name="minTripmates" id="minTripmates" class="form-control ">
         </div>
 
         <div class="input-container">
             <label for="maxTripmates" class="form-label mb-2">Maximum tripmates</label>
-            <input required min="1" type="number" name="maxTripmates" id="maxTripmates" class="form-control ">
+            <input  min="1" type="number" name="maxTripmates" id="maxTripmates" class="form-control ">
         </div>
 
 
@@ -48,33 +48,33 @@
         <div class="catagaries-container">
             <div>
                 <label class="label-btns" for="one"><i class="fa-solid fa-utensils"></i> Foods</label>
-                <input type="checkbox" class="input-btns" id="one" autocomplete="off" value="Foods" name="catagaries[]">
+                <input type="checkbox" class="input-btns" id="one" autocomplete="off" value="foods" name="categories[]">
     
             </div>
             <div>
                 <label class="label-btns" for="two"><i class="fa-solid fa-umbrella-beach"></i> Beach</label>
-                <input type="checkbox" class="input-btns" id="two" autocomplete="off" value="Beach" name="catagaries[]">
+                <input type="checkbox" class="input-btns" id="two" autocomplete="off" value="beach" name="categories[]">
     
             </div>
             <div>
                 <label class="label-btns" for="three"><i class="fa-brands fa-fort-awesome"></i> Culture</label>
-                <input type="checkbox" class="input-btns" id="three" autocomplete="off" value="Culture" name="catagaries[]">
+                <input type="checkbox" class="input-btns" id="three" autocomplete="off" value="culture" name="categories[]">
     
     
             </div>
             <div>
                 <label class="label-btns" for="four"><i class="fa-solid fa-champagne-glasses"></i> Party</label>
-                <input type="checkbox" class="input-btns" id="four" autocomplete="off" value="Party" name="catagaries[]">
+                <input type="checkbox" class="input-btns" id="four" autocomplete="off" value="party" name="categories[]">
     
             </div>
             <div>
                 <label class="label-btns" for="five"><i class="fa-solid fa-volleyball"></i> Sports</label>
-                <input type="checkbox" class="input-btns" id="five" autocomplete="off" value="Sports" name="catagaries[]">
+                <input type="checkbox" class="input-btns" id="five" autocomplete="off" value="sports" name="categories[]">
     
             </div>
             <div>
                 <label class="label-btns" for="six"><i class="fa-solid fa-mountain-sun"></i> Nature</label>
-                <input type="checkbox" class="input-btns" id="six" autocomplete="off" value="Nature" name="catagaries[]">    
+                <input type="checkbox" class="input-btns" id="six" autocomplete="off" value="nature" name="categories[]">    
             </div>
 
 
@@ -84,12 +84,12 @@
 
         <div class="mt-3 input-container">
             <label  for="title" class="form-label mb-2">Trip title</label>
-            <input required type="text" name="title" id="title" class="form-control ">
+            <input  type="text" name="title" id="title" class="form-control ">
         </div>
 
         <div class="textarea-container mt-3">
             <span class="input-group-text">Trip description</span>
-            <textarea requiredclass="form-control input-container-textarea"  name="tripDescription" aria-label="With textarea"
+            <textarea  class="form-control input-container-textarea"  name="tripDescription" aria-label="With textarea"
                 placeholder="Write an overview of the trip giving a unique selling point.."></textarea>
         </div>
         <div class="input-group mt-3 textarea-container">
@@ -102,27 +102,27 @@
             <label class="form-check-label" for="1">
                 Hotels
             </label>
-            <input class="acc-input" type="checkbox" value="Hotel" id="1" name="accomodations[]">
+            <input class="acc-input" type="checkbox" value="hotel" id="1" name="accomodations[]">
 
             <label class="form-check-label" for="2">
                 Hostels
             </label>
-            <input class="form-check-input acc-input" type="checkbox" value="Hostels" id="2" name="accomodations[]">
+            <input class="form-check-input acc-input" type="checkbox" value="hostels" id="2" name="accomodations[]">
 
             <label class="form-check-label" for="3">
                 Apartments
             </label>
-            <input class="form-check-input acc-input" type="checkbox" value="Apartments" id="3" name="accomodations[]">
+            <input class="form-check-input acc-input" type="checkbox" value="apartments" id="3" name="accomodations[]">
 
             <label class="form-check-label" for="4">
                 Camping
             </label>
-            <input class="form-check-input acc-input" type="checkbox" value="Camping" id="4" name="accomodations[]">
+            <input class="form-check-input acc-input" type="checkbox" value="camping" id="4" name="accomodations[]">
 
             <label class="form-check-label" for="5">
                 Bed & Breakfast
             </label>
-            <input class="form-check-input acc-input" type="checkbox" value="Bed & Breakfast" id="5" name="accomodations[]">
+            <input class="form-check-input acc-input" type="checkbox" value="bed & breakfast" id="5" name="accomodations[]">
         </div>
 
         <div class="includes-container mt-3 mb-3">
@@ -150,10 +150,10 @@
                 <input type="file" name="stopImages[]" class="form-control" multiple>
 
                 <label for="stopLocation" class="form-label mb-2">Enter Location</label>
-                <input required type="text" name="stopLocation[]" class="form-control">
+                <input  type="text" name="stopLocation[]" class="form-control">
 
                 <label for="stopDescription" class="form-label mb-2">Tell Us More</label>
-                <input required type="text" name="stopDescription[]" class="form-control">
+                <input  type="text" name="stopDescription[]" class="form-control">
             </div>
         </div>
 
@@ -169,33 +169,37 @@
                 <h2>Travel cost</h2>
                 <div class="train-ticket">
                     <label for="trainTicket" class="form-label mb-2">Train ticket cost : ₹</label>
-                    <input required type="number" name="trainTicket" class="form-control">    
+                    <input  type="number" name="trainTicket" class="form-control">    
                 </div>
 
                 <div class="flight-ticket">
                     <label for="flightTicket" class="form-label mb-2">Flight ticket cost : ₹</label>
-                    <input required type="number" name="flightTicket" class="form-control">    
+                    <input  type="number" name="flightTicket" class="form-control">    
                 </div>
 
                 <h2>Total trip cost</h2>
 
                 <div class="total-cost">
                     <label for="totalCost" class="form-label mb-2">Total trip cost : ₹</label>
-                    <input required type="number" name="totalCost" class="form-control">    
+                    <input  type="number" name="totalCost" class="form-control">    
                 </div>
 
                 <h1>Trip buffer</h1>
                 <div class="total-cost">
                     <label for="buffer" class="form-label mb-2">Enter the buffer : %</label>
-                    <input required type="number" name="buffer" min="0" max="15" class="form-control">    
+                    <input  type="number" name="buffer" min="0" max="15" class="form-control">    
                 </div>
 
             </div>
 
         </div>
 
+        <input type="text">
+
         <button class="submit-btn">SUBMIT</button>
     </form>
+
+
 
     <script>
         function addTodo() {
