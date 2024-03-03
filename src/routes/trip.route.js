@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { addNewTrip, showAllTrips ,newTripForm,showTrip,editTripForm , deleteTrip , mytrip } from "../controllers/newTrip.controler.js";
+import { addNewTrip, showAllTrips ,newTripForm,showTrip,editTripForm , deleteTrip , mytrip , postEditTrip } from "../controllers/newTrip.controler.js";
 import { storage } from "../cloudinary.js";
 import multer from 'multer';
 import { isLoggedIn , isAgent , isOwner } from "../middlewares.js";
@@ -24,5 +24,6 @@ router.route("/:id")
 
 router.route("/:id/editTrip")
     .get(asyncWrap(editTripForm))
+    .put(upload.fields([{ name: 'tripImages', maxCount: 10 }, { name: 'stopImages', maxCount: 10 }]),asyncWrap(postEditTrip))
 
 export default router;

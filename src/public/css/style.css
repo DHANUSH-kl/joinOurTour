@@ -136,14 +136,14 @@ form {
     display: inline-block;
 }
 
-.includes-container {
+.includes-container  , .excludes-container{
     width: 70%;
     display: flex;
     justify-content: center;
     align-items: center;
     gap: 2rem;
 }
-.includes-container input {
+.includes-container input , .excludes-container input{
     width: 50%;
     height: 40px;
     text-align: center;
@@ -151,7 +151,7 @@ form {
     border-radius: 10px;
     border: 3px solid #588157;
 }
-.includes-container button {
+.includes-container button , .excludes-container button{
     width: auto;
     padding: 0.7rem 2rem;
     background-color: #588157;
@@ -161,11 +161,11 @@ form {
     cursor: pointer;
 }
 
-.todoContainer {
+.todoContainer , .excludes-todoContainer{
     width: 70%;
 }
 
-.todoItem {
+.todoItem , .excludeItem {
     width: 100%;
     display: flex;
     justify-content: center;
@@ -174,7 +174,7 @@ form {
     margin-bottom: 1.5rem;
 }
 
-.todoItem input {
+.todoItem input , .excludeItem input{
     width: 70%;
     height: 30px;
     border: 3px solid #588157;
@@ -182,7 +182,7 @@ form {
     border-radius: 10px;
 }
 
-.todoItem button {
+.todoItem button , .excludeItem button{
     width: auto;
     padding: 0.4rem 1rem;
     color: white;

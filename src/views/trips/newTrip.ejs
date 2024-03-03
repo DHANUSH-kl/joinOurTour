@@ -194,7 +194,15 @@
                 <!-- Todos will be added here -->
             </div>
 
-
+            <div class="excludes-container">
+                <input type="text" class="form-control" id="excludesInput" placeholder="Enter excludes"
+                    aria-label="Example text with button addon" aria-describedby="button-addon1">
+                <button onclick="excludes()" class="btn" type="button" id="excludesButton">Add</button>
+            </div>
+        
+            <div id="excludes-todoContainer">
+                <!-- Excludes will be added here -->
+            </div>
 
             <div class="days-container">
                 <label for="departure" class="form-label mb-2">departure</label>
@@ -299,6 +307,41 @@
 
             // Clear the input field for the next todo
             document.getElementById('todoInput').value = '';
+        }
+
+        function excludes() {
+            // Get the value from the input field
+            var excludeValue = document.getElementById('excludesInput').value;
+
+            // Create a container div for the exclude item
+            var excludesContainer = document.createElement('div');
+            excludesContainer.className = 'excludeItem';
+
+            // Create a new input element for the exclude
+            var newExcludeInput = document.createElement('input');
+            newExcludeInput.type = 'text';
+            newExcludeInput.value = excludeValue;
+            newExcludeInput.name = 'excludes[]';
+
+            // Create a delete button
+            var deleteButton = document.createElement('button');
+            deleteButton.className = 'deleteButton';
+            deleteButton.className = 'btn';
+            deleteButton.innerHTML = 'Delete';
+            deleteButton.onclick = function () {
+                // Remove the exclude item when the delete button is clicked
+                excludesContainer.remove();
+            };
+
+            // Append the new input and delete button to the excludesContainer div
+            excludesContainer.appendChild(newExcludeInput);
+            excludesContainer.appendChild(deleteButton);
+
+            // Append the excludesContainer to the excludesContainer div
+            document.getElementById('excludes-todoContainer').appendChild(excludesContainer);
+
+            // Clear the input field for the next exclude
+            document.getElementById('excludesInput').value = '';
         }
 
         let stopCounter = 1;

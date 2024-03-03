@@ -39,12 +39,11 @@ const addNewTrip = async (req, res) => {
         ,flightTicket
         ,totalCost
         ,buffer
+        ,excludes
 
     } = req.body;
 
     let userId = req.user._id;
-
-
 
     const newTrip = new Trip({
         departure,
@@ -60,19 +59,19 @@ const addNewTrip = async (req, res) => {
         stopDescription,
         owner : userId,
     });
-    console.log(newTrip);
 
     await User.findByIdAndUpdate(req.user._id, {
         $push: { createdTrips: newTrip._id },
     });
 
+    console.log(req.body)
 
 
-    // console.log(req.body.catagaries)
     await newTrip.save();
     
 
     res.redirect("/");
+
 }
 
 // displaying all trips 
@@ -95,11 +94,73 @@ const showTrip = async (req, res) => {
 // edit trip 
 
 const editTripForm = async (req, res) => {
-    let { id } = req.params;
+    let {id} = req.params;
     const trip = await Trip.findById(id);
-    console.log(trip);
     res.render("trips/editTrip.ejs", { trip })
 }
+
+const postEditTrip = async (req, res) => {
+    let { id } = req.params;
+
+    // Extract trip details from the request body
+    const {
+        departure,
+        endDate,
+        categories,
+        location,
+        minTripmates,
+        maxTripmates,
+        tripimages,
+        title,
+        tripDescription,
+        accomodations,
+        aboutLeader,
+        includes,
+        totalDays,
+        stopLocation,
+        stopDescription,
+        trainTicket,
+        flightTicket,
+        totalCost,
+        buffer
+    } = req.body;
+
+    // Define the update object
+    const update = {
+        departure,
+        endDate,
+        categories,
+        location,
+        minTripmates,
+        maxTripmates,
+        tripimages,
+        title,
+        tripDescription,
+        accomodations,
+        aboutLeader,
+        includes,
+        totalDays,
+        stopLocation,
+        stopDescription,
+        trainTicket,
+        flightTicket,
+        totalCost,
+        buffer
+    };
+
+    // Use findByIdAndUpdate to update the trip. The $set operator is used to specify the fields to update.
+    const updatedTrip = await Trip.findByIdAndUpdate(id, { $set: update }, { new: true });
+
+    if (!updatedTrip) {
+        // Handle case where the trip is not found
+        return res.status(404).send('Trip not found');
+    }
+
+    // Optionally, you can return the updated trip to the client or redirect to another page
+    res.redirect(`/${id}`); 
+};
+
+
 
 const deleteTrip = async(req,res) => {
     let {id} = req.params;
@@ -119,4 +180,4 @@ const mytrip = async(req,res) => {
 }
 
 
-export { newTripForm, showAllTrips, addNewTrip, editTripForm, showTrip , deleteTrip , mytrip };
+export { newTripForm, showAllTrips, addNewTrip, editTripForm, showTrip , deleteTrip , mytrip , postEditTrip };
