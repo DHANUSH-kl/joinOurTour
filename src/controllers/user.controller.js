@@ -1,5 +1,6 @@
 import express from 'express';
 import bodyParser from 'body-parser';
+import passport from 'passport';
 import {User} from '../models/user.model.js';
 
 const app = express();
@@ -31,5 +32,14 @@ const signinUser = async(req,res) => {
     res.redirect("/")
 }
 
+const logout = (req, res, next) => {
+    req.logout(err => {
+       if (err) return next(err);
+    });
+    res.redirect('/');
+    
+};
+   
 
-export {signupForm , signupUser , signinForm , signinUser };
+
+export {signupForm , signupUser , signinForm , signinUser , logout };

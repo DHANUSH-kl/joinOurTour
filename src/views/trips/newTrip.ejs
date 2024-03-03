@@ -9,11 +9,55 @@
     <link
         href="https://fonts.googleapis.com/css2?family=Lato:wght@400;700;900&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"
         rel="stylesheet">
+        <link rel="stylesheet" href="/css/nav.css">
     <link rel="stylesheet" href="/css/style.css">
     <title>Document</title>
 </head>
 
 <body>
+
+    <nav>
+        <div class="logo">
+            <h3>LOGO</h3>
+        </div>
+        <div class="trips-nav">
+            <a href="/">ALL TRIPS</a>
+        </div>
+        <div class="user-nav">
+            <% if(!currUser){ %>
+                <a href="/user/signup">SIGN UP</a>
+                <a href="/user/signin">SIGN IN</a>
+            <% } %>
+
+            <% if(currUser){ %>
+                <a href="/user/logout">LOG OUT</a>
+            <% } %>
+            <div class="user" id="user">
+                <i class="fa-regular fa-user"></i>
+            </div>
+        </div>
+
+        <div class="dropdown-container" id="dropdown">
+            <div class="close">
+                <i class="fa-solid fa-xmark" id="close"></i>
+            </div>
+            <div class="user-info-container">
+                <% if(!currUser) { %>
+                    <div class="profile"></div>
+                    <p>USERNAME</p>    
+                <% } else { %>
+                    <div class="profile"></div>
+                    <p><%= currUser.username %></p> 
+                <% } %>
+            </div>
+            <div class="nav-links">
+                <a href="/mytrips">MY TRIP</a>
+                <a href="/createtrip">CREATE TRIP</a>
+                <a href="/">PAYMENTS AND PAYOUTS</a>
+                <a href="/user/signup">SIGN UP</a>    
+            </div>
+        </div>
+    </nav>
 
     
 

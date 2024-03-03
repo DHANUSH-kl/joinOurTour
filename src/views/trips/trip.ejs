@@ -1,28 +1,83 @@
-<% layout("./layouts/boilerplate.ejs") %>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/css/nav.css">
+    <title>Document</title>
+</head>
+<body>
+    
+    <nav>
+        <div class="logo">
+            <h3>LOGO</h3>
+        </div>
+        <div class="trips-nav">
+            <a href="/">ALL TRIPS</a>
+        </div>
+        <div class="user-nav">
+            <% if(!currUser){ %>
+                <a href="/user/signup">SIGN UP</a>
+                <a href="/user/signin">SIGN IN</a>
+            <% } %>
 
-<h1> <%= trip.title %> </h1>
-<h3> <%= trip.tripDescription %> </h3>
-<h3> <%= trip.departure %> </h3>
-<h3> <%= trip.includes %> </h3>
+            <% if(currUser){ %>
+                <a href="/user/logout">LOG OUT</a>
+            <% } %>
+            <div class="user" id="user">
+                <i class="fa-regular fa-user"></i>
+            </div>
+        </div>
 
-<h1>Stops</h1>
+        <div class="dropdown-container" id="dropdown">
+            <div class="close">
+                <i class="fa-solid fa-xmark" id="close"></i>
+            </div>
+            <div class="user-info-container">
+                <% if(!currUser) { %>
+                    <div class="profile"></div>
+                    <p>USERNAME</p>    
+                <% } else { %>
+                    <div class="profile"></div>
+                    <p><%= currUser.username %></p> 
+                <% } %>
+            </div>
+            <div class="nav-links">
+                <a href="/mytrips">MY TRIP</a>
+                <a href="/createtrip">CREATE TRIP</a>
+                <a href="/">PAYMENTS AND PAYOUTS</a>
+                <a href="/user/signup">SIGN UP</a>    
+            </div>
+        </div>
+    </nav>
 
-<h1><%= trip.stopLocation %></h1>
-<h1><%= trip.stopDescription %></h1>
-<h1><%= trip.owner.username %></h1>
+    <h1> <%= trip.title %> </h1>
+    <h3> <%= trip.tripDescription %> </h3>
+    <h3> <%= trip.departure %> </h3>
+    <h3> <%= trip.includes %> </h3>
+    
+    <h1>Stops</h1>
+    
+    <h1><%= trip.stopLocation %></h1>
+    <h1><%= trip.stopDescription %></h1>
+    <h1><%= trip.owner.username %></h1>
+    
+    
+    
+    <% if ( currUser && currUser._id.toString() == trip.owner._id.toString() ) { %>
+        <form action="/<%= trip._id %>/?_method=DELETE" method="POST">
+            <button>Delete</button>
+        </form>
+    <% } %>
+    
+    
+    <% if ( currUser && currUser._id.toString() == trip.owner._id.toString() ) { %>
+        <form action="/<%= trip._id %>/editTrip" method="GET">
+            <button>Edit</button>
+        </form>
+    <% } %>
+    
+    
 
-
-
-<% if ( currUser && currUser._id.toString() == trip.owner._id.toString() ) { %>
-    <form action="/<%= trip._id %>/?_method=DELETE" method="POST">
-        <button>Delete</button>
-    </form>
-<% } %>
-
-
-<% if ( currUser && currUser._id.toString() == trip.owner._id.toString() ) { %>
-    <form action="/<%= trip._id %>/editTrip" method="GET">
-        <button>Edit</button>
-    </form>
-<% } %>
-
+</body>
+</html>

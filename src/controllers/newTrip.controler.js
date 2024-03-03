@@ -1,5 +1,6 @@
 import express from 'express';
 import bodyParser from 'body-parser';
+import { User } from '../models/user.model.js';
 import { storage } from '../cloudinary.js';
 import multer from 'multer';
 import { Trip } from '../models/travel.model.js';
@@ -60,9 +61,16 @@ const addNewTrip = async (req, res) => {
         owner : userId,
     });
     console.log(newTrip);
+
+    await User.findByIdAndUpdate(req.user._id, {
+        $push: { createdTrips: newTrip._id },
+    });
+
+
+
     // console.log(req.body.catagaries)
     await newTrip.save();
-
+    
 
     res.redirect("/");
 }
@@ -72,6 +80,8 @@ const addNewTrip = async (req, res) => {
 const showAllTrips = async (req, res) => {
     const allTrips = await Trip.find().populate("owner");
     res.render("trips/showAll", { allTrips })
+    console.log(req.user)
+
 }
 
 // showing particular trip 
@@ -94,8 +104,19 @@ const editTripForm = async (req, res) => {
 const deleteTrip = async(req,res) => {
     let {id} = req.params;
     await Trip.findByIdAndDelete(id);
+
+     // Remove the trip ID from the user's createdTrips array
+     await User.findByIdAndUpdate(req.user._id , {
+        $pull: { createdTrips: id },
+    });
+
     res.redirect("/")
 }
 
+const mytrip = async(req,res) => {
+    const trips = await User.findById(req.user._id).populate("createdTrips");
+    res.render("trips/mytrip.ejs" , {trips} )
+}
 
-export { newTripForm, showAllTrips, addNewTrip, editTripForm, showTrip , deleteTrip };
+
+export { newTripForm, showAllTrips, addNewTrip, editTripForm, showTrip , deleteTrip , mytrip };

@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { addNewTrip, showAllTrips ,newTripForm,showTrip,editTripForm , deleteTrip , } from "../controllers/newTrip.controler.js";
+import { addNewTrip, showAllTrips ,newTripForm,showTrip,editTripForm , deleteTrip , mytrip } from "../controllers/newTrip.controler.js";
 import { storage } from "../cloudinary.js";
 import multer from 'multer';
 import { isLoggedIn , isAgent , isOwner } from "../middlewares.js";
@@ -14,6 +14,9 @@ router.route("/createtrip")
     
 router.route("/")
     .get(asyncWrap(showAllTrips))
+
+router.route("/mytrips")
+    .get( isLoggedIn , asyncWrap(mytrip) )
     
 router.route("/:id")
     .get(asyncWrap(showTrip))

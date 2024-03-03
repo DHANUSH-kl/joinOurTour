@@ -24,6 +24,12 @@ const userSchema = new Schema({
         companyLogo: String,
         languages: [String],
     },
+    createdTrips: [
+        {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: 'Trip',
+        },
+    ],
 }, { timestamps: true });
 
 userSchema.plugin(passportLocalMongoose);

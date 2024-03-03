@@ -29,7 +29,14 @@
             <a href="/">ALL TRIPS</a>
         </div>
         <div class="user-nav">
-            <a href="/user/signup">SIGN UP</a>
+            <% if(!currUser){ %>
+                <a href="/user/signup">SIGN UP</a>
+                <a href="/user/signin">SIGN IN</a>
+            <% } %>
+
+            <% if(currUser){ %>
+                <a href="/user/logout">LOG OUT</a>
+            <% } %>
             <div class="user" id="user">
                 <i class="fa-regular fa-user"></i>
             </div>
@@ -40,11 +47,16 @@
                 <i class="fa-solid fa-xmark" id="close"></i>
             </div>
             <div class="user-info-container">
-                <div class="profile"></div>
-                <p>USERNAME</p>
+                <% if(!currUser) { %>
+                    <div class="profile"></div>
+                    <p>USERNAME</p>    
+                <% } else { %>
+                    <div class="profile"></div>
+                    <p><%= currUser.username %></p> 
+                <% } %>
             </div>
             <div class="nav-links">
-                <a href="">MY TRIP</a>
+                <a href="/mytrips">MY TRIP</a>
                 <a href="/createtrip">CREATE TRIP</a>
                 <a href="/">PAYMENTS AND PAYOUTS</a>
                 <a href="/user/signup">SIGN UP</a>    

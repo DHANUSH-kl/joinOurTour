@@ -1,6 +1,6 @@
 import { Router } from "express";
 const router = Router();
-import { signupForm , signupUser ,  signinForm , signinUser  } from "../controllers/user.controller.js";
+import { signupForm , signupUser ,  signinForm , signinUser, logout  } from "../controllers/user.controller.js";
 import passport from "passport";
 import { asyncWrap } from "../constants.js";
 
@@ -14,5 +14,7 @@ router.route("/signin")
         failureRedirect : "/user/signup",
     }) , signinUser)
 
+router.route("/logout")
+    .get(asyncWrap(logout))
 
 export default router;
