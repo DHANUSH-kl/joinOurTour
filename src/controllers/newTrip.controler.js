@@ -19,7 +19,7 @@ const newTripForm = async (req, res) => {
 // posting new trip 
 
 const addNewTrip = async (req, res) => {
-    console.log(req.files);
+
     let { departure
         ,endDate
         ,categories
@@ -60,11 +60,13 @@ const addNewTrip = async (req, res) => {
         owner : userId,
     });
 
+
     await User.findByIdAndUpdate(req.user._id, {
         $push: { createdTrips: newTrip._id },
     });
 
-    console.log(req.body)
+    // console.log(req.body);
+    console.log(req.files);
 
 
     await newTrip.save();
@@ -79,7 +81,6 @@ const addNewTrip = async (req, res) => {
 const showAllTrips = async (req, res) => {
     const allTrips = await Trip.find().populate("owner");
     res.render("trips/showAll", { allTrips })
-    console.log(req.user)
 
 }
 

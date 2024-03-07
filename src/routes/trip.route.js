@@ -1,16 +1,16 @@
 import { Router } from "express";
 import { addNewTrip, showAllTrips ,newTripForm,showTrip,editTripForm , deleteTrip , mytrip , postEditTrip , catagariesTrips } from "../controllers/newTrip.controler.js";
 import { storage } from "../cloudinary.js";
-import multer from 'multer';
 import { isLoggedIn , isAgent , isOwner } from "../middlewares.js";
 import { asyncWrap } from "../constants.js";
+import multer from 'multer';
 const upload = multer({ storage })
 
 const router = Router();
 
 router.route("/createtrip")
     .get(asyncWrap( newTripForm ) )
-    .post( upload.fields([{ name: 'tripImages', maxCount: 10 }, { name: 'stopImages', maxCount: 10 }]),(addNewTrip))
+    .post( upload.fields([{ name: 'tripImages', maxCount: 10 }, { name: 'stopImages', maxCount: 10 }]) ,(addNewTrip))
     
 router.route("/")
     .get(asyncWrap(showAllTrips))

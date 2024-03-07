@@ -96,8 +96,8 @@
             </div>
 
             <div class="images-container">
-                <label for="tripImages[]" class="form-label mb-2">Trip images</label>
-                <input type="file" name="tripImages[]" id="tripImages[]" class="form-control" multiple>
+                <label for="tripImages" class="form-label mb-2">Trip images</label>
+                <input type="file" name="tripImages" id="tripImages" class="form-control" multiple>
             </div>
 
 
@@ -106,38 +106,38 @@
                 <div>
                     <label class="label-btns" for="one"><i class="fa-solid fa-utensils"></i> Foods</label>
                     <input type="checkbox" class="input-btns" id="one" autocomplete="off" value="foods"
-                        name="categories[]">
+                        name="categories">
 
                 </div>
                 <div>
                     <label class="label-btns" for="two"><i class="fa-solid fa-umbrella-beach"></i> Beach</label>
                     <input type="checkbox" class="input-btns" id="two" autocomplete="off" value="beach"
-                        name="categories[]">
+                        name="categories">
 
                 </div>
                 <div>
                     <label class="label-btns" for="three"><i class="fa-brands fa-fort-awesome"></i> Culture</label>
                     <input type="checkbox" class="input-btns" id="three" autocomplete="off" value="culture"
-                        name="categories[]">
+                        name="categories">
 
 
                 </div>
                 <div>
                     <label class="label-btns" for="four"><i class="fa-solid fa-champagne-glasses"></i> Party</label>
                     <input type="checkbox" class="input-btns" id="four" autocomplete="off" value="party"
-                        name="categories[]">
+                        name="categories">
 
                 </div>
                 <div>
                     <label class="label-btns" for="five"><i class="fa-solid fa-volleyball"></i> Sports</label>
                     <input type="checkbox" class="input-btns" id="five" autocomplete="off" value="sports"
-                        name="categories[]">
+                        name="categories">
 
                 </div>
                 <div>
                     <label class="label-btns" for="six"><i class="fa-solid fa-mountain-sun"></i> Nature</label>
                     <input type="checkbox" class="input-btns" id="six" autocomplete="off" value="nature"
-                        name="categories[]">
+                        name="categories">
                 </div>
 
 
@@ -152,34 +152,34 @@
                     <label for="1">
                         Hotels
                     </label>
-                    <input type="checkbox" value="hotel" id="1" name="accomodations[]">
+                    <input type="checkbox" value="hotel" id="1" name="accomodations">
                 </div>
                 <div>
                     <label for="2">
                         Hostels
                     </label>
-                    <input type="checkbox" value="hostels" id="2" name="accomodations[]">
+                    <input type="checkbox" value="hostels" id="2" name="accomodations">
                 </div>
                 <div>
                     <label for="3">
                         Apartments
                     </label>
                     <input class="form-check-input acc-input" type="checkbox" value="apartments" id="3"
-                        name="accomodations[]">
+                        name="accomodations">
                 </div>
                 <div>
                     <label class="form-check-label" for="4">
                         Camping
                     </label>
                     <input class="form-check-input acc-input" type="checkbox" value="camping" id="4"
-                        name="accomodations[]">
+                        name="accomodations">
                 </div>
                 <div>
                     <label class="form-check-label" for="5">
                         Bed & Breakfast
                     </label>
                     <input class="form-check-input acc-input" type="checkbox" value="bed & breakfast" id="5"
-                        name="accomodations[]">
+                        name="accomodations">
                 </div>
 
             </div>
@@ -197,7 +197,7 @@
             <div class="excludes-container">
                 <input type="text" class="form-control" id="excludesInput" placeholder="Enter excludes"
                     aria-label="Example text with button addon" aria-describedby="button-addon1">
-                <button onclick="excludes()" class="btn" type="button" id="excludesButton">Add</button>
+                <button onclick="addExclude()" class="btn" type="button" id="excludesButton">Add</button>
             </div>
         
             <div id="excludes-todoContainer">
@@ -221,13 +221,13 @@
                 <div class="stop-section">
                     <h3>Stop 1</h3>
                     <label for="stopImages" class="form-label mb-2">Upload Image</label>
-                    <input type="file" name="stopImages[]" class="form-control">
+                    <input type="file" name="stopImages" class="form-control">
 
                     <label for="stopLocation" class="form-label mb-2">Enter Location</label>
-                    <input type="text" name="stopLocation[]" class="form-control">
+                    <input type="text" name="stopLocation" class="form-control">
 
                     <label for="stopDescription" class="form-label mb-2">Tell Us More</label>
-                    <input type="text" name="stopDescription[]" class="form-control">
+                    <input type="text" name="stopDescription" class="form-control">
 
                 </div>
             </div>
@@ -236,16 +236,16 @@
             <div class="transport-container">
                 <h2>PLEASE SELECT THE MODE OF transport</h2>
                 <label for="flight" >FLIGHT</label>
-                <input type="checkbox" name="transport[]" id="flight" value="flight">
+                <input type="checkbox" name="transport" id="flight" value="flight">
 
                 <label for="train" >TRAIN</label>
-                <input type="checkbox" name="transport[]" id="train" value="train">
+                <input type="checkbox" name="transport" id="train" value="train">
 
                 <label for="car" >CAR</label>
-                <input type="checkbox" name="transport[]" id="car" value="car">
+                <input type="checkbox" name="transport" id="car" value="car">
 
                 <label for="walk" >WALK</label>
-                <input type="checkbox" name="transport[]" id="walk" value="walk">
+                <input type="checkbox" name="transport" id="walk" value="walk">
 
             </div>
 
@@ -297,7 +297,7 @@
             var newTodoInput = document.createElement('input');
             newTodoInput.type = 'text';
             newTodoInput.value = todoValue;
-            newTodoInput.name = 'includes[]';
+            newTodoInput.name = 'includes';
 
             // Create a delete button
             var deleteButton = document.createElement('button');
@@ -320,41 +320,39 @@
             document.getElementById('todoInput').value = '';
         }
 
-        function excludes() {
-            // Get the value from the input field
-            var excludeValue = document.getElementById('excludesInput').value;
+        function addExclude() {
+        // Get the value from the input field
+        var excludeValue = document.getElementById('excludesInput').value;
 
-            // Create a container div for the exclude item
-            var excludesContainer = document.createElement('div');
-            excludesContainer.className = 'excludeItem';
+        // Create a container div for the exclude item
+        var excludesContainer = document.createElement('div');
+        excludesContainer.className = 'excludeItem';
 
-            // Create a new input element for the exclude
-            var newExcludeInput = document.createElement('input');
-            newExcludeInput.type = 'text';
-            newExcludeInput.value = excludeValue;
-            newExcludeInput.name = 'excludes[]';
+        // Create a new input element for the exclude
+        var newExcludeInput = document.createElement('input');
+        newExcludeInput.type = 'text';
+        newExcludeInput.value = excludeValue;
+        newExcludeInput.name = 'excludes';
 
-            // Create a delete button
-            var deleteButton = document.createElement('button');
-            deleteButton.className = 'deleteButton';
-            deleteButton.className = 'btn';
-            deleteButton.innerHTML = 'Delete';
-            deleteButton.onclick = function () {
-                // Remove the exclude item when the delete button is clicked
-                excludesContainer.remove();
-            };
+        // Create a delete button
+        var deleteButton = document.createElement('button');
+        deleteButton.className = 'deleteButton btn';
+        deleteButton.innerHTML = 'Delete';
+        deleteButton.onclick = function () {
+            // Remove the exclude item when the delete button is clicked
+            excludesContainer.remove();
+        };
 
-            // Append the new input and delete button to the excludesContainer div
-            excludesContainer.appendChild(newExcludeInput);
-            excludesContainer.appendChild(deleteButton);
+        // Append the new input and delete button to the excludesContainer div
+        excludesContainer.appendChild(newExcludeInput);
+        excludesContainer.appendChild(deleteButton);
 
-            // Append the excludesContainer to the excludesContainer div
-            document.getElementById('excludes-todoContainer').appendChild(excludesContainer);
+        // Append the excludesContainer to the excludesContainer div
+        document.getElementById('excludes-todoContainer').appendChild(excludesContainer);
 
-            // Clear the input field for the next exclude
-            document.getElementById('excludesInput').value = '';
-        }
-
+        // Clear the input field for the next exclude
+        document.getElementById('excludesInput').value = '';
+    }
         let stopCounter = 1;
 
         function addStop() {
@@ -369,13 +367,13 @@
                 <h3>Stop ${stopCounter}</h3>
     
                 <label for="stopImages" class="form-label mb-2">Upload Image</label>
-                <input type="file" name="stopImages[]" class="form-control">
+                <input type="file" name="stopImages" class="form-control">
     
                 <label for="stopLocation" class="form-label mb-2">Enter Location</label>
-                <input type="text" name="stopLocation[]" class="form-control">
+                <input type="text" name="stopLocation" class="form-control">
     
                 <label for="stopDescription" class="form-label mb-2">Tell Us More</label>
-                <input type="text" name="stopDescription[]" class="form-control">
+                <input type="text" name="stopDescription" class="form-control">
     
                 <button type="button" class="btn" onclick="deleteStop(this)">Delete Stop</button>
             `;
@@ -423,11 +421,11 @@
     initialStopSection.innerHTML = `
         <h3>Stop 1</h3>
         <label for="stopImages" class="form-label mb-2">Upload Image</label>
-        <input type="file" name="stopImages[]" class="form-control">
+        <input type="file" name="stopImages" class="form-control">
         <label for="stopLocation" class="form-label mb-2">Enter Location</label>
-        <input type="text" name="stopLocation[]" class="form-control">
+        <input type="text" name="stopLocation" class="form-control">
         <label for="stopDescription" class="form-label mb-2">Tell Us More</label>
-        <input type="text" name="stopDescription[]" class="form-control">
+        <input type="text" name="stopDescription" class="form-control">
     `;
     stopsContainer.appendChild(initialStopSection);
 
@@ -438,11 +436,11 @@
         newStopSection.innerHTML = `
             <h3>Stop ${i}</h3>
             <label for="stopImages" class="form-label mb-2">Upload Image</label>
-            <input type="file" name="stopImages[]" class="form-control">
+            <input type="file" name="stopImages" class="form-control">
             <label for="stopLocation" class="form-label mb-2">Enter Location</label>
-            <input type="text" name="stopLocation[]" class="form-control">
+            <input type="text" name="stopLocation" class="form-control">
             <label for="stopDescription" class="form-label mb-2">Tell Us More</label>
-            <input type="text" name="stopDescription[]" class="form-control">
+            <input type="text" name="stopDescription" class="form-control">
             <button type="button" class="btn" onclick="deleteStop(this)">Delete Stop</button>
         `;
         stopsContainer.appendChild(newStopSection);

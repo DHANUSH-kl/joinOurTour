@@ -82,7 +82,13 @@
         <%for(trips of allTrips) {%>
             <div class="card-container">
                 <div class="card-img">
-                    <img src="<%= trips.tripImages %>" alt="trip-image">
+                    <% if (trips.tripImages && trips.tripImages.length > 0 && trips.tripImages[0].path) { %>
+                        <div class="trip-image">
+                            <img src="<%= trips.tripImages[0].path %>" alt="Trip Image">
+                        </div>
+                    <% } else { %>
+                        <p>No images available for this trip</p>
+                    <% } %>
                 </div>
                 <div class="card-body">
                     <h3 class="card-title">
