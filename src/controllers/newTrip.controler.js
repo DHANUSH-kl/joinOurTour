@@ -43,6 +43,15 @@ const addNewTrip = async (req, res) => {
 
     } = req.body;
 
+    // Extract the trip and stop images from req.files
+    const tripImages = req.files.tripImages.map(file => ({
+        path: file.path, 
+    }));
+
+    const stopImages = req.files.stopImages.map(file => ({
+        path: file.path, 
+    }));
+
     let userId = req.user._id;
 
     const newTrip = new Trip({
@@ -57,6 +66,8 @@ const addNewTrip = async (req, res) => {
         totalDays,
         stopLocation,
         stopDescription,
+        tripImages, 
+        stopImages,
         owner : userId,
     });
 
@@ -89,6 +100,7 @@ const showAllTrips = async (req, res) => {
 const showTrip = async (req, res) => {
     let { id } = req.params;
     const trip = await Trip.findById(id).populate("owner");
+    console.log(trip)
     res.render("trips/trip.ejs", { trip })
 }
 

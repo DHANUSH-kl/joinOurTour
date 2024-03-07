@@ -1,6 +1,11 @@
 import mongoose, { Schema } from "mongoose";
 import { User } from "./user.model.js";
 
+const imageSchema = new mongoose.Schema({
+    path: String,
+    // Add other properties if needed
+   });
+
 const tripSchema = new Schema({
     departure : {
         type : String,
@@ -27,15 +32,11 @@ const tripSchema = new Schema({
     includes : {
         type : [String]
     },
-    tripImages : {
-        type: [String],
-    },
     totalDays : {
         type : Number,
     },
-    stopImages : {
-        type : [String],
-    },
+    tripImages: [imageSchema],
+    stopImages: [imageSchema],
     stopLocation : {
         type : [String],
     },
