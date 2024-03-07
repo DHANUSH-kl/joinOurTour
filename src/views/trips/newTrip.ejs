@@ -233,6 +233,22 @@
             </div>
             <button type="button" class="btn add-stop" onclick="addStop()">Add Stop</button>
 
+            <div class="transport-container">
+                <h2>PLEASE SELECT THE MODE OF transport</h2>
+                <label for="flight" >FLIGHT</label>
+                <input type="checkbox" name="transport[]" id="flight" value="flight">
+
+                <label for="train" >TRAIN</label>
+                <input type="checkbox" name="transport[]" id="train" value="train">
+
+                <label for="car" >CAR</label>
+                <input type="checkbox" name="transport[]" id="car" value="car">
+
+                <label for="walk" >WALK</label>
+                <input type="checkbox" name="transport[]" id="walk" value="walk">
+
+            </div>
+
             <div class="trip-calculator-conatiner">
 
                 <h2>Cost per tripmate</h2>
@@ -240,18 +256,7 @@
 
                 <div class="travel-cost-container">
 
-                    <h2>Travel cost</h2>
-                    <div class="train-ticket">
-                        <label for="trainTicket" class="form-label mb-2">Train ticket cost : ₹</label>
-                        <input type="number" name="trainTicket" class="form-control">
-                    </div>
-
-                    <div class="flight-ticket">
-                        <label for="flightTicket" class="form-label mb-2">Flight ticket cost : ₹</label>
-                        <input type="number" name="flightTicket" class="form-control">
-                    </div>
-
-                    <h2>Total trip cost</h2>
+                    <h2>TRIP COST PER TRIPMATE</h2>
 
                     <div class="total-cost">
                         <label for="totalCost" class="form-label mb-2">Total trip cost : ₹</label>
@@ -262,6 +267,12 @@
                     <div class="total-cost">
                         <label for="buffer" class="form-label mb-2">Enter the buffer : %</label>
                         <input type="number" name="buffer" min="0" max="15" class="form-control">
+                    </div><br>
+
+                    <div class="total-cost">
+                        <label for="deposit" class="form-label mb-2">Enter the deposit : %</label>
+                        <p>Enter the percent of total trip cost for deposit </p>
+                        <input type="number" name="deposit" class="form-control">
                     </div>
 
                 </div>

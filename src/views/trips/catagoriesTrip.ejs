@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <% if (trips && trips.length > 0) { %>
+        <h1>Trips:</h1>
+        <ul>
+            <% trips.forEach(trip => { %>
+                <li><%= trip.title %></li>
+                <!-- Assuming 'title' is a property of your Trip model, adjust accordingly -->
+            <% }); %>
+        </ul>
+    <% } else { %>
+        <h1>There are no trips related to that category.</h1>
+    <% } %>
+</body>
+</html>

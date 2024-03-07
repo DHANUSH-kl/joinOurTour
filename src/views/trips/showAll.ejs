@@ -67,6 +67,17 @@
 
     <h1>all trips</h1>
 
+    <div class="catagories-container">
+        <form id="catagoriesForm" action="/catagaries" method="POST">
+
+            <input type="hidden" name="categories" id="categoryInput" value="">
+            <button type="button" onclick="filterTrip('nature')">nature</button>
+            <button type="button" onclick="filterTrip('party')">party</button>
+
+        </form>
+    </div>
+    
+
     <div class="cards">
         <%for(trips of allTrips) {%>
             <div class="card-container">
@@ -84,7 +95,16 @@
             </div>
             <%}%>
     </div>
-<script src="/js/nav.js"></script>
-</body>
+    <script>
+        function filterTrip(category) {
+            // Set the value of the hidden input field to the selected category
+            document.getElementById('categoryInput').value = category;
+            
+            // Submit the form
+            document.getElementById('catagoriesForm').submit();
+        }
+    </script>
+    <script src="/js/nav.js"></script>
+    </body>
 
 </html>

@@ -179,5 +179,12 @@ const mytrip = async(req,res) => {
     res.render("trips/mytrip.ejs" , {trips} )
 }
 
+const catagariesTrips = async(req,res) => {
+    const {categories} = req.body;
+    console.log(categories)
+    const trips = await Trip.find({ categories: categories })
+    res.render("trips/catagoriesTrip.ejs" , {trips})
+}
 
-export { newTripForm, showAllTrips, addNewTrip, editTripForm, showTrip , deleteTrip , mytrip , postEditTrip };
+
+export { newTripForm, showAllTrips, addNewTrip, editTripForm, showTrip , deleteTrip , mytrip , postEditTrip , catagariesTrips };
