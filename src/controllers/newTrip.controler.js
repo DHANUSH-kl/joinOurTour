@@ -44,13 +44,13 @@ const addNewTrip = async (req, res) => {
     } = req.body;
 
     // Extract the trip and stop images from req.files
-    const tripImages = req.files.tripImages.map(file => ({
+    const tripImages = req.files.tripImages ? req.files.tripImages.map(file => ({
         path: file.path, 
-    }));
+    })) : [];
 
-    const stopImages = req.files.stopImages.map(file => ({
-        path: file.path, 
-    }));
+    const stopImages = req.files.stopImages ? req.files.stopImages.map(file => ({
+        path: file.path,
+    })) : [];
 
     let userId = req.user._id;
 
@@ -63,6 +63,7 @@ const addNewTrip = async (req, res) => {
         tripDescription,
         accomodations,
         includes,
+        excludes,
         totalDays,
         stopLocation,
         stopDescription,
@@ -116,7 +117,7 @@ const postEditTrip = async (req, res) => {
     let { id } = req.params;
 
     // Extract trip details from the request body
-    const {
+    let {
         departure,
         endDate,
         categories,
@@ -129,6 +130,7 @@ const postEditTrip = async (req, res) => {
         accomodations,
         aboutLeader,
         includes,
+        excludes,
         totalDays,
         stopLocation,
         stopDescription,
@@ -138,8 +140,30 @@ const postEditTrip = async (req, res) => {
         buffer
     } = req.body;
 
+    // Preprocess fields to replace undefined with empty string or empty array
+    departure = departure ?? '';
+    endDate = endDate ?? '';
+    categories = categories ?? [];
+    location = location ?? '';
+    minTripmates = minTripmates ?? '';
+    maxTripmates = maxTripmates ?? '';
+    tripimages = tripimages ?? [];
+    title = title ?? '';
+    tripDescription = tripDescription ?? ' ';
+    accomodations = accomodations ?? [];
+    aboutLeader = aboutLeader ?? '';
+    includes = includes ?? [];
+    excludes = excludes ?? [];
+    totalDays = totalDays ?? '';
+    stopLocation = stopLocation ?? [];
+    stopDescription = stopDescription ?? [];
+    trainTicket = trainTicket ?? '';
+    flightTicket = flightTicket ?? '';
+    totalCost = totalCost ?? '';
+    buffer = buffer ?? '';
+
     // Define the update object
-    const update = {
+    let update = {
         departure,
         endDate,
         categories,
@@ -152,6 +176,7 @@ const postEditTrip = async (req, res) => {
         accomodations,
         aboutLeader,
         includes,
+        excludes,
         totalDays,
         stopLocation,
         stopDescription,
@@ -160,6 +185,8 @@ const postEditTrip = async (req, res) => {
         totalCost,
         buffer
     };
+
+    console.log("update" , update);
 
     // Use findByIdAndUpdate to update the trip. The $set operator is used to specify the fields to update.
     const updatedTrip = await Trip.findByIdAndUpdate(id, { $set: update }, { new: true });

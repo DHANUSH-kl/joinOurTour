@@ -32,6 +32,9 @@ const tripSchema = new Schema({
     includes : {
         type : [String]
     },
+    excludes : {
+        type : [String]
+    },
     totalDays : {
         type : Number,
     },
