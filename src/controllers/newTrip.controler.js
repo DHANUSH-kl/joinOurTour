@@ -140,6 +140,15 @@ const postEditTrip = async (req, res) => {
         buffer
     } = req.body;
 
+        // Extract the trip and stop images from req.files
+        const tripImages = req.files.tripImages ? req.files.tripImages.map(file => ({
+            path: file.path, 
+        })) : [];
+    
+        const stopImages = req.files.stopImages ? req.files.stopImages.map(file => ({
+            path: file.path,
+        })) : [];
+
     // Preprocess fields to replace undefined with empty string or empty array
     departure = departure ?? '';
     endDate = endDate ?? '';
@@ -179,6 +188,7 @@ const postEditTrip = async (req, res) => {
         excludes,
         totalDays,
         stopLocation,
+        stopImages,
         stopDescription,
         trainTicket,
         flightTicket,

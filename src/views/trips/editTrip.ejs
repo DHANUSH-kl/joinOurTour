@@ -183,6 +183,12 @@
                     <% for (let i = 0; i < trip.stopLocation.length ; i++) { %>
                         <div class="stop-section">
                             <h3>Stop <%= i + 1 %></h3>
+
+                             <!-- Display existing stop image -->
+                            <% if (trip.stopImages && trip.stopImages[i]) { %>
+                                <img src="<%= trip.stopImages[i] %>" alt="Stop Image" class="stop-image" />
+                            <% } %>
+
             
                             <label for="stopImages" class="form-label mb-2">Upload Image</label>
                             <input type="file" name="stopImages" class="form-control">
@@ -202,6 +208,19 @@
             <% } %>
     
             
+
+            <!-- Existing trip images -->
+            <% for (let i = 0; i < trip.tripImages.length; i++) { %>
+                <img src="<%= trip.tripImages[i].path %>" alt="Trip Image" class="trip-image" />
+                <button type="button" onclick="deleteTripImage('<%= trip._id %>', '<%= trip.tripImages[i]._id %>')">Delete Image</button>
+            <% } %>
+
+            <!-- Input for adding new images -->
+            <label for="newTripImages" class="form-label mb-2">Add New Images</label>
+            <input type="file" name="newTripImages" id="newTripImages" class="form-control multiple">
+
+
+
     
             <button class="mt-3">SUBMIT</button>
         </form>

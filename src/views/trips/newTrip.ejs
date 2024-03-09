@@ -233,7 +233,7 @@
             </div>
             <button type="button" class="btn add-stop" onclick="addStop()">Add Stop</button>
 
-            <div class="transport-container">
+            <!-- <div class="transport-container">
                 <h2>PLEASE SELECT THE MODE OF transport</h2>
                 <label for="flight" >FLIGHT</label>
                 <input type="checkbox" name="transport" id="flight" value="flight">
@@ -247,7 +247,7 @@
                 <label for="walk" >WALK</label>
                 <input type="checkbox" name="transport" id="walk" value="walk">
 
-            </div>
+            </div> -->
 
             <div class="trip-calculator-conatiner">
 
@@ -285,6 +285,7 @@
 
 
     <script>
+        
         function addTodo() {
             // Get the value from the input field
             var todoValue = document.getElementById('todoInput').value;
@@ -356,31 +357,48 @@
         let stopCounter = 1;
 
         function addStop() {
-            stopCounter++;
+        stopCounter++;
 
-            const stopsContainer = document.getElementById('stops-container');
+        const stopsContainer = document.getElementById('stops-container');
 
-            const newStopSection = document.createElement('div');
-            newStopSection.className = 'stop-section';
+        const newStopSection = document.createElement('div');
+        newStopSection.className = 'stop-section';
 
-            newStopSection.innerHTML = `
-                <h3>Stop ${stopCounter}</h3>
-    
-                <label for="stopImages" class="form-label mb-2">Upload Image</label>
-                <input type="file" name="stopImages" class="form-control">
-    
-                <label for="stopLocation" class="form-label mb-2">Enter Location</label>
-                <input type="text" name="stopLocation" class="form-control">
-    
-                <label for="stopDescription" class="form-label mb-2">Tell Us More</label>
-                <input type="text" name="stopDescription" class="form-control">
-    
-                <button type="button" class="btn" onclick="deleteStop(this)">Delete Stop</button>
-            `;
+        newStopSection.innerHTML = `
+            <h3>Stop ${stopCounter}</h3>
 
-            stopsContainer.appendChild(newStopSection);
-            updateStopNumbers();
-        }
+            <div class="transport-container">
+                <h2>PLEASE SELECT THE MODE OF transport</h2>
+                <label for="flight">FLIGHT</label>
+                <input type="checkbox" name="transport" value="flight">
+
+                <label for="train">TRAIN</label>
+                <input type="checkbox" name="transport" value="train">
+
+                <label for="car">CAR</label>
+                <input type="checkbox" name="transport" value="car">
+
+                <label for="walk">WALK</label>
+                <input type="checkbox" name="transport" value="walk">
+            </div>
+
+            <label for="stopImages" class="form-label mb-2">Upload Image</label>
+            <input type="file" name="stopImages" class="form-control">
+
+            <label for="stopLocation" class="form-label mb-2">Enter Location</label>
+            <input type="text" name="stopLocation" class="form-control">
+
+            <label for="stopDescription" class="form-label mb-2">Tell Us More</label>
+            <input type="text" name="stopDescription" class="form-control">
+
+            
+
+            <button type="button" class="btn" onclick="deleteStop(this)">Delete Stop</button>
+        `;
+
+        stopsContainer.appendChild(newStopSection);
+        updateStopNumbers();
+    }
 
         function deleteStop(button) {
             const stopsContainer = document.getElementById('stops-container');
@@ -399,17 +417,36 @@
         }
 
         function calculateDurationAndAddStops() {
-            // Get the departure and end date values
-            const departureDate = new Date(document.getElementById('departure').value);
-            const endDate = new Date(document.getElementById('endDate').value);
+        // Get the departure and end date values
+        const departureDate = new Date(document.getElementById('departure').value);
+        const endDate = new Date(document.getElementById('endDate').value);
 
-            // Calculate the duration in days
-            const durationInDays = Math.floor((endDate - departureDate) / (24 * 60 * 60 * 1000));
+        // Calculate the duration in days
+        const durationInDays = Math.floor((endDate - departureDate) / (24 * 60 * 60 * 1000));
 
-            // Call a function to dynamically add stops based on the calculated duration
-            addStopsBasedOnDuration(durationInDays);
-        }
+        // Call a function to dynamically add stops based on the calculated duration
+        addStopsBasedOnDuration(durationInDays);
 
+        // Add transport container for each stop
+        const stopsContainer = document.getElementById('stops-container');
+        const transportContainers = stopsContainer.querySelectorAll('.transport-container');
+        transportContainers.forEach((transportContainer) => {
+            transportContainer.innerHTML = `
+                <h2>PLEASE SELECT THE MODE OF transport</h2>
+                <label for="flight">FLIGHT</label>
+                <input type="checkbox" name="transport" value="flight">
+
+                <label for="train">TRAIN</label>
+                <input type="checkbox" name="transport" value="train">
+
+                <label for="car">CAR</label>
+                <input type="checkbox" name="transport" value="car">
+
+                <label for="walk">WALK</label>
+                <input type="checkbox" name="transport" value="walk">
+            `;
+        });
+    }
         function addStopsBasedOnDuration(duration) {
     const stopsContainer = document.getElementById('stops-container');
     // Clear existing stops
@@ -431,10 +468,30 @@
 
     // Add stops dynamically based on the duration, including the departure date
     for (let i = 2; i <= duration + 1; i++) {
+
+        
         const newStopSection = document.createElement('div');
         newStopSection.className = 'stop-section';
         newStopSection.innerHTML = `
             <h3>Stop ${i}</h3>
+
+
+            <div class="transport-container">
+                <h2>PLEASE SELECT THE MODE OF transport</h2>
+                <label for="flight">FLIGHT</label>
+                <input type="checkbox" name="transport" value="flight">
+
+                <label for="train">TRAIN</label>
+                <input type="checkbox" name="transport" value="train">
+
+                <label for="car">CAR</label>
+                <input type="checkbox" name="transport" value="car">
+
+                <label for="walk">WALK</label>
+                <input type="checkbox" name="transport" value="walk">
+            </div>
+
+
             <label for="stopImages" class="form-label mb-2">Upload Image</label>
             <input type="file" name="stopImages" class="form-control">
             <label for="stopLocation" class="form-label mb-2">Enter Location</label>

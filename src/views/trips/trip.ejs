@@ -79,6 +79,7 @@
   </div>
 
 
+
     <h1> <%= trip.title %> </h1>
     <h3> <%= trip.tripDescription %> </h3>
     <h3> <%= trip.departure %> </h3>
@@ -89,6 +90,19 @@
     <h1><%= trip.stopLocation %></h1>
     <h1><%= trip.stopDescription %></h1>
     <h1><%= trip.owner.username %></h1>
+
+    <% if (trip.stopImages && trip.stopImages.length > 0) { %>
+        <div id="existingStopImages">
+            <% trip.stopImages.forEach(function(image, index) { %>
+                <div class="existing-image">
+                    <img src="<%= image.path %>" alt="Stop Image <%= index + 1 %>">
+                </div>
+            <% }); %>
+        </div>
+    <% } else { %>
+        <img alt="No Image">
+    <% } %>    
+
     
     
     
