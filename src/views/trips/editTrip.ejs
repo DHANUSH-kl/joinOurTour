@@ -184,15 +184,7 @@
                         <div class="stop-section">
                             <h3>Stop <%= i + 1 %></h3>
 
-                             <!-- Display existing stop image -->
-                            <% if (trip.stopImages && trip.stopImages[i]) { %>
-                                <img src="<%= trip.stopImages[i] %>" alt="Stop Image" class="stop-image" />
-                            <% } %>
-
-            
-                            <label for="stopImages" class="form-label mb-2">Upload Image</label>
-                            <input type="file" name="stopImages" class="form-control">
-            
+                        
                             <label for="stopLocation" class="form-label mb-2">Enter Location</label>
                             <input type="text" name="stopLocation" class="form-control" value="<%= trip.stopLocation[i] %>">
             
@@ -206,19 +198,6 @@
             <% } else { %>
                 <p>Error loading Stop details. Please try again.</p>
             <% } %>
-    
-            
-
-            <!-- Existing trip images -->
-            <% for (let i = 0; i < trip.tripImages.length; i++) { %>
-                <img src="<%= trip.tripImages[i].path %>" alt="Trip Image" class="trip-image" />
-                <button type="button" onclick="deleteTripImage('<%= trip._id %>', '<%= trip.tripImages[i]._id %>')">Delete Image</button>
-            <% } %>
-
-            <!-- Input for adding new images -->
-            <label for="newTripImages" class="form-label mb-2">Add New Images</label>
-            <input type="file" name="newTripImages" id="newTripImages" class="form-control multiple">
-
 
 
     
@@ -226,6 +205,8 @@
         </form>
     
         <script>
+
+            
             function addTodo() {
                 // Get the value from the input field
                 var todoValue = document.getElementById('todoInput').value;
@@ -393,6 +374,8 @@
         }
         updateStopNumbers();
     }
+
+    
         </script>
     <%} else {%>
         <p>Trip not found</p>

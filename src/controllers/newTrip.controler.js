@@ -77,9 +77,7 @@ const addNewTrip = async (req, res) => {
         $push: { createdTrips: newTrip._id },
     });
 
-    // console.log(req.body);
-    console.log(req.files);
-
+    console.log(req.body);
 
     await newTrip.save();
     

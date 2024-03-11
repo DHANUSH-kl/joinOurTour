@@ -14,7 +14,7 @@ router.route("/grantagentaccess")
     .post(postAgentAccess)
 
 router.route("/tripleaderform")
-    .get(isLoggedIn ,isAgent , tripLeaderForm)
+    .get(isLoggedIn , tripLeaderForm)
     .post(postTripLeader)
 
 
