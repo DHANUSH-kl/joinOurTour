@@ -14,6 +14,9 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
         integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA=="
         crossorigin="anonymous" referrerpolicy="no-referrer" />
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Anton&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="/css/nav.css">
     <link rel="stylesheet" href="/css/showAll.css">
     <title>Document</title>
@@ -65,18 +68,38 @@
     </nav>
 
 
-    <h1>all trips</h1>
+<div class="header-image">
+    <h1>ALL TRIPS</h1>
+    <!-- <img src="/images/headerImage.png" alt=""> -->
+</div>
 
-    <div class="catagories-container">
-        <form id="catagoriesForm" action="/catagaries" method="POST">
+<div class="search-bar">
+    <i class="fa-solid fa-magnifying-glass"></i>
+    <input type="text" placeholder="WHERE DO YOU WANT TO GO?">
+</div>
 
-            <input type="hidden" name="categories" id="categoryInput" value="">
-            <button type="button" onclick="filterTrip('nature')">nature</button>
-            <button type="button" onclick="filterTrip('party')">party</button>
+<main>
+    <div class="filter">
+            <h1 class="filter-heading">TRIP STYLE</h1>
 
-        </form>
+
+            <div class="catagories-container">
+                <form id="catagoriesForm" action="/catagaries" method="POST">
+        
+                    <input type="hidden" name="categories" id="categoryInput" value="">
+                    <button type="button" onclick="filterTrip('nature')">nature</button>
+                    <button type="button" onclick="filterTrip('party')">party</button>
+                    <button type="button" onclick="filterTrip('food')">food</button>
+                    <button type="button" onclick="filterTrip('beach')">beach</button>
+                    <button type="button" onclick="filterTrip('culture')">culture</button>
+                    <button type="button" onclick="filterTrip('sports')">sports</button>
+        
+                </form>
+            </div>
+        
+                <h1 class="trip-typo">TRIP</h1>
+                <h1 class="style-typo">STYLE</h1>
     </div>
-    
 
     <div class="cards">
         <%for(trips of allTrips) {%>
@@ -101,6 +124,12 @@
             </div>
             <%}%>
     </div>
+
+</main>
+    
+
+
+
     <script>
         function filterTrip(category) {
             // Set the value of the hidden input field to the selected category
