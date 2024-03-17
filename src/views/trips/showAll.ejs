@@ -107,7 +107,7 @@
                 <div class="card-img">
                     <% if (trips.tripImages && trips.tripImages.length > 0 && trips.tripImages[0].path) { %>
                         <div class="trip-image">
-                            <img src="" alt="Trip Image">
+                            <img src="<%= trips.tripImages[0].path %>" alt="Trip Image">
                         </div>
                     <% } else { %>
                         <p>No images available for this trip</p>

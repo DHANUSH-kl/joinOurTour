@@ -98,9 +98,16 @@ const showAllTrips = async (req, res) => {
 
 const showTrip = async (req, res) => {
     let { id } = req.params;
-    const trip = await Trip.findById(id).populate("owner");
-    console.log(trip)
+    const trip = await Trip.findById(id).populate({
+        path: 'owner',
+        populate: {
+            path: 'tripLeader'
+        }
+    });    console.log(trip)
     res.render("trips/trip.ejs", { trip })
+
+
+console.log('Trip Leader:', trip.owner.tripLeader);
 }
 
 // edit trip 

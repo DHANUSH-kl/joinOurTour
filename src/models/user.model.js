@@ -2,10 +2,6 @@ import mongoose, { Schema } from "mongoose";
 import passportLocalMongoose from "passport-local-mongoose";
 
 const userSchema = new Schema({
-    username: {
-        type: String,
-        required: true,
-    },
     isAgent: {
         type: Boolean,
         default: false,

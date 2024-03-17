@@ -1,5 +1,8 @@
 import express from 'express';
 import bodyParser from 'body-parser';
+import { storage } from '../cloudinary.js';
+import multer from 'multer';
+const upload = multer({ storage });
 const app = express();
 import {User} from '../models/user.model.js';
 
@@ -43,7 +46,7 @@ const tripLeaderForm = async(req,res) => {
 
 const postTripLeader = async (req,res) => {
 
-    const { companyName, companyEstablishedYear, companyContactNumber, companyEmail, emergencyContactNumber , aboutCompany , companyLogo , languages } = req.body;
+    const { companyName, companyEstablishedYear, companyContactNumber, companyEmail, emergencyContactNumber , aboutCompany , languages } = req.body;
 
     // Create a new Leader instance
     const tripLeader = {
@@ -53,12 +56,11 @@ const postTripLeader = async (req,res) => {
         companyEmail,
         emergencyContactNumber,
         aboutCompany,
-        companyLogo,
         languages,
     };
 
     // Update the user with the tripLeader information
-    // const user = await User.findByIdAndUpdate(req.user._id, { tripLeader });
+    const user = await User.findByIdAndUpdate(req.user._id, { tripLeader });
     console.log(req.body)
     // console.log(user);
 

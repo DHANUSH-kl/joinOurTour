@@ -11,6 +11,7 @@
 
 
     <link rel="stylesheet" href="/css/nav.css">
+    <link rel="stylesheet" href="/css/trip.css">
     <title>Document</title>
 </head>
 <body>
@@ -79,17 +80,28 @@
   </div>
 
 
+<main>
+    <div class="title">
+        <h1> <%= trip.title %> </h1>
+    </div>
+    <div class="tripleader">
+        <% if (trip.owner && trip.owner.tripLeader && trip.owner.tripLeader.companyName) { %>
+            Hosted by <span><%= trip.owner.tripLeader.companyName %></span>
+        <% } %>
+        
 
-    <h1> <%= trip.title %> </h1>
-    <h3> <%= trip.tripDescription %> </h3>
-    <h3> <%= trip.departure %> </h3>
-    <h3> <%= trip.includes %> </h3>
+    </div>
+</main>
+
+    <!-- <h3> <%= trip.tripDescription %> </h3> -->
+    <!-- <h3> <%= trip.departure %> </h3> -->
+    <!-- <h3> <%= trip.includes %> </h3> -->
     
-    <h1>Stops</h1>
+    <!-- <h1>Stops</h1>
     
     <h1><%= trip.stopLocation %></h1>
     <h1><%= trip.stopDescription %></h1>
-    <h1><%= trip.owner.username %></h1>
+    <h1><%= trip.owner.username %></h1> -->
 
     <% if (trip.stopImages && trip.stopImages.length > 0) { %>
         <div id="existingStopImages">

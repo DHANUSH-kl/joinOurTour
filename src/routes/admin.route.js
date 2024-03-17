@@ -1,8 +1,12 @@
 import { Router } from "express";
-const router = Router();
+import { becomeOwnerForm, postOwner, agentAccessForm, postAgentAccess, tripLeaderForm, postTripLeader } from "../controllers/admin.controller.js";
 import { asyncWrap } from "../constants.js";
 import { isAgent, isLoggedIn, isOwner } from "../middlewares.js";
-import { becomeOwnerForm , postOwner , agentAccessForm , postAgentAccess , tripLeaderForm , postTripLeader } from "../controllers/admin.controller.js";
+import multer from 'multer';
+import { storage } from "../cloudinary.js";
+
+const upload = multer({ storage });
+const router = Router();
 
 
 router.route("/owner")
