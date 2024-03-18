@@ -54,6 +54,43 @@ main {
   padding: 1.5rem;
 }
 
+.tripleader {
+  padding: 1.5rem;
+}
 .tripleader span{
   font-weight: 900;
+}
+
+.featrues-conatiner {
+  /* width: 100vw; */
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  gap: 1.5rem;
+  margin-left: 1.5rem;
+}
+
+.description-container h3 {
+  font-weight: 600;
+  margin-left: 1.5rem;
+  margin-top: 2rem;
+}
+.includes-container {
+  width: auto;
+  border: 2px solid gray;
+  height: auto;
+  padding: 1.5rem;
+  margin: 1.5rem;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  flex-wrap: wrap;
+}
+
+.includes-container div {
+  display: flex;
+  /* justify-content: center;
+  align-items: center; */
+  gap: 0.8rem;
+  margin: 0.5rem;
 }

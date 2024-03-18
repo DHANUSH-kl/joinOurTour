@@ -36,7 +36,7 @@ const tripSchema = new Schema({
         type : [String]
     },
     totalDays : {
-        type : String,
+        type : Number,
     },
     tripImages: [imageSchema],
     stopImages: [imageSchema],

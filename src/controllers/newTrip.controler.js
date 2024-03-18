@@ -39,6 +39,7 @@ const addNewTrip = async (req, res) => {
         ,flightTicket
         ,totalCost
         ,buffer
+        ,transport
         ,excludes
 
     } = req.body;
@@ -51,6 +52,8 @@ const addNewTrip = async (req, res) => {
     const stopImages = req.files.stopImages ? req.files.stopImages.map(file => ({
         path: file.path,
     })) : [];
+
+    console.log(stopImages);
 
     let userId = req.user._id;
 
@@ -69,8 +72,12 @@ const addNewTrip = async (req, res) => {
         stopDescription,
         tripImages, 
         stopImages,
+        transport,
         owner : userId,
     });
+
+    totalDays = totalDays[0] ? parseInt(totalDays[0]) : 0;
+
 
 
     await User.findByIdAndUpdate(req.user._id, {
@@ -103,11 +110,11 @@ const showTrip = async (req, res) => {
         populate: {
             path: 'tripLeader'
         }
-    });    console.log(trip)
+    }); 
     res.render("trips/trip.ejs", { trip })
 
+    console.log(trip)
 
-console.log('Trip Leader:', trip.owner.tripLeader);
 }
 
 // edit trip 
@@ -136,14 +143,17 @@ const postEditTrip = async (req, res) => {
         aboutLeader,
         includes,
         excludes,
-        totalDays,
         stopLocation,
         stopDescription,
         trainTicket,
         flightTicket,
         totalCost,
-        buffer
+        buffer,
+        totalDays,
     } = req.body;
+
+        totalDays = totalDays[0] ? parseInt(totalDays[0]) : 0;
+        // totalDays = totalDays.toString();
 
         // Extract the trip and stop images from req.files
         const tripImages = req.files.tripImages ? req.files.tripImages.map(file => ({

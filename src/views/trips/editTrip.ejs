@@ -67,11 +67,6 @@
                 <label for="departure" class="form-label mb-2">departure</label>
                 <input type="date" name="departure" id="departure" class="form-control " value="<%= trip.departure %>">
             </div>
-
-            <div class="totalDays-container">
-                <label for="totalDays" class="form-label mb-2">Total days</label>
-                <input type="text" name="totalDays" id="totalDays" class="form-control " value="<%= trip.totalDays %>">
-            </div>
             
     
             <div>
@@ -79,7 +74,10 @@
                 <input type="text" name="location" id="location" value="<%= trip.location %>" class="form-control ">
             </div>
     
-    
+            <div class="totalDays-container">
+                <label for="totalDays">Total days</label>
+                <input type="number" name="totalDays" id="totalDays" class="form-control " value="<%= trip.totalDays %>">
+            </div>
     
             <div class="mt-3">
                 <label class="label-btns" for="one"><i class="fa-solid fa-utensils"></i> Foods</label>
@@ -189,6 +187,11 @@
                     <% for (let i = 0; i < trip.stopLocation.length ; i++) { %>
                         <div class="stop-section">
                             <h3>Stop <%= i + 1 %></h3>
+
+                            <img src="<%= trip.stopImages[i].path %>" alt="">
+
+                            <label for="stopImages" class="form-label mb-2">Enter Location</label>
+                            <input type="file" name="stopImages" class="form-control">
 
                         
                             <label for="stopLocation" class="form-label mb-2">Enter Location</label>
