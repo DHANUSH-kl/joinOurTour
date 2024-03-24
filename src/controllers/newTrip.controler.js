@@ -68,6 +68,7 @@ const addNewTrip = async (req, res) => {
         includes,
         excludes,
         totalDays,
+        totalCost,
         stopLocation,
         stopDescription,
         tripImages, 
@@ -121,108 +122,136 @@ const showTrip = async (req, res) => {
 
 const editTripForm = async (req, res) => {
     let {id} = req.params;
-    const trip = await Trip.findById(id);
+    const trip = await Trip.findById(id);  
     res.render("trips/editTrip.ejs", { trip })
 }
 
+
 const postEditTrip = async (req, res) => {
-    let { id } = req.params;
+    const { id } = req.params;
 
-    // Extract trip details from the request body
-    let {
-        departure,
-        endDate,
-        categories,
-        location,
-        minTripmates,
-        maxTripmates,
-        tripimages,
-        title,
-        tripDescription,
-        accomodations,
-        aboutLeader,
-        includes,
-        excludes,
-        stopLocation,
-        stopDescription,
-        trainTicket,
-        flightTicket,
-        totalCost,
-        buffer,
-        totalDays,
-    } = req.body;
+    try {
+        // Fetch the existing trip data
+        const existingTrip = await Trip.findById(id);
 
-        totalDays = totalDays[0] ? parseInt(totalDays[0]) : 0;
-        // totalDays = totalDays.toString();
+        // Extract trip details from the request body
+        let {
+            departure,
+            endDate,
+            categories,
+            location,
+            minTripmates,
+            maxTripmates,
+            title,
+            tripDescription,
+            accomodations,
+            aboutLeader,
+            includes,
+            excludes,
+            stopLocation,
+            stopDescription,
+            trainTicket,
+            flightTicket,
+            totalCost,
+            buffer,
+            totalDays,
+        } = req.body;
 
-        // Extract the trip and stop images from req.files
-        const tripImages = req.files.tripImages ? req.files.tripImages.map(file => ({
-            path: file.path, 
-        })) : [];
-    
-        const stopImages = req.files.stopImages ? req.files.stopImages.map(file => ({
-            path: file.path,
-        })) : [];
+        // Convert totalDays to integer
+        totalDays = parseInt(totalDays[0]) || 0;
 
-    // Preprocess fields to replace undefined with empty string or empty array
-    departure = departure ?? '';
-    endDate = endDate ?? '';
-    categories = categories ?? [];
-    location = location ?? '';
-    minTripmates = minTripmates ?? '';
-    maxTripmates = maxTripmates ?? '';
-    tripimages = tripimages ?? [];
-    title = title ?? '';
-    tripDescription = tripDescription ?? ' ';
-    accomodations = accomodations ?? [];
-    aboutLeader = aboutLeader ?? '';
-    includes = includes ?? [];
-    excludes = excludes ?? [];
-    totalDays = totalDays ?? '';
-    stopLocation = stopLocation ?? [];
-    stopDescription = stopDescription ?? [];
-    trainTicket = trainTicket ?? '';
-    flightTicket = flightTicket ?? '';
-    totalCost = totalCost ?? '';
-    buffer = buffer ?? '';
+// Initialize tripimages with existing tripimages or an empty array if not present
+let tripimages = existingTrip.tripimages || [];
 
-    // Define the update object
-    let update = {
-        departure,
-        endDate,
-        categories,
-        location,
-        minTripmates,
-        maxTripmates,
-        tripimages,
-        title,
-        tripDescription,
-        accomodations,
-        aboutLeader,
-        includes,
-        excludes,
-        totalDays,
-        stopLocation,
-        stopImages,
-        stopDescription,
-        trainTicket,
-        flightTicket,
-        totalCost,
-        buffer
-    };
+// Check if req.files.tripImages is defined
+if (req.files && req.files.tripImages) {
+    // Loop through each uploaded trip image
+    req.files.tripImages.forEach((file, index) => {
+        // If the uploaded trip image at this index should be updated
+        if (tripimages[index]) {
+            tripimages[index].path = file.path;
+        } else {
+            // If there is no existing trip image at this index, add the new one
+            tripimages.push({ path: file.path });
+        }
+    });
+}
 
-    console.log("update" , update);
+       // Initialize stopImages with existing stopImages or an empty array if not present
+let stopImages = existingTrip.stopImages || [];
 
-    // Use findByIdAndUpdate to update the trip. The $set operator is used to specify the fields to update.
-    const updatedTrip = await Trip.findByIdAndUpdate(id, { $set: update }, { new: true });
+// Check if req.files.stopImages is defined
+if (req.files && req.files.stopImages) {
+    // Loop through each uploaded stop image
+    req.files.stopImages.forEach((file, index) => {
+        // If the uploaded stop image at this index should be updated
+        if (stopImages[index]) {
+            stopImages[index].path = file.path;
+        } else {
+            // If there is no existing stop image at this index, add the new one at the end
+            stopImages.push({ path: file.path });
+        }
+    });
+}
 
-    if (!updatedTrip) {
-        // Handle case where the trip is not found
-        return res.status(404).send('Trip not found');
+        // Preprocess fields to replace undefined with empty string or empty array
+        departure = departure || '';
+        endDate = endDate || '';
+        categories = categories || [];
+        location = location || '';
+        minTripmates = minTripmates || '';
+        maxTripmates = maxTripmates || '';
+        title = title || '';
+        tripDescription = tripDescription || '';
+        accomodations = accomodations || [];
+        aboutLeader = aboutLeader || '';
+        includes = includes || [];
+        excludes = excludes || [];
+        stopLocation = stopLocation || [];
+        stopDescription = stopDescription || [];
+        trainTicket = trainTicket || '';
+        flightTicket = flightTicket || '';
+        totalCost = totalCost || '';
+        buffer = buffer || '';
+
+        // Merge the new data with the existing data
+        const mergedData = {
+            ...existingTrip._doc,
+            departure,
+            endDate,
+            categories,
+            location,
+            minTripmates,
+            maxTripmates,
+            tripimages: tripimages.length > 0 ? tripimages : existingTrip.tripImages,
+            title,
+            tripDescription,
+            accomodations,
+            aboutLeader,
+            includes,
+            excludes,
+            totalDays,
+            stopLocation,
+            stopImages: stopImages.length > 0 ? stopImages : existingTrip.stopImages,
+            stopDescription,
+            trainTicket,
+            flightTicket,
+            totalCost,
+            buffer
+        };
+
+        // Update the trip with the merged data
+        const updatedTrip = await Trip.findByIdAndUpdate(id, { $set: mergedData }, { new: true });
+
+        if (!updatedTrip) {
+            return res.status(404).send('Trip not found');
+        }
+
+        res.redirect(`/${id}`);
+    } catch (error) {
+        console.error('Error updating trip:', error);
+        res.status(500).send('Internal Server Error');
     }
-
-    // Optionally, you can return the updated trip to the client or redirect to another page
-    res.redirect(`/${id}`); 
 };
 
 
@@ -246,10 +275,50 @@ const mytrip = async(req,res) => {
 
 const catagariesTrips = async(req,res) => {
     const {categories} = req.body;
-    console.log(categories)
-    const trips = await Trip.find({ categories: categories })
+
+    const trips = await Trip.find({ categories: { $in: categories } });
+
     res.render("trips/catagoriesTrip.ejs" , {trips})
 }
 
 
-export { newTripForm, showAllTrips, addNewTrip, editTripForm, showTrip , deleteTrip , mytrip , postEditTrip , catagariesTrips };
+const priceFilter = async(req,res) => {
+
+
+    const {minTotal , maxTotal} = req.body;
+
+     // Find trips whose total cost is within the specified range
+     const allTrips = await Trip.find({
+        totalCost: { $gte: minTotal, $lte: maxTotal }
+    });
+
+    console.log(trips)
+
+    res.render("trips/priceFilterTrip.ejs" , {allTrips})
+
+}
+
+
+const searchTrips = async(req,res) => {
+    try {
+        const { location } = req.body;
+
+        // Sanitize input if necessary
+
+        // Perform search query
+        const allTrips = await Trip.find({
+            location: {
+                $regex: new RegExp('^' + location, 'i')
+            }
+        });
+
+        res.render("trips/searchTrips.ejs" ,{allTrips});
+
+    } catch (error) {
+        console.error("Error searching trips:", error);
+        res.status(500).json({ error: "Internal server error" });
+    }
+
+}
+
+export { searchTrips , newTripForm, showAllTrips, addNewTrip, editTripForm, showTrip , deleteTrip , mytrip , postEditTrip , catagariesTrips , priceFilter };

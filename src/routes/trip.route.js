@@ -1,6 +1,8 @@
 import { Router } from "express";
-import { addNewTrip, showAllTrips ,newTripForm,showTrip,editTripForm , deleteTrip , mytrip , postEditTrip , catagariesTrips } from "../controllers/newTrip.controler.js";
+import express from 'express';
+import { addNewTrip, showAllTrips ,newTripForm,showTrip,editTripForm , deleteTrip , mytrip , postEditTrip , catagariesTrips , priceFilter ,searchTrips} from "../controllers/newTrip.controler.js";
 import { storage } from "../cloudinary.js";
+import bodyParser from 'body-parser';
 import { isLoggedIn , isAgent , isOwner } from "../middlewares.js";
 import { asyncWrap } from "../constants.js";
 import multer from 'multer';
@@ -8,12 +10,21 @@ const upload = multer({ storage })
 
 const router = Router();
 
+// Middleware to parse form data
+router.use(express.urlencoded({ extended: true }));
+
 router.route("/createtrip")
     .get(asyncWrap( newTripForm ) )
     .post( upload.fields([{ name: 'tripImages', maxCount: 10 }, { name: 'stopImages', maxCount: 10 }]) ,(addNewTrip))
     
 router.route("/")
     .get(asyncWrap(showAllTrips))
+
+router.route("/priceFilter")
+    .post( asyncWrap(priceFilter))
+
+router.route("/searchTrips")
+    .post(asyncWrap(searchTrips))
 
 router.route("/catagaries")
     .post(asyncWrap( catagariesTrips ))

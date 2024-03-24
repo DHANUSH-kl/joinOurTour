@@ -63,7 +63,7 @@ body {
 }
 
 main {
-    display: flex;
+    /* display: flex; */
     width: 95%;
     height: 100vh;
     margin-top: 3rem;
@@ -195,3 +195,6 @@ main {
     -webkit-box-orient: vertical;
     overflow: hidden;
     text-overflow: ellipsis; /* Add ellipsis if text overflows */}
+
+
+      

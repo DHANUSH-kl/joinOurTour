@@ -74,6 +74,11 @@
                 <input type="text" name="location" id="location" value="<%= trip.location %>" class="form-control ">
             </div>
     
+            <div class="total-cost">
+                <label for="totalCost" class="form-label mb-2">Total trip cost : ₹</label>
+                <input type="number" name="totalCost" class="form-control" value="<%= trip.totalCost %>">
+            </div>
+
             <div class="totalDays-container">
                 <label for="totalDays">Total days</label>
                 <input type="number" name="totalDays" id="totalDays" class="form-control " value="<%= trip.totalDays %>">
@@ -188,7 +193,9 @@
                         <div class="stop-section">
                             <h3>Stop <%= i + 1 %></h3>
 
-                            <img src="<%= trip.stopImages[i].path %>" alt="">
+                            <% if(trip.stopImages && trip.stopImages[i]){ %>
+                                <img src="<%= trip.stopImages[i].path %>" alt="">
+                            <% } %>
 
                             <label for="stopImages" class="form-label mb-2">Enter Location</label>
                             <input type="file" name="stopImages" class="form-control">

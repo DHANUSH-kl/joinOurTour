@@ -148,9 +148,19 @@
          </div>
 
          <div class="stops-container">
+            <h1 class="title">STOPS</h1>
+
            <% for(let i=0 ; i<trip.stopLocation.length ; i++){ %>
-                <h1><%= trip.stopLocation[i] %></h1>
-                <h3><%= trip.stopDescription[i] %></h3>
+            <div class="stop-number"><%= i+1 %></div>
+
+            <div class="location-container">
+                <i class="fa-solid fa-location-dot"></i>
+                <h1 class="location"><%= trip.stopLocation[i] %></h1>
+            </div>
+                <% if(trip.stopImages && trip.stopImages[i]){ %>
+                    <img src="<%= trip.stopImages[i].path %>" alt="">
+                <% } %>
+                <h3 class="description"><%= trip.stopDescription[i] %></h3>
                 <% } %>
         
          </div>

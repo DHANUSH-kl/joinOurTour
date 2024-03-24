@@ -73,10 +73,14 @@
     <!-- <img src="/images/headerImage.png" alt=""> -->
 </div>
 
-<div class="search-bar">
-    <i class="fa-solid fa-magnifying-glass"></i>
-    <input type="text" placeholder="WHERE DO YOU WANT TO GO?">
-</div>
+<form action="/searchTrips" method="POST" id="searchTripForm">
+    <div class="search-bar">
+        <i class="fa-solid fa-magnifying-glass"></i>
+        <input type="text" name="location" placeholder="WHERE DO YOU WANT TO GO?">
+        <button type="button" onclick="searchTripForm()">Search</button>
+    </div>
+</form>
+
 
 <main>
     <div class="filter">
@@ -93,13 +97,36 @@
                     <button type="button" onclick="filterTrip('beach')">beach</button>
                     <button type="button" onclick="filterTrip('culture')">culture</button>
                     <button type="button" onclick="filterTrip('sports')">sports</button>
+
+                  
+
+                  
+            
         
                 </form>
+
             </div>
         
                 <h1 class="trip-typo">TRIP</h1>
                 <h1 class="style-typo">STYLE</h1>
     </div>
+
+    <form id="priceFilterForm" action="/priceFilter" method="POST">
+        <div class="price-filter">
+            <h2>Price Range</h2>
+            <div class="price-input">
+                <label for="minTotal">Min Price</label>
+                <input type="number" name="minTotal" id="minTotal" placeholder="min price">
+                <span>-</span>
+                <label for="maxTotal">Max Price</label>
+                <input type="number" name="maxTotal" id="maxTotal" placeholder="max price">
+                <button onclick="filterByPrice()">Apply</button>
+            </div>
+        </div>
+    </form>
+    
+
+
 
     <div class="cards">
         <%for(trips of allTrips) {%>
@@ -125,6 +152,9 @@
             <%}%>
     </div>
 
+
+
+
 </main>
     
 
@@ -137,7 +167,32 @@
             
             // Submit the form
             document.getElementById('catagoriesForm').submit();
+    
         }
+
+        function searchTripForm() {
+            document.getElementById('searchTripForm').submit();
+        }
+
+        function filterByPrice() {
+    // Collect minPrice and maxPrice values
+    // var minPrice = document.getElementById('minPrice').value;
+    // var maxPrice = document.getElementById('maxPrice').value;
+
+    // Submit the form
+
+    document.getElementById('priceFilterForm').submit();
+
+   // Delay clearing the input fields until after the form is submitted
+   setTimeout(function() {
+        document.getElementById('minTotal').value = '';
+        document.getElementById('maxTotal').value = '';
+    }, 1000); // You can adjust the delay time as needed
+}
+
+        
+
+
     </script>
     <script src="/js/nav.js"></script>
     </body>

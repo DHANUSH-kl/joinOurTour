@@ -94,3 +94,44 @@ main {
   gap: 0.8rem;
   margin: 0.5rem;
 }
+
+.stops-container {
+  width: 50vw;
+  min-height: 100vh;
+  background-color: aqua;
+}
+.location-container {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  gap: 1rem;
+  margin: 3rem;
+}
+.stops-container .title {
+  font-size: 3rem;
+  font-weight: 900;
+  text-align: center;
+}
+.stops-container .stop-number{
+  width: 2.5rem;
+  height: 2.5rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: white;
+  margin-left: 1.5rem;
+  border-radius: 50%;
+  background-color: blueviolet;
+}
+
+.stops-container img {
+  width: 60%;
+  margin-left: 1.5rem;
+}
+
+.stops-container .description {
+  padding: 1.5rem;
+}
+
+
+
