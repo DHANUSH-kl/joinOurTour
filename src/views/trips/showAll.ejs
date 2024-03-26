@@ -83,7 +83,8 @@
 
 
 <main>
-    <div class="filter">
+    <div class="sort-container">
+        <div class="filter">
             <h1 class="filter-heading">TRIP STYLE</h1>
 
 
@@ -113,17 +114,28 @@
 
     <form id="priceFilterForm" action="/priceFilter" method="POST">
         <div class="price-filter">
-            <h2>Price Range</h2>
+            <h1 class="pricebg">PRICE</h1>
+            <h1 class="rangebg">RANGE</h1>
+            <div class="price-heading">
+                <h2>Price Range</h2>
+            </div>
             <div class="price-input">
-                <label for="minTotal">Min Price</label>
-                <input type="number" name="minTotal" id="minTotal" placeholder="min price">
-                <span>-</span>
-                <label for="maxTotal">Max Price</label>
-                <input type="number" name="maxTotal" id="maxTotal" placeholder="max price">
+                <div>
+                    <!-- <label for="minTotal">Min Price</label> -->
+                    <input type="number" name="minTotal" id="minTotal" placeholder="min price">    
+                </div>
+
+                <div>
+                    <!-- <label for="maxTotal">Max Price</label> -->
+                    <input type="number" name="maxTotal" id="maxTotal" placeholder="max price">    
+                </div>
+
                 <button onclick="filterByPrice()">Apply</button>
             </div>
         </div>
     </form>
+
+    </div>
     
 
 
