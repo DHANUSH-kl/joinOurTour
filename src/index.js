@@ -97,6 +97,17 @@ app.use("/admin" , adminRoutes);
 // })
 
 
+app.get('/', (req, res) => {
+    // Generate JSON data (replace this with your actual data)
+    const jsonData = { message: 'Hello, world!' };
+  
+    // Set the Content-Type header to indicate JSON response
+    res.setHeader('Content-Type', 'application/json');
+  
+    // Send the JSON data as the response
+    res.status(200).json(jsonData);
+  });
+
 
 app.use((err, req, res, next) => {
     let { statusCode = 500, message = "something went wrong!" } = err;
