@@ -14,7 +14,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
         integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA=="
         crossorigin="anonymous" referrerpolicy="no-referrer" />
-        <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Anton&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="/css/nav.css">
@@ -35,14 +35,14 @@
             <% if(!currUser){ %>
                 <a href="/user/signup">SIGN UP</a>
                 <a href="/user/signin">SIGN IN</a>
-            <% } %>
+                <% } %>
 
-            <% if(currUser){ %>
-                <a href="/user/logout">LOG OUT</a>
-            <% } %>
-            <div class="user" id="user">
-                <i class="fa-regular fa-user"></i>
-            </div>
+                    <% if(currUser){ %>
+                        <a href="/user/logout">LOG OUT</a>
+                        <% } %>
+                            <div class="user" id="user">
+                                <i class="fa-regular fa-user"></i>
+                            </div>
         </div>
 
         <div class="dropdown-container" id="dropdown">
@@ -52,161 +52,269 @@
             <div class="user-info-container">
                 <% if(!currUser) { %>
                     <div class="profile"></div>
-                    <p>USERNAME</p>    
-                <% } else { %>
-                    <div class="profile"></div>
-                    <p><%= currUser.username %></p> 
-                <% } %>
+                    <p>USERNAME</p>
+                    <% } else { %>
+                        <div class="profile"></div>
+                        <p>
+                            <%= currUser.username %>
+                        </p>
+                        <% } %>
             </div>
             <div class="nav-links">
                 <a href="/mytrips">MY TRIP</a>
                 <a href="/createtrip">CREATE TRIP</a>
                 <a href="/">PAYMENTS AND PAYOUTS</a>
-                <a href="/user/signup">SIGN UP</a>    
+                <a href="/user/signup">SIGN UP</a>
             </div>
         </div>
     </nav>
 
 
-<div class="header-image">
-    <h1>ALL TRIPS</h1>
-    <!-- <img src="/images/headerImage.png" alt=""> -->
-</div>
-
-<form action="/searchTrips" method="POST" id="searchTripForm">
-    <div class="search-bar">
-        <i class="fa-solid fa-magnifying-glass"></i>
-        <input type="text" name="location" placeholder="WHERE DO YOU WANT TO GO?">
-        <button type="button" onclick="searchTripForm()">Search</button>
-    </div>
-</form>
-
-
-<main>
-    <div class="sort-container">
-        <div class="filter">
-            <h1 class="filter-heading">TRIP STYLE</h1>
-
-
-            <div class="catagories-container">
-                <form id="catagoriesForm" action="/catagaries" method="POST">
-        
-                    <input type="hidden" name="categories" id="categoryInput" value="">
-                    <button type="button" onclick="filterTrip('nature')">nature</button>
-                    <button type="button" onclick="filterTrip('party')">party</button>
-                    <button type="button" onclick="filterTrip('food')">food</button>
-                    <button type="button" onclick="filterTrip('beach')">beach</button>
-                    <button type="button" onclick="filterTrip('culture')">culture</button>
-                    <button type="button" onclick="filterTrip('sports')">sports</button>
-
-                  
-
-                  
-            
-        
-                </form>
-
-            </div>
-        
-                <h1 class="trip-typo">TRIP</h1>
-                <h1 class="style-typo">STYLE</h1>
+    <div class="header-image">
+        <h1>ALL TRIPS</h1>
+        <!-- <img src="/images/headerImage.png" alt=""> -->
     </div>
 
-    <form id="priceFilterForm" action="/priceFilter" method="POST">
-        <div class="price-filter">
-            <h1 class="pricebg">PRICE</h1>
-            <h1 class="rangebg">RANGE</h1>
-            <div class="price-heading">
-                <h2>Price Range</h2>
+    <form action="/searchTrips" method="POST" id="searchTripForm">
+        <div class="search-bar">
+            <i class="fa-solid fa-magnifying-glass"></i>
+            <div class="location-search-container">
+                <label for="location">Where</label>
+                <input type="text" name="location" id="location" placeholder="Search destinations">
             </div>
-            <div class="price-input">
-                <div>
-                    <!-- <label for="minTotal">Min Price</label> -->
-                    <input type="number" name="minTotal" id="minTotal" placeholder="min price">    
-                </div>
 
-                <div>
-                    <!-- <label for="maxTotal">Max Price</label> -->
-                    <input type="number" name="maxTotal" id="maxTotal" placeholder="max price">    
-                </div>
-
-                <button onclick="filterByPrice()">Apply</button>
+            <div class="checkin-search-container">
+                <label for="checkIn">Check in</label>
+                <input type="date" placeholder="Check in" name="checkIn" id="checkIn">
             </div>
+
+            <div class="checkout-search-container">
+                <label for="checkOut">Check out</label>
+                <input type="date" placeholder="Check out" name="checkOut" id="checkOut">
+            </div>
+
+            <button type="button" onclick="searchTripForm()">Search</button>
         </div>
     </form>
 
-    </div>
-    
+
+    <main>
+        <div class="sort-container">
+            <div class="filter">
+                <h1 class="filter-heading">TRIP STYLE</h1>
+
+
+                <div class="catagories-container">
+                    <form id="catagoriesForm" action="/catagaries" method="POST">
+
+                        <input type="hidden" name="categories" id="categoryInput" value="">
+                        <button type="button" onclick="filterTrip('nature')">nature</button>
+                        <button type="button" onclick="filterTrip('party')">party</button>
+                        <button type="button" onclick="filterTrip('food')">food</button>
+                        <button type="button" onclick="filterTrip('beach')">beach</button>
+                        <button type="button" onclick="filterTrip('culture')">culture</button>
+                        <button type="button" onclick="filterTrip('sports')">sports</button>
 
 
 
-    <div class="cards">
-        <%for(trips of allTrips) {%>
-            <div class="card-container">
-                <div class="card-img">
-                    <% if (trips.tripImages && trips.tripImages.length > 0 && trips.tripImages[0].path) { %>
-                        <div class="trip-image">
-                            <img src="<%= trips.tripImages[0].path %>" alt="Trip Image">
-                        </div>
-                    <% } else { %>
-                        <p>No images available for this trip</p>
-                    <% } %>
+
+
+
+                    </form>
+
                 </div>
-                <div class="card-body">
-                    <h3 class="card-title">
-                        <a href="/<%= trips._id %>">
-                            <%= trips.title %>
-                        </a>
-                    </h3>
 
-                </div>
+                <h1 class="trip-typo">TRIP</h1>
+                <h1 class="style-typo">STYLE</h1>
             </div>
-            <%}%>
-    </div>
+
+            <form id="priceFilterForm" action="/priceFilter" method="POST">
+                <div class="price-filter">
+                    <h1 class="pricebg">PRICE</h1>
+                    <h1 class="rangebg">RANGE</h1>
+                    <div class="price-heading">
+                        <h2>Price Range</h2>
+                    </div>
+                    <div class="price-input">
+                        <div>
+                            <!-- <label for="minTotal">Min Price</label> -->
+                            <input type="number" name="minTotal" id="minTotal" placeholder="min price">
+                        </div>
+
+                        <div>
+                            <!-- <label for="maxTotal">Max Price</label> -->
+                            <input type="number" name="maxTotal" id="maxTotal" placeholder="max price">
+                        </div>
+
+                        <button onclick="filterByPrice()">Apply</button>
+                    </div>
+                </div>
+            </form>
+
+        </div>
 
 
 
 
-</main>
-    
+        <div class="cards">
+            <% for(let i=0; i < allTrips.length; i++) { %>
+                <div class="card-container">
+                    <div class="card-img">
+                        <% if (allTrips[i].tripImages && allTrips[i].tripImages.length> 0 &&
+                            allTrips[i].tripImages[0].path) { %>
+                            <div class="trip-image">
+                                <div class="cart-container">
+                                    <i class="fa-solid fa-heart" id="heart<%= allTrips[i]._id %>"
+                                        onclick="toggleHeart('<%= allTrips[i]._id %>')"></i>
+                                </div>
+                                <div class="location-container">
+                                    <i class="fa-solid fa-location-dot"></i>
+                                    <h3>
+                                        <%= allTrips[i].location %>
+                                    </h3>
+                                </div>
+                                <img src="<%= allTrips[i].tripImages[0].path %>" alt="Trip Image">
+                            </div>
+                            <% } else { %>
+                                <p>No images available for this trip</p>
+                                <% } %>
+                    </div>
+                    <div class="card-body">
+                        <h3 class="card-title">
+                            <a href="/<%= allTrips[i]._id %>">
+                                <%= allTrips[i] %>
+                            </a>
+                        </h3>
+                        <div class="dates-container">
+                            <span>Departure:</span>
+                            <p>
+                                <% if (allTrips[i].departure) { %>
+                                    <%= allTrips[i].departure.toLocaleDateString('en-US', { day: '2-digit', month: 'short', year: 'numeric' }) %>
+                                <% } else { %>
+                                    Departure date not available
+                                <% } %>
+                            </p>
+                        </div>
+                        <div class="price-container">
+                            <% if (allTrips[i].totalCost) { %>
+                                <% var formattedPrice=allTrips[i].totalCost.toLocaleString('en-IN', { style: 'currency'
+                                    , currency: 'INR' }); %>
+                                    <%= formattedPrice %>
+                                        <% } else { %>
+                                            Price Not Available
+                                            <% } %>
+                        </div>
+                    </div>
+                </div>
+                <% } %>
+
+        </div>
+
+
+
+
+    </main>
+
 
 
 
     <script>
+
+        // Array to store wishlist trip IDs
+        let wishlist = [];
+
+        // Function to toggle heart icon color and update wishlist
+        function toggleHeart(tripId) {
+            const heartIcon = document.getElementById(`heart${tripId}`);
+            const index = wishlist.indexOf(tripId);
+
+            if (index === -1) {
+                // Add trip to wishlist
+                wishlist.push(tripId);
+                heartIcon.classList.add('red'); // Add red class for red color
+            } else {
+                // Remove trip from wishlist
+                wishlist.splice(index, 1);
+                heartIcon.classList.remove('red'); // Remove red class
+            }
+
+            // Send updated wishlist data to server
+            updateWishlist();
+        }
+
+        // Function to send wishlist data to the server
+        async function updateWishlist() {
+            // Data to be sent in the POST request
+            const postData = {
+                wishlist: wishlist
+            };
+
+            // Options for the fetch request
+            const options = {
+                method: 'POST', // Request method
+                headers: {
+                    'Content-Type': 'application/json' // Specify content type as JSON
+                },
+                body: JSON.stringify(postData) // Convert data to JSON format
+            };
+
+                // Make the POST request
+                const response = await fetch('http://localhost:8080/', options);
+                const newData = await response.json();
+                console.log(newData);
+                
+        }
+
+
+        
         function filterTrip(category) {
             // Set the value of the hidden input field to the selected category
             document.getElementById('categoryInput').value = category;
-            
+
             // Submit the form
             document.getElementById('catagoriesForm').submit();
-    
+
         }
 
         function searchTripForm() {
             document.getElementById('searchTripForm').submit();
         }
 
+
+
+
         function filterByPrice() {
-    // Collect minPrice and maxPrice values
-    // var minPrice = document.getElementById('minPrice').value;
-    // var maxPrice = document.getElementById('maxPrice').value;
+            // Collect minPrice and maxPrice values
+            // var minPrice = document.getElementById('minPrice').value;
+            // var maxPrice = document.getElementById('maxPrice').value;
 
-    // Submit the form
+            // Submit the form
 
-    document.getElementById('priceFilterForm').submit();
+            document.getElementById('priceFilterForm').submit();
 
-   // Delay clearing the input fields until after the form is submitted
-   setTimeout(function() {
-        document.getElementById('minTotal').value = '';
-        document.getElementById('maxTotal').value = '';
-    }, 1000); // You can adjust the delay time as needed
-}
+            // Delay clearing the input fields until after the form is submitted
+            setTimeout(function () {
+                document.getElementById('minTotal').value = '';
+                document.getElementById('maxTotal').value = '';
+            }, 1000); // You can adjust the delay time as needed
+        }
 
-        
 
+
+        function searchTripForm() {
+            // Submit the form
+            document.getElementById('searchTripForm').submit();
+
+            // Clear the input fields after a short delay
+            setTimeout(function () {
+                document.getElementById('location').value = '';
+                document.getElementById('checkIn').value = '';
+                document.getElementById('checkOut').value = '';
+            }, 500); // Adjust the delay time as needed
+        }
 
     </script>
     <script src="/js/nav.js"></script>
-    </body>
+</body>
 
 </html>

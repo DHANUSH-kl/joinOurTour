@@ -4,12 +4,17 @@ import { User } from '../models/user.model.js';
 import { storage } from '../cloudinary.js';
 import multer from 'multer';
 import { Trip } from '../models/travel.model.js';
+import { Review } from '../models/review.model.js';
 const upload = multer({ storage });
 const app = express();
 
+
+app.use(express.json());
+
 // Use body-parser middleware to parse form data
 app.use(bodyParser.urlencoded({ extended: true }));
-
+// Use body-parser middleware to parse JSON data
+app.use(bodyParser.json());
 // creating a new trip 
 
 const newTripForm = async (req, res) => {
@@ -114,7 +119,6 @@ const showTrip = async (req, res) => {
     }); 
     res.render("trips/trip.ejs", { trip })
 
-    console.log(trip)
 
 }
 
@@ -299,26 +303,110 @@ const priceFilter = async(req,res) => {
 }
 
 
-const searchTrips = async(req,res) => {
+const searchTrips = async (req, res) => {
     try {
-        const { location } = req.body;
+        const { location, checkIn, checkOut } = req.body;
 
-        // Sanitize input if necessary
+        // Convert checkIn and checkOut to Date objects
+        const departure = new Date(checkIn);
+        const endDate = new Date(checkOut);
 
-        // Perform search query
-        const allTrips = await Trip.find({
-            location: {
-                $regex: new RegExp('^' + location, 'i')
-            }
+        // Exact match trips with case-insensitive location
+        const exactMatchTrips = await Trip.find({
+            location: { $regex: new RegExp('^' + location, 'i') },
+            departure,
+            endDate
         });
 
-        res.render("trips/searchTrips.ejs" ,{allTrips});
+        // Date flexible trips with the same location
+        const dateFlexibleTrips = await Trip.find({ location: { $regex: new RegExp('^' + location, 'i') }});
+
+        // Location flexible trips with dates around the entered departure and end dates
+        const locationFlexibleTrips = await Trip.find({
+            departure: { $gte: new Date(departure.getTime() - 24 * 60 * 60 * 1000), $lte: new Date(endDate.getTime() + 24 * 60 * 60 * 1000) }
+        });
+
+        const allTrips = await Trip.find();
+
+        console.log(req.body);
+        console.log("Location:", location);
+        console.log("Date Flexible Trips Query:", { location });
+        console.log(exactMatchTrips, locationFlexibleTrips, dateFlexibleTrips);
+
+        res.render("trips/searchTrips.ejs", { exactMatchTrips, locationFlexibleTrips, dateFlexibleTrips, allTrips });
 
     } catch (error) {
         console.error("Error searching trips:", error);
         res.status(500).json({ error: "Internal server error" });
     }
+}
+
+
+const whislist = async(req,res) => {
+
+
+
+    // Extract the wishlist array from the request body
+    const { wishlist } = req.body;
+
+    // Initialize the wishlist array in the session if it doesn't exist
+    req.session.wishlist = req.session.wishlist || [];
+
+    // Loop through the wishlist items received from the client
+    wishlist.forEach(tripId => {
+        // Check if the tripId is not already in the wishlist stored in the session
+        if (!req.session.wishlist.includes(tripId)) {
+            // Add the tripId to the wishlist stored in the session
+            req.session.wishlist.push(tripId);
+        }
+    });
+
+    console.log("Wishlist updated:", req.session.wishlist);
+        
+}
+
+const reviews = async(req,res) => {
+
+    const {id} = req.params;
+    const {name, comment} = req.body;
+
+    // Find the trip by ID
+    const trip = await Trip.findById(id);
+
+    // Get the trip start date
+    const tripStartDate = new Date(trip.departure);
+
+    // Calculate the current date
+    const currentDate = new Date();
+
+    // Calculate the date after 1 day of trip start
+    const allowedDate = new Date(tripStartDate);
+    allowedDate.setDate(tripStartDate.getDate() + 1);
+
+    // Check if the current date is after the allowed date
+    if (currentDate < allowedDate) {
+        // If the current date is before the allowed date, user cannot post review yet
+        return res.status(400).json({ error: "Review cannot be posted before the trip starts." });
+    }
+
+    // Create a new review instance
+    const newReview = new Review({
+        name,
+        comment
+    });
+
+    // Save the new review
+    await newReview.save();
+
+    // Push the new review to the trip's reviews array
+    trip.reviews.push(newReview);
+
+    // Save the updated trip
+    await trip.save();
+
+    console.log(trip);
+    res.redirect(`/${id}`);
 
 }
 
-export { searchTrips , newTripForm, showAllTrips, addNewTrip, editTripForm, showTrip , deleteTrip , mytrip , postEditTrip , catagariesTrips , priceFilter };
+export { reviews , whislist , searchTrips , newTripForm, showAllTrips, addNewTrip, editTripForm, showTrip , deleteTrip , mytrip , postEditTrip , catagariesTrips , priceFilter };

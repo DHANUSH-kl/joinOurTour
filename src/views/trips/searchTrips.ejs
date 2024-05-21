@@ -6,29 +6,31 @@
     <title>Document</title>
 </head>
 <body>
-    <div class="cards">
-        <%for(trips of allTrips) {%>
-            <div class="card-container">
-                <div class="card-img">
-                    <% if (trips.tripImages && trips.tripImages.length > 0 && trips.tripImages[0].path) { %>
-                        <div class="trip-image">
-                            <img src="<%= trips.tripImages[0].path %>" alt="Trip Image">
-                        </div>
-                    <% } else { %>
-                        <p>No images available for this trip</p>
-                    <% } %>
-                </div>
-                <div class="card-body">
-                    <h3 class="card-title">
-                        <a href="/<%= trips._id %>">
-                            <%= trips.title %>
-                        </a>
-                    </h3>
 
-                </div>
-            </div>
-            <%}%>
-    </div>
+
+<%if(exactMatchTrips) {%>
+    <h1>Exact trips</h1>
+    <h1><%= exactMatchTrips %></h1>
+    <br>
+<%}%>
+
+<%if(locationFlexibleTrips) {%>
+    <h1>location flexible trips</h1>
+    <h1><%= locationFlexibleTrips %></h1>
+    <br>
+<%}%>
+
+
+<%if(dateFlexibleTrips) {%>
+    <h1>date flexible trips</h1>
+    <h1><%= dateFlexibleTrips %></h1>
+    <br>
+<%}%>
+
+<%if(allTrips){%>
+    <h1>all trips</h1>
+    <h1><%= allTrips %></h1>
+<%}%>
 
 
 </body>

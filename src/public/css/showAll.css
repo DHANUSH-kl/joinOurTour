@@ -38,15 +38,15 @@ body {
 
 .search-bar {
     width: 95vw;
-    height: 50px;
+    height: 7rem;
     margin-top: 1.3rem;
     background-image: url(/images/headerImage.png);
     background-size: cover;
     background-position: top;
     display: flex;
-    justify-content: flex-start;
-    gap: 3rem;
+    justify-content: space-between;
     align-items: center;
+    gap: 3rem;
     padding: 2rem;
 }
 
@@ -55,9 +55,9 @@ body {
     font-size: 2rem;
 }
 .search-bar input {
-    width: 80%;
+    width: 100%;
     text-align: center;
-    height: 40px;
+    height: 50px;
     border-radius: 10px;
     border: 2px solid white;
 }
@@ -69,6 +69,26 @@ body {
     font-weight: 700;
     border-radius: 7px;
     cursor: pointer;
+}
+
+.search-bar div {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 1rem;
+}
+
+.search-bar div label {
+    font-weight: 700;
+    color: white;
+}
+
+.location-search-container {
+    width: 60%;
+}
+.checkin-search-container , .checkout-search-container {
+    width: 40%;
 }
 
 
@@ -246,13 +266,12 @@ main {
     gap: 3rem;
     justify-content: flex-start;
     align-items: center;
-    background-color: aquamarine;
     margin-top: 5rem;
 }
 
 .card-container {
     width: 14rem;
-    height: 20rem;
+    height: 18rem;
     background-color: #F9CBC7;
     border-radius: 5px;
     overflow: hidden;
@@ -262,6 +281,7 @@ main {
     width: 100%;
     height: 50%;
     overflow: hidden;
+    position: relative;
 }
 
 .card-img img {
@@ -269,9 +289,44 @@ main {
     height: 100%;
 }
 
+.cart-container {
+    position: absolute;
+    top: 0.5rem;
+    right: 1rem;
+}
+.cart-container i {
+    cursor: pointer;
+}
+.red {
+    color: red;
+}
+
+
+
+.location-container {
+    position: absolute;
+    top: 0.7rem;
+    left: 0.6rem;
+    padding: 0.3rem 0.7rem;
+    width: auto;
+    background-color: white;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 0.5rem;
+    border-radius: 1rem;
+}
+.location-container i {
+    font-size: 0.6rem;
+}
+.location-container h3 {
+    font-size: 0.7rem;
+    font-weight: 700;
+}
 .card-body {
     width: 100%;
     height: 50%;
+    position: relative;
 }
 
 .card-title {
@@ -288,4 +343,28 @@ main {
     overflow: hidden;
     text-overflow: ellipsis; /* Add ellipsis if text overflows */
 }
+.dates-container {
+    width: 100%;
+    height: 2rem;
+    padding: 0rem 1rem;
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    gap: 0.3rem;
+}
+.dates-container span , p{
+    font-size: 0.7rem;
+    opacity: 0.7;
+}
+.dates-container span {
+    font-weight: 700;
+}
 
+.price-container {
+    font-weight: 900;
+    font-size: 0.8rem;
+    color: rgb(2, 151, 2);
+    position: absolute;
+    bottom: 1rem;
+    left: 1rem;
+}

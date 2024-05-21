@@ -10,6 +10,7 @@ import { fileURLToPath } from 'url';
 import { dirname } from 'path';
 import cookieParser from 'cookie-parser';
 import session from 'express-session';
+import cors from 'cors';
 import passport from 'passport';
 import { Strategy as LocalStrategy } from 'passport-local';
 import { User } from "./models/user.model.js";
@@ -36,7 +37,7 @@ connectDB()
     
 
 app.use(express.urlencoded({ extended: true }));
-
+app.use(express.json())
 //express session
 
 
@@ -64,7 +65,7 @@ passport.serializeUser(User.serializeUser());
 passport.deserializeUser(User.deserializeUser());
 
 
-
+app.use(cors());
 app.use(methodOverride("_method"));
 app.use(express.static(path.join(__dirname, "/public")));
 app.use(cookieParser());
@@ -95,6 +96,8 @@ app.use("/admin" , adminRoutes);
 //    res.send("SOMETHING went wrong");
 // })
 
+
+
 app.use((err, req, res, next) => {
     let { statusCode = 500, message = "something went wrong!" } = err;
     res.status(statusCode).send(message);
@@ -102,3 +105,4 @@ app.use((err, req, res, next) => {
 app.all("*", (err, req, res, next) => {
     next(new expressError(404, "page not found"))
 })
+

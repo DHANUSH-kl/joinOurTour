@@ -1,5 +1,6 @@
 import mongoose, { Schema } from "mongoose";
 import { User } from "./user.model.js";
+import { Review } from "./review.model.js";
 
 const imageSchema = new mongoose.Schema({
     path: String,
@@ -8,10 +9,10 @@ const imageSchema = new mongoose.Schema({
 
 const tripSchema = new Schema({
     departure : {
-        type : String,
+        type : Date,
     },
     endDate : {
-        type : String
+        type : Date
     },
     location : {
         type : String,
@@ -56,6 +57,10 @@ const tripSchema = new Schema({
         type : Schema.Types.ObjectId,
         ref : "User"
     },
+    reviews : [{
+        type : Schema.Types.ObjectId,
+        ref : "review"
+    }]
 } , {timestamps:true});
 
 

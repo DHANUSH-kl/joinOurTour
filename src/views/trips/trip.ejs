@@ -123,6 +123,8 @@
 
         <div class="description-container">
             <h3> <%= trip.tripDescription %> </h3>
+            <h3> <%= trip.departure %> </h3>
+            <h3> <%= trip.endDate %> </h3>
         </div>
 
         <div class="includes-container">
@@ -164,6 +166,15 @@
                 <% } %>
         
          </div>
+
+        <form action="/<%= trip._id %>/reviews" method="POST">
+
+            <label for="rating">ratings</label>
+            <input type="range" min="0" max="5" name="rating" id="rating">
+            <label for="comment">Leave a comment</label>
+            <input type="text" name="comment" id="comment">
+            <button>submit your review</button>
+        </form>
     </main>
 
     <!-- <h1>Stops</h1>
