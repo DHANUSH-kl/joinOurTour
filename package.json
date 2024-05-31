@@ -1,19 +1,18 @@
 {
-  "engines":{
-    "node":"18.16.1",
+  "engines": {
+    "node": "18.16.1"
   },
   "name": "joinourjourney",
   "version": "1.0.0",
   "proxy": "http://localhost:8080",
-  "description": "Online travel booking ",
+  "description": "Online travel booking",
   "type": "module",
   "main": "index.js",
   "scripts": {
     "start": "node -r dotenv/config --experimental-json-modules src/index.js",
     "dev": "nodemon -r dotenv/config --experimental-json-modules src/index.js",
     "build": "webpack"
-}
-,
+  },
   "author": "Dhanush",
   "license": "ISC",
   "dependencies": {
