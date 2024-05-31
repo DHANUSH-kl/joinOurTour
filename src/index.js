@@ -3,7 +3,6 @@ import express from 'express';
 import connectDB from './db/db.js';
 import methodOverride from 'method-override';
 import ejsMate from 'ejs-mate';
-import { urlencoded } from 'express';
 import path from 'path';
 import { fileURLToPath } from 'url';
 import { dirname } from 'path';
