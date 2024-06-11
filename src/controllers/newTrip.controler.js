@@ -18,7 +18,7 @@ app.use(bodyParser.json());
 // creating a new trip 
 
 const newTripForm = async (req, res) => {
-    res.render("trips/newTrip.ejs");    
+    res.render("trips/newTrip.ejs");
 }
 
 // posting new trip 
@@ -26,32 +26,33 @@ const newTripForm = async (req, res) => {
 const addNewTrip = async (req, res) => {
 
     let { departure
-        ,endDate
-        ,categories
-        ,location
-        ,minTripmates
-        ,maxTripmates
-        ,tripimages
-        ,title
-        ,tripDescription
-        ,accomodations
-        ,aboutLeader
-        ,includes
-        ,totalDays
-        ,stopLocation
-        ,stopDescription
-        ,trainTicket
-        ,flightTicket
-        ,totalCost
-        ,buffer
-        ,transport
-        ,excludes
+        , endDate
+        , categories
+        , location
+        , minTripmates
+        , maxTripmates
+        , tripimages
+        , title
+        , tripDescription
+        , accomodations
+        , aboutLeader
+        , includes
+        , totalDays
+        , stopLocation
+        , stopDescription
+        , trainTicket
+        , flightTicket
+        , totalCost
+        , buffer
+        , transport
+        , excludes
+        , youtubeUrl
 
     } = req.body;
 
     // Extract the trip and stop images from req.files
     const tripImages = req.files.tripImages ? req.files.tripImages.map(file => ({
-        path: file.path, 
+        path: file.path,
     })) : [];
 
     const stopImages = req.files.stopImages ? req.files.stopImages.map(file => ({
@@ -61,6 +62,16 @@ const addNewTrip = async (req, res) => {
     console.log(stopImages);
 
     let userId = req.user._id;
+
+    // Transform the YouTube URL for embedding
+    if (youtubeUrl.includes("youtu.be")) {
+        youtubeUrl = youtubeUrl.replace("youtu.be", "www.youtube.com/embed");
+        youtubeUrl = youtubeUrl.split('?')[0]; // Remove query parameters
+    } else if (youtubeUrl.includes("watch?v=")) {
+        youtubeUrl = youtubeUrl.replace("watch?v=", "embed/");
+        youtubeUrl = youtubeUrl.split('&')[0]; // Remove other parameters
+    }
+
 
     const newTrip = new Trip({
         departure,
@@ -76,10 +87,11 @@ const addNewTrip = async (req, res) => {
         totalCost,
         stopLocation,
         stopDescription,
-        tripImages, 
+        tripImages,
         stopImages,
         transport,
-        owner : userId,
+        owner: userId,
+        youtubeUrl,
     });
 
     totalDays = totalDays[0] ? parseInt(totalDays[0]) : 0;
@@ -93,7 +105,7 @@ const addNewTrip = async (req, res) => {
     console.log(req.body);
 
     await newTrip.save();
-    
+
 
     res.redirect("/");
 
@@ -116,7 +128,7 @@ const showTrip = async (req, res) => {
         populate: {
             path: 'tripLeader'
         }
-    }); 
+    });
     res.render("trips/trip.ejs", { trip })
 
 
@@ -125,8 +137,8 @@ const showTrip = async (req, res) => {
 // edit trip 
 
 const editTripForm = async (req, res) => {
-    let {id} = req.params;
-    const trip = await Trip.findById(id);  
+    let { id } = req.params;
+    const trip = await Trip.findById(id);
     res.render("trips/editTrip.ejs", { trip })
 }
 
@@ -164,39 +176,39 @@ const postEditTrip = async (req, res) => {
         // Convert totalDays to integer
         totalDays = parseInt(totalDays[0]) || 0;
 
-// Initialize tripimages with existing tripimages or an empty array if not present
-let tripimages = existingTrip.tripimages || [];
+        // Initialize tripimages with existing tripimages or an empty array if not present
+        let tripimages = existingTrip.tripimages || [];
 
-// Check if req.files.tripImages is defined
-if (req.files && req.files.tripImages) {
-    // Loop through each uploaded trip image
-    req.files.tripImages.forEach((file, index) => {
-        // If the uploaded trip image at this index should be updated
-        if (tripimages[index]) {
-            tripimages[index].path = file.path;
-        } else {
-            // If there is no existing trip image at this index, add the new one
-            tripimages.push({ path: file.path });
+        // Check if req.files.tripImages is defined
+        if (req.files && req.files.tripImages) {
+            // Loop through each uploaded trip image
+            req.files.tripImages.forEach((file, index) => {
+                // If the uploaded trip image at this index should be updated
+                if (tripimages[index]) {
+                    tripimages[index].path = file.path;
+                } else {
+                    // If there is no existing trip image at this index, add the new one
+                    tripimages.push({ path: file.path });
+                }
+            });
         }
-    });
-}
 
-       // Initialize stopImages with existing stopImages or an empty array if not present
-let stopImages = existingTrip.stopImages || [];
+        // Initialize stopImages with existing stopImages or an empty array if not present
+        let stopImages = existingTrip.stopImages || [];
 
-// Check if req.files.stopImages is defined
-if (req.files && req.files.stopImages) {
-    // Loop through each uploaded stop image
-    req.files.stopImages.forEach((file, index) => {
-        // If the uploaded stop image at this index should be updated
-        if (stopImages[index]) {
-            stopImages[index].path = file.path;
-        } else {
-            // If there is no existing stop image at this index, add the new one at the end
-            stopImages.push({ path: file.path });
+        // Check if req.files.stopImages is defined
+        if (req.files && req.files.stopImages) {
+            // Loop through each uploaded stop image
+            req.files.stopImages.forEach((file, index) => {
+                // If the uploaded stop image at this index should be updated
+                if (stopImages[index]) {
+                    stopImages[index].path = file.path;
+                } else {
+                    // If there is no existing stop image at this index, add the new one at the end
+                    stopImages.push({ path: file.path });
+                }
+            });
         }
-    });
-}
 
         // Preprocess fields to replace undefined with empty string or empty array
         departure = departure || '';
@@ -260,52 +272,151 @@ if (req.files && req.files.stopImages) {
 
 
 
-const deleteTrip = async(req,res) => {
-    let {id} = req.params;
+const deleteTrip = async (req, res) => {
+    let { id } = req.params;
     await Trip.findByIdAndDelete(id);
 
-     // Remove the trip ID from the user's createdTrips array
-     await User.findByIdAndUpdate(req.user._id , {
+    // Remove the trip ID from the user's createdTrips array
+    await User.findByIdAndUpdate(req.user._id, {
         $pull: { createdTrips: id },
     });
 
     res.redirect("/")
 }
 
-const mytrip = async(req,res) => {
+const mytrip = async (req, res) => {
     const trips = await User.findById(req.user._id).populate("createdTrips");
-    res.render("trips/mytrip.ejs" , {trips} )
+    res.render("trips/mytrip.ejs", { trips })
 }
 
-const catagariesTrips = async(req,res) => {
-    const {categories} = req.body;
+const catagariesTrips = async (req, res) => {
+    const { categories } = req.body;
 
     const trips = await Trip.find({ categories: { $in: categories } });
 
-    res.render("trips/catagoriesTrip.ejs" , {trips})
+    res.render("trips/catagoriesTrip.ejs", { trips })
 }
 
 
-const priceFilter = async(req,res) => {
+const priceFilter = async (req, res) => {
+    const { minTotal, maxTotal } = req.body;
 
-
-    const {minTotal , maxTotal} = req.body;
-
-     // Find trips whose total cost is within the specified range
-     const allTrips = await Trip.find({
+    // Find trips whose total cost is within the specified range
+    const allTrips = await Trip.find({
         totalCost: { $gte: minTotal, $lte: maxTotal }
     });
 
-    console.log(trips)
+    // Corrected log statement to use 'allTrips'
+    console.log(allTrips);
 
-    res.render("trips/priceFilterTrip.ejs" , {allTrips})
+    // Render the template with 'allTrips'
+    res.render("trips/priceFilterTrip.ejs", { allTrips });
+};
 
-}
+
+
+// const searchTrips = async (req, res) => {
+//     try {
+//         const { location, checkIn, checkOut } = req.body;
+
+//         // Convert checkIn and checkOut to Date objects
+//         const departure = new Date(checkIn);
+//         const endDate = new Date(checkOut);
+
+//         // Exact match trips with case-insensitive location
+//         const exactMatchTrips = await Trip.find({
+//             location: { $regex: new RegExp('^' + location, 'i') },
+//             departure,
+//             endDate
+//         });
+
+//         // Date flexible trips with the same location
+//         const dateFlexibleTrips = await Trip.find({ location: { $regex: new RegExp('^' + location, 'i') }});
+
+//         // Location flexible trips with dates around the entered departure and end dates
+//         const locationFlexibleTrips = await Trip.find({
+//             departure: { $gte: new Date(departure.getTime() - 24 * 60 * 60 * 1000), $lte: new Date(endDate.getTime() + 24 * 60 * 60 * 1000) }
+//         });
+
+//         const allTrips = await Trip.find();
+
+//         console.log(req.body);
+//         console.log("Location:", location);
+//         console.log("Date Flexible Trips Query:", { location });
+//         console.log(exactMatchTrips, locationFlexibleTrips, dateFlexibleTrips);
+
+//         res.render("trips/searchTrips.ejs", { exactMatchTrips, locationFlexibleTrips, dateFlexibleTrips, allTrips });
+
+//     } catch (error) {
+//         console.error("Error searching trips:", error);
+//         res.status(500).json({ error: "Internal server error" });
+//     }
+// }
+
+
+// const searchTrips = async (req, res) => {
+//     try {
+//         const { location, checkIn, checkOut } = req.body;
+
+//         // Convert checkIn and checkOut to Date objects
+//         const departure = new Date(checkIn);
+//         const endDate = new Date(checkOut);
+
+//         // Exact match trips with case-insensitive location
+//         const exactMatchTrips = await Trip.find({
+//             location: { $regex: new RegExp('^' + location, 'i') },
+//             departure,
+//             endDate
+//         }).lean(); // Use lean() for better performance and easier manipulation
+
+//         // Add category to exact match trips
+//         exactMatchTrips.forEach(trip => trip.category = 'Exact Match');
+
+//         // Date flexible trips with the same location
+//         const dateFlexibleTrips = await Trip.find({
+//             location: { $regex: new RegExp('^' + location, 'i') }
+//         }).lean();
+
+//         // Add category to date flexible trips
+//         dateFlexibleTrips.forEach(trip => trip.category = 'Date Flexible');
+
+//         // Location flexible trips with dates around the entered departure and end dates
+//         const locationFlexibleTrips = await Trip.find({
+//             departure: {
+//                 $gte: new Date(departure.getTime() - 24 * 60 * 60 * 1000),
+//                 $lte: new Date(endDate.getTime() + 24 * 60 * 60 * 1000)
+//             }
+//         }).lean();
+
+//         // Add category to location flexible trips
+//         locationFlexibleTrips.forEach(trip => trip.category = 'Location Flexible');
+
+//         const allTrips = await Trip.find().lean();
+
+//         console.log(req.body);
+//         console.log("Location:", location);
+//         console.log("Date Flexible Trips Query:", { location });
+//         console.log(exactMatchTrips, locationFlexibleTrips, dateFlexibleTrips);
+
+//         res.render("trips/searchTrips.ejs", {
+//             exactMatchTrips,
+//             locationFlexibleTrips,
+//             dateFlexibleTrips,
+//             allTrips
+//         });
+
+//     } catch (error) {
+//         console.error("Error searching trips:", error);
+//         res.status(500).json({ error: "Internal server error" });
+//     }
+// };
 
 
 const searchTrips = async (req, res) => {
     try {
-        const { location, checkIn, checkOut } = req.body;
+        const { location, checkIn, checkOut, category } = req.body;
+
+        console.log("categoris", category)
 
         // Convert checkIn and checkOut to Date objects
         const departure = new Date(checkIn);
@@ -319,21 +430,34 @@ const searchTrips = async (req, res) => {
         });
 
         // Date flexible trips with the same location
-        const dateFlexibleTrips = await Trip.find({ location: { $regex: new RegExp('^' + location, 'i') }});
+        const dateFlexibleTrips = await Trip.find({
+            location: { $regex: new RegExp('^' + location, 'i') }
+        });
 
         // Location flexible trips with dates around the entered departure and end dates
         const locationFlexibleTrips = await Trip.find({
             departure: { $gte: new Date(departure.getTime() - 24 * 60 * 60 * 1000), $lte: new Date(endDate.getTime() + 24 * 60 * 60 * 1000) }
         });
 
+        // Category match trips with the same location and matching categories
+        // Category match trips with the same location and matching categories
+        const categoryMatchTrips = await Trip.find({
+            location: { $regex: new RegExp('^' + location, 'i') },
+            categories: { $in: Array.isArray(category) ? category : [category] } // Ensure category is an array
+        });
+
+
         const allTrips = await Trip.find();
 
         console.log(req.body);
         console.log("Location:", location);
         console.log("Date Flexible Trips Query:", { location });
-        console.log(exactMatchTrips, locationFlexibleTrips, dateFlexibleTrips);
+        console.log("Exact Match Trips:", exactMatchTrips);
+        console.log("Location Flexible Trips:", locationFlexibleTrips);
+        console.log("Date Flexible Trips:", dateFlexibleTrips);
+        console.log("Category Match Trips:", categoryMatchTrips);
 
-        res.render("trips/searchTrips.ejs", { exactMatchTrips, locationFlexibleTrips, dateFlexibleTrips, allTrips });
+        res.render("trips/searchTrips.ejs", { exactMatchTrips, locationFlexibleTrips, dateFlexibleTrips, categoryMatchTrips, allTrips });
 
     } catch (error) {
         console.error("Error searching trips:", error);
@@ -341,8 +465,7 @@ const searchTrips = async (req, res) => {
     }
 }
 
-
-const whislist = async(req,res) => {
+const whislist = async (req, res) => {
 
 
 
@@ -362,13 +485,13 @@ const whislist = async(req,res) => {
     });
 
     console.log("Wishlist updated:", req.session.wishlist);
-        
+
 }
 
-const reviews = async(req,res) => {
+    const reviews = async (req, res) => {
 
-    const {id} = req.params;
-    const {name, comment} = req.body;
+    const { id } = req.params;
+    const { name, comment } = req.body;
 
     // Find the trip by ID
     const trip = await Trip.findById(id);
@@ -409,4 +532,5 @@ const reviews = async(req,res) => {
 
 }
 
-export { reviews , whislist , searchTrips , newTripForm, showAllTrips, addNewTrip, editTripForm, showTrip , deleteTrip , mytrip , postEditTrip , catagariesTrips , priceFilter };
+export { reviews, whislist, searchTrips, newTripForm, showAllTrips, addNewTrip, editTripForm, showTrip, deleteTrip, mytrip, postEditTrip, catagariesTrips, priceFilter };
+

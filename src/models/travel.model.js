@@ -4,6 +4,7 @@ import { Review } from "./review.model.js";
 
 const imageSchema = new mongoose.Schema({
     path: String,
+    public_id: String,
     // Add other properties if needed
    });
 
@@ -22,6 +23,9 @@ const tripSchema = new Schema({
     },
     title : {
         type : String,
+    },
+    youtubeUrl: {
+        type: String, 
     },
     tripDescription : {
         type : String,

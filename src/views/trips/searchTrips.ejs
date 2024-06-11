@@ -8,30 +8,42 @@
 <body>
 
 
-<%if(exactMatchTrips) {%>
-    <h1>Exact trips</h1>
-    <h1><%= exactMatchTrips %></h1>
-    <br>
-<%}%>
+    <h1>Search Results</h1>
 
-<%if(locationFlexibleTrips) {%>
-    <h1>location flexible trips</h1>
-    <h1><%= locationFlexibleTrips %></h1>
-    <br>
-<%}%>
+    <h2>Exact Match Trips</h2>
+    <ul>
+        <% exactMatchTrips.forEach(trip => { %>
+            <li><%= trip.title %> - <%= trip.location %></li>
+        <% }) %>
+    </ul>
 
+    <h2>Date Flexible Trips</h2>
+    <ul>
+        <% dateFlexibleTrips.forEach(trip => { %>
+            <li><%= trip.title %> - <%= trip.location %></li>
+        <% }) %>
+    </ul>
 
-<%if(dateFlexibleTrips) {%>
-    <h1>date flexible trips</h1>
-    <h1><%= dateFlexibleTrips %></h1>
-    <br>
-<%}%>
+    <h2>Location Flexible Trips</h2>
+    <ul>
+        <% locationFlexibleTrips.forEach(trip => { %>
+            <li><%= trip.title %> - <%= trip.location %></li>
+        <% }) %>
+    </ul>
 
-<%if(allTrips){%>
-    <h1>all trips</h1>
-    <h1><%= allTrips %></h1>
-<%}%>
+    <h2>Category Match Trips</h2>
+    <ul>
+        <% categoryMatchTrips.forEach(trip => { %>
+            <li><%= trip.title %> - <%= trip.location %> - Categories: <%= trip.categories.join(', ') %></li>
+        <% }) %>
+    </ul>
 
+    <h2>All Trips</h2>
+    <ul>
+        <% allTrips.forEach(trip => { %>
+            <li><%= trip.title %> - <%= trip.location %></li>
+        <% }) %>
+    </ul>
 
 </body>
 </html>

@@ -8,7 +8,7 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Lato&display=swap" rel="stylesheet">
     <link
-        href="https://fonts.googleapis.com/css2?family=Lato:wght@400;700;900&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"
+        href="https://fonts.googleapis.com/css2?family=Lato:wght@400;700;900&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900&display=swap"
         rel="stylesheet">
 
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
@@ -35,14 +35,14 @@
             <% if(!currUser){ %>
                 <a href="/user/signup">SIGN UP</a>
                 <a href="/user/signin">SIGN IN</a>
-                <% } %>
+            <% } %>
 
-                    <% if(currUser){ %>
-                        <a href="/user/logout">LOG OUT</a>
-                        <% } %>
-                            <div class="user" id="user">
-                                <i class="fa-regular fa-user"></i>
-                            </div>
+            <% if(currUser){ %>
+                <a href="/user/logout">LOG OUT</a>
+            <% } %>
+            <div class="user" id="user">
+                <i class="fa-regular fa-user"></i>
+            </div>
         </div>
 
         <div class="dropdown-container" id="dropdown">
@@ -53,12 +53,12 @@
                 <% if(!currUser) { %>
                     <div class="profile"></div>
                     <p>USERNAME</p>
-                    <% } else { %>
-                        <div class="profile"></div>
-                        <p>
-                            <%= currUser.username %>
-                        </p>
-                        <% } %>
+                <% } else { %>
+                    <div class="profile"></div>
+                    <p>
+                        <%= currUser.username %>
+                    </p>
+                <% } %>
             </div>
             <div class="nav-links">
                 <a href="/mytrips">MY TRIP</a>
@@ -68,7 +68,6 @@
             </div>
         </div>
     </nav>
-
 
     <div class="header-image">
         <h1>ALL TRIPS</h1>
@@ -93,35 +92,32 @@
                 <input type="date" placeholder="Check out" name="checkOut" id="checkOut">
             </div>
 
-            <button type="button" onclick="searchTripForm()">Search</button>
+            <button type="button" onclick="searchTrip()">Search</button>
         </div>
     </form>
-
 
     <main>
         <div class="sort-container">
             <div class="filter">
                 <h1 class="filter-heading">TRIP STYLE</h1>
 
-
                 <div class="catagories-container">
-                    <form id="catagoriesForm" action="/catagaries" method="POST">
-
-                        <input type="hidden" name="categories" id="categoryInput" value="">
-                        <button type="button" onclick="filterTrip('nature')">nature</button>
-                        <button type="button" onclick="filterTrip('party')">party</button>
-                        <button type="button" onclick="filterTrip('food')">food</button>
-                        <button type="button" onclick="filterTrip('beach')">beach</button>
-                        <button type="button" onclick="filterTrip('culture')">culture</button>
-                        <button type="button" onclick="filterTrip('sports')">sports</button>
-
-
-
-
-
-
+                    <form id="categoryFilterForm" method="POST" action="/searchtrips">
+                        <label for="nature"><input type="checkbox" name="category" value="nature" id="nature"
+                                onclick="toggleCategory('nature')"> Nature</label>
+                        <label for="party"><input type="checkbox" name="category" value="party" id="party"
+                                onclick="toggleCategory('party')"> Party</label>
+                        <label for="food"><input type="checkbox" name="category" value="food" id="food"
+                                onclick="toggleCategory('food')"> Food</label>
+                        <label for="beach"><input type="checkbox" name="category" value="beach" id="beach"
+                                onclick="toggleCategory('beach')"> Beach</label>
+                        <label for="culture"><input type="checkbox" name="category" value="culture" id="culture"
+                                onclick="toggleCategory('culture')"> Culture</label>
+                        <label for="sports"><input type="checkbox" name="category" value="sports" id="sports"
+                                onclick="toggleCategory('sports')"> Sports</label>
+                        <input type="hidden" name="selectedCategories" id="selectedCategories">
+                        <button type="button" onclick="searchCategory()">Apply Categories</button>
                     </form>
-
                 </div>
 
                 <h1 class="trip-typo">TRIP</h1>
@@ -146,50 +142,42 @@
                             <input type="number" name="maxTotal" id="maxTotal" placeholder="max price">
                         </div>
 
-                        <button onclick="filterByPrice()">Apply</button>
+                        <button type="button" onclick="filterByPrice()">Apply</button>
                     </div>
                 </div>
             </form>
-
         </div>
-
-
-
 
         <div class="cards">
             <% for(let i=0; i < allTrips.length; i++) { %>
                 <div class="card-container">
                     <div class="card-img">
-                        <% if (allTrips[i].tripImages && allTrips[i].tripImages.length> 0 &&
-                            allTrips[i].tripImages[0].path) { %>
+                        <% if (allTrips[i].tripImages && allTrips[i].tripImages.length > 0 && allTrips[i].tripImages[0].path) { %>
                             <div class="trip-image">
                                 <div class="cart-container">
-                                    <i class="fa-solid fa-heart" id="heart<%= allTrips[i]._id %>"
-                                        onclick="toggleHeart('<%= allTrips[i]._id %>')"></i>
+                                    <i class="fa-solid fa-heart" id="heart<%= allTrips[i]._id %>" onclick="toggleHeart('<%= allTrips[i]._id %>')"></i>
                                 </div>
                                 <div class="location-container">
                                     <i class="fa-solid fa-location-dot"></i>
-                                    <h3>
-                                        <%= allTrips[i].location %>
-                                    </h3>
+                                    <h3><%= allTrips[i].location %></h3>
                                 </div>
                                 <img src="<%= allTrips[i].tripImages[0].path %>" alt="Trip Image">
                             </div>
-                            <% } else { %>
-                                <p>No images available for this trip</p>
-                                <% } %>
+                        <% } else { %>
+                            <p>No images available for this trip</p>
+                        <% } %>
                     </div>
                     <div class="card-body">
                         <h3 class="card-title">
                             <a href="/<%= allTrips[i]._id %>">
-                                <%= allTrips[i] %>
+                                <%= allTrips[i].title %>
                             </a>
                         </h3>
                         <div class="dates-container">
                             <span>Departure:</span>
                             <p>
                                 <% if (allTrips[i].departure) { %>
-                                    <%= allTrips[i].departure.toLocaleDateString('en-US', { day: '2-digit', month: 'short', year: 'numeric' }) %>
+                                    <%= new Date(allTrips[i].departure).toLocaleDateString('en-US', { day: '2-digit', month: 'short', year: 'numeric' }) %>
                                 <% } else { %>
                                     Departure date not available
                                 <% } %>
@@ -197,29 +185,18 @@
                         </div>
                         <div class="price-container">
                             <% if (allTrips[i].totalCost) { %>
-                                <% var formattedPrice=allTrips[i].totalCost.toLocaleString('en-IN', { style: 'currency'
-                                    , currency: 'INR' }); %>
-                                    <%= formattedPrice %>
-                                        <% } else { %>
-                                            Price Not Available
-                                            <% } %>
+                                <%= allTrips[i].totalCost.toLocaleString('en-IN', { style: 'currency', currency: 'INR' }) %>
+                            <% } else { %>
+                                Price Not Available
+                            <% } %>
                         </div>
                     </div>
                 </div>
-                <% } %>
-
+            <% } %>
         </div>
-
-
-
-
     </main>
 
-
-
-
     <script>
-
         // Array to store wishlist trip IDs
         let wishlist = [];
 
@@ -245,51 +222,61 @@
         // Function to send wishlist data to the server
         async function updateWishlist() {
             // Data to be sent in the POST request
-            const postData = {
-                wishlist: wishlist
-            };
+            const postData = { wishlist: wishlist };
 
             // Options for the fetch request
             const options = {
                 method: 'POST', // Request method
-                headers: {
-                    'Content-Type': 'application/json' // Specify content type as JSON
-                },
+                headers: { 'Content-Type': 'application/json' }, // Specify content type as JSON
                 body: JSON.stringify(postData) // Convert data to JSON format
             };
 
-                // Make the POST request
-                const response = await fetch('http://localhost:8080/', options);
-                const newData = await response.json();
-                console.log(newData);
-                
+            // Make the POST request
+            const response = await fetch('http://localhost:8080/', options);
+            const newData = await response.json();
+            console.log(newData);
         }
 
+        // Array to store selected categories
+        let selectedCategories = [];
 
-        
-        function filterTrip(category) {
-            // Set the value of the hidden input field to the selected category
-            document.getElementById('categoryInput').value = category;
+        // Function to toggle category selection
+        function toggleCategory(category) {
+            const index = selectedCategories.indexOf(category);
+
+            if (index === -1) {
+                // Add category to selectedCategories
+                selectedCategories.push(category);
+            } else {
+                // Remove category from selectedCategories
+                selectedCategories.splice(index, 1);
+            }
+
+            // Update the hidden input field with selected categories
+            document.getElementById('selectedCategories').value = selectedCategories.join(',');
+        }
+
+        // Function to submit the search form
+        function searchTrip() {
+            // Update the hidden input field with selected categories
+            document.getElementById('selectedCategories').value = selectedCategories.join(',');
 
             // Submit the form
-            document.getElementById('catagoriesForm').submit();
-
-        }
-
-        function searchTripForm() {
             document.getElementById('searchTripForm').submit();
         }
 
-
-
-
-        function filterByPrice() {
-            // Collect minPrice and maxPrice values
-            // var minPrice = document.getElementById('minPrice').value;
-            // var maxPrice = document.getElementById('maxPrice').value;
+        // Function to submit the category form
+        function searchCategory() {
+            // Update the hidden input field with selected categories
+            document.getElementById('selectedCategories').value = selectedCategories.join(',');
 
             // Submit the form
+            document.getElementById('categoryFilterForm').submit();
+        }
 
+        // Function to submit the price filter form
+        function filterByPrice() {
+            // Submit the form
             document.getElementById('priceFilterForm').submit();
 
             // Delay clearing the input fields until after the form is submitted
@@ -299,19 +286,17 @@
             }, 1000); // You can adjust the delay time as needed
         }
 
+        document.addEventListener('DOMContentLoaded', () => {
+    const dateInputs = document.querySelectorAll('input[type="date"]');
+    
 
-
-        function searchTripForm() {
-            // Submit the form
-            document.getElementById('searchTripForm').submit();
-
-            // Clear the input fields after a short delay
-            setTimeout(function () {
-                document.getElementById('location').value = '';
-                document.getElementById('checkIn').value = '';
-                document.getElementById('checkOut').value = '';
-            }, 500); // Adjust the delay time as needed
-        }
+    //this is for date picker 
+    dateInputs.forEach(input => {
+        input.addEventListener('focus', (event) => {
+            event.target.showPicker();
+        });
+    });
+});
 
     </script>
     <script src="/js/nav.js"></script>

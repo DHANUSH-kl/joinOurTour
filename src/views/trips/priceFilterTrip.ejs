@@ -3,16 +3,16 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Filtered Trips</title>
 </head>
 <body>
     <div class="cards">
-        <%for(trips of allTrips) {%>
+        <% allTrips.forEach(trip => { %>
             <div class="card-container">
                 <div class="card-img">
-                    <% if (trips.tripImages && trips.tripImages.length > 0 && trips.tripImages[0].path) { %>
+                    <% if (trip.tripImages && trip.tripImages.length > 0 && trip.tripImages[0].path) { %>
                         <div class="trip-image">
-                            <img src="<%= trips.tripImages[0].path %>" alt="Trip Image">
+                            <img src="<%= trip.tripImages[0].path %>" alt="Trip Image">
                         </div>
                     <% } else { %>
                         <p>No images available for this trip</p>
@@ -20,15 +20,13 @@
                 </div>
                 <div class="card-body">
                     <h3 class="card-title">
-                        <a href="/<%= trips._id %>">
-                            <%= trips.title %>
+                        <a href="/<%= trip._id %>">
+                            <%= trip.title %>
                         </a>
                     </h3>
-
                 </div>
             </div>
-            <%}%>
+        <% }); %>
     </div>
-
 </body>
 </html>
