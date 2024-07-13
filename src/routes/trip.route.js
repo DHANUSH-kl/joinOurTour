@@ -1,6 +1,6 @@
 import { Router } from "express";
 import express from 'express';
-import {whislist, addNewTrip, showAllTrips ,newTripForm,showTrip,editTripForm  , deleteTrip , mytrip , postEditTrip , catagariesTrips , priceFilter ,searchTrips, reviews} from "../controllers/newTrip.controler.js";
+import {whislist,aboutus, addNewTrip, showAllTrips ,newTripForm,showTrip,editTripForm  , deleteTrip , mytrip , postEditTrip , catagariesTrips , priceFilter ,searchTrips, reviews} from "../controllers/newTrip.controler.js";
 import { storage } from "../cloudinary.js";
 import bodyParser from 'body-parser';
 import { isLoggedIn , isAgent , isOwner } from "../middlewares.js";
@@ -16,6 +16,9 @@ router.use(express.urlencoded({ extended: true }));
 router.route("/createtrip")
     .get(asyncWrap( newTripForm ) )
     .post( upload.fields([{ name: 'tripImages', maxCount: 10 }, { name: 'stopImages', maxCount: 10 }]) ,(addNewTrip))
+
+router.route("/aboutus")
+    .get(asyncWrap(aboutus))
 
 router.route("/")
     .get(asyncWrap(showAllTrips))

@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Lato&display=swap" rel="stylesheet">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Lato:wght@400;700;900&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900&display=swap"
+        rel="stylesheet">
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
+        integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA=="
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Anton&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
+    <link rel="stylesheet" href="/css/nav.css">
+    <link rel="stylesheet" href="/css/aboutus.css">
+    <title>Document</title>
+</head>
+
+<body>
+
+
+    <nav>
+        <div class="top-container">
+            <img src="../images/account_circle.png" alt="">
+            <img src="../images/search.png" alt="">
+        </div>
+        <div class="bottom-container">
+            <img src="../images/linkedin(3).png" alt="">
+            <img src="../images/instagram(4).png" alt="">
+            <img src="../images/facebook-app-symbol(1).png
+            " alt="">
+        </div>
+    </nav>
+
+
+    <div class="hero-content-container">
+        <h1>Elevate your <br> nature <br> experience.</h1>
+    </div>
+
+    
+    <!-- <form action="/searchTrips" method="POST" id="searchTripForm" class="search-container">
+        <div class="search-bar">
+            <div class="location-search-container">
+                <label for="location">Where</label>
+                <input type="text" name="location" id="location" placeholder="Search destinations">
+            </div>
+
+            <div class="checkin-search-container">
+                <label for="checkIn">Check in</label>
+                <input type="date" placeholder="Check in" name="checkIn" id="checkIn">
+            </div>
+
+            <div class="checkout-search-container">
+                <label for="checkOut">Check out</label>
+                <input type="date" placeholder="Check out" name="checkOut" id="checkOut">
+            </div>
+
+            <button type="button" onclick="searchTrip()">Search</button>
+        </div>
+    </form> -->
+
+
+   
+    <div class="swiper mySwiper">
+
+        <div class="swiper-wrapper">
+          <div class="swiper-slide"><img src="../images/image1.png" alt="image"></div>
+          <div class="swiper-slide"><img src="../images/image1.png" alt="image"></div>
+          <div class="swiper-slide"><img src="../images/image1.png" alt="image"></div>
+          <div class="swiper-slide"><img src="../images/image1.png" alt="image"></div>
+          <div class="swiper-slide"><img src="../images/image1.png" alt="image"></div>
+          <div class="swiper-slide"><img src="../images/image1.png" alt="image"></div>
+          <div class="swiper-slide"><img src="../images/image1.png" alt="image"></div>
+          <div class="swiper-slide"><img src="../images/image1.png" alt="image"></div>
+          <div class="swiper-slide"><img src="../images/image1.png" alt="image"></div>
+        </div>
+        <!-- <div class="swiper-pagination"></div> -->
+      </div>
+
+
+      <div class="img"></div>
+
+
+<!-- 
+    <form action="/searchTrips" method="POST" id="searchTripForm">
+        <div class="search-bar">
+            <i class="fa-solid fa-magnifying-glass"></i>
+            <div class="location-search-container">
+                <label for="location">Where</label>
+                <input type="text" name="location" id="location" placeholder="Search destinations">
+            </div>
+
+            <div class="checkin-search-container">
+                <label for="checkIn">Check in</label>
+                <input type="date" placeholder="Check in" name="checkIn" id="checkIn">
+            </div>
+
+            <div class="checkout-search-container">
+                <label for="checkOut">Check out</label>
+                <input type="date" placeholder="Check out" name="checkOut" id="checkOut">
+            </div>
+
+            <button type="button" onclick="searchTrip()">Search</button>
+        </div>
+    </form> -->
+
+    <!-- Swiper JS -->
+    <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+
+    <!-- Initialize Swiper -->
+    <script>
+      var swiper = new Swiper(".mySwiper", {
+        speed: 1000,
+        spaceBetween: 0,
+        centeredSlides: true,
+        autoplay: {
+          delay: 2500,
+          disableOnInteraction: false,
+        },
+        pagination: {
+          el: ".swiper-pagination",
+          clickable: true,
+        },
+        navigation: {
+          nextEl: ".swiper-button-next",
+          prevEl: ".swiper-button-prev",
+        },
+      });
+    </script>
+  
+
+  
+
+  <script>
+
+
+
+        // Function to submit the search form
+        function searchTrip() {
+            // Update the hidden input field with selected categories
+            document.getElementById('selectedCategories').value = selectedCategories.join(',');
+
+            // Submit the form
+            document.getElementById('searchTripForm').submit();
+        }
+
+        // Function to submit the category form
+        function searchCategory() {
+            // Update the hidden input field with selected categories
+            document.getElementById('selectedCategories').value = selectedCategories.join(',');
+
+            // Submit the form
+            document.getElementById('categoryFilterForm').submit();
+        }
+
+
+            //this is for date picker 
+    dateInputs.forEach(input => {
+        input.addEventListener('focus', (event) => {
+            event.target.showPicker();
+        });
+    });
+
+    
+    
+    
+    
+    </script>
+
+    <script src="/js/nav.js"></script>
+
+    </body>
+    
+    </html>

@@ -65,9 +65,13 @@
             enctype="multipart/form-data">
             <div>
                 <label for="departure" class="form-label mb-2">departure</label>
-                <input type="date" name="departure" id="departure" class="form-control " value="<%= trip.departure %>">
+                <input type="date" name="departure" id="departure" class="form-control " value="<%= trip.departure ? new Date(trip.departure).toISOString().split('T')[0] : '' %>">
             </div>
-            
+    
+            <div>
+                <label for="endDate" class="form-label mb-2">endDate</label>
+                <input type="date" name="endDate" id="endDate" class="form-control " value="<%= trip.endDate ? new Date(trip.endDate).toISOString().split('T')[0] : '' %>">
+            </div>
     
             <div>
                 <label for="location" class="form-label mb-2">Enter location</label>

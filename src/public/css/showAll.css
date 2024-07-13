@@ -1,370 +1,342 @@
-*{   
-    padding: 0;
+@font-face {
+    font-family: 'poppins';
+    src: url('/fonts/poppins-Regular.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+  }
+
+
+
+
+
+
+
+*{
     margin: 0;
+    padding: 0;
     box-sizing: border-box;
-    font-family: lato;
+    
+}
+
+a {
+    text-decoration: none;
+    color: #D3D3D3;
 }
 
 body {
+    background: #F5F5F5;
+}
+
+header {
     width: 100vw;
-    min-height: 100vh;
-    overflow-x: hidden;
-    overflow-y: scroll;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-}
-
-.header-image {
-    background-color: aqua;
-    width: 95vw;
-    height: 250px;
-    margin-top: 2.5rem;
-    display: flex;
-    justify-content: center;
-    align-items: center;
+    height: 60vh;
     position: relative;
-    background-image: url(/images/headerImage.png);
-    background-repeat: no-repeat;
-    background-position: center;
-    background-size: cover;
-
-}
-.header-image h1 {
-    font-size: 12rem;
-    font-weight: 900;
-    color: white;
+    background: url("../images/1st page bg image.png") lightgray 50% / cover no-repeat;
+    position: relative;
 }
 
-.search-bar {
-    width: 95vw;
-    height: 7rem;
-    margin-top: 1.3rem;
-    background-image: url(/images/headerImage.png);
-    background-size: cover;
-    background-position: top;
+header hr {
+    position: absolute;
+    top: 5.5rem;
+    width: 100vw;
+    stroke-width: 0.8px;
+    stroke: #D3D3D3;
+}
+
+nav {
+    width: 100vw;
+    height: 80px;
     display: flex;
     justify-content: space-between;
     align-items: center;
-    gap: 3rem;
-    padding: 2rem;
+    gap: 5rem;
 }
 
-.search-bar i {
-    color: white;
-    font-size: 2rem;
+nav .right {
+    margin-right: 4rem;
+    gap: 1.5rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
 }
-.search-bar input {
-    width: 100%;
-    text-align: center;
-    height: 50px;
-    border-radius: 10px;
-    border: 2px solid white;
+nav .right img {
+    width: 2.4rem;
 }
-.search-bar button {
-    padding: 0.3rem 1rem;
-    border: 2px solid white;
-    background-color: #F9CBC7;
-    color: white;
-    font-weight: 700;
-    border-radius: 7px;
+
+nav .home {
+    color: #FFF;
+    font-family: Poppins;
+    font-size: 20px;
+    font-style: normal;
+    font-weight: 500;
+    line-height: normal;
     cursor: pointer;
 }
 
-.search-bar div {
+nav .logo {
+        color: #FFF;
+        font-family: Poppins;
+        font-size: 20px;
+        font-style: normal;
+        font-weight: 500;
+        line-height: normal;
+        cursor: pointer;
+        margin-left: 4rem;
+}
+
+.bottom-container {
+    width: 10vw;
+    height: 100%;
+    position: absolute;
+    left: 0;
+    top: 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 2rem;
+    margin-top: 2rem;
+}
+
+.bottom-container img {
+    width: 1.4rem;
+    cursor: pointer;
+}
+
+.search-container {
+    width: 100%;
+    height: 10vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.search-bar {
+    width: 50vw;
+    height: 10vh;
+    border-radius: 200px;
+    background: #FFF;
+    box-shadow: 0px 10px 40px 0px rgba(0, 0, 0, 0.05);
+    margin-top: -5rem;
+    z-index: 99;
+}
+
+main {
+    background-color: #F5F5F5;
+    width: 100vw;
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 3rem;
+    margin-top: 5rem;
+}
+
+.filter-container {
+    width: 20vw;
+    height: 100vh;
+    margin-left: -4rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+    align-self: flex-start;
+}
+.filters {
+    width: 80%;
+    height: 60%;
+    border-radius: 12px;
+    border: 1px solid #E7E6E6;  
+}
+.filters .top {
+    height: 30%;
+    background-color: #05A351;
+    border-radius: 12px 12px 0px 0px;
+}
+.filters .bottom {
+    height: 100%;
+    width: 100%;
+    background-color: #F5F5F5;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+}
+.cards-container {
+    width: 65vw;    
+    height: 300vh;   
+    display: flex;
+    justify-content: flex-start;
+    gap: 5rem;
+    flex-wrap: wrap;
+}
+
+.your-trip {
+    width: 100%;
+    height: 70px;
+    background-color: antiquewhite;
+}
+
+.filter-body {
+    color: #05073C;
+    font-family: Poppins;
+    font-size: 18px;
+    font-style: normal;
+    font-weight: 500;
+    line-height: 27px; /* 150% */
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    height: 70px;
+    padding: 1rem;
+}
+
+.filter-content {
+    width: 100%;
+    height: 40vh;
+}
+.filter-content form {
+    width: 100%;
+    height: 100%;
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
     gap: 1rem;
-}
-
-.search-bar div label {
-    font-weight: 700;
-    color: white;
-}
-
-.location-search-container {
-    width: 60%;
-}
-.checkin-search-container , .checkout-search-container {
-    width: 40%;
-}
-
-
-main {
-    /* display: flex; */
-    width: 95%;
-    height: 100vh;
-    margin-top: 3rem;
-    gap: 3rem;
-}
-
-.sort-container {
-    width: 100vw;
-    height: 100vh;
-    /* background-color: black; */
-    display: flex;
-    justify-content: center;
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 3rem;
-}
-
-
-.price-filter {
-    width: 400px;
-    height: 40vh;
-    background-color: #F4968E80;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    flex-direction: column;
-    gap: 2rem;
-    padding: 2rem;
-    position: relative;
-    overflow: hidden;
-}
-.price-input {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    gap: 2rem;
-}
-.price-input input {
-    border: none;
-    padding: 0.4rem;
-    text-align: center;
-    border-radius: 0.7rem;
-}
-.price-input button {
-    text-align: center;
-}
-.price-heading {
-    width: 100%;
-    border-bottom: 2px solid black;
-    text-align: center;
-}
-.price-input button {
-    padding: 0.4rem 1rem;
-    cursor: pointer;
-    font-weight: 700;
-    border: none;
-    border-radius: 7px;
-}
-.pricebg {
-    position: absolute;
-    top: 5.5rem;
-    z-index: -20;
-    -webkit-text-stroke: 2px black;
-    -webkit-text-fill-color: transparent;
-    left: 0.5rem;
-    transform: rotate(-25deg);
-    color: rgb(170, 170, 170);
-    opacity: 0.1;
-    font-size: 7rem;
-    font-family: "Clash Display";
-}
-
-.rangebg {
-    position: absolute;
-    top: 11rem;
-    z-index: -20;
-    -webkit-text-stroke: 2px black;
-    -webkit-text-fill-color: transparent;
-    left: 5rem;
-    transform: rotate(-25deg);
-    color: rgb(170, 170, 170);
-    opacity: 0.1;
-    font-size: 7rem;
-    font-family: "Clash Display";
-}
-.filter {
-    width: 400px;
-    height: 450px;
-    background-color: #F4968E80;
-    align-self: flex-start;
-    padding: 2rem;
-    position: relative;
-    overflow: hidden;
-}
-.filter .filter-heading {
-    text-align: center;
-    border-bottom: 2px solid black;
-}
-
-.catagories-container {
-    width: 100%;
-    height: 100%;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-}
-
-#catagoriesForm {
-    width: 95%;
-    height: 100%;
-    /* display: flex; */
-    /* justify-content: center;
-    align-items: center; */
-    /* gap: 3rem; */
-    /* flex-wrap: wrap; */
-    position: relative;
-}
-
-.catagories-container button {
-    width: 7rem;
-    height: 2rem;
-    padding: 0.5rem 2rem;
-    cursor: pointer;
-    background-color: white;
-    border-radius: 7px;
-    border: none;
-    font-family: "Clash Display";
-    font-weight: 500;
-    font-size: 14px;
-    margin: 1rem;
-}
-.catagories-container button:hover{
-    opacity: 0.5;
-}
-
-.trip-typo{
-    position: absolute;
-    top: 6rem;
-    z-index: -20;
-    -webkit-text-stroke: 2px black;
-    -webkit-text-fill-color: transparent;
-    left: 2rem;
-    transform: rotate(-25deg);
-    color: rgb(170, 170, 170);
-    opacity: 0.1;
-    font-size: 8rem;
-    font-family: "Clash Display";
-}
-
-.style-typo{
-    position: absolute;
-    top: 15rem;
-    left: 0rem;
-    z-index: -20;
-    -webkit-text-stroke: 2px black;
-    -webkit-text-fill-color: transparent;
-    transform: rotate(-25deg);
-    color: rgb(170, 170, 170);
-    opacity: 0.1;
-    font-size: 8rem;
-    font-family: "Clash Display";
-}
-
-.cards {
-    width: 100vw;
-    min-height: 100vh;
-    display: flex;
-    flex-wrap: wrap;
-    gap: 3rem;
-    justify-content: flex-start;
-    align-items: center;
-    margin-top: 5rem;
+    background-color: aquamarine;
 }
 
 .card-container {
-    width: 14rem;
-    height: 18rem;
-    background-color: #F9CBC7;
-    border-radius: 5px;
-    overflow: hidden;
+    width: 15rem;
+    height: 24rem;
+    border-radius: 12px;
+    border: 1px solid #E7E6E6;
+    background: #FFF;}
+
+
+.card-body {
+    width: 100%;
+    height: 50%;
 }
 
 .card-img {
     width: 100%;
-    height: 50%;
-    overflow: hidden;
+    height: 45%;
+    border-radius: 12px;
+    padding: 6.5px;
     position: relative;
 }
-
-.card-img img {
+.trip-image{
     width: 100%;
     height: 100%;
 }
-
-.cart-container {
+.trip-image img {
+    width: 100%;
+    height: 100%;
+    border-radius: 12px;
+}
+.heart-container {
     position: absolute;
-    top: 0.5rem;
-    right: 1rem;
-}
-.cart-container i {
-    cursor: pointer;
-}
-.red {
-    color: red;
-}
-
-
-
-.location-container {
-    position: absolute;
-    top: 0.7rem;
-    left: 0.6rem;
-    padding: 0.3rem 0.7rem;
-    width: auto;
-    background-color: white;
+    width: 1.3rem;
+    height: 1.3rem;
+    border-radius: 50%;
+    bottom: -4px;
+    right: 20px;
     display: flex;
     justify-content: center;
     align-items: center;
-    gap: 0.5rem;
-    border-radius: 1rem;
+    background: #FFF;
+    box-shadow: 0px 10px 40px 0px rgba(0, 0, 0, 0.05);  
 }
-.location-container i {
-    font-size: 0.6rem;
-}
-.location-container h3 {
-    font-size: 0.7rem;
-    font-weight: 700;
-}
-.card-body {
-    width: 100%;
-    height: 50%;
-    position: relative;
+.heart-container i {
+    width: 1rem;
+    cursor: pointer;
 }
 
-.card-title {
-    font-size: 0.8rem;
-    padding: 1rem;
-    font-weight: 700;
-    overflow: hidden;
-}
-
-.card-title a {
-    display: -webkit-box;
-    -webkit-line-clamp: 2; /* Limit to 2 lines */
-    -webkit-box-orient: vertical;
-    overflow: hidden;
-    text-overflow: ellipsis; /* Add ellipsis if text overflows */
-}
-.dates-container {
+.route {
     width: 100%;
-    height: 2rem;
-    padding: 0rem 1rem;
+    height: 20%;
+    padding: 10px;
+    margin-top: 10px;
     display: flex;
     justify-content: flex-start;
     align-items: center;
-    gap: 0.3rem;
-}
-.dates-container span , p{
-    font-size: 0.7rem;
-    opacity: 0.7;
-}
-.dates-container span {
-    font-weight: 700;
+    gap: 1rem;
 }
 
-.price-container {
-    font-weight: 900;
-    font-size: 0.8rem;
-    color: rgb(2, 151, 2);
-    position: absolute;
-    bottom: 1rem;
-    left: 1rem;
+.route img {
+    width: 1.8rem;
+}
+
+.card-title a{
+    color: #05A351;
+    font-family: Poppins;
+    font-size: 15px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 24.38px;
+}
+
+
+.card-title p {
+    color: #717171;
+    font-family: Poppins;
+    font-size: 14px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 24.38px; /* 135.444% */
+}
+
+.card-title h4 {
+    font-size: 10rem;
+}
+
+.title-container {
+    padding: 10px;
+    width: 100%;
+    margin-top: 5px;
+}
+.title-container h4 {
+    color: #05073C;
+    font-family: Poppins;
+    font-size: 14px;
+    font-style: normal;
+    font-weight: 500;
+    line-height: 24px; /* 150% */
+}
+
+.card-body hr {
+    margin-top: 3rem;
+    height: 1px; /* This controls the thickness */
+    background-color: #E7E6E6; /* This sets the color */
+    border: none; /* Removes the default border */
+
+}
+
+
+.card-bottom {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px;
+}
+
+.card-bottom h4 , .price-container{
+    color: #05073C;
+    font-family: Poppins;
+    font-size: 14px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 24.38px; /* 152.375% */
+}
+
+.price-container span {
+    color: #05073C;
+    font-family: Poppins;
+    font-size: 13px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 24.38px; /* 152.375% */
 }

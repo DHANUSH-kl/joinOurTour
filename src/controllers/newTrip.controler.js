@@ -532,5 +532,9 @@ const whislist = async (req, res) => {
 
 }
 
-export { reviews, whislist, searchTrips, newTripForm, showAllTrips, addNewTrip, editTripForm, showTrip, deleteTrip, mytrip, postEditTrip, catagariesTrips, priceFilter };
+const aboutus = async(req,res) => {
+    res.render("trips/aboutus.ejs")
+}
+
+export {aboutus, reviews, whislist, searchTrips, newTripForm, showAllTrips, addNewTrip, editTripForm, showTrip, deleteTrip, mytrip, postEditTrip, catagariesTrips, priceFilter };
 
