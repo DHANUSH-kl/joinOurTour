@@ -104,3 +104,117 @@ nav img:hover{
     line-height: 170%; /* 126.576px */
 }
 
+.why-container {
+    width: 100vw;
+    height: 120vh;
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    position: relative;
+}
+
+.middle h1 {
+    color: #00A651;
+    font-family: Poppins;
+    font-size: 78px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 71px; /* 91.026% */
+    letter-spacing: -0.5px;
+}
+
+.why-container .middle .why-images{
+    width: 30rem;
+    height: 30vh;
+    position: relative;
+
+}
+
+.why-images img {
+    position: absolute;
+    width: 250px;
+
+}
+
+.why-images .two {
+    left: 10rem;
+    top: 2rem;
+}
+
+.left {
+    width: 40vw;
+    height: 100vh;
+    position: absolute;
+    top: 0;
+    left: 0;
+}
+
+.left .boxes {
+    width: 300px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    gap: 0.7rem;
+}
+
+.left h1 {
+    color: #00A651;
+    font-family: Poppins;
+    font-size: 26px;
+    font-style: normal;
+    font-weight: 400;
+    margin: 0;
+}
+
+.left p {
+    color: var(--184-d-47, #184D47);
+    text-align: center;
+    font-family: Poppins;
+    font-size: 14px;
+    font-style: normal;
+    font-weight: 400;
+    letter-spacing: 0.15px;
+    margin: 0;
+}
+.left .one {
+    position: absolute;
+    top: 7rem;
+    left: 10rem;
+}
+
+.left .boxes {
+    position: absolute;
+}
+
+.left .two {
+    top: 22rem;
+    left: 13rem;
+}
+
+.left .three {
+    bottom: -5rem;
+    left: 34rem;
+}
+
+.left .four {
+    bottom: -10rem;
+    right: -37rem;
+}
+
+.why-container .rigth {
+    width: 353px;
+    height: 468px;
+    position: absolute;
+    top: 13rem;
+    right: 9rem;
+}
+
+.why-container .rigth p {
+    color: var(--184-d-47, #184D47);
+    font-family: Poppins;
+    font-size: 18px;
+    font-style: normal;
+    font-weight: 500;
+    line-height: 32px; /* 133.333% */
+}
