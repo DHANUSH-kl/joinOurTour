@@ -5,7 +5,7 @@ import multer from 'multer';
 const upload = multer({ storage });
 const app = express();
 import {User} from '../models/user.model.js';
-
+import Admin from '../models/admin.model.js';
 app.use(bodyParser.urlencoded({ extended: true }));
 
 const becomeOwnerForm = async(req,res) => {
@@ -68,4 +68,40 @@ const postTripLeader = async (req,res) => {
 
 }
 
-export { becomeOwnerForm , postOwner , agentAccessForm , postAgentAccess , tripLeaderForm , postTripLeader }
+const displayPackages = async (req,res) => {
+    // const {destination , tripPackage } = req.body;
+
+    // const tripdisplay = {destination , tripPackage }
+
+    // const displayPackages = new admin({
+    //     destination,tripPackage
+    // });
+
+    const allData = await Admin.find();
+    console.log(allData)
+
+
+    res.render("admin/adminPannel.ejs")
+
+
+}
+
+const posttripPackage = async (req,res) => {
+    const {destination , tripPackage1, tripPackage2 , tripPackage3 , tripPackage4} = req.body;
+
+        // Create a new instance of the Admin model
+        const displayPackage = new Admin({
+            destination,
+            tripPackage1,
+            tripPackage2,
+            tripPackage3,
+            tripPackage4
+        });
+        
+        await displayPackage.save();
+
+
+        console.log(displayPackage)
+}
+
+export { posttripPackage, becomeOwnerForm , postOwner , agentAccessForm , postAgentAccess , tripLeaderForm , postTripLeader ,displayPackages}
