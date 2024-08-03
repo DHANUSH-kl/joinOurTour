@@ -5,6 +5,7 @@ import { storage } from '../cloudinary.js';
 import multer from 'multer';
 import { Trip } from '../models/travel.model.js';
 import { Review } from '../models/review.model.js';
+import Admin from '../models/admin.model.js';
 const upload = multer({ storage });
 const app = express();
 
@@ -488,7 +489,7 @@ const whislist = async (req, res) => {
 
 }
 
-    const reviews = async (req, res) => {
+const reviews = async (req, res) => {
 
     const { id } = req.params;
     const { name, comment } = req.body;
@@ -532,9 +533,25 @@ const whislist = async (req, res) => {
 
 }
 
-const aboutus = async(req,res) => {
-    res.render("trips/aboutus.ejs")
+const aboutus = async (req, res) => {
+
+    const allData = await Admin.find();
+
+
+    const adminData = allData[0];
+
+    const { d1, d2, d3, d4, p1, p2, p3, p4 } = adminData;
+
+
+    const tripPackage1 = await Trip.findById(p1);
+    const tripPackage2 = await Trip.findById(p2);
+    const tripPackage3 = await Trip.findById(p3);
+    const tripPackage4 = await Trip.findById(p4);
+
+    const tripPackages = [tripPackage1, tripPackage2, tripPackage3, tripPackage4]
+
+    res.render("trips/aboutus.ejs" , {tripPackages})
 }
 
-export {aboutus, reviews, whislist, searchTrips, newTripForm, showAllTrips, addNewTrip, editTripForm, showTrip, deleteTrip, mytrip, postEditTrip, catagariesTrips, priceFilter };
+export { aboutus, reviews, whislist, searchTrips, newTripForm, showAllTrips, addNewTrip, editTripForm, showTrip, deleteTrip, mytrip, postEditTrip, catagariesTrips, priceFilter };
 

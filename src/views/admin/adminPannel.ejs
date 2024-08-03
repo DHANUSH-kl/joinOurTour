@@ -3,24 +3,42 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/css/admin.css">
+
     <title>Document</title>
 </head>
 <body>
     <form action="/admin/adminpannel" method="POST">
-        <label for="destination">destination</label>
-        <input type="text" name="destination" id="destination" class="destination">
 
-        <label for="tripPackage1">packages1</label>
-        <input type="text" name="tripPackage1" id="tripPackage1" class="tripPackage1">
-        
-        <label for="tripPackage2">packages2</label>
-        <input type="text" name="tripPackage2" id="tripPackage2" class="tripPackage2">
-        
-        <label for="tripPackage3">packages3</label>
-        <input type="text" name="tripPackage3" id="tripPackage3" class="tripPackage3">
+        <div class="destination">
+            <label for="d1">destination 1</label>
+            <input type="text" name="d1" id="d1" class="d1">
 
-        <label for="tripPackage4">packages4</label>
-        <input type="text" name="tripPackage4" id="tripPackage4" class="tripPackage4">
+            <label for="d2">destination 2</label>
+            <input type="text" name="d2" id="d2" class="d2">
+
+            <label for="d3">destination 3</label>
+            <input type="text" name="d3" id="d3" class="d3">
+
+            <label for="d4">destination 4</label>
+            <input type="text" name="d4" id="d4" class="d4">
+        </div>
+
+
+        <div class="package">
+            <label for="p1">packages1</label>
+            <input type="text" name="p1" id="p1" class="p1">
+            
+            <label for="p2">packages2</label>
+            <input type="text" name="p2" id="p2" class="p2">
+            
+            <label for="p3">packages3</label>
+            <input type="text" name="p3" id="p3" class="p3">
+    
+            <label for="p4">packages4</label>
+            <input type="text" name="p4" id="p4" class="p4">
+    
+        </div>
 
 
         <button type="submit">Submit</button>
