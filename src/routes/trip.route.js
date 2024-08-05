@@ -1,6 +1,6 @@
 import { Router } from "express";
 import express from 'express';
-import {whislist,aboutus, addNewTrip, showAllTrips ,newTripForm,showTrip,editTripForm  , deleteTrip , mytrip , postEditTrip , catagariesTrips , priceFilter ,searchTrips, reviews} from "../controllers/newTrip.controler.js";
+import { getSecondarySearch , whislist,aboutus, addNewTrip, showAllTrips ,newTripForm,showTrip,editTripForm  , deleteTrip , mytrip , postEditTrip , catagariesTrips , priceFilter ,searchTrips, reviews} from "../controllers/newTrip.controler.js";
 import { storage } from "../cloudinary.js";
 import bodyParser from 'body-parser';
 import { isLoggedIn , isAgent , isOwner } from "../middlewares.js";
@@ -33,6 +33,9 @@ router.route("/priceFilter")
 
 router.route("/searchTrips")
     .post(asyncWrap(searchTrips))
+
+router.route("/secondarysearch")
+    .post(asyncWrap(getSecondarySearch))
 
 router.route("/catagaries")
     .post(asyncWrap( catagariesTrips ))

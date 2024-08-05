@@ -1,4 +1,5 @@
 import express from 'express';
+import methodOverride from 'method-override'
 import bodyParser from 'body-parser';
 import { storage } from '../cloudinary.js';
 import multer from 'multer';
@@ -10,6 +11,8 @@ import { Trip } from '../models/travel.model.js';
 import { Review } from '../models/review.model.js';
 
 app.use(bodyParser.urlencoded({ extended: true }));
+
+app.use(methodOverride('_method'));
 
 const becomeOwnerForm = async (req, res) => {
     res.render("admin/ownerForm.ejs")
@@ -140,4 +143,52 @@ const posttripPackage = async (req, res) => {
     console.log(displayPackage)
 }
 
-export { posttripPackage, becomeOwnerForm, postOwner, agentAccessForm, postAgentAccess, tripLeaderForm, postTripLeader, displayPackages }
+const editAdminForm =async (req,res) => {
+
+    try {
+        // Fetch all Admin documents and get the first one
+        const allAdminData = await Admin.find();
+        const adminData = allAdminData[0]; // Access the first document
+
+        if (!adminData) {
+            return res.status(404).send('Admin data not found.');
+        }
+
+        // Render the EJS template with the admin data
+        res.render('admin/editAdmin.ejs', { adminData });
+    } catch (error) {
+        console.error(error);
+        res.status(500).send('An error occurred while fetching the admin data.');
+    }
+
+}
+
+const editAdminPannel = async(req,res) => {
+
+    try {
+        const updatedData = req.body;
+
+        // Find all Admin documents and get the first one
+        const allAdminData = await Admin.find();
+        const adminData = allAdminData[0]; // Access the first document
+
+        if (!adminData) {
+            return res.status(404).send('Admin data not found.');
+        }
+
+        // Update the document with new values
+        Object.assign(adminData, updatedData);
+
+        // Save the updated document
+        await adminData.save();
+
+        console.log(adminData);
+        res.status(200).send('Admin data updated successfully.');
+    } catch (error) {
+        console.error(error);
+        res.status(500).send('An error occurred while updating the admin data.');
+    }
+
+}
+
+export { editAdminForm , editAdminPannel, posttripPackage, becomeOwnerForm, postOwner, agentAccessForm, postAgentAccess, tripLeaderForm, postTripLeader, displayPackages }

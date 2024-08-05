@@ -553,5 +553,9 @@ const aboutus = async (req, res) => {
     res.render("trips/aboutus.ejs" , {tripPackages})
 }
 
-export { aboutus, reviews, whislist, searchTrips, newTripForm, showAllTrips, addNewTrip, editTripForm, showTrip, deleteTrip, mytrip, postEditTrip, catagariesTrips, priceFilter };
+const getSecondarySearch = async(req,res) => {
+    console.log(req.body)
+}
+
+export { getSecondarySearch , aboutus, reviews, whislist, searchTrips, newTripForm, showAllTrips, addNewTrip, editTripForm, showTrip, deleteTrip, mytrip, postEditTrip, catagariesTrips, priceFilter };
 

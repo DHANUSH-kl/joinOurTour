@@ -1,5 +1,5 @@
 import { Router } from "express";
-import {posttripPackage , displayPackages,becomeOwnerForm, postOwner, agentAccessForm, postAgentAccess, tripLeaderForm, postTripLeader } from "../controllers/admin.controller.js";
+import { editAdminForm ,editAdminPannel, posttripPackage , displayPackages,becomeOwnerForm, postOwner, agentAccessForm, postAgentAccess, tripLeaderForm, postTripLeader } from "../controllers/admin.controller.js";
 import { asyncWrap } from "../constants.js";
 import { isAgent, isLoggedIn, isOwner } from "../middlewares.js";
 import multer from 'multer';
@@ -12,6 +12,12 @@ const router = Router();
 router.route("/adminpannel")
     .get(displayPackages)
     .post(posttripPackage)
+
+
+router.route("/adminpannel/editadminpannel")
+    .get(editAdminForm)
+    .put(editAdminPannel)
+
 
 router.route("/owner")
     .get( isLoggedIn , becomeOwnerForm)

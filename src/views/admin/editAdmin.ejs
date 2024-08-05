@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/css/admin.css">
+
+    <title>Document</title>
+</head>
+<body>
+    <form action="/admin/adminpannel/editadminpannel?_method=PUT" method="POST">
+
+
+
+        <div class="destination">
+            <label for="d1">Destination 1</label>
+            <input type="text" name="d1" id="d1" class="d1" value="<%= adminData.d1 %>">
+
+            <label for="d2">Destination 2</label>
+            <input type="text" name="d2" id="d2" class="d2" value="<%= adminData.d2 %>">
+
+            <label for="d3">Destination 3</label>
+            <input type="text" name="d3" id="d3" class="d3" value="<%= adminData.d3 %>">
+
+            <label for="d4">Destination 4</label>
+            <input type="text" name="d4" id="d4" class="d4" value="<%= adminData.d4 %>">
+        </div>
+
+        <div class="package">
+            <label for="p1">Package 1</label>
+            <input type="text" name="p1" id="p1" class="p1" value="<%= adminData.p1 %>">
+
+            <label for="p2">Package 2</label>
+            <input type="text" name="p2" id="p2" class="p2" value="<%= adminData.p2 %>">
+
+            <label for="p3">Package 3</label>
+            <input type="text" name="p3" id="p3" class="p3" value="<%= adminData.p3 %>">
+
+            <label for="p4">Package 4</label>
+            <input type="text" name="p4" id="p4" class="p4" value="<%= adminData.p4 %>">
+        </div>
+
+        <button type="submit">Submit</button>
+    </form>
+
+
+</body>
+</html>

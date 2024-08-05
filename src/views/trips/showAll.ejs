@@ -41,7 +41,7 @@
 
 
 
-    
+
     <!-- <form action="/searchTrips" method="POST" id="searchTripForm" class="search-container">
         <div class="search-bar">
             <div class="location-search-container">
@@ -64,7 +64,7 @@
     </form> -->
 
 
-   
+
     <header>
         <nav>
             <div class="logo">
@@ -73,13 +73,13 @@
             <div class="home">
                 <a href="http://localhost:8080/aboutus">HOME</a>
             </div>
-            <div class="right"> 
+            <div class="right">
                 <img src="../images/account_circle.png" alt="">
                 <img src="../images/search.png" alt="">
             </div>
         </nav>
         <hr>
-         <div class="bottom-container">
+        <div class="bottom-container">
             <img src="../images/linkedin(3).png" alt="">
             <img src="../images/instagram(4).png" alt="">
             <img src="../images/facebook-app-symbol(1).png
@@ -95,111 +95,159 @@
 
     <main>
         <div class="filter-container">
+            <div class="secondary-search">
+                <i class="fa-solid fa-location-dot loc"></i>
+                <form action="">
+                    <input type="text" placeholder="Search destinations" class="secondary-location" id="secondaryDestination">
+                </form>
+                
+                <button class="secondary-search-button" onclick="submitSecondarySearch()">
+                    <i class="fa-solid fa-arrow-right"></i>
+                </button>
+            </div>
             <div class="filters">
                 <div class="top">
-                    
+
                 </div>
                 <div class="bottom">
                     <div class="your-trip">
-                        <div class="filter-body">
+                        <div class="you-type-filter-body">
                             <p>Tour Type</p>
-                            <img src="../images/arrow.svg" alt="">    
+                            <img src="../images/arrow.svg" alt="" id="filterToggle">
                         </div>
-                        <div class="filter-content">
+                        <div class="you-type-filter-content">
                             <form id="categoryFilterForm" method="POST" action="/searchtrips">
-                                <label for="nature"><input type="checkbox" name="category" value="nature" id="nature"
+                                <label for="nature"><img src="../images/nature-style.png" alt="" class="style-img"><input type="checkbox" class="categoryCheckbox" name="category" value="nature" id="nature"
                                         onclick="toggleCategory('nature')"> Nature</label>
-                                <label for="party"><input type="checkbox" name="category" value="party" id="party"
+                                <label for="party"><img src="../images/nature-style.png" alt="" class="style-img"><input type="checkbox" class="categoryCheckbox" name="category" value="party" id="party"
                                         onclick="toggleCategory('party')"> Party</label>
-                                <label for="food"><input type="checkbox" name="category" value="food" id="food"
+                                <label for="food"><img src="../images/nature-style.png" alt="" class="style-img"><input type="checkbox" class="categoryCheckbox" name="category" value="food" id="food"
                                         onclick="toggleCategory('food')"> Food</label>
-                                <label for="beach"><input type="checkbox" name="category" value="beach" id="beach"
+                                <label for="beach"><img src="../images/nature-style.png" alt="" class="style-img"><input type="checkbox" class="categoryCheckbox" name="category" value="beach" id="beach"
                                         onclick="toggleCategory('beach')"> Beach</label>
-                                <label for="culture"><input type="checkbox" name="category" value="culture" id="culture"
+                                <label for="culture"><img src="../images/nature-style.png" alt="" class="style-img"><input type="checkbox" class="categoryCheckbox" name="category" value="culture" id="culture"
                                         onclick="toggleCategory('culture')"> Culture</label>
-                                <label for="sports"><input type="checkbox" name="category" value="sports" id="sports"
+                                <label for="sports"><img src="../images/nature-style.png" alt="" class="style-img"><input type="checkbox" class="categoryCheckbox" name="category" value="sports" id="sports"
                                         onclick="toggleCategory('sports')"> Sports</label>
                                 <input type="hidden" name="selectedCategories" id="selectedCategories">
-                                <button type="button" onclick="searchCategory()">Apply Categories</button>
+                                <!-- <button type="button" onclick="searchCategory()">Apply Categories</button> -->
                             </form>
+                        </div>
+
+                        <div class="price-slider-header">
+
+                        </div>
+                        <div class="price-filter-container">
+                            <div class="wrapper">
+
+
+                                <div class="slider">
+                                    <div class="progress"></div>
+                                </div>
+                                <div class="range-input">
+                                    <form action="">
+                                        <input type="range" id="minPrice" class="range-min" min="0" max="70000" step="100">
+                                        <input type="range" id="maxPrice" class="range-max" min="0" max="70000" step="100">
+
+                                    </form>
+                                </div>
+
+                                <div class="price-input">
+                                    <div class="field">
+                                        <input type="number" class="input-min" value="0">
+                                    </div>
+                                    <div class="field">
+                                        <input type="number" class="input-max" value="100000">
+                                    </div>
+                                </div>
+
+
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
         <div class="cards-container">
-                <% for(let i=0; i < allTrips.length; i++) { %>
-                    <div class="card-container">
-                        <div class="card-img">
-                            <% if (allTrips[i].tripImages && allTrips[i].tripImages.length > 0 && allTrips[i].tripImages[0].path) { %>
-                                <div class="trip-image">
-                                    <img src="<%= allTrips[i].tripImages[0].path %>" alt="Trip Image">
-                                </div>
-                                <div class="heart-container">
-                                    <i class="fa-regular fa-heart"></i>
+            <% for(let i=0; i < allTrips.length; i++) { %>
+                <div class="card-container">
+                    <div class="card-img">
+                        <% if (allTrips[i].tripImages && allTrips[i].tripImages.length> 0 &&
+                            allTrips[i].tripImages[0].path) { %>
+                            <div class="trip-image">
+                                <img src="<%= allTrips[i].tripImages[0].path %>" alt="Trip Image">
+                            </div>
+                            <div class="heart-container">
+                                <i class="fa-regular fa-heart"></i>
 
-                                </div>
+                            </div>
                             <% } else { %>
                                 <p>No images available for this trip</p>
-                            <% } %>
+                                <% } %>
+                    </div>
+                    <div class="card-body">
+                        <div class="route">
+                            <img src="../images/route.svg" alt="">
+                            <h3 class="card-title">
+                                <a href="/<%= allTrips[i]._id %>">
+                                    <%= allTrips[i].location %>
+                                </a>
+
+                                <p>
+                                    <% if (allTrips[i].departure) { %>
+                                        <%= new Date(allTrips[i].departure).toLocaleDateString('en-US', { month: 'long'
+                                            , day: '2-digit' }) %> ~
+                                            <% } else { %>
+                                                date not available
+                                                <% } %>
+                                                    <% if (allTrips[i].endDate) { %>
+                                                        <%= new Date(allTrips[i].endDate).toLocaleDateString('en-US', {
+                                                            month: 'long' , day: '2-digit' }) %>
+                                                            <% } %>
+
+
+                                </p>
+
+
+                            </h3>
                         </div>
-                        <div class="card-body">
-                            <div class="route">
-                                <img src="../images/route.svg" alt="">
-                                <h3 class="card-title">
-                                    <a href="/<%= allTrips[i]._id %>">
-                                        <%= allTrips[i].location %>
-                                    </a>
 
-                                    <p>
-                                        <% if (allTrips[i].departure) { %>
-                                            <%= new Date(allTrips[i].departure).toLocaleDateString('en-US', { month: 'long', day: '2-digit' }) %> ~
-                                        <% } else { %>
-                                            date not available
-                                        <% } %>
-                                        <% if (allTrips[i].endDate) { %>
-                                            <%= new Date(allTrips[i].endDate).toLocaleDateString('en-US', { month: 'long', day: '2-digit' }) %>
-                                        <% }  %>
-                        
-                                        
-                                    </p>
-                                    
+                        <div class="title-container">
+                            <h4 class="trip-title">
+                                <%= allTrips[i].title %>
+                            </h4>
+                        </div>
+                        <hr>
 
-                                </h3>
-                            </div>
-                            
-                            <div class="title-container">
-                                <h4 class="trip-title">
-                                    <%= allTrips[i].title %>
+                        <div class="card-bottom">
+
+                            <div class="days-container">
+                                <h4 class="days">
+                                    <%= allTrips[i].totalDays %> days
                                 </h4>
                             </div>
-                            <hr>
 
-                            <div class="card-bottom">
-
-                                <div class="days-container">
-                                    <h4 class="days">
-                                        <%= allTrips[i].totalDays %> days
-                                    </h4>
-                                </div>
-
-                                <div class="price-container">
-                                    <% if (allTrips[i].totalCost) { %>
-                                       <span>FROM</span> &nbsp;<b><%= allTrips[i].totalCost.toLocaleString('en-IN', { style: 'currency', currency: 'INR' }) %></b>
+                            <div class="price-container">
+                                <% if (allTrips[i].totalCost) { %>
+                                    <span>FROM</span> &nbsp;<b>
+                                        <%= allTrips[i].totalCost.toLocaleString('en-IN', { style: 'currency' ,
+                                            currency: 'INR' }) %>
+                                    </b>
                                     <% } else { %>
                                         Price Not Available
-                                    <% } %>
-                                </div>
-    
+                                        <% } %>
                             </div>
+
                         </div>
                     </div>
+                </div>
                 <% } %>
         </div>
     </main>
 
 
-<!-- 
+
+    <!-- 
     <form action="/searchTrips" method="POST" id="searchTripForm">
         <div class="search-bar">
             <i class="fa-solid fa-magnifying-glass"></i>
@@ -280,28 +328,28 @@
 
 
     <!-- Swiper JS -->
-  <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
 
-  <!-- Initialize Swiper -->
-  <script>
-    var swiper = new Swiper(".mySwiper", {
-      speed: 1000,
-      spaceBetween: 0,
-      centeredSlides: true,
-      autoplay: {
-        delay: 2500,
-        disableOnInteraction: false,
-      },
-      pagination: {
-        el: ".swiper-pagination",
-        clickable: true,
-      },
-      navigation: {
-        nextEl: ".swiper-button-next",
-        prevEl: ".swiper-button-prev",
-      },
-    });
-  </script>
+    <!-- Initialize Swiper -->
+    <script>
+        var swiper = new Swiper(".mySwiper", {
+            speed: 1000,
+            spaceBetween: 0,
+            centeredSlides: true,
+            autoplay: {
+                delay: 2500,
+                disableOnInteraction: false,
+            },
+            pagination: {
+                el: ".swiper-pagination",
+                clickable: true,
+            },
+            navigation: {
+                nextEl: ".swiper-button-next",
+                prevEl: ".swiper-button-prev",
+            },
+        });
+    </script>
 
     <script>
         // Array to store wishlist trip IDs
@@ -394,18 +442,20 @@
         }
 
         document.addEventListener('DOMContentLoaded', () => {
-    const dateInputs = document.querySelectorAll('input[type="date"]');
-    
+            const dateInputs = document.querySelectorAll('input[type="date"]');
 
-    //this is for date picker 
-    dateInputs.forEach(input => {
-        input.addEventListener('focus', (event) => {
-            event.target.showPicker();
+
+            //this is for date picker 
+            dateInputs.forEach(input => {
+                input.addEventListener('focus', (event) => {
+                    event.target.showPicker();
+                });
+            });
         });
-    });
-});
 
     </script>
+    <script src="/js/secondarySearch.js"></script>
+    <script src="/js/filter.js"></script>
     <script src="/js/nav.js"></script>
 </body>
 
