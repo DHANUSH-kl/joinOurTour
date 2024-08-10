@@ -27,6 +27,7 @@ const newTripForm = async (req, res) => {
 const addNewTrip = async (req, res) => {
 
     let { departure
+        ,fromLocation
         , endDate
         , categories
         , location
@@ -76,6 +77,7 @@ const addNewTrip = async (req, res) => {
 
     const newTrip = new Trip({
         departure,
+        fromLocation,
         endDate,
         location,
         categories,
@@ -154,6 +156,7 @@ const postEditTrip = async (req, res) => {
         // Extract trip details from the request body
         let {
             departure,
+            fromLocation,
             endDate,
             categories,
             location,
@@ -213,6 +216,7 @@ const postEditTrip = async (req, res) => {
 
         // Preprocess fields to replace undefined with empty string or empty array
         departure = departure || '';
+        fromLocation = fromLocation || '';
         endDate = endDate || '';
         categories = categories || [];
         location = location || '';
@@ -235,6 +239,7 @@ const postEditTrip = async (req, res) => {
         const mergedData = {
             ...existingTrip._doc,
             departure,
+            fromLocation,
             endDate,
             categories,
             location,

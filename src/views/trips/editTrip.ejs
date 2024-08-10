@@ -78,6 +78,13 @@
                 <input type="text" name="location" id="location" value="<%= trip.location %>" class="form-control ">
             </div>
     
+
+            <div>
+                <label for="fromLocation" class="form-label mb-2">from location</label>
+                <input type="text" name="fromLocation" id="fromLocation" value="<%= trip.fromLocation %>" class="form-control ">
+            </div>
+
+
             <div class="total-cost">
                 <label for="totalCost" class="form-label mb-2">Total trip cost : ₹</label>
                 <input type="number" name="totalCost" class="form-control" value="<%= trip.totalCost %>">
