@@ -20,6 +20,7 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
     <link rel="stylesheet" href="/css/nav.css">
     <link rel="stylesheet" href="/css/showAll.css">
+    <link rel="stylesheet" href="/css/searchBar.css">
     <title>Document</title>
 </head>
 
@@ -88,7 +89,19 @@
     </header>
 
     <div class="search-container">
-        <div class="search-bar"></div>
+        <div class="search-bar">
+            <div class="search-locations">
+                <div class="startingLocation-container search-locations-container">
+                    <label for="startingLocation">Starting from</label>
+                    <input type="text" name="startingLocation" id="startingLocation" placeholder="Delhi">    
+                </div>
+                <hr class="location-break">
+                <div class="destinationLocation-container search-locations-container">
+                    <label for="destinationLocation">Going to</label>
+                    <input type="text" name="destinationLocation" id="destinationLocation" placeholder="Goa">    
+                </div>
+            </div>
+        </div>
     </div>
 
 
