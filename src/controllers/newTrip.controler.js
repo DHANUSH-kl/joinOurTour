@@ -27,7 +27,7 @@ const newTripForm = async (req, res) => {
 const addNewTrip = async (req, res) => {
 
     let { departure
-        ,fromLocation
+        , fromLocation
         , endDate
         , categories
         , location
@@ -321,102 +321,6 @@ const priceFilter = async (req, res) => {
 
 
 
-// const searchTrips = async (req, res) => {
-//     try {
-//         const { location, checkIn, checkOut } = req.body;
-
-//         // Convert checkIn and checkOut to Date objects
-//         const departure = new Date(checkIn);
-//         const endDate = new Date(checkOut);
-
-//         // Exact match trips with case-insensitive location
-//         const exactMatchTrips = await Trip.find({
-//             location: { $regex: new RegExp('^' + location, 'i') },
-//             departure,
-//             endDate
-//         });
-
-//         // Date flexible trips with the same location
-//         const dateFlexibleTrips = await Trip.find({ location: { $regex: new RegExp('^' + location, 'i') }});
-
-//         // Location flexible trips with dates around the entered departure and end dates
-//         const locationFlexibleTrips = await Trip.find({
-//             departure: { $gte: new Date(departure.getTime() - 24 * 60 * 60 * 1000), $lte: new Date(endDate.getTime() + 24 * 60 * 60 * 1000) }
-//         });
-
-//         const allTrips = await Trip.find();
-
-//         console.log(req.body);
-//         console.log("Location:", location);
-//         console.log("Date Flexible Trips Query:", { location });
-//         console.log(exactMatchTrips, locationFlexibleTrips, dateFlexibleTrips);
-
-//         res.render("trips/searchTrips.ejs", { exactMatchTrips, locationFlexibleTrips, dateFlexibleTrips, allTrips });
-
-//     } catch (error) {
-//         console.error("Error searching trips:", error);
-//         res.status(500).json({ error: "Internal server error" });
-//     }
-// }
-
-
-// const searchTrips = async (req, res) => {
-//     try {
-//         const { location, checkIn, checkOut } = req.body;
-
-//         // Convert checkIn and checkOut to Date objects
-//         const departure = new Date(checkIn);
-//         const endDate = new Date(checkOut);
-
-//         // Exact match trips with case-insensitive location
-//         const exactMatchTrips = await Trip.find({
-//             location: { $regex: new RegExp('^' + location, 'i') },
-//             departure,
-//             endDate
-//         }).lean(); // Use lean() for better performance and easier manipulation
-
-//         // Add category to exact match trips
-//         exactMatchTrips.forEach(trip => trip.category = 'Exact Match');
-
-//         // Date flexible trips with the same location
-//         const dateFlexibleTrips = await Trip.find({
-//             location: { $regex: new RegExp('^' + location, 'i') }
-//         }).lean();
-
-//         // Add category to date flexible trips
-//         dateFlexibleTrips.forEach(trip => trip.category = 'Date Flexible');
-
-//         // Location flexible trips with dates around the entered departure and end dates
-//         const locationFlexibleTrips = await Trip.find({
-//             departure: {
-//                 $gte: new Date(departure.getTime() - 24 * 60 * 60 * 1000),
-//                 $lte: new Date(endDate.getTime() + 24 * 60 * 60 * 1000)
-//             }
-//         }).lean();
-
-//         // Add category to location flexible trips
-//         locationFlexibleTrips.forEach(trip => trip.category = 'Location Flexible');
-
-//         const allTrips = await Trip.find().lean();
-
-//         console.log(req.body);
-//         console.log("Location:", location);
-//         console.log("Date Flexible Trips Query:", { location });
-//         console.log(exactMatchTrips, locationFlexibleTrips, dateFlexibleTrips);
-
-//         res.render("trips/searchTrips.ejs", {
-//             exactMatchTrips,
-//             locationFlexibleTrips,
-//             dateFlexibleTrips,
-//             allTrips
-//         });
-
-//     } catch (error) {
-//         console.error("Error searching trips:", error);
-//         res.status(500).json({ error: "Internal server error" });
-//     }
-// };
-
 
 const searchTrips = async (req, res) => {
     try {
@@ -471,9 +375,51 @@ const searchTrips = async (req, res) => {
     }
 }
 
+
+const mainSearch = async (req, res) => {
+
+    const { startingLocation, destinationLocation, fromDate, toDate } = req.body;
+
+
+    // Parse the input dates
+    const departureDate = new Date(fromDate);
+    const endDate = new Date(toDate);
+
+    // Extend the endDate by 6 days
+    const extendedEndDate = new Date(endDate.getTime() + 6 * 24 * 60 * 60 * 1000);
+
+    // Apply a 1-day buffer to handle edge cases
+    const departureBufferStart = new Date(departureDate.getTime() - 24 * 60 * 60 * 1000);
+    const departureBufferEnd = new Date(departureDate.getTime() + 24 * 60 * 60 * 1000);
+
+    console.log('Departure Date with Buffer Start:', departureBufferStart);
+    console.log('Extended End Date:', extendedEndDate);
+
+    // Exact match query with a 6-day extension and 1-day buffer
+    const exactMatchTrips = await Trip.find({
+        // fromLocation: { $regex: new RegExp('^' + startingLocation, 'i') },
+        // location: { $regex: new RegExp('^' + destinationLocation, 'i') },
+        departure: { $gte: departureBufferStart, $lte: departureBufferEnd },
+        endDate: { $gte: endDate, $lte: extendedEndDate }
+    });
+
+
+    const destinationMatch = await Trip.find({
+        location: { $regex: new RegExp('^' + destinationLocation, 'i') }
+    });
+
+    console.log('Exact Match Trips:', exactMatchTrips);
+    // console.log('Destination Match:', destinationMatch);
+
+
+    // Render the results in the mainSearch.ejs view
+    res.render("trips/mainSearch.ejs", { exactMatchTrips, destinationMatch });
+
+
+
+}
+
 const whislist = async (req, res) => {
-
-
 
     // Extract the wishlist array from the request body
     const { wishlist } = req.body;
@@ -555,12 +501,12 @@ const aboutus = async (req, res) => {
 
     const tripPackages = [tripPackage1, tripPackage2, tripPackage3, tripPackage4]
 
-    res.render("trips/aboutus.ejs" , {tripPackages})
+    res.render("trips/aboutus.ejs", { tripPackages })
 }
 
-const getSecondarySearch = async(req,res) => {
+const getSecondarySearch = async (req, res) => {
     console.log(req.body)
 }
 
-export { getSecondarySearch , aboutus, reviews, whislist, searchTrips, newTripForm, showAllTrips, addNewTrip, editTripForm, showTrip, deleteTrip, mytrip, postEditTrip, catagariesTrips, priceFilter };
+export { mainSearch, getSecondarySearch, aboutus, reviews, whislist, searchTrips, newTripForm, showAllTrips, addNewTrip, editTripForm, showTrip, deleteTrip, mytrip, postEditTrip, catagariesTrips, priceFilter };
 
