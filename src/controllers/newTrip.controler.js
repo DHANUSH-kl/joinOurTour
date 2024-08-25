@@ -117,11 +117,21 @@ const addNewTrip = async (req, res) => {
 // displaying all trips 
 
 const showAllTrips = async (req, res) => {
-    const allTrips = await Trip.find().populate("owner");
-    res.render("trips/showAll", { allTrips })
+    const perPage = 6; // Number of trips per page
+    const page = parseInt(req.query.page) || 1; // Current page number
 
-}
+    const totalTrips = await Trip.countDocuments(); // Get the total number of trips
+    const allTrips = await Trip.find()
+        .populate("owner")
+        .skip((perPage * page) - perPage) // Skip trips to get the correct page
+        .limit(perPage); // Limit the number of trips per page
 
+    res.render("trips/showAll", {
+        allTrips,
+        currentPage: page,
+        totalPages: Math.ceil(totalTrips / perPage)
+    });
+};
 // showing particular trip 
 
 const showTrip = async (req, res) => {
@@ -180,35 +190,32 @@ const postEditTrip = async (req, res) => {
         // Convert totalDays to integer
         totalDays = parseInt(totalDays[0]) || 0;
 
-        // Initialize tripimages with existing tripimages or an empty array if not present
-        let tripimages = existingTrip.tripimages || [];
+        // Initialize tripImages based on the presence of new uploads
+        let tripImages = [];
 
-        // Check if req.files.tripImages is defined
-        if (req.files && req.files.tripImages) {
-            // Loop through each uploaded trip image
-            req.files.tripImages.forEach((file, index) => {
-                // If the uploaded trip image at this index should be updated
-                if (tripimages[index]) {
-                    tripimages[index].path = file.path;
-                } else {
-                    // If there is no existing trip image at this index, add the new one
-                    tripimages.push({ path: file.path });
-                }
+        // Check if req.files.tripImages is defined and is an array
+        if (req.files && req.files.tripImages && Array.isArray(req.files.tripImages)) {
+            // Loop through each uploaded trip image and add it to tripImages array
+            req.files.tripImages.forEach((file) => {
+                tripImages.push({ path: file.path });
             });
+        } else {
+            // If no new trip images are provided, keep the existing images
+            tripImages = existingTrip.tripImages || [];
         }
 
-        // Initialize stopImages with existing stopImages or an empty array if not present
+        // Initialize stopImages based on the presence of new uploads
         let stopImages = existingTrip.stopImages || [];
 
-        // Check if req.files.stopImages is defined
-        if (req.files && req.files.stopImages) {
+        // Check if req.files.stopImages is defined and is an array
+        if (req.files && req.files.stopImages && Array.isArray(req.files.stopImages)) {
             // Loop through each uploaded stop image
             req.files.stopImages.forEach((file, index) => {
-                // If the uploaded stop image at this index should be updated
                 if (stopImages[index]) {
+                    // Update existing stop image path
                     stopImages[index].path = file.path;
                 } else {
-                    // If there is no existing stop image at this index, add the new one at the end
+                    // Add new stop image if it doesn't exist in the current index
                     stopImages.push({ path: file.path });
                 }
             });
@@ -235,7 +242,7 @@ const postEditTrip = async (req, res) => {
         totalCost = totalCost || '';
         buffer = buffer || '';
 
-        // Merge the new data with the existing data
+        // Merge the new data with the existing data, replacing the old tripImages array if new images are provided
         const mergedData = {
             ...existingTrip._doc,
             departure,
@@ -245,7 +252,7 @@ const postEditTrip = async (req, res) => {
             location,
             minTripmates,
             maxTripmates,
-            tripimages: tripimages.length > 0 ? tripimages : existingTrip.tripImages,
+            tripImages, // Only the new images or existing images if no new images are uploaded
             title,
             tripDescription,
             accomodations,
@@ -254,7 +261,7 @@ const postEditTrip = async (req, res) => {
             excludes,
             totalDays,
             stopLocation,
-            stopImages: stopImages.length > 0 ? stopImages : existingTrip.stopImages,
+            stopImages, // Ensure this matches the initialized variable
             stopDescription,
             trainTicket,
             flightTicket,
@@ -264,6 +271,9 @@ const postEditTrip = async (req, res) => {
 
         // Update the trip with the merged data
         const updatedTrip = await Trip.findByIdAndUpdate(id, { $set: mergedData }, { new: true });
+
+        console.log('Uploaded trip images:', req.files.tripImages);
+        console.log('Existing trip images:', tripImages);
 
         if (!updatedTrip) {
             return res.status(404).send('Trip not found');
@@ -397,8 +407,8 @@ const mainSearch = async (req, res) => {
 
     // Exact match query with a 6-day extension and 1-day buffer
     const exactMatchTrips = await Trip.find({
-        // fromLocation: { $regex: new RegExp('^' + startingLocation, 'i') },
-        // location: { $regex: new RegExp('^' + destinationLocation, 'i') },
+        fromLocation: { $regex: new RegExp('^' + startingLocation, 'i') },
+        location: { $regex: new RegExp('^' + destinationLocation, 'i') },
         departure: { $gte: departureBufferStart, $lte: departureBufferEnd },
         endDate: { $gte: endDate, $lte: extendedEndDate }
     });
@@ -505,7 +515,76 @@ const aboutus = async (req, res) => {
 }
 
 const getSecondarySearch = async (req, res) => {
-    console.log(req.body)
+
+    // Extract values from req.body
+    const destination = req.body.destination.trim(); // Use trim() to remove any leading/trailing spaces
+    const minPrice = req.body.minPrice;
+    const maxPrice = req.body.maxPrice;
+    const fromdte = req.body.fromdte;
+    const todte = req.body.todte;
+
+    const categories = req.body.categories ? req.body.categories.split(',').map(cat => cat.trim()) : []; // Assuming categories can be comma-separated
+
+    let query = {};
+
+    // Add location to query if destination is provided and not empty
+    if (destination) {
+        query.location = { $regex: new RegExp(destination, 'i') }; // Case-insensitive match
+    }
+
+    // Add categories to query if any are provided
+    if (categories.length > 0) {
+        query.categories = { $in: categories }; // Match any of the provided categories
+    }
+
+
+    // Only add totalCost to the query if minPrice and maxPrice are not both '0'
+    if (minPrice !== '0' || maxPrice !== '0') {
+        if (minPrice && maxPrice) {
+            query.totalCost = { $gte: Number(minPrice), $lte: Number(maxPrice) };
+        } else if (minPrice) {
+            query.totalCost = { $gte: Number(minPrice) };
+        } else if (maxPrice) {
+            query.totalCost = { $lte: Number(maxPrice) };
+        }
+    }
+
+    // Parse 'fromdte' and 'todte' with the current year
+    const currentYear = new Date().getFullYear();
+
+    // Parse 'fromdte' and 'todte' into Date objects
+    if (fromdte) {
+        const fromDate = new Date(fromdte); // Ensure fromdte is in YYYY-MM-DD format
+        if (!isNaN(fromDate.getTime())) { // Check if the date is valid
+            query.departure = { $gte: fromDate };
+        }
+    }
+
+    if (todte) {
+        const toDate = new Date(todte); // Ensure todte is in YYYY-MM-DD format
+        if (!isNaN(toDate.getTime())) { // Check if the date is valid
+            query.endDate = { $lte: toDate };
+        }
+    }
+
+    console.log("Query Object:", query);
+    console.log("req.body:", req.body);
+
+    try {
+        // Find trips that match the query
+        const trips = await Trip.find(query)
+            .populate('owner')  // Populate owner information
+            .exec();
+
+        // console.log('Trips Found:', trips);  // Log the found trips
+
+
+        res.render("trips/secondarySearch", { trips })
+
+    } catch (error) {
+        console.error('Error fetching trips:', error);
+        res.status(500).send('Error fetching trips');
+    }
 }
 
 export { mainSearch, getSecondarySearch, aboutus, reviews, whislist, searchTrips, newTripForm, showAllTrips, addNewTrip, editTripForm, showTrip, deleteTrip, mytrip, postEditTrip, catagariesTrips, priceFilter };

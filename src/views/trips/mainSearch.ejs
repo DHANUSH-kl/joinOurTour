@@ -20,10 +20,15 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Anton&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
+
     <link rel="stylesheet" href="/css/nav.css">
     <link rel="stylesheet" href="/css/showAll.css">
     <link rel="stylesheet" href="/css/searchBar.css">
     <link rel="stylesheet" href="/css/mainSearch.css">
+    <link rel="stylesheet" href="/css/filterSearch.css">
+    <link rel="stylesheet" href="/css/pagination.css">
+    <link rel="stylesheet" href="/css/account.css">
+
     <title>Document</title>
 </head>
 
@@ -72,16 +77,41 @@
     <header>
         <nav>
             <div class="logo">
-                <h4><b>TRAVELER</b></h4>
+                <a href="/"><h4><b>TRAVELER</b></h4></a>
             </div>
             <div class="home">
-                <a href="http://localhost:8080/aboutus">HOME</a>
+                <a href="/aboutus">HOME</a>
             </div>
             <div class="right">
-                <img src="../images/account_circle.png" alt="">
-                <img src="../images/search.png" alt="">
+                <img src="../images/account_circle.png" alt="" class="account-icon">
+                <!-- <img src="../images/search.png" alt=""> -->
+
+                <div class="account-container acc-hide">
+                    <div class="close">
+                        <i class="fa-solid fa-xmark" id="close"></i>
+                    </div>
+                    <div class="user-info-container">
+                        <% if(!currUser) { %>
+                            <p>USERNAME</p>
+                            <% } else { %>
+                                <div class="profile"></div>
+                                <p>
+                                    <%= currUser.username %>
+                                </p>
+                                <% } %>
+                    </div>
+                    <div class="nav-links">
+                        <a href="/mytrips">MY TRIP</a>
+                        <a href="/createtrip">CREATE TRIP</a>
+                        <a href="/">PAYMENTS AND PAYOUTS</a>
+                        <a href="/user/signin">SIGN IN</a>
+                        <a href="/user/signup">SIGN UP</a>
+                    </div>
+                </div>
+
             </div>
         </nav>
+
         <hr>
         <div class="bottom-container">
             <img src="../images/linkedin(3).png" alt="">
@@ -92,47 +122,47 @@
     </header>
 
     <div class="search-container">
-            <div class="search-bar">
-                <div class="search-locations">
-                    <img src="../images/searchloc.png" alt="">
-                    <div class="startingLocation-container search-locations-container">
-                        <label for="startingLocation">Starting from</label>
-                        <input type="text" name="startingLocation" id="startingLocation" placeholder="Delhi">
-                    </div>
-                    <hr class="location-break">
-                    <div class="destinationLocation-container search-locations-container">
-                        <label for="destinationLocation">Going to</label>
-                        <input type="text" name="destinationLocation" id="destinationLocation" placeholder="Goa">
-                    </div>
+        <div class="search-bar">
+            <div class="search-locations">
+                <img src="../images/searchloc.png" alt="">
+                <div class="startingLocation-container search-locations-container">
+                    <label for="startingLocation">Starting from</label>
+                    <input type="text" name="startingLocation" id="startingLocation" placeholder="Delhi">
                 </div>
-
-
-                <div class="search-dates">
-                    <img src="../images/searchDates.png" alt="">
-                    <div class="search-dates-container">
-                        <div class="trip-dates trip-from-date">
-                            <label for="fromDate">from </label>
-                            <input type="date" class="fromDate" id="fromDate">
-                        </div>
-
-                        <div class="trip-dates trip-to-date">
-                            <label for="toDate">to</label>
-                            <input type="date" class="toDate" id="toDate">
-                        </div>
-
-
-                    </div>
+                <hr class="location-break">
+                <div class="destinationLocation-container search-locations-container">
+                    <label for="destinationLocation">Going to</label>
+                    <input type="text" name="destinationLocation" id="destinationLocation" placeholder="Goa">
                 </div>
+            </div>
 
-                <div class="mainSearchBtn-container">
-                    <button class="mainSearchBtn" onclick="submitSearch()">
-                        <span class="material-symbols-outlined">
-                            east
-                        </span>
-                    </button>
+
+            <div class="search-dates">
+                <img src="../images/searchDates.png" alt="">
+                <div class="search-dates-container">
+                    <div class="trip-dates trip-from-date">
+                        <label for="fromDate">from </label>
+                        <input type="date" class="fromDate" id="fromDate">
+                    </div>
+
+                    <div class="trip-dates trip-to-date">
+                        <label for="toDate">to</label>
+                        <input type="date" class="toDate" id="toDate">
+                    </div>
+
 
                 </div>
             </div>
+
+            <div class="mainSearchBtn-container">
+                <button class="mainSearchBtn" onclick="submitSearch()">
+                    <span class="material-symbols-outlined">
+                        east
+                    </span>
+                </button>
+
+            </div>
+        </div>
     </div>
 
 
@@ -152,13 +182,19 @@
             </div>
             <div class="filters">
                 <div class="top">
+                    <h1>When are you traveling?</h1>
 
+                    <div class="filters-dates">
+                        <input type="date" id="fromdte" name="fromdte" placeholder="july 4" />
+                        <input type="date" id="todte" name="todte" />
+
+                    </div>
                 </div>
                 <div class="bottom">
                     <div class="your-trip">
                         <div class="you-type-filter-body">
                             <p>Tour Type</p>
-                            <img src="../images/arrow.svg" alt="" id="filterToggle">
+                            <img src="../images/arrow.svg" alt="" id="filterToggle" class="filter-controller">
                         </div>
                         <div class="you-type-filter-content">
                             <form id="categoryFilterForm" method="POST" action="/searchtrips">
@@ -166,22 +202,21 @@
                                         class="style-img"><input type="checkbox" class="categoryCheckbox"
                                         name="category" value="nature" id="nature" onclick="toggleCategory('nature')">
                                     Nature</label>
-                                <label for="party"><img src="../images/nature-style.png" alt="" class="style-img"><input
+                                <label for="party"><img src="../images/party.png" alt="" class="style-img"><input
                                         type="checkbox" class="categoryCheckbox" name="category" value="party"
                                         id="party" onclick="toggleCategory('party')"> Party</label>
-                                <label for="food"><img src="../images/nature-style.png" alt="" class="style-img"><input
+                                <label for="food"><img src="../images/food.png" alt="" class="style-img"><input
                                         type="checkbox" class="categoryCheckbox" name="category" value="food" id="food"
                                         onclick="toggleCategory('food')"> Food</label>
-                                <label for="beach"><img src="../images/nature-style.png" alt="" class="style-img"><input
+                                <label for="beach"><img src="../images/beach.png" alt="" class="style-img"><input
                                         type="checkbox" class="categoryCheckbox" name="category" value="beach"
                                         id="beach" onclick="toggleCategory('beach')"> Beach</label>
-                                <label for="culture"><img src="../images/nature-style.png" alt=""
-                                        class="style-img"><input type="checkbox" class="categoryCheckbox"
-                                        name="category" value="culture" id="culture"
-                                        onclick="toggleCategory('culture')"> Culture</label>
-                                <label for="sports"><img src="../images/nature-style.png" alt=""
-                                        class="style-img"><input type="checkbox" class="categoryCheckbox"
-                                        name="category" value="sports" id="sports" onclick="toggleCategory('sports')">
+                                <label for="culture"><img src="../images/culture.png" alt="" class="style-img"><input
+                                        type="checkbox" class="categoryCheckbox" name="category" value="culture"
+                                        id="culture" onclick="toggleCategory('culture')"> Culture</label>
+                                <label for="sports"><img src="../images/sports.png" alt="" class="style-img"><input
+                                        type="checkbox" class="categoryCheckbox" name="category" value="sports"
+                                        id="sports" onclick="toggleCategory('sports')">
                                     Sports</label>
                                 <input type="hidden" name="selectedCategories" id="selectedCategories">
                                 <!-- <button type="button" onclick="searchCategory()">Apply Categories</button> -->
@@ -189,6 +224,8 @@
                         </div>
 
                         <div class="price-slider-header">
+                            <p>Price filter</p>
+                            <img src="../images/arrow.svg" alt="" id="priceFilterToggle" class="filter-controller">
 
                         </div>
                         <div class="price-filter-container">
@@ -224,80 +261,142 @@
                 </div>
             </div>
         </div>
+
         <div class="cards-container">
-            <% for(let i=0; i < allTrips.length; i++) { %>
-                <div class="card-container">
-                    <div class="card-img">
-                        <% if (allTrips[i].tripImages && allTrips[i].tripImages.length> 0 &&
-                            allTrips[i].tripImages[0].path) { %>
-                            <div class="trip-image">
-                                <img src="<%= allTrips[i].tripImages[0].path %>" alt="Trip Image">
-                            </div>
-                            <div class="heart-container">
-                                <i class="fa-regular fa-heart"></i>
-
-                            </div>
-                            <% } else { %>
-                                <p>No images available for this trip</p>
-                                <% } %>
-                    </div>
-                    <div class="card-body">
-                        <div class="route">
-                            <img src="../images/route.svg" alt="">
-                            <h3 class="card-title">
-                                <a href="/<%= allTrips[i]._id %>">
-                                    <%= allTrips[i].location %>
-                                </a>
-
-                                <p>
-                                    <% if (allTrips[i].departure) { %>
-                                        <%= new Date(allTrips[i].departure).toLocaleDateString('en-US', { month: 'long'
-                                            , day: '2-digit' }) %> ~
-                                            <% } else { %>
-                                                date not available
-                                                <% } %>
-                                                    <% if (allTrips[i].endDate) { %>
-                                                        <%= new Date(allTrips[i].endDate).toLocaleDateString('en-US', {
-                                                            month: 'long' , day: '2-digit' }) %>
-                                                            <% } %>
-
-
-                                </p>
-
-
-                            </h3>
+            <% if (exactMatchTrips && exactMatchTrips.length> 0) { %>
+                <% for(let i=0; i < exactMatchTrips.length; i++) { %>
+                    <div class="card-container">
+                        <div class="card-img">
+                            <% if (exactMatchTrips[i].tripImages && exactMatchTrips[i].tripImages.length> 0 &&
+                                exactMatchTrips[i].tripImages[0].path) { %>
+                                <div class="trip-image">
+                                    <img src="<%= exactMatchTrips[i].tripImages[0].path %>" alt="Trip Image">
+                                </div>
+                                <div class="heart-container">
+                                    <i class="fa-regular fa-heart"></i>
+                                </div>
+                                <% } else { %>
+                                    <p>No images available for this trip</p>
+                                    <% } %>
                         </div>
-
-                        <div class="title-container">
-                            <h4 class="trip-title">
-                                <%= allTrips[i].title %>
-                            </h4>
-                        </div>
-                        <hr>
-
-                        <div class="card-bottom">
-
-                            <div class="days-container">
-                                <h4 class="days">
-                                    <%= allTrips[i].totalDays %> days
+                        <div class="card-body">
+                            <div class="route">
+                                <img src="../images/route.svg" alt="">
+                                <h3 class="card-title">
+                                    <a href="/<%= exactMatchTrips[i]._id %>">
+                                        <%= exactMatchTrips[i].location %>
+                                    </a>
+                                    <p>
+                                        <% if (exactMatchTrips[i].departure) { %>
+                                            <%= new Date(exactMatchTrips[i].departure).toLocaleDateString('en-US', {
+                                                month: 'long' , day: '2-digit' }) %> ~
+                                                <% } else { %>
+                                                    date not available
+                                                    <% } %>
+                                                        <% if (exactMatchTrips[i].endDate) { %>
+                                                            <%= new
+                                                                Date(exactMatchTrips[i].endDate).toLocaleDateString('en-US',
+                                                                { month: 'long' , day: '2-digit' }) %>
+                                                                <% } %>
+                                    </p>
+                                </h3>
+                            </div>
+                            <div class="title-container">
+                                <h4 class="trip-title">
+                                    <%= exactMatchTrips[i].title %>
                                 </h4>
                             </div>
-
-                            <div class="price-container">
-                                <% if (allTrips[i].totalCost) { %>
-                                    <span>FROM</span> &nbsp;<b>
-                                        <%= allTrips[i].totalCost.toLocaleString('en-IN', { style: 'currency' ,
-                                            currency: 'INR' }) %>
-                                    </b>
-                                    <% } else { %>
-                                        Price Not Available
-                                        <% } %>
+                            <hr>
+                            <div class="card-bottom">
+                                <div class="days-container">
+                                    <h4 class="days">
+                                        <%= exactMatchTrips[i].totalDays %> days
+                                    </h4>
+                                </div>
+                                <div class="price-container">
+                                    <% if (exactMatchTrips[i].totalCost) { %>
+                                        <span>FROM</span> &nbsp;<b>
+                                            <%= exactMatchTrips[i].totalCost.toLocaleString('en-IN', { style: 'currency'
+                                                , currency: 'INR' }) %>
+                                        </b>
+                                        <% } else { %>
+                                            Price Not Available
+                                            <% } %>
+                                </div>
                             </div>
-
                         </div>
                     </div>
-                </div>
-                <% } %>
+                    <% } %>
+                        <% } else if (destinationMatch && destinationMatch.length> 0) { %>
+                            <% for(let i=0; i < destinationMatch.length; i++) { %>
+                                <div class="card-container">
+                                    <div class="card-img">
+                                        <% if (destinationMatch[i].tripImages && destinationMatch[i].tripImages.length>
+                                            0 &&
+                                            destinationMatch[i].tripImages[0].path) { %>
+                                            <div class="trip-image">
+                                                <img src="<%= destinationMatch[i].tripImages[0].path %>"
+                                                    alt="Trip Image">
+                                            </div>
+                                            <div class="heart-container">
+                                                <i class="fa-regular fa-heart"></i>
+                                            </div>
+                                            <% } else { %>
+                                                <p>No images available for this trip</p>
+                                                <% } %>
+                                    </div>
+                                    <div class="card-body">
+                                        <div class="route">
+                                            <img src="../images/route.svg" alt="">
+                                            <h3 class="card-title">
+                                                <a href="/<%= destinationMatch[i]._id %>">
+                                                    <%= destinationMatch[i].location %>
+                                                </a>
+                                                <p>
+                                                    <% if (destinationMatch[i].departure) { %>
+                                                        <%= new
+                                                            Date(destinationMatch[i].departure).toLocaleDateString('en-US',
+                                                            { month: 'long' , day: '2-digit' }) %> ~
+                                                            <% } else { %>
+                                                                date not available
+                                                                <% } %>
+                                                                    <% if (destinationMatch[i].endDate) { %>
+                                                                        <%= new
+                                                                            Date(destinationMatch[i].endDate).toLocaleDateString('en-US',
+                                                                            { month: 'long' , day: '2-digit' }) %>
+                                                                            <% } %>
+                                                </p>
+                                            </h3>
+                                        </div>
+                                        <div class="title-container">
+                                            <h4 class="trip-title">
+                                                <%= destinationMatch[i].title %>
+                                            </h4>
+                                        </div>
+                                        <hr>
+                                        <div class="card-bottom">
+                                            <div class="days-container">
+                                                <h4 class="days">
+                                                    <%= destinationMatch[i].totalDays %> days
+                                                </h4>
+                                            </div>
+                                            <div class="price-container">
+                                                <% if (destinationMatch[i].totalCost) { %>
+                                                    <span>FROM</span> &nbsp;<b>
+                                                        <%= destinationMatch[i].totalCost.toLocaleString('en-IN', {
+                                                            style: 'currency' , currency: 'INR' }) %>
+                                                    </b>
+                                                    <% } else { %>
+                                                        Price Not Available
+                                                        <% } %>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <% } %>
+                                    <% } else { %>
+                                        <p>No trips found.</p>
+                                        <% } %>
         </div>
     </main>
 
@@ -323,7 +422,7 @@
 
             <button type="button" onclick="searchTrip()">Search</button>
         </div>
-    </form> -->
+    </form>
 
     <main>
         <div class="sort-container">
@@ -407,7 +506,7 @@
     </script>
 
     <script>
-       
+
 
         document.addEventListener('DOMContentLoaded', () => {
             const dateInputs = document.querySelectorAll('input[type="date"]');
@@ -422,10 +521,15 @@
         });
 
     </script>
+    <script src="/js/dropdown.js"></script>
+    <script src="/js/autoSuggestions.js"></script>
     <script src="/js/secondarySearch.js"></script>
     <script src="/js/mainSearch.js"></script>
     <script src="/js/filter.js"></script>
     <script src="/js/nav.js"></script>
+    <script src="/js/pricefilter.js"></script>
+
+
 </body>
 
 </html>

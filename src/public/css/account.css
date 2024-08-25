@@ -1,0 +1,83 @@
+nav .right {
+    position: relative;
+
+}
+
+.account-icon:hover {
+    transform: scale(1.1);
+    transition: 0.2s ease-in;
+}
+
+
+.account-container {
+    width: 15rem;
+    height: auto;
+    background-color: rgb(255, 255, 255);
+    position: absolute;
+    top: 3rem;
+    right: 0.5rem;
+    z-index: 9;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: flex-start;
+    gap: 1rem;
+    padding: 1rem;
+    border-radius: 10px;
+    
+}
+
+.user-info-container {
+    font-size: 15px;
+    font-family: Poppins;
+    color: #ffffff;
+}
+
+.account-container .nav-links {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: flex-start;
+    gap: 1rem;
+    margin-bottom: 2rem;
+
+}
+
+.account-container .nav-links a{
+    font-size: 15px;
+    font-family: Poppins;
+    color: #ffffff;
+
+
+}
+
+.close {
+    align-self: flex-end;
+    margin-bottom: 2rem;
+}
+
+.acc-hide {
+    display: none;
+}
+
+.close i{
+    font-size: 1.3rem;
+}
+
+.close i:hover {
+    transform: scale(1.1);
+    transition: 0.2s ease-in;
+}
+
+
+.account-container {
+
+
+    background: rgba(255, 255, 255, 0.1); /* Semi-transparent white background */
+    backdrop-filter: blur(5px); /* Blur effect */
+    border-radius: 10px; /* Rounded corners */
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Subtle shadow for depth */
+    color: white; /* Text color (adjust as needed for contrast) */
+    border: 1px solid rgba(255, 255, 255, 0.2); /* Light border to enhance glass effect */
+
+}

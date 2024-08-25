@@ -132,6 +132,8 @@ input[type="date"]:hover {
     background-color: #fff;
     color: #05A351;
     transition: 0.2s ease-in;
+    box-shadow: 0 0 5px rgba(0, 255, 47, 0.5);
+
 }
 
 input[type="date"] {
@@ -168,4 +170,9 @@ input[type="date"]:focus {
     margin-right: 0.5rem;
 
 }
+
+
+
+
+
 

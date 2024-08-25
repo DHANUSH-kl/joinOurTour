@@ -22,15 +22,6 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
 
 
-
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>
-    <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
-
-
-
-
-
     <link rel="stylesheet" href="/css/nav.css">
     <link rel="stylesheet" href="/css/showAll.css">
     <link rel="stylesheet" href="/css/searchBar.css">
@@ -38,6 +29,7 @@
     <link rel="stylesheet" href="/css/filterSearch.css">
     <link rel="stylesheet" href="/css/pagination.css">
     <link rel="stylesheet" href="/css/account.css">
+
     <title>Document</title>
 </head>
 
@@ -86,7 +78,7 @@
     <header>
         <nav>
             <div class="logo">
-                <h4><b>TRAVELER</b></h4>
+                <a href="/"><h4><b>TRAVELER</b></h4></a>
             </div>
             <div class="home">
                 <a href="/aboutus">HOME</a>
@@ -121,15 +113,6 @@
             </div>
         </nav>
         <hr>
-
-
-
-
-
-
-
-
-
         <div class="bottom-container">
             <img src="../images/linkedin(3).png" alt="">
             <img src="../images/instagram(4).png" alt="">
@@ -137,7 +120,6 @@
             " alt="">
         </div>
     </header>
-
 
     <div class="search-container">
         <div class="search-bar">
@@ -192,7 +174,7 @@
                 <i class="fa-solid fa-location-dot loc"></i>
                 <form action="">
                     <input type="text" placeholder="Search destinations" class="secondary-location"
-                        id="secondaryDestination" name="destination">
+                        id="secondaryDestination">
                 </form>
 
                 <button class="secondary-search-button" onclick="submitSecondarySearch()">
@@ -282,13 +264,13 @@
             </div>
         </div>
         <div class="cards-container">
-            <% for(let i=0; i < allTrips.length; i++) { %>
+            <% for(let i=0; i < trips.length; i++) { %>
                 <div class="card-container">
                     <div class="card-img">
-                        <% if (allTrips[i].tripImages && allTrips[i].tripImages.length> 0 &&
-                            allTrips[i].tripImages[0].path) { %>
+                        <% if (trips[i].tripImages && trips[i].tripImages.length> 0 &&
+                            trips[i].tripImages[0].path) { %>
                             <div class="trip-image">
-                                <img src="<%= allTrips[i].tripImages[0].path %>" alt="Trip Image">
+                                <img src="<%= trips[i].tripImages[0].path %>" alt="Trip Image">
                             </div>
                             <div class="heart-container">
                                 <i class="fa-regular fa-heart"></i>
@@ -302,20 +284,21 @@
                         <div class="route">
                             <img src="../images/route.svg" alt="">
                             <h3 class="card-title">
-                                <a href="/<%= allTrips[i]._id %>">
-                                    <%= allTrips[i].location %>
+                                <a href="/<%= trips[i]._id %>">
+                                    <%= trips[i].location %>
                                 </a>
 
                                 <p>
-                                    <% if (allTrips[i].departure) { %>
-                                        <%= new Date(allTrips[i].departure).toLocaleDateString('en-US', { month: 'long'
-                                            , day: '2-digit' }) %> ~
+                                    <% if (trips[i].departure) { %>
+                                        <%= new Date(trips[i].departure).toLocaleDateString('en-US', {
+                                            month: 'long' , day: '2-digit' }) %> ~
                                             <% } else { %>
                                                 date not available
                                                 <% } %>
-                                                    <% if (allTrips[i].endDate) { %>
-                                                        <%= new Date(allTrips[i].endDate).toLocaleDateString('en-US', {
-                                                            month: 'long' , day: '2-digit' }) %>
+                                                    <% if (trips[i].endDate) { %>
+                                                        <%= new
+                                                            Date(trips[i].endDate).toLocaleDateString('en-US',
+                                                            { month: 'long' , day: '2-digit' }) %>
                                                             <% } %>
 
 
@@ -327,7 +310,7 @@
 
                         <div class="title-container">
                             <h4 class="trip-title">
-                                <%= allTrips[i].title %>
+                                <%= trips[i].title %>
                             </h4>
                         </div>
                         <hr>
@@ -336,14 +319,14 @@
 
                             <div class="days-container">
                                 <h4 class="days">
-                                    <%= allTrips[i].totalDays %> days
+                                    <%= trips[i].totalDays %> days
                                 </h4>
                             </div>
 
                             <div class="price-container">
-                                <% if (allTrips[i].totalCost) { %>
+                                <% if (trips[i].totalCost) { %>
                                     <span>FROM</span> &nbsp;<b>
-                                        <%= allTrips[i].totalCost.toLocaleString('en-IN', { style: 'currency' ,
+                                        <%= trips[i].totalCost.toLocaleString('en-IN', { style: 'currency' ,
                                             currency: 'INR' }) %>
                                     </b>
                                     <% } else { %>
@@ -356,25 +339,11 @@
                 </div>
                 <% } %>
 
+            
 
         </div>
     </main>
 
-    <div class="pagination">
-        <% if (currentPage> 1) { %>
-            <a href="?page=<%= currentPage - 1 %>" class="prev">Previous</a>
-            <% } %>
-
-                <% for (let i=1; i <=totalPages; i++) { %>
-                    <a href="?page=<%= i %>" class="<%= i === currentPage ? 'active' : '' %>">
-                        <%= i %>
-                    </a>
-                    <% } %>
-
-                        <% if (currentPage < totalPages) { %>
-                            <a href="?page=<%= currentPage + 1 %>" class="next">Next</a>
-                            <% } %>
-    </div>
 
 
 
@@ -432,6 +401,7 @@
     <script src="/js/filter.js"></script>
     <script src="/js/nav.js"></script>
     <script src="/js/pricefilter.js"></script>
+
 </body>
 
 </html>

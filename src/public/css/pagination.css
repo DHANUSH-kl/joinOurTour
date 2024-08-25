@@ -1,0 +1,30 @@
+.pagination {
+    width: 100%;
+    height: 10vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 1rem;
+}
+
+.pagination a {
+    font-size: 1rem;
+    color: black;
+    font-family: Poppins;
+    width: 1.7rem;
+    height: 1.7rem;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.pagination .active {
+    color: #fff;
+    background: #08A050;
+    
+}
+
+.pagination .prev , .pagination .next {
+    width: auto;
+}

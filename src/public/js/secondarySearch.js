@@ -1,72 +1,134 @@
+
+
+
+
+
+
+
+// function submitSecondarySearch() {
+//     // Get the destination
+//     const destination = document.getElementById('secondaryDestination').value;
+
+//     // Get the selected categories
+//     const selectedCategories = Array.from(document.querySelectorAll('.categoryCheckbox:checked'))
+//                                      .map(cb => cb.value);
+
+//     // Get the price range
+//     const minPrice = document.getElementById('minPrice').value;
+//     const maxPrice = document.getElementById('maxPrice').value;
+
+//     // Prepare the data to be sent
+//     const data = {
+//         destination,
+//         categories: selectedCategories,
+//         minPrice,
+//         maxPrice
+//     };
+
+//     console.log('Data to be sent:', data);
+
+//     // Create a form and submit it
+//     const form = document.createElement('form');
+//     form.method = 'POST';
+//     form.action = '/secondarysearch';
+
+//     for (const key in data) {
+//         if (data.hasOwnProperty(key)) {
+//             if (Array.isArray(data[key])) {
+//                 // If the value is an array (like categories), create a hidden input for each item
+//                 data[key].forEach(value => {
+//                     const input = document.createElement('input');
+//                     input.type = 'hidden';
+//                     input.name = key; // Keep the same name to treat as an array on server-side
+//                     input.value = value;
+//                     form.appendChild(input);
+//                 });
+//             } else {
+//                 const input = document.createElement('input');
+//                 input.type = 'hidden';
+//                 input.name = key;
+//                 input.value = data[key];
+//                 form.appendChild(input);
+//             }
+//         }
+//     }
+
+//     document.body.appendChild(form);
+//     form.submit();
+// }
+
+
+
+
+
+//new form
+
+
+
+
 function submitSecondarySearch() {
     // Get the destination
-    const destinationInput = document.getElementById('secondaryDestination');
-    const destination = destinationInput ? destinationInput.value : '';
+    const destination = document.getElementById('secondaryDestination').value;
 
     // Get the selected categories
     const selectedCategories = Array.from(document.querySelectorAll('.categoryCheckbox:checked'))
                                      .map(cb => cb.value);
 
     // Get the price range
-    const minPriceInput = document.getElementById('minPrice');
-    const maxPriceInput = document.getElementById('maxPrice');
-    const minPrice = minPriceInput ? minPriceInput.value : '';
-    const maxPrice = maxPriceInput ? maxPriceInput.value : '';
+    const minPrice = document.getElementById('minPrice').value;
+    const maxPrice = document.getElementById('maxPrice').value;
+
+    // Get the dates
+    const fromdte = document.getElementById('fromdte').value;
+    const todte = document.getElementById('todte').value;
 
     // Prepare the data to be sent
     const data = {
         destination,
         categories: selectedCategories,
         minPrice,
-        maxPrice
+        maxPrice,
+        fromdte,
+        todte
     };
 
     console.log('Data to be sent:', data);
 
-    // Send the data to the server
-    fetch('/secondarysearch', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(data)
-    })
-    .then(response => {
-        console.log('Response received:', response);
-        if (!response.ok) {
-            throw new Error('Network response was not ok');
+    // Create a form and submit it
+    const form = document.createElement('form');
+    form.method = 'POST';
+    form.action = '/secondarysearch';
+
+    for (const key in data) {
+        if (data.hasOwnProperty(key)) {
+            if (Array.isArray(data[key])) {
+                // If the value is an array (like categories), create a hidden input for each item
+                data[key].forEach(value => {
+                    const input = document.createElement('input');
+                    input.type = 'hidden';
+                    input.name = key; // Keep the same name to treat as an array on server-side
+                    input.value = value;
+                    form.appendChild(input);
+                });
+            } else {
+                const input = document.createElement('input');
+                input.type = 'hidden';
+                input.name = key;
+                input.value = data[key];
+                form.appendChild(input);
+            }
         }
-        return response.json();
-    })
-    .then(data => {
-        console.log('Success:', data);
-        console.log('Clearing inputs...');
+    }
 
-        // Clear the input fields after successful submission
-        if (destinationInput) {
-            console.log('Clearing destination input');
-            destinationInput.value = '';
-        }
-
-        if (minPriceInput) {
-            console.log('Clearing minPrice input');
-            minPriceInput.value = '';
-        }
-
-        if (maxPriceInput) {
-            console.log('Clearing maxPrice input');
-            maxPriceInput.value = '';
-        }
-
-        // Clear the checkboxes
-        document.querySelectorAll('.categoryCheckbox').forEach(cb => {
-            console.log('Clearing checkbox:', cb.value);
-            cb.checked = false;
-        });
-
-        console.log('Inputs should be cleared now.');
-    })
-    .catch(error => {
-        console.error('Error:', error);
-    });
+    document.body.appendChild(form);
+    form.submit();
 }
+
+
+
+//dates
+
+
+
+
+
