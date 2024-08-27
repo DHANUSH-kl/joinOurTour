@@ -176,3 +176,44 @@ input[type="date"]:focus {
 
 
 
+/* suggetions  */
+
+
+/* Style the autocomplete suggestions */
+.ui-autocomplete {
+    max-height: 200px;
+    overflow-y: auto;
+    /* Prevent horizontal scrollbar */
+    overflow-x: hidden;
+    z-index: 1000;
+}
+
+/* Style for the state items */
+.ui-autocomplete li {
+    padding: 5px;
+    cursor: pointer;
+    position: relative; /* Ensure cities list is positioned correctly */
+}
+
+.city-list {
+    margin-top: 0;
+    padding-left: 0;
+    background-color: rgba(0, 0, 0, 0.8); /* Dark background to make it stand out */
+    color: white; /* White text to ensure readability */
+    border: 1px solid #ccc;
+    position: absolute;
+    left: 100%;
+    top: 0;
+    white-space: nowrap;
+    z-index: 1001;
+    display: block;
+}
+/* Style for the individual city items */
+.city-list li {
+    list-style: none;
+    padding: 5px;
+    white-space: nowrap;
+}
+
+
+

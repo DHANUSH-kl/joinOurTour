@@ -20,6 +20,9 @@ router.route("/createtrip")
 router.route("/aboutus")
     .get(asyncWrap(aboutus))
 
+router.route("/update-wishlist")
+    .post( isLoggedIn , asyncWrap(whislist))
+
 router.route("/")
     .get(asyncWrap(showAllTrips))
     .post(asyncWrap(whislist))

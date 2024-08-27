@@ -26,6 +26,12 @@ const userSchema = new Schema({
             ref: 'Trip',
         },
     ],
+    wishlist: [
+        { 
+            type: mongoose.Schema.Types.ObjectId, 
+            ref: 'Trip' 
+        }
+    ],
 }, { timestamps: true });
 
 userSchema.plugin(passportLocalMongoose);

@@ -429,26 +429,7 @@ const mainSearch = async (req, res) => {
 
 }
 
-const whislist = async (req, res) => {
 
-    // Extract the wishlist array from the request body
-    const { wishlist } = req.body;
-
-    // Initialize the wishlist array in the session if it doesn't exist
-    req.session.wishlist = req.session.wishlist || [];
-
-    // Loop through the wishlist items received from the client
-    wishlist.forEach(tripId => {
-        // Check if the tripId is not already in the wishlist stored in the session
-        if (!req.session.wishlist.includes(tripId)) {
-            // Add the tripId to the wishlist stored in the session
-            req.session.wishlist.push(tripId);
-        }
-    });
-
-    console.log("Wishlist updated:", req.session.wishlist);
-
-}
 
 const reviews = async (req, res) => {
 
@@ -584,6 +565,35 @@ const getSecondarySearch = async (req, res) => {
     } catch (error) {
         console.error('Error fetching trips:', error);
         res.status(500).send('Error fetching trips');
+    }
+}
+
+const whislist = async(req,res) => {
+    const userId = req.user._id; // Assuming `req.user` is set by your authentication middleware
+    const wishlist = req.body.wishlist; // Array of trip IDs
+
+    console.log("userID:", userId);
+    console.log("Request Body:", req.body);
+    console.log("Wishlist:", wishlist);
+
+    if (!userId || !Array.isArray(wishlist)) {
+        return res.status(400).json({ success: false, message: 'Invalid request data' });
+    }
+
+    try {
+        const user = await User.findById(userId);
+        if (!user) {
+            return res.status(404).json({ success: false, message: 'User not found' });
+        }
+
+        user.wishlist = wishlist; // Update the user's wishlist
+        await user.save(); // Save changes to the database
+
+        console.log("Updated Wishlist:", user.wishlist); // Debugging line
+        res.json({ success: true, message: 'Wishlist updated successfully' });
+    } catch (error) {
+        console.error('Error updating wishlist:', error);
+        res.status(500).json({ success: false, message: 'Failed to update wishlist' });
     }
 }
 

@@ -356,3 +356,6 @@ input[type="date"]:hover {
 
 
 
+.wishlist-active {
+    color: red;
+}
