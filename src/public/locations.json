@@ -1,6 +1,7 @@
 {
     "Delhi": ["New Delhi", "Dwarka", "Saket"],
     "Goa": ["Panaji", "Margao", "Vasco da Gama"],
+    "Gujurat": ["1", "2", "3 "],
     "Maharashtra": ["Mumbai", "Pune", "Nagpur"],
     "Karnataka": ["Bangalore", "Mysore", "Mangalore"]
 }

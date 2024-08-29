@@ -219,21 +219,12 @@
 
       <div class="swiffy-slider slider-item-show2 slider-nav-autoplay">
         <ul class="slider-container">
-          <li>
-            <img src="../images/destination1.jpeg" alt="">
-            <button>Explore trip</button>
-          </li>
-
-          <li>
-            <img src="../images/destination1.jpeg" alt="">
-            <button>Explore trip</button>
-          </li>
-
-
-          <li>
-            <img src="../images/destination1.jpeg" alt="">
-            <button>Explore trip</button>
-          </li>
+          <% for (let i = 0; i < exploreTrips.length; i++) { %>
+            <li>
+                <img src="<%= exploreTrips[i].tripImages[0].path %>" alt="">
+                <button class="explore-trip"><a href="/<%= exploreTrips[i]._id %>">Explore Trip</a></button>
+            </li>
+          <% } %>
 
         </ul>
 
@@ -264,7 +255,10 @@
           <img src="<%= tripPackages[i].tripImages[0].path %>" alt="">
           <p><%= tripPackages[i].title %></p>
 
-          <button>Discover more</button>
+          <form action="/discover" method="POST">
+            <input type="hidden" name="tripId" value="<%= tripPackages[i]._id %>">
+            <button type="submit">Discover more</button>
+          </form>
         </div>
         <% } %>
 

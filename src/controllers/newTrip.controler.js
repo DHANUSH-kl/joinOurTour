@@ -490,9 +490,16 @@ const aboutus = async (req, res) => {
     const tripPackage3 = await Trip.findById(p3);
     const tripPackage4 = await Trip.findById(p4);
 
+    const exploreTrips1 = await Trip.findById(d1);
+    const exploreTrips2 = await Trip.findById(d2);
+    const exploreTrips3 = await Trip.findById(d3);
+    const exploreTrips4 = await Trip.findById(d4);
+
+    const exploreTrips = [exploreTrips1,exploreTrips2,exploreTrips3,exploreTrips4]
+
     const tripPackages = [tripPackage1, tripPackage2, tripPackage3, tripPackage4]
 
-    res.render("trips/aboutus.ejs", { tripPackages })
+    res.render("trips/aboutus.ejs", { tripPackages , exploreTrips })
 }
 
 const getSecondarySearch = async (req, res) => {
@@ -597,5 +604,25 @@ const whislist = async(req,res) => {
     }
 }
 
-export { mainSearch, getSecondarySearch, aboutus, reviews, whislist, searchTrips, newTripForm, showAllTrips, addNewTrip, editTripForm, showTrip, deleteTrip, mytrip, postEditTrip, catagariesTrips, priceFilter };
+const discoverPage = async(req,res) => {
+
+    const tripId = req.body.tripId; 
+    const trip = await Trip.findById(tripId);
+    
+    if (!trip) {
+        return res.status(404).json({ message: "Trip not found" });
+    }
+
+
+    // Step 2: Extract the location and find all trips with the same location
+    const location = trip.location;
+    const tripsByLocation = await Trip.find({ location: new RegExp(`^${location}$`, 'i') });
+
+
+    res.render("trips/discover.ejs", { tripsByLocation })
+
+
+}
+
+export { discoverPage ,mainSearch, getSecondarySearch, aboutus, reviews, whislist, searchTrips, newTripForm, showAllTrips, addNewTrip, editTripForm, showTrip, deleteTrip, mytrip, postEditTrip, catagariesTrips, priceFilter };
 

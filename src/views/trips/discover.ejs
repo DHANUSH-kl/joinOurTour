@@ -1,0 +1,410 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Lato&display=swap" rel="stylesheet">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Lato:wght@400;700;900&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900&display=swap"
+        rel="stylesheet">
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
+        integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA=="
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link rel="stylesheet"
+        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0" />
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Anton&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
+
+
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>
+    <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+
+
+
+
+
+    <link rel="stylesheet" href="/css/nav.css">
+    <link rel="stylesheet" href="/css/showAll.css">
+    <link rel="stylesheet" href="/css/searchBar.css">
+    <link rel="stylesheet" href="/css/mainSearch.css">
+    <link rel="stylesheet" href="/css/filterSearch.css">
+    <link rel="stylesheet" href="/css/pagination.css">
+    <link rel="stylesheet" href="/css/account.css">
+    <title>Document</title>
+</head>
+
+<body>
+
+
+    <!-- <nav>
+        <div class="top-container">
+            <img src="../images/account_circle.png" alt="">
+            <img src="../images/search.png" alt="">
+        </div>
+        <div class="bottom-container">
+            <img src="../images/linkedin(3).png" alt="">
+            <img src="../images/instagram(4).png" alt="">
+            <img src="../images/facebook-app-symbol(1).png
+            " alt="">
+        </div>
+    </nav> -->
+
+
+
+
+    <!-- <form action="/searchTrips" method="POST" id="searchTripForm" class="search-container">
+        <div class="search-bar">
+            <div class="location-search-container">
+                <label for="location">Where</label>
+                <input type="text" name="location" id="location" placeholder="Search destinations">
+            </div>
+
+            <div class="checkin-search-container">
+                <label for="checkIn">Check in</label>
+                <input type="date" placeholder="Check in" name="checkIn" id="checkIn">
+            </div>
+
+            <div class="checkout-search-container">
+                <label for="checkOut">Check out</label>
+                <input type="date" placeholder="Check out" name="checkOut" id="checkOut">
+            </div>
+
+            <button type="button" onclick="searchTrip()">Search</button>
+        </div>
+    </form> -->
+
+
+
+    <header>
+        <nav>
+            <div class="logo">
+                <h4><b>TRAVELER</b></h4>
+            </div>
+            <div class="home">
+                <a href="/aboutus">HOME</a>
+            </div>
+            <div class="right">
+                <img src="../images/account_circle.png" alt="" class="account-icon">
+                <!-- <img src="../images/search.png" alt=""> -->
+
+                <div class="account-container acc-hide">
+                    <div class="close">
+                        <i class="fa-solid fa-xmark" id="close"></i>
+                    </div>
+                    <div class="user-info-container">
+                        <% if(!currUser) { %>
+                            <p>USERNAME</p>
+                            <% } else { %>
+                                <div class="profile"></div>
+                                <p>
+                                    <%= currUser.username %>
+                                </p>
+                                <% } %>
+                    </div>
+                    <div class="nav-links">
+                        <a href="/mytrips">MY TRIP</a>
+                        <a href="/createtrip">CREATE TRIP</a>
+                        <a href="/">PAYMENTS AND PAYOUTS</a>
+                        <a href="/user/signin">SIGN IN</a>
+                        <a href="/user/signup">SIGN UP</a>
+                    </div>
+                </div>
+
+            </div>
+        </nav>
+        <hr>
+
+
+
+
+
+
+
+
+
+        <div class="bottom-container">
+            <img src="../images/linkedin(3).png" alt="">
+            <img src="../images/instagram(4).png" alt="">
+            <img src="../images/facebook-app-symbol(1).png
+            " alt="">
+        </div>
+    </header>
+
+
+    <div class="search-container">
+        <div class="search-bar">
+            <div class="search-locations">
+                <img src="../images/searchloc.png" alt="">
+                <div class="startingLocation-container search-locations-container">
+                    <label for="startingLocation">Starting from</label>
+                    <input type="text" name="startingLocation" id="startingLocation" placeholder="Delhi">
+
+                </div>
+                <hr class="location-break">
+                <div class="destinationLocation-container search-locations-container">
+                    <label for="destinationLocation">Going to</label>
+                    <input type="text" name="destinationLocation" id="destinationLocation" placeholder="Goa">
+                </div>
+            </div>
+
+
+            <div class="search-dates">
+                <img src="../images/searchDates.png" alt="">
+                <div class="search-dates-container">
+                    <div class="trip-dates trip-from-date">
+                        <label for="fromDate">from </label>
+                        <input type="date" class="fromDate" id="fromDate">
+                    </div>
+
+                    <div class="trip-dates trip-to-date">
+                        <label for="toDate">to</label>
+                        <input type="date" class="toDate" id="toDate">
+                    </div>
+
+
+                </div>
+            </div>
+
+            <div class="mainSearchBtn-container">
+                <button class="mainSearchBtn" onclick="submitSearch()">
+                    <span class="material-symbols-outlined">
+                        east
+                    </span>
+                </button>
+
+            </div>
+        </div>
+    </div>
+
+
+
+    <main>
+        <div class="filter-container">
+            <div class="secondary-search">
+                <i class="fa-solid fa-location-dot loc"></i>
+                <form action="">
+                    <input type="text" placeholder="Search destinations" class="secondary-location"
+                        id="secondaryDestination" name="destination">
+                </form>
+
+                <button class="secondary-search-button" onclick="submitSecondarySearch()">
+                    <i class="fa-solid fa-arrow-right"></i>
+                </button>
+            </div>
+            <div class="filters">
+                <div class="top">
+                    <h1>When are you traveling?</h1>
+
+                    <div class="filters-dates">
+                        <input type="date" id="fromdte" name="fromdte" placeholder="july 4" />
+                        <input type="date" id="todte" name="todte" />
+
+                    </div>
+                </div>
+                <div class="bottom">
+                    <div class="your-trip">
+                        <div class="you-type-filter-body">
+                            <p>Tour Type</p>
+                            <img src="../images/arrow.svg" alt="" id="filterToggle" class="filter-controller">
+                        </div>
+                        <div class="you-type-filter-content">
+                            <form id="categoryFilterForm" method="POST" action="/searchtrips">
+                                <label for="nature"><img src="../images/nature-style.png" alt=""
+                                        class="style-img"><input type="checkbox" class="categoryCheckbox"
+                                        name="category" value="nature" id="nature" onclick="toggleCategory('nature')">
+                                    Nature</label>
+                                <label for="party"><img src="../images/party.png" alt="" class="style-img"><input
+                                        type="checkbox" class="categoryCheckbox" name="category" value="party"
+                                        id="party" onclick="toggleCategory('party')"> Party</label>
+                                <label for="food"><img src="../images/food.png" alt="" class="style-img"><input
+                                        type="checkbox" class="categoryCheckbox" name="category" value="food" id="food"
+                                        onclick="toggleCategory('food')"> Food</label>
+                                <label for="beach"><img src="../images/beach.png" alt="" class="style-img"><input
+                                        type="checkbox" class="categoryCheckbox" name="category" value="beach"
+                                        id="beach" onclick="toggleCategory('beach')"> Beach</label>
+                                <label for="culture"><img src="../images/culture.png" alt="" class="style-img"><input
+                                        type="checkbox" class="categoryCheckbox" name="category" value="culture"
+                                        id="culture" onclick="toggleCategory('culture')"> Culture</label>
+                                <label for="sports"><img src="../images/sports.png" alt="" class="style-img"><input
+                                        type="checkbox" class="categoryCheckbox" name="category" value="sports"
+                                        id="sports" onclick="toggleCategory('sports')">
+                                    Sports</label>
+                                <input type="hidden" name="selectedCategories" id="selectedCategories">
+                                <!-- <button type="button" onclick="searchCategory()">Apply Categories</button> -->
+                            </form>
+                        </div>
+
+                        <div class="price-slider-header">
+                            <p>Price filter</p>
+                            <img src="../images/arrow.svg" alt="" id="priceFilterToggle" class="filter-controller">
+
+                        </div>
+                        <div class="price-filter-container">
+                            <div class="wrapper">
+
+
+                                <div class="slider">
+                                    <div class="progress"></div>
+                                </div>
+                                <div class="range-input">
+                                    <form action="">
+                                        <input type="range" id="minPrice" class="range-min" min="0" max="70000"
+                                            step="100">
+                                        <input type="range" id="maxPrice" class="range-max" min="0" max="70000"
+                                            step="100">
+
+                                    </form>
+                                </div>
+
+                                <div class="price-input">
+                                    <div class="field">
+                                        <input type="number" class="input-min" value="0">
+                                    </div>
+                                    <div class="field">
+                                        <input type="number" class="input-max" value="100000">
+                                    </div>
+                                </div>
+
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+<div class="cards-container">
+    <% for(let i=0; i < tripsByLocation.length; i++) { %>
+        <div class="card-container">
+            <div class="card-img">
+                <% if (tripsByLocation[i].tripImages && tripsByLocation[i].tripImages.length > 0 &&
+                    tripsByLocation[i].tripImages[0].path) { %>
+                    <div class="trip-image">
+                        <img src="<%= tripsByLocation[i].tripImages[0].path %>" alt="Trip Image">
+                    </div>
+                    <div class="heart-container">
+                        <i class="fa-regular fa-heart wishlist-icon" 
+                           data-id="<%= tripsByLocation[i]._id %>"></i>
+                    </div>
+                <% } else { %>
+                    <p>No images available for this trip</p>
+                <% } %>
+            </div>
+            <div class="card-body">
+                <div class="route">
+                    <img src="../images/route.svg" alt="">
+                    <h3 class="card-title">
+                        <a href="/<%= tripsByLocation[i]._id %>">
+                            <%= tripsByLocation[i].location %>
+                        </a>
+                        <p>
+                            <% if (tripsByLocation[i].departure) { %>
+                                <%= new Date(tripsByLocation[i].departure).toLocaleDateString('en-US', { month: 'long', day: '2-digit' }) %> ~
+                            <% } else { %>
+                                date not available
+                            <% } %>
+                            <% if (tripsByLocation[i].endDate) { %>
+                                <%= new Date(tripsByLocation[i].endDate).toLocaleDateString('en-US', { month: 'long', day: '2-digit' }) %>
+                            <% } %>
+                        </p>
+                    </h3>
+                </div>
+                <div class="title-container">
+                    <h4 class="trip-title">
+                        <%= tripsByLocation[i].title %>
+                    </h4>
+                </div>
+                <hr>
+                <div class="card-bottom">
+                    <div class="days-container">
+                        <h4 class="days">
+                            <%= tripsByLocation[i].totalDays %> days
+                        </h4>
+                    </div>
+                    <div class="price-container">
+                        <% if (tripsByLocation[i].totalCost) { %>
+                            <span>FROM</span> &nbsp;<b>
+                                <%= tripsByLocation[i].totalCost.toLocaleString('en-IN', { style: 'currency', currency: 'INR' }) %>
+                            </b>
+                        <% } else { %>
+                            Price Not Available
+                        <% } %>
+                    </div>
+                </div>
+            </div>
+        </div>
+    <% } %>
+</div>
+    </main>
+
+
+
+
+
+
+
+
+    <!-- Swiper JS -->
+    <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+
+    <!-- Initialize Swiper -->
+    <script>
+        var swiper = new Swiper(".mySwiper", {
+            speed: 1000,
+            spaceBetween: 0,
+            centeredSlides: true,
+            autoplay: {
+                delay: 2500,
+                disableOnInteraction: false,
+            },
+            pagination: {
+                el: ".swiper-pagination",
+                clickable: true,
+            },
+            navigation: {
+                nextEl: ".swiper-button-next",
+                prevEl: ".swiper-button-prev",
+            },
+        });
+    </script>
+
+    <script>
+
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const dateInputs = document.querySelectorAll('input[type="date"]');
+
+
+            //this is for date picker 
+            dateInputs.forEach(input => {
+                input.addEventListener('focus', (event) => {
+                    event.target.showPicker();
+                });
+            });
+        });
+
+
+
+
+
+    </script>
+    <script src="/js/whislist.js"></script>
+    <script src="/js/dropdown.js"></script>
+    <script src="/js/autoSuggestions.js"></script>
+    <script src="/js/secondarySearch.js"></script>
+    <script src="/js/mainSearch.js"></script>
+    <script src="/js/filter.js"></script>
+    <script src="/js/nav.js"></script>
+    <script src="/js/pricefilter.js"></script>
+</body>
+
+</html>
