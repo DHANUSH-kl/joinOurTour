@@ -654,7 +654,7 @@ nav img:hover{
     color: #fff;
 }
 
-.explore-trip a:hover{
+.explore-trip:hover a{
     color: black;
     transition: 0.2s ease;
 }
