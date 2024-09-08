@@ -2,8 +2,11 @@ document.addEventListener('DOMContentLoaded', () => {
     const wishlistIcons = document.querySelectorAll('.wishlist-icon');
     const userId = "<%= user ? user._id : null %>"; // Fetching the user ID if the user is signed in
 
+    // Initialize the wishlist icons based on the user's saved wishlist
+    fetchUserWishlist();
+
     wishlistIcons.forEach(icon => {
-        icon.addEventListener('click', function() {
+        icon.addEventListener('click', function () {
             // Check if the user is signed in
             if (!userId) {
                 alert('Please sign in to add items to your wishlist.');
@@ -11,52 +14,27 @@ document.addEventListener('DOMContentLoaded', () => {
             }
 
             const tripId = this.getAttribute('data-id');
+            const isActive = this.classList.contains('wishlist-active');
 
             // Toggle the heart icon color and state
-            this.classList.toggle('fa-solid');
-            this.classList.toggle('fa-regular');
-            this.classList.toggle('wishlist-active');
+            this.classList.toggle('fa-solid', !isActive);
+            this.classList.toggle('fa-regular', isActive);
+            this.classList.toggle('wishlist-active', !isActive);
 
             // Update the wishlist
-            updateWishlist(tripId, this.classList.contains('wishlist-active'));
+            updateWishlist(tripId);
         });
     });
 
-    // Fetch or initialize the wishlist from local storage
-    const wishlist = JSON.parse(localStorage.getItem('wishlist')) || [];
-
-    function updateWishlist(tripId, isAdding) {
-        // Add or remove the trip ID from the wishlist array
-        if (isAdding) {
-            wishlist.push(tripId);
-        } else {
-            const index = wishlist.indexOf(tripId);
-            if (index !== -1) wishlist.splice(index, 1);
-        }
-
-        // Update the wishlist in local storage
-        localStorage.setItem('wishlist', JSON.stringify(wishlist));
-
-        // Send the updated wishlist to the server
-        sendWishlistToServer(wishlist);
-    }
-
-    function sendWishlistToServer(wishlist) {
+    function updateWishlist(tripId) {
         fetch('/update-wishlist', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
             },
-            body: JSON.stringify({ wishlist })
+            body: JSON.stringify({ tripId })
         })
-        .then(response => {
-            // Check if the response is in JSON format
-            if (response.headers.get('content-type')?.includes('application/json')) {
-                return response.json();
-            } else {
-                throw new Error('Server response is not in JSON format.');
-            }
-        })
+        .then(response => response.json())
         .then(data => {
             if (data.success) {
                 console.log('Wishlist updated successfully on the server.');
@@ -69,12 +47,25 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    // Initialize the wishlist icons based on the current state of local storage
-    wishlist.forEach(id => {
-        const icon = document.querySelector(`.wishlist-icon[data-id="${id}"]`);
-        if (icon) {
-            icon.classList.add('fa-solid', 'wishlist-active');
-            icon.classList.remove('fa-regular');
-        }
-    });
+    function fetchUserWishlist() {
+        if (!userId) return;
+
+        // Fetch the user's wishlist from the server (you could pass this from the backend on page load as well)
+        fetch(`/user-wishlist?userId=${userId}`)
+            .then(response => response.json())
+            .then(data => {
+                if (data.success && Array.isArray(data.wishlist)) {
+                    data.wishlist.forEach(id => {
+                        const icon = document.querySelector(`.wishlist-icon[data-id="${id}"]`);
+                        if (icon) {
+                            icon.classList.add('fa-solid', 'wishlist-active');
+                            icon.classList.remove('fa-regular');
+                        }
+                    });
+                }
+            })
+            .catch(error => {
+                console.error('Error fetching user wishlist:', error);
+            });
+    }
 });

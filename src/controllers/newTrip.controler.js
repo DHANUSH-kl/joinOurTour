@@ -129,7 +129,8 @@ const showAllTrips = async (req, res) => {
     res.render("trips/showAll", {
         allTrips,
         currentPage: page,
-        totalPages: Math.ceil(totalTrips / perPage)
+        totalPages: Math.ceil(totalTrips / perPage),
+        user:req.user
     });
 };
 // showing particular trip 
@@ -141,8 +142,11 @@ const showTrip = async (req, res) => {
         populate: {
             path: 'tripLeader'
         }
-    });
-    res.render("trips/trip.ejs", { trip })
+    })
+    .populate('reviews');
+
+
+    res.render("trips/trip.ejs", { trip, id: req.params.id, user: req.user})
 
 
 }
@@ -433,46 +437,89 @@ const mainSearch = async (req, res) => {
 
 const reviews = async (req, res) => {
 
-    const { id } = req.params;
-    const { name, comment } = req.body;
+    try {
+        const { id } = req.params; // Assuming the trip ID is provided in the URL params
 
-    // Find the trip by ID
-    const trip = await Trip.findById(id);
+        const {
+            locationRating,
+            amenitiesRating,
+            foodRating,
+            roomRating,
+            priceRating,
+            operatorRating,
+            name,
+            email,
+            title,
+            comment
+        } = req.body;
 
-    // Get the trip start date
-    const tripStartDate = new Date(trip.departure);
+          // Ensure req.user is populated; typically this is done via authentication middleware
+          if (!req.user || !req.user._id) {
+            return res.status(403).json({ message: "User not authenticated." });
+        }
 
-    // Calculate the current date
-    const currentDate = new Date();
+        // Create a new review
+        const newReview = new Review({
+            locationRating,
+            amenitiesRating,
+            foodRating,
+            roomRating,
+            priceRating,
+            operatorRating,
+            name,
+            email,
+            title,
+            comment,
+            author: req.user._id 
+        });
 
-    // Calculate the date after 1 day of trip start
-    const allowedDate = new Date(tripStartDate);
-    allowedDate.setDate(tripStartDate.getDate() + 1);
+        // Save the new review
+        await newReview.save();
 
-    // Check if the current date is after the allowed date
-    if (currentDate < allowedDate) {
-        // If the current date is before the allowed date, user cannot post review yet
-        return res.status(400).json({ error: "Review cannot be posted before the trip starts." });
+        // Fetch the trip by ID
+        const trip = await Trip.findById(id);
+
+        if (!trip) {
+            return res.status(404).json({ message: "Trip not found." });
+        }
+
+        // Add the review to the trip’s reviews array
+        trip.reviews.push(newReview._id);
+
+        // Save the updated trip
+        await trip.save();
+
+        console.log(trip.reviews)
+
+
+
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ message: "An error occurred while posting the review." });
     }
 
-    // Create a new review instance
-    const newReview = new Review({
-        name,
-        comment
-    });
 
-    // Save the new review
-    await newReview.save();
+}
 
-    // Push the new review to the trip's reviews array
-    trip.reviews.push(newReview);
+const deleteReview = async(req,res) => {
+    try {
+        const reviewId = req.params.id;
+        const review = await Review.findById(reviewId);
 
-    // Save the updated trip
-    await trip.save();
+        if (!review) {
+            return res.status(404).json({ message: 'Review not found.' });
+        }
 
-    console.log(trip);
-    res.redirect(`/${id}`);
+        if (review.author.toString() !== req.user._id.toString()) {
+            return res.status(403).json({ message: 'Unauthorized.' });
+        }
 
+        await Review.findByIdAndDelete(reviewId);
+        res.redirect('back'); // Redirect back to the previous page
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ message: 'An error occurred while deleting the review.' });
+    }
 }
 
 const aboutus = async (req, res) => {
@@ -624,5 +671,5 @@ const discoverPage = async(req,res) => {
 
 }
 
-export { discoverPage ,mainSearch, getSecondarySearch, aboutus, reviews, whislist, searchTrips, newTripForm, showAllTrips, addNewTrip, editTripForm, showTrip, deleteTrip, mytrip, postEditTrip, catagariesTrips, priceFilter };
+export { deleteReview , discoverPage ,mainSearch, getSecondarySearch, aboutus, reviews, whislist, searchTrips, newTripForm, showAllTrips, addNewTrip, editTripForm, showTrip, deleteTrip, mytrip, postEditTrip, catagariesTrips, priceFilter };
 
