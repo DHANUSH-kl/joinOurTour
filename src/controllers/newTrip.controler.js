@@ -491,6 +491,8 @@ const reviews = async (req, res) => {
 
         console.log(trip.reviews)
 
+        res.redirect(`/{id}`)
+
 
 
     } catch (error) {
