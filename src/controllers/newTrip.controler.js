@@ -629,35 +629,28 @@ const getSecondarySearch = async (req, res) => {
 }
 
 const whislist = async (req, res) => {
-    console.log(req.body);
-    const userId = req.user._id;  // Get the current user
     const { tripId, addToWishlist } = req.body;
 
-    console.log("userID", userId);
-    console.log("whislist", addToWishlist);
+    if (!req.user) {
+        return res.status(401).json({ success: false, message: 'User not authenticated' });
+    }
 
     try {
-        const user = await User.findById(userId);
-
-        if (!user) {
-            return res.status(404).json({ success: false, message: 'User not found' });
-        }
+        const user = await User.findById(req.user._id);
 
         if (addToWishlist) {
-            // Add tripId to the wishlist if not already present
             if (!user.wishlist.includes(tripId)) {
                 user.wishlist.push(tripId);
             }
         } else {
-            // Remove tripId from the wishlist
             user.wishlist = user.wishlist.filter(id => id.toString() !== tripId);
         }
 
         await user.save();
-        res.status(200).json({ success: true });
+        return res.json({ success: true });
     } catch (error) {
-        console.error('Error while updating wishlist:', error);
-        res.status(500).json({ success: false, error: 'Internal server error' });
+        console.error('Error updating wishlist:', error);
+        return res.status(500).json({ success: false, message: 'Internal server error' });
     }
 }
 

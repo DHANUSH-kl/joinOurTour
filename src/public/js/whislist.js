@@ -10,7 +10,7 @@ document.addEventListener('DOMContentLoaded', () => {
         icon.addEventListener('click', function () {
             // If user is not signed in, prevent the action
             if (!userId) {
-                // Optionally, show a message or disable interaction here
+                alert('Please sign in to manage your wishlist.');
                 return;
             }
 
@@ -65,6 +65,7 @@ document.addEventListener('DOMContentLoaded', () => {
             .then(response => response.json())
             .then(data => {
                 if (data.success && Array.isArray(data.wishlist)) {
+                    wishlist = data.wishlist; // Update the wishlist array
                     data.wishlist.forEach(id => {
                         const icon = document.querySelector(`.wishlist-icon[data-id="${id}"]`);
                         if (icon) {

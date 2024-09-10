@@ -294,16 +294,15 @@
                             </div>
                             <div class="heart-container">
                                 <% if (user) { %>
-                                    <!-- Check if the trip is in the user's wishlist -->
                                     <% const isInWishlist=userWishlist.includes(allTrips[i]._id.toString()); %>
-                                        <!-- Use the solid heart if it's in the wishlist, otherwise use the regular heart -->
-                                        <i class="<%= isInWishlist ? 'fa-solid fa-heart turn-red' : 'fa-regular fa-heart' %> wishlist-icon"
+                                        <i class="<%= isInWishlist ? 'fa-solid fa-heart wishlist-active' : 'fa-regular fa-heart' %> wishlist-icon"
                                             data-id="<%= allTrips[i]._id %>" style="cursor: pointer;"></i>
                                         <% } else { %>
                                             <i class="fa-regular fa-heart wishlist-icon"
                                                 data-id="<%= allTrips[i]._id %>" style="cursor: not-allowed;"></i>
                                             <% } %>
                             </div>
+
 
 
 
