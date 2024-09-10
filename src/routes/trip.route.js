@@ -1,6 +1,6 @@
 import { Router } from "express";
 import express from 'express';
-import { deleteReview , discoverPage , mainSearch,  getSecondarySearch , whislist,aboutus, addNewTrip, showAllTrips ,newTripForm,showTrip,editTripForm  , deleteTrip , mytrip , postEditTrip , catagariesTrips , priceFilter ,searchTrips, reviews} from "../controllers/newTrip.controler.js";
+import { showWishlist, deleteReview , discoverPage , mainSearch,  getSecondarySearch , whislist,aboutus, addNewTrip, showAllTrips ,newTripForm,showTrip,editTripForm  , deleteTrip , mytrip , postEditTrip , catagariesTrips , priceFilter ,searchTrips, reviews, fetchWhislist} from "../controllers/newTrip.controler.js";
 import { storage } from "../cloudinary.js";
 import bodyParser from 'body-parser';
 import { isLoggedIn , isAgent , isOwner } from "../middlewares.js";
@@ -25,6 +25,12 @@ router.route("/update-wishlist")
 
 router.route("/reviews")
     .post(reviews)
+
+router.route("fetchWhislist")
+    .get(fetchWhislist)
+
+router.route("/showWishlist")
+    .get( isLoggedIn ,showWishlist)
 
 router.route("/discover")
     .post(discoverPage)

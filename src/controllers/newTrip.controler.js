@@ -119,6 +119,8 @@ const addNewTrip = async (req, res) => {
 const showAllTrips = async (req, res) => {
     const perPage = 6; // Number of trips per page
     const page = parseInt(req.query.page) || 1; // Current page number
+    
+    const userWishlist = req.user ? req.user.wishlist : [];
 
     const totalTrips = await Trip.countDocuments(); // Get the total number of trips
     const allTrips = await Trip.find()
@@ -130,7 +132,8 @@ const showAllTrips = async (req, res) => {
         allTrips,
         currentPage: page,
         totalPages: Math.ceil(totalTrips / perPage),
-        user:req.user
+        user: req.user,
+        userWishlist 
     });
 };
 // showing particular trip 
@@ -143,10 +146,10 @@ const showTrip = async (req, res) => {
             path: 'tripLeader'
         }
     })
-    .populate('reviews');
+        .populate('reviews');
 
 
-    res.render("trips/trip.ejs", { trip, id: req.params.id, user: req.user})
+    res.render("trips/trip.ejs", { trip, id: req.params.id, user: req.user })
 
 
 }
@@ -453,8 +456,8 @@ const reviews = async (req, res) => {
             comment
         } = req.body;
 
-          // Ensure req.user is populated; typically this is done via authentication middleware
-          if (!req.user || !req.user._id) {
+        // Ensure req.user is populated; typically this is done via authentication middleware
+        if (!req.user || !req.user._id) {
             return res.status(403).json({ message: "User not authenticated." });
         }
 
@@ -470,7 +473,7 @@ const reviews = async (req, res) => {
             email,
             title,
             comment,
-            author: req.user._id 
+            author: req.user._id
         });
 
         // Save the new review
@@ -491,7 +494,8 @@ const reviews = async (req, res) => {
 
         console.log(trip.reviews)
 
-        res.redirect(`/{id}`)
+        res.redirect(`/${id}`);
+
 
 
 
@@ -503,7 +507,7 @@ const reviews = async (req, res) => {
 
 }
 
-const deleteReview = async(req,res) => {
+const deleteReview = async (req, res) => {
     try {
         const reviewId = req.params.id;
         const review = await Review.findById(reviewId);
@@ -544,11 +548,11 @@ const aboutus = async (req, res) => {
     const exploreTrips3 = await Trip.findById(d3);
     const exploreTrips4 = await Trip.findById(d4);
 
-    const exploreTrips = [exploreTrips1,exploreTrips2,exploreTrips3,exploreTrips4]
+    const exploreTrips = [exploreTrips1, exploreTrips2, exploreTrips3, exploreTrips4]
 
     const tripPackages = [tripPackage1, tripPackage2, tripPackage3, tripPackage4]
 
-    res.render("trips/aboutus.ejs", { tripPackages , exploreTrips })
+    res.render("trips/aboutus.ejs", { tripPackages, exploreTrips })
 }
 
 const getSecondarySearch = async (req, res) => {
@@ -624,40 +628,74 @@ const getSecondarySearch = async (req, res) => {
     }
 }
 
-const whislist = async(req,res) => {
-    const userId = req.user._id; // Assuming `req.user` is set by your authentication middleware
-    const wishlist = req.body.wishlist; // Array of trip IDs
+const whislist = async (req, res) => {
+    console.log(req.body);
+    const userId = req.user._id;  // Get the current user
+    const { tripId, addToWishlist } = req.body;
 
-    console.log("userID:", userId);
-    console.log("Request Body:", req.body);
-    console.log("Wishlist:", wishlist);
-
-    if (!userId || !Array.isArray(wishlist)) {
-        return res.status(400).json({ success: false, message: 'Invalid request data' });
-    }
+    console.log("userID", userId);
+    console.log("whislist", addToWishlist);
 
     try {
         const user = await User.findById(userId);
+
         if (!user) {
             return res.status(404).json({ success: false, message: 'User not found' });
         }
 
-        user.wishlist = wishlist; // Update the user's wishlist
-        await user.save(); // Save changes to the database
+        if (addToWishlist) {
+            // Add tripId to the wishlist if not already present
+            if (!user.wishlist.includes(tripId)) {
+                user.wishlist.push(tripId);
+            }
+        } else {
+            // Remove tripId from the wishlist
+            user.wishlist = user.wishlist.filter(id => id.toString() !== tripId);
+        }
 
-        console.log("Updated Wishlist:", user.wishlist); // Debugging line
-        res.json({ success: true, message: 'Wishlist updated successfully' });
+        await user.save();
+        res.status(200).json({ success: true });
     } catch (error) {
-        console.error('Error updating wishlist:', error);
-        res.status(500).json({ success: false, message: 'Failed to update wishlist' });
+        console.error('Error while updating wishlist:', error);
+        res.status(500).json({ success: false, error: 'Internal server error' });
     }
 }
 
-const discoverPage = async(req,res) => {
+const showWishlist = async (req, res) => {
+    const id = req.user._id;  // Directly access _id
 
-    const tripId = req.body.tripId; 
+    // Find the user by their ID
+    const user = await User.findById(id);
+      // Access the user's wishlist
+      const wishlistIds = user.wishlist; // Correct spelling of 'wishlist'
+
+
+      // Fetch details of trips that are in the user's wishlist
+      const wishlistTrips = await Trip.find({ _id: { $in: wishlistIds } }).exec();
+
+      res.render("trips/wishlist.ejs", {
+          wishlistTrips,  // Pass the wishlistTrips to the view
+          user: user, // Pass user for rendering user-specific information
+      });
+}
+
+const fetchWhislist = async (req, res) => {
+    const userId = req.query.userId;
+
+    try {
+        const user = await User.findById(userId).select('wishlist');
+        res.json({ success: true, wishlist: user.wishlist });
+    } catch (error) {
+        console.error(error);
+        res.json({ success: false, wishlist: [] });
+    }
+}
+
+const discoverPage = async (req, res) => {
+
+    const tripId = req.body.tripId;
     const trip = await Trip.findById(tripId);
-    
+
     if (!trip) {
         return res.status(404).json({ message: "Trip not found" });
     }
@@ -673,5 +711,5 @@ const discoverPage = async(req,res) => {
 
 }
 
-export { deleteReview , discoverPage ,mainSearch, getSecondarySearch, aboutus, reviews, whislist, searchTrips, newTripForm, showAllTrips, addNewTrip, editTripForm, showTrip, deleteTrip, mytrip, postEditTrip, catagariesTrips, priceFilter };
+export { showWishlist , fetchWhislist, deleteReview, discoverPage, mainSearch, getSecondarySearch, aboutus, reviews, whislist, searchTrips, newTripForm, showAllTrips, addNewTrip, editTripForm, showTrip, deleteTrip, mytrip, postEditTrip, catagariesTrips, priceFilter };
 

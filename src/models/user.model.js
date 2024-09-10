@@ -27,11 +27,11 @@ const userSchema = new Schema({
         },
     ],
     wishlist: [
-        { 
-            type: mongoose.Schema.Types.ObjectId, 
-            ref: 'Trip' 
-        }
-    ],
+        {
+             type: mongoose.Schema.Types.ObjectId,
+             ref: 'Trip' 
+            }
+        ]
 }, { timestamps: true });
 
 userSchema.plugin(passportLocalMongoose);
