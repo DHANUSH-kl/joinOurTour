@@ -119,7 +119,7 @@ const addNewTrip = async (req, res) => {
 const showAllTrips = async (req, res) => {
     const perPage = 6; // Number of trips per page
     const page = parseInt(req.query.page) || 1; // Current page number
-    
+
     const userWishlist = req.user ? req.user.wishlist : [];
 
     const totalTrips = await Trip.countDocuments(); // Get the total number of trips
@@ -133,7 +133,7 @@ const showAllTrips = async (req, res) => {
         currentPage: page,
         totalPages: Math.ceil(totalTrips / perPage),
         user: req.user,
-        userWishlist 
+        userWishlist
     });
 };
 // showing particular trip 
@@ -149,7 +149,43 @@ const showTrip = async (req, res) => {
         .populate('reviews');
 
 
-    res.render("trips/trip.ejs", { trip, id: req.params.id, user: req.user })
+   // Calculate average rating
+   let totalRatings = 0;
+   let count = 0;
+   trip.reviews.forEach(review => {
+       const locationRating = review.locationRating || 0;
+       const amenitiesRating = review.amenitiesRating || 0;
+       const foodRating = review.foodRating || 0;
+       const roomRating = review.roomRating || 0;
+       const priceRating = review.priceRating || 0;
+       const operatorRating = review.operatorRating || 0;
+
+       const overallRating = (locationRating + amenitiesRating + foodRating + roomRating + priceRating + operatorRating) / 6;
+       
+       totalRatings += overallRating;
+       count++;
+   });
+
+   
+
+   const averageRating = count > 0 ? totalRatings / count : 0;
+
+
+   function getRatingDescription(rating) {
+    if (rating <= 1) return 'Worse';
+    if (rating <= 2) return 'Bad';
+    if (rating <= 3) return 'Okay';
+    if (rating <= 4) return 'Good';
+    return 'Excellent';
+}
+
+    res.render("trips/trip.ejs", { 
+        trip, id: req.params.id,
+        user: req.user,
+        averageRating: averageRating.toFixed(1),
+        hasReviews: count > 0,
+        getRatingDescription 
+    })
 
 
 }
@@ -564,7 +600,8 @@ const getSecondarySearch = async (req, res) => {
     const fromdte = req.body.fromdte;
     const todte = req.body.todte;
 
-    const categories = req.body.categories ? req.body.categories.split(',').map(cat => cat.trim()) : []; // Assuming categories can be comma-separated
+    // Handle categories correctly whether it's an array or a single value
+    const categories = Array.isArray(req.body.categories) ? req.body.categories.map(cat => cat.trim()) : (req.body.categories ? [req.body.categories.trim()] : []);
 
     let query = {};
 
@@ -578,7 +615,6 @@ const getSecondarySearch = async (req, res) => {
         query.categories = { $in: categories }; // Match any of the provided categories
     }
 
-
     // Only add totalCost to the query if minPrice and maxPrice are not both '0'
     if (minPrice !== '0' || maxPrice !== '0') {
         if (minPrice && maxPrice) {
@@ -589,9 +625,6 @@ const getSecondarySearch = async (req, res) => {
             query.totalCost = { $lte: Number(maxPrice) };
         }
     }
-
-    // Parse 'fromdte' and 'todte' with the current year
-    const currentYear = new Date().getFullYear();
 
     // Parse 'fromdte' and 'todte' into Date objects
     if (fromdte) {
@@ -617,15 +650,13 @@ const getSecondarySearch = async (req, res) => {
             .populate('owner')  // Populate owner information
             .exec();
 
-        // console.log('Trips Found:', trips);  // Log the found trips
-
-
-        res.render("trips/secondarySearch", { trips })
+        res.render("trips/secondarySearch", { trips });
 
     } catch (error) {
         console.error('Error fetching trips:', error);
         res.status(500).send('Error fetching trips');
     }
+
 }
 
 const whislist = async (req, res) => {
@@ -659,17 +690,17 @@ const showWishlist = async (req, res) => {
 
     // Find the user by their ID
     const user = await User.findById(id);
-      // Access the user's wishlist
-      const wishlistIds = user.wishlist; // Correct spelling of 'wishlist'
+    // Access the user's wishlist
+    const wishlistIds = user.wishlist; // Correct spelling of 'wishlist'
 
 
-      // Fetch details of trips that are in the user's wishlist
-      const wishlistTrips = await Trip.find({ _id: { $in: wishlistIds } }).exec();
+    // Fetch details of trips that are in the user's wishlist
+    const wishlistTrips = await Trip.find({ _id: { $in: wishlistIds } }).exec();
 
-      res.render("trips/wishlist.ejs", {
-          wishlistTrips,  // Pass the wishlistTrips to the view
-          user: user, // Pass user for rendering user-specific information
-      });
+    res.render("trips/wishlist.ejs", {
+        wishlistTrips,  // Pass the wishlistTrips to the view
+        user: user, // Pass user for rendering user-specific information
+    });
 }
 
 const fetchWhislist = async (req, res) => {
@@ -704,5 +735,5 @@ const discoverPage = async (req, res) => {
 
 }
 
-export { showWishlist , fetchWhislist, deleteReview, discoverPage, mainSearch, getSecondarySearch, aboutus, reviews, whislist, searchTrips, newTripForm, showAllTrips, addNewTrip, editTripForm, showTrip, deleteTrip, mytrip, postEditTrip, catagariesTrips, priceFilter };
+export { showWishlist, fetchWhislist, deleteReview, discoverPage, mainSearch, getSecondarySearch, aboutus, reviews, whislist, searchTrips, newTripForm, showAllTrips, addNewTrip, editTripForm, showTrip, deleteTrip, mytrip, postEditTrip, catagariesTrips, priceFilter };
 

@@ -139,6 +139,7 @@ main {
 .card-body {
     width: 100%;
     height: 50%;
+    position: relative;
 }
 
 .card-img {
@@ -203,7 +204,7 @@ main {
 .card-title p {
     color: #717171;
     font-family: Poppins;
-    font-size: 14px;
+    font-size: 10px;
     font-style: normal;
     font-weight: 400;
     line-height: 24.38px; /* 135.444% */
@@ -227,13 +228,7 @@ main {
     line-height: 24px; /* 150% */
 }
 
-.card-body hr {
-    margin-top: 3rem;
-    height: 1px; /* This controls the thickness */
-    background-color: #E7E6E6; /* This sets the color */
-    border: none; /* Removes the default border */
 
-}
 
 
 .card-bottom {
@@ -241,6 +236,11 @@ main {
     justify-content: space-between;
     align-items: center;
     padding: 10px;
+    border-top: 2px solid #E7E6E6;
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
 }
 
 .card-bottom h4 , .price-container{
