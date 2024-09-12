@@ -124,9 +124,39 @@ const showAllTrips = async (req, res) => {
 
     const totalTrips = await Trip.countDocuments(); // Get the total number of trips
     const allTrips = await Trip.find()
+        .populate("reviews") 
         .populate("owner")
         .skip((perPage * page) - perPage) // Skip trips to get the correct page
         .limit(perPage); // Limit the number of trips per page
+
+
+
+
+
+
+         // Calculate average ratings for each trip
+    allTrips.forEach(trip => {
+        let totalRatings = 0;
+        let count = 0;
+        trip.reviews.forEach(review => {
+            const locationRating = review.locationRating || 0;
+            const amenitiesRating = review.amenitiesRating || 0;
+            const foodRating = review.foodRating || 0;
+            const roomRating = review.roomRating || 0;
+            const priceRating = review.priceRating || 0;
+            const operatorRating = review.operatorRating || 0;
+
+            const overallRating = (locationRating + amenitiesRating + foodRating + roomRating + priceRating + operatorRating) / 6;
+
+            totalRatings += overallRating;
+            count++;
+        });
+        trip.averageRating = count > 0 ? (totalRatings / count).toFixed(1) : 0; // Add average rating to trip object
+    });
+
+
+
+
 
     res.render("trips/showAll", {
         allTrips,
@@ -135,6 +165,7 @@ const showAllTrips = async (req, res) => {
         user: req.user,
         userWishlist
     });
+
 };
 // showing particular trip 
 

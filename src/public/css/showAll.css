@@ -269,3 +269,99 @@ main {
 
 
 
+
+
+
+
+.stars-cont {
+    width: 20vw;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    
+  }
+  
+  .stars-cont p {
+    color: #05073C;
+    font-family: Poppins;
+    font-size: 18px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 28.13px;
+  }
+  
+  
+  
+  
+  
+  /* stars  */
+  
+  
+  .rate {
+     
+    height: 46px;
+    padding: 0 10px;
+  }
+  .rate:not(:checked) > input {
+    position:absolute;
+    top:-9999px;
+  }
+  .rate:not(:checked) > label {
+    float:right;
+    width:1em;
+    overflow:hidden;
+    white-space:nowrap;
+    cursor:pointer;
+    font-size:25px;
+    color:#ccc;
+    z-index: 1;
+    display: inline-block;
+  }
+  .rate:not(:checked) > label:before {
+    content: '★ ';
+  }
+  .rate > input:checked ~ label {
+    color: #ffc700;    
+  }
+
+
+
+
+
+  .rate {
+    height: 46px;
+    padding: 0 10px;
+  }
+  
+  .rate input[type="radio"] {
+    display: none; /* Hide radio buttons */
+  }
+  
+  .rate label {
+    float: right;
+    width: 1em;
+    overflow: hidden;
+    white-space: nowrap;
+    cursor: pointer;
+    font-size: 25px;
+    color: #ccc;
+    z-index: 1;
+    display: inline-block;
+  }
+  
+  .rate label:before {
+    content: '★ ';
+  }
+  
+  .rate input:checked ~ label {
+    color: #ffc700;    
+  }
+  
+
+  
+ 
+
+
+
+
+
