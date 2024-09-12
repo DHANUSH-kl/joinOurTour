@@ -80,3 +80,34 @@ document.addEventListener('DOMContentLoaded', () => {
             });
     }
 });
+
+
+
+
+
+
+
+
+
+// redirects
+
+
+
+document.addEventListener('DOMContentLoaded', function () {
+    // Select all wishlist icons
+    const wishlistIcons = document.querySelectorAll('.redirect-i');
+
+    wishlistIcons.forEach(function (icon) {
+        icon.addEventListener('click', function () {
+            // Check if the user is signed in (you may replace this with your actual authentication logic)
+            const isLoggedIn = false; // Replace this with your logic
+
+            if (!isLoggedIn) {
+                // If user is not signed in, redirect to sign-in page
+                window.location.href = '/user/signin';
+            } else {
+                // Handle the wishlist functionality for signed-in users here
+            }
+        });
+    });
+});

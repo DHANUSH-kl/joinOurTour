@@ -124,7 +124,7 @@ const showAllTrips = async (req, res) => {
 
     const totalTrips = await Trip.countDocuments(); // Get the total number of trips
     const allTrips = await Trip.find()
-        .populate("reviews") 
+        .populate("reviews")
         .populate("owner")
         .skip((perPage * page) - perPage) // Skip trips to get the correct page
         .limit(perPage); // Limit the number of trips per page
@@ -134,7 +134,7 @@ const showAllTrips = async (req, res) => {
 
 
 
-         // Calculate average ratings for each trip
+    // Calculate average ratings for each trip
     allTrips.forEach(trip => {
         let totalRatings = 0;
         let count = 0;
@@ -180,42 +180,42 @@ const showTrip = async (req, res) => {
         .populate('reviews');
 
 
-   // Calculate average rating
-   let totalRatings = 0;
-   let count = 0;
-   trip.reviews.forEach(review => {
-       const locationRating = review.locationRating || 0;
-       const amenitiesRating = review.amenitiesRating || 0;
-       const foodRating = review.foodRating || 0;
-       const roomRating = review.roomRating || 0;
-       const priceRating = review.priceRating || 0;
-       const operatorRating = review.operatorRating || 0;
+    // Calculate average rating
+    let totalRatings = 0;
+    let count = 0;
+    trip.reviews.forEach(review => {
+        const locationRating = review.locationRating || 0;
+        const amenitiesRating = review.amenitiesRating || 0;
+        const foodRating = review.foodRating || 0;
+        const roomRating = review.roomRating || 0;
+        const priceRating = review.priceRating || 0;
+        const operatorRating = review.operatorRating || 0;
 
-       const overallRating = (locationRating + amenitiesRating + foodRating + roomRating + priceRating + operatorRating) / 6;
-       
-       totalRatings += overallRating;
-       count++;
-   });
+        const overallRating = (locationRating + amenitiesRating + foodRating + roomRating + priceRating + operatorRating) / 6;
 
-   
-
-   const averageRating = count > 0 ? totalRatings / count : 0;
+        totalRatings += overallRating;
+        count++;
+    });
 
 
-   function getRatingDescription(rating) {
-    if (rating <= 1) return 'Worse';
-    if (rating <= 2) return 'Bad';
-    if (rating <= 3) return 'Okay';
-    if (rating <= 4) return 'Good';
-    return 'Excellent';
-}
 
-    res.render("trips/trip.ejs", { 
+    const averageRating = count > 0 ? totalRatings / count : 0;
+
+
+    function getRatingDescription(rating) {
+        if (rating <= 1) return 'Worse';
+        if (rating <= 2) return 'Bad';
+        if (rating <= 3) return 'Okay';
+        if (rating <= 4) return 'Good';
+        return 'Excellent';
+    }
+
+    res.render("trips/trip.ejs", {
         trip, id: req.params.id,
         user: req.user,
         averageRating: averageRating.toFixed(1),
         hasReviews: count > 0,
-        getRatingDescription 
+        getRatingDescription
     })
 
 
@@ -461,48 +461,94 @@ const searchTrips = async (req, res) => {
 
 
 const mainSearch = async (req, res) => {
+    const { startingLocation, destinationLocation, fromDate, toDate, minPrice, maxPrice, categories } = req.body;
 
-    const { startingLocation, destinationLocation, fromDate, toDate } = req.body;
+    // Build the query object dynamically
+    let query = {};
 
+    // Handle the starting location (departure)
+    if (startingLocation && startingLocation.trim()) {
+        query.fromLocation = { $regex: new RegExp('^' + startingLocation.trim(), 'i') }; // Case-insensitive match
+    }
+
+    // Handle the destination location
+    if (destinationLocation && destinationLocation.trim()) {
+        query.location = { $regex: new RegExp('^' + destinationLocation.trim(), 'i') }; // Case-insensitive match
+    }
 
     // Parse the input dates
-    const departureDate = new Date(fromDate);
-    const endDate = new Date(toDate);
+    if (fromDate) {
+        const departureDate = new Date(fromDate);
+        const departureBufferStart = new Date(departureDate.getTime() - 24 * 60 * 60 * 1000); // 1-day buffer
+        const departureBufferEnd = new Date(departureDate.getTime() + 24 * 60 * 60 * 1000); // 1-day buffer
+        query.departure = { $gte: departureBufferStart, $lte: departureBufferEnd };
+    }
 
-    // Extend the endDate by 6 days
-    const extendedEndDate = new Date(endDate.getTime() + 6 * 24 * 60 * 60 * 1000);
+    if (toDate) {
+        const endDate = new Date(toDate);
+        const extendedEndDate = new Date(endDate.getTime() + 6 * 24 * 60 * 60 * 1000); // Extend end date by 6 days
+        query.endDate = { $gte: endDate, $lte: extendedEndDate };
+    }
 
-    // Apply a 1-day buffer to handle edge cases
-    const departureBufferStart = new Date(departureDate.getTime() - 24 * 60 * 60 * 1000);
-    const departureBufferEnd = new Date(departureDate.getTime() + 24 * 60 * 60 * 1000);
+    // Add price filter to query if minPrice or maxPrice is provided
+    if (minPrice || maxPrice) {
+        query.totalCost = {};
+        if (minPrice) {
+            query.totalCost.$gte = Number(minPrice);
+        }
+        if (maxPrice) {
+            query.totalCost.$lte = Number(maxPrice);
+        }
+    }
 
-    console.log('Departure Date with Buffer Start:', departureBufferStart);
-    console.log('Extended End Date:', extendedEndDate);
+    // Handle categories whether it's an array or a single value
+    if (categories) {
+        const categoryArray = Array.isArray(categories) ? categories : [categories.trim()];
+        query.categories = { $in: categoryArray };
+    }
 
-    // Exact match query with a 6-day extension and 1-day buffer
-    const exactMatchTrips = await Trip.find({
-        fromLocation: { $regex: new RegExp('^' + startingLocation, 'i') },
-        location: { $regex: new RegExp('^' + destinationLocation, 'i') },
-        departure: { $gte: departureBufferStart, $lte: departureBufferEnd },
-        endDate: { $gte: endDate, $lte: extendedEndDate }
-    });
+    try {
+        // Execute the search query
+        const exactMatchTrips = await Trip.find(query).populate('owner').populate('reviews');
 
+        // Check if the user is logged in and retrieve their wishlist
+        let userWishlist = [];
+        if (req.user) {
+            const user = await User.findById(req.user._id).populate('wishlist');
+            userWishlist = user.wishlist.map(trip => trip._id.toString());
+        }
 
-    const destinationMatch = await Trip.find({
-        location: { $regex: new RegExp('^' + destinationLocation, 'i') }
-    });
+        // Calculate average rating for each trip
+        const tripsWithRatings = exactMatchTrips.map(trip => {
+            let totalRatings = 0;
+            let count = 0;
+            trip.reviews.forEach(review => {
+                const locationRating = review.locationRating || 0;
+                const amenitiesRating = review.amenitiesRating || 0;
+                const foodRating = review.foodRating || 0;
+                const roomRating = review.roomRating || 0;
+                const priceRating = review.priceRating || 0;
+                const operatorRating = review.operatorRating || 0;
+                const overallRating = (locationRating + amenitiesRating + foodRating + roomRating + priceRating + operatorRating) / 6;
+                totalRatings += overallRating;
+                count++;
+            });
+            trip.averageRating = count > 0 ? (totalRatings / count).toFixed(1) : 0;
+            return trip;
+        });
 
-    console.log('Exact Match Trips:', exactMatchTrips);
-    // console.log('Destination Match:', destinationMatch);
+        // Render the results in the mainSearch.ejs view
+        res.render("trips/mainSearch.ejs", {
+            exactMatchTrips: tripsWithRatings,
+            user: req.user,
+            userWishlist,
+        });
 
-
-    // Render the results in the mainSearch.ejs view
-    res.render("trips/mainSearch.ejs", { exactMatchTrips, destinationMatch });
-
-
-
+    } catch (error) {
+        console.error('Error during trip search:', error);
+        res.status(500).send("Server error");
+    }
 }
-
 
 
 const reviews = async (req, res) => {
@@ -679,9 +725,58 @@ const getSecondarySearch = async (req, res) => {
         // Find trips that match the query
         const trips = await Trip.find(query)
             .populate('owner')  // Populate owner information
+            .populate('reviews')  // Populate reviews to calculate the average rating
             .exec();
 
-        res.render("trips/secondarySearch", { trips });
+
+
+        // If the user is logged in, retrieve their wishlist
+        let userWishlist = [];
+        if (req.user) {
+            const user = await User.findById(req.user._id).populate('wishlist');
+            userWishlist = user.wishlist.map(trip => trip._id.toString()); // Convert ObjectIds to strings
+        }
+
+
+        // Add rating calculation for each trip
+        trips.forEach(trip => {
+            let totalRatings = 0;
+            let count = 0;
+
+            // Calculate average rating based on the reviews
+            trip.reviews.forEach(review => {
+                const locationRating = review.locationRating || 0;
+                const amenitiesRating = review.amenitiesRating || 0;
+                const foodRating = review.foodRating || 0;
+                const roomRating = review.roomRating || 0;
+                const priceRating = review.priceRating || 0;
+                const operatorRating = review.operatorRating || 0;
+
+                const overallRating = (locationRating + amenitiesRating + foodRating + roomRating + priceRating + operatorRating) / 6;
+
+                totalRatings += overallRating;
+                count++;
+            });
+
+            trip.averageRating = count > 0 ? (totalRatings / count).toFixed(1) : 0; // Add averageRating to each trip
+            trip.hasReviews = count > 0; // Add hasReviews flag to each trip
+        });
+
+        // Function to get rating description
+        function getRatingDescription(rating) {
+            if (rating <= 1) return 'Worse';
+            if (rating <= 2) return 'Bad';
+            if (rating <= 3) return 'Okay';
+            if (rating <= 4) return 'Good';
+            return 'Excellent';
+        }
+
+        res.render("trips/secondarySearch", {
+            trips,
+            user: req.user, // Pass user info
+            userWishlist,
+            getRatingDescription, // Pass the rating description function
+        });
 
     } catch (error) {
         console.error('Error fetching trips:', error);

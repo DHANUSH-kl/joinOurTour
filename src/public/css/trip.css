@@ -138,7 +138,6 @@ main {
   width: 100%;
   height: 70vh;
   margin-top: 3rem;
-  background-color: #05073C;
 }
 
 
@@ -288,6 +287,7 @@ main {
   width: 100%;
   height: auto;
   position: relative;
+  margin-top: 3rem;
 }
 
 
@@ -681,7 +681,14 @@ ul.rb li .timestamp {
   width: 2rem;
   height: 2rem;
   border-radius: 50%;
-  background-color: #4f5b66;
+  background-color: #05A351;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.pfp span {
+  color: #FFF;
 }
 
 .rev-name {
@@ -786,12 +793,13 @@ ul.rb li .timestamp {
 
 .overall-rating-container {
   width: 80%;
-  height: 50vh;
+  height: auto;
   margin-top: 30px;
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
   align-items: flex-start;
+  margin-bottom: 3rem;
 
 }
 
@@ -849,4 +857,40 @@ ul.rb li .timestamp {
   font-style: normal;
   font-weight: 500;
   line-height: 30px; 
+}
+
+.review {
+  margin-top: 50px;
+}
+
+
+/* image gallery  */
+
+
+
+.swiper {
+  width: 100%;
+  height: 100%;
+  cursor: pointer;
+}
+
+.swiper-slide {
+  text-align: center;
+  font-size: 18px;
+  background: #fff;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.swiper-slide img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+
+:root {
+  --swiper-theme-color: #05A351;
 }

@@ -11,16 +11,7 @@ function submitSearch() {
     // Get the to date
     const toDate = document.getElementById('toDate').value;
 
-    // Check if dates are selected
-    if (!fromDate) {
-        alert('Please select a start date.');
-        return;
-    }
 
-    if (!toDate) {
-        alert('Please select an end date.');
-        return;
-    }
 
     // Prepare the data to be sent
     const data = {

@@ -113,8 +113,12 @@
                         <a href="/mytrips">MY TRIP</a>
                         <a href="/createtrip">CREATE TRIP</a>
                         <a href="/">PAYMENTS AND PAYOUTS</a>
-                        <a href="/user/signin">SIGN IN</a>
-                        <a href="/user/signup">SIGN UP</a>
+                        <% if (!user) { %>
+                            <a href="/user/signin">SIGN IN</a>
+                            <a href="/user/signup">SIGN UP</a>
+                        <% } else { %>
+                            <a href="/user/logout">SIGN OUT</a>
+                        <% } %>
                         <a href="/showWishlist">WISHLIST</a>
                     </div>
                 </div>
@@ -338,33 +342,42 @@
                         </div>
 
                         <div class="rating-container">
-    <div class="rate rat1">
-        <!-- 5 Stars -->
-        <input type="radio" id="locStar5-<%= i %>" name="locationRating-<%= i %>" value="5"
-            <% if (allTrips[i].averageRating >= 5) { %> checked <% } %> disabled />
-        <label for="locStar5-<%= i %>">5 stars</label>
+                            <div class="rate rat1">
+                                <!-- 5 Stars -->
+                                <input type="radio" id="locStar5-<%= i %>" name="locationRating-<%= i %>" value="5" <%
+                                    if (allTrips[i].averageRating>= 5) { %> checked <% } %> disabled />
+                                    <label for="locStar5-<%= i %>">5 stars</label>
 
-        <!-- 4 Stars -->
-        <input type="radio" id="locStar4-<%= i %>" name="locationRating-<%= i %>" value="4"
-            <% if (allTrips[i].averageRating >= 4 && allTrips[i].averageRating < 5) { %> checked <% } %> disabled />
-        <label for="locStar4-<%= i %>">4 stars</label>
+                                    <!-- 4 Stars -->
+                                    <input type="radio" id="locStar4-<%= i %>" name="locationRating-<%= i %>" value="4"
+                                        <% if (allTrips[i].averageRating>= 4 && allTrips[i].averageRating < 5) { %>
+                                        checked <% } %> disabled />
+                                            <label for="locStar4-<%= i %>">4 stars</label>
 
-        <!-- 3 Stars -->
-        <input type="radio" id="locStar3-<%= i %>" name="locationRating-<%= i %>" value="3"
-            <% if (allTrips[i].averageRating >= 3 && allTrips[i].averageRating < 4) { %> checked <% } %> disabled />
-        <label for="locStar3-<%= i %>">3 stars</label>
+                                            <!-- 3 Stars -->
+                                            <input type="radio" id="locStar3-<%= i %>" name="locationRating-<%= i %>"
+                                                value="3" <% if (allTrips[i].averageRating>= 3 &&
+                                            allTrips[i].averageRating < 4) { %> checked <% } %> disabled />
+                                                    <label for="locStar3-<%= i %>">3 stars</label>
 
-        <!-- 2 Stars -->
-        <input type="radio" id="locStar2-<%= i %>" name="locationRating-<%= i %>" value="2"
-            <% if (allTrips[i].averageRating >= 2 && allTrips[i].averageRating < 3) { %> checked <% } %> disabled />
-        <label for="locStar2-<%= i %>">2 stars</label>
+                                                    <!-- 2 Stars -->
+                                                    <input type="radio" id="locStar2-<%= i %>"
+                                                        name="locationRating-<%= i %>" value="2" <% if
+                                                        (allTrips[i].averageRating>= 2 && allTrips[i].averageRating < 3)
+                                                        { %> checked <% } %> disabled />
+                                                            <label for="locStar2-<%= i %>">2 stars</label>
 
-        <!-- 1 Star -->
-        <input type="radio" id="locStar1-<%= i %>" name="locationRating-<%= i %>" value="1"
-            <% if (allTrips[i].averageRating >= 1 && allTrips[i].averageRating < 2) { %> checked <% } %> disabled />
-        <label for="locStar1-<%= i %>">1 star</label>
-    </div>
-</div>
+                                                            <!-- 1 Star -->
+                                                            <input type="radio" id="locStar1-<%= i %>"
+                                                                name="locationRating-<%= i %>" value="1" <% if
+                                                                (allTrips[i].averageRating>= 1 &&
+                                                            allTrips[i].averageRating < 2) { %> checked <% } %> disabled
+                                                                    />
+                                                                    <label for="locStar1-<%= i %>">1 star</label>
+                            </div>
+
+                            <p><%= allTrips[i].averageRating %></p>
+                        </div>
 
 
                         <div class="card-bottom">
@@ -454,26 +467,8 @@
 
 
 
+
        
-  document.addEventListener('DOMContentLoaded', function () {
-    // Select all wishlist icons
-    const wishlistIcons = document.querySelectorAll('.redirect-i');
-
-    wishlistIcons.forEach(function (icon) {
-      icon.addEventListener('click', function () {
-        // Check if the user is signed in (you may replace this with your actual authentication logic)
-        const isLoggedIn = false; // Replace this with your logic
-        
-        if (!isLoggedIn) {
-          // If user is not signed in, redirect to sign-in page
-          window.location.href = '/user/signin';
-        } else {
-          // Handle the wishlist functionality for signed-in users here
-        }
-      });
-    });
-  });
-
 
 
 

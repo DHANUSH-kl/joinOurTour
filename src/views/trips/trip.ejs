@@ -99,6 +99,16 @@
 
             <div class="image-gallery">
 
+                <div class="swiper mySwiper">
+                    <div class="swiper-wrapper">
+                        <% trip.tripImages.forEach(function(image) { %>
+                            <div class="swiper-slide">
+                                <img src="<%= image.path %>" alt="Trip Image" />
+                            </div>
+                            <% }); %>
+                    </div>
+                    <div class="swiper-pagination"></div>
+                </div>
             </div>
 
 
@@ -272,7 +282,11 @@
                 <% trip.reviews.forEach(review=> { %>
                     <div class="review">
                         <div class="rev-name">
-                            <div class="pfp"></div>
+                            <div class="pfp">
+                                <span class="material-symbols-outlined">
+                                    account_circle
+                                    </span>
+                            </div>
                             <p>
                                 <%= review.name %>
                             </p>
@@ -456,6 +470,27 @@
 
 
 
+                    <!-- Swiper JS -->
+                    <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+
+                    <!-- Initialize Swiper -->
+                    <script>
+                        var swiper = new Swiper(".mySwiper", {
+                            slidesPerView: 2,
+                            spaceBetween: 30,
+                            freeMode: true,
+                            pagination: {
+                                el: ".swiper-pagination",
+                                clickable: true,
+                            },
+                            autoplay: {
+                                delay: 2000, // Delay between slides in milliseconds (3000ms = 3 seconds)
+                                disableOnInteraction: false, // Keeps autoplay running even after user interactions
+                            },
+                        });
+                    </script>
+
+
 
 
 
@@ -485,7 +520,7 @@
 
 
 
-                        
+
 
 
 
