@@ -339,9 +339,19 @@
                             <h4 class="trip-title">
                                 <%= allTrips[i].title %>
                             </h4>
+
                         </div>
 
+                        <div class="ratio-container">
+                            <p class="maleRatio">Male: <%= allTrips[i].maleRatio %>%</p>
+                            <p class="femaleRatio">Female: <%= allTrips[i].femaleRatio %>%</p>
+
+                        </div>
+
+                        
+
                         <div class="rating-container">
+
                             <div class="rate rat1">
                                 <!-- 5 Stars -->
                                 <input type="radio" id="locStar5-<%= i %>" name="locationRating-<%= i %>" value="5" <%
@@ -377,7 +387,9 @@
                             </div>
 
                             <p><%= allTrips[i].averageRating %></p>
+
                         </div>
+
 
 
                         <div class="card-bottom">

@@ -49,6 +49,8 @@ const addNewTrip = async (req, res) => {
         , transport
         , excludes
         , youtubeUrl
+        ,maleTravelers
+        ,femaleTravelers 
 
     } = req.body;
 
@@ -95,6 +97,8 @@ const addNewTrip = async (req, res) => {
         transport,
         owner: userId,
         youtubeUrl,
+        maleTravelers,
+        femaleTravelers 
     });
 
     totalDays = totalDays[0] ? parseInt(totalDays[0]) : 0;
@@ -152,6 +156,16 @@ const showAllTrips = async (req, res) => {
             count++;
         });
         trip.averageRating = count > 0 ? (totalRatings / count).toFixed(1) : 0; // Add average rating to trip object
+
+
+        // Calculate male-to-female ratio
+        const totalTravelers = trip.maleTravelers + trip.femaleTravelers;
+        const maleRatio = totalTravelers > 0 ? ((trip.maleTravelers / totalTravelers) * 100).toFixed(1) : 0;
+        const femaleRatio = totalTravelers > 0 ? ((trip.femaleTravelers / totalTravelers) * 100).toFixed(1) : 0;
+
+        // Add ratios to trip object
+        trip.maleRatio = maleRatio;
+        trip.femaleRatio = femaleRatio;
     });
 
 
@@ -259,10 +273,15 @@ const postEditTrip = async (req, res) => {
             totalCost,
             buffer,
             totalDays,
+            maleTravelers, // Extract male travelers
+            femaleTravelers 
         } = req.body;
 
         // Convert totalDays to integer
         totalDays = parseInt(totalDays[0]) || 0;
+
+        maleTravelers = parseInt(maleTravelers) || 0;
+        femaleTravelers = parseInt(femaleTravelers) || 0;
 
         // Initialize tripImages based on the presence of new uploads
         let tripImages = [];
@@ -340,7 +359,9 @@ const postEditTrip = async (req, res) => {
             trainTicket,
             flightTicket,
             totalCost,
-            buffer
+            buffer,
+            maleTravelers, 
+            femaleTravelers 
         };
 
         // Update the trip with the merged data

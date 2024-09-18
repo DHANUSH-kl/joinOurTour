@@ -67,7 +67,15 @@ const tripSchema = new Schema({
     reviews : [{
         type : Schema.Types.ObjectId,
         ref : "Review"
-    }]
+    }],
+    maleTravelers: {
+        type: Number,
+        default: 0
+    },
+    femaleTravelers: {
+        type: Number,
+        default: 0
+    },
 } , {timestamps:true});
 
 

@@ -130,7 +130,7 @@ main {
 
 .card-container {
     width: 15rem;
-    height: 24rem;
+    height: 27rem;
     border-radius: 12px;
     border: 1px solid #E7E6E6;
     background: #FFF;}
@@ -379,4 +379,46 @@ main {
     font-style: normal;
     font-weight: 400;
     line-height: 24.38px;
+}
+
+
+.ratio-container {
+    width: 100%;
+    height: auto;
+    padding-left: 10px;
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    gap: 1rem;
+
+}
+
+.ratio-container p {
+    color: #888;
+    font-family: Poppins;
+    font-size: 10px;
+    font-style: normal;
+    font-weight: 400;
+}
+
+.maleRatio::before{
+    content: "";
+    width: 0.5rem;
+    height: 0.5rem;
+    margin-right: 5px;
+    border-radius: 50%;
+    background-color: #286BEE;
+    display: inline-block;
+    text-align: center;
+}
+
+.femaleRatio::before{
+    content: "";
+    width: 0.5rem;
+    height: 0.5rem;
+    margin-right: 5px;
+    border-radius: 50%;
+    background-color: #F23DE0;
+    display: inline-block;
+    text-align: center;
 }

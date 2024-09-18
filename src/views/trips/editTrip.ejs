@@ -197,6 +197,17 @@
                 <label for="totalDays" class="form-label mb-2">Total days</label>
                 <input type="number" name="totalDays" id="totalDays" class="form-control " value="<%= trip.totalDays %>">
             </div>
+
+            <div class="mt-3">
+                <label for="maleTravelers" class="form-label mb-2">Male Travelers</label>
+                <input type="number" name="maleTravelers" id="maleTravelers" class="form-control" value="<%= trip.maleTravelers %>">
+            </div>
+            
+            <div class="mt-3">
+                <label for="femaleTravelers" class="form-label mb-2">Female Travelers</label>
+                <input type="number" name="femaleTravelers" id="femaleTravelers" class="form-control" value="<%= trip.femaleTravelers %>">
+            </div>
+            
     
             <% if (trip && trip.stopLocation && trip.stopDescription) { %>
                 <div id="stops-container">
