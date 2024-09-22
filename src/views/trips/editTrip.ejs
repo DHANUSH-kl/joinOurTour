@@ -124,7 +124,7 @@
             <div class="input-group mt-3">
                 <span class="input-group-text">Trip description</span>
                 <textarea class="form-control" name="tripDescription"
-                    aria-label="With textarea"><%= trip.description %> </textarea>
+                    aria-label="With textarea"><%= trip.tripDescription %> </textarea>
             </div>
             
             <div class="accomodations mt-3">
@@ -196,6 +196,16 @@
             <div class="mt-3">
                 <label for="totalDays" class="form-label mb-2">Total days</label>
                 <input type="number" name="totalDays" id="totalDays" class="form-control " value="<%= trip.totalDays %>">
+            </div>
+
+            <div class="mt-3">
+                <label for="groupSize" class="form-label mb-2">Group Size</label>
+                <input type="number" name="groupSize" id="groupSize" class="form-control" value="<%= trip.groupSize %>">
+            </div>
+            
+            <div class="mt-3">
+                <label for="minAge" class="form-label mb-2">Minimum Age</label>
+                <input type="number" name="minAge" id="minAge" class="form-control" value="<%= trip.minAge %>">
             </div>
 
             <div class="mt-3">

@@ -51,6 +51,8 @@ const addNewTrip = async (req, res) => {
         , youtubeUrl
         ,maleTravelers
         ,femaleTravelers 
+        ,groupSize // New input for group size
+        ,minAge  
 
     } = req.body;
 
@@ -98,7 +100,9 @@ const addNewTrip = async (req, res) => {
         owner: userId,
         youtubeUrl,
         maleTravelers,
-        femaleTravelers 
+        femaleTravelers,
+        groupSize,  // Adding group size to the new trip
+        minAge 
     });
 
     totalDays = totalDays[0] ? parseInt(totalDays[0]) : 0;
@@ -274,7 +278,9 @@ const postEditTrip = async (req, res) => {
             buffer,
             totalDays,
             maleTravelers, // Extract male travelers
-            femaleTravelers 
+            femaleTravelers,
+            groupSize,       // New input for group size
+            minAge  
         } = req.body;
 
         // Convert totalDays to integer
@@ -282,6 +288,8 @@ const postEditTrip = async (req, res) => {
 
         maleTravelers = parseInt(maleTravelers) || 0;
         femaleTravelers = parseInt(femaleTravelers) || 0;
+        groupSize = parseInt(groupSize) || 0; // Convert group size to integer
+        minAge = parseInt(minAge) || 0;
 
         // Initialize tripImages based on the presence of new uploads
         let tripImages = [];
@@ -361,7 +369,9 @@ const postEditTrip = async (req, res) => {
             totalCost,
             buffer,
             maleTravelers, 
-            femaleTravelers 
+            femaleTravelers,
+            groupSize,  // Add group size to the merged data
+            minAge
         };
 
         // Update the trip with the merged data

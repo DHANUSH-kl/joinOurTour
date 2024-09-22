@@ -76,6 +76,14 @@ const tripSchema = new Schema({
         type: Number,
         default: 0
     },
+    groupSize: {             // New field for group size
+        type: Number,
+        default: 1           // You can set a default value if required
+    },
+    minAge: {                // New field for minimum age
+        type: Number,
+        default: 18          // Set a default value for minimum age
+    }
 } , {timestamps:true});
 
 
