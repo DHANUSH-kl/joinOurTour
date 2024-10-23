@@ -3,6 +3,45 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Lato&display=swap" rel="stylesheet">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Lato:wght@400;700;900&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900&display=swap"
+        rel="stylesheet">
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
+        integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA=="
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link rel="stylesheet"
+        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0" />
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Anton&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
+
+
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>
+    <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+
+
+
+
+
+
+
+    <link rel="stylesheet" href="/css/nav.css">
+    <link rel="stylesheet" href="/css/showAll.css">
+    <link rel="stylesheet" href="/css/searchBar.css">
+    <link rel="stylesheet" href="/css/mainSearch.css">
+    <link rel="stylesheet" href="/css/filterSearch.css">
+    <link rel="stylesheet" href="/css/pagination.css">
+    <link rel="stylesheet" href="/css/account.css">
+
+
+
     <title>Document</title>
 </head>
 <body>
@@ -19,7 +58,139 @@
     <% } else { %>
         <p>No wishlist trips found.</p>
     <% } %>
+
+    <div class="cards-container">
+        <% for(let i=0; i < wishlistTrips.length; i++) { %>
+            <div class="card-container">
+                <div class="card-img">
+                    <% if (wishlistTrips[i].tripImages && wishlistTrips[i].tripImages.length> 0 &&
+                        wishlistTrips[i].tripImages[0].path) { %>
+                        <div class="trip-image">
+                            <img src="<%= wishlistTrips[i].tripImages[0].path %>" alt="Trip Image">
+                        </div>
+                        <div class="heart-container">
+                            <% if (user) { %>
+                                <% const isInWishlist=userWishlist.includes(wishlistTrips[i]._id.toString()); %>
+                                    <i class="<%= isInWishlist ? 'fa-solid fa-heart wishlist-active' : 'fa-regular fa-heart' %> wishlist-icon"
+                                        data-id="<%= wishlistTrips[i]._id %>" style="cursor: pointer;"></i>
+                                    <% } else { %>
+                                        <i class="fa-regular fa-heart wishlist-icon redirect-i"
+                                            data-id="<%= wishlistTrips[i]._id %>"></i>
+                                        <% } %>
+                        </div>
+
+
+
+
+                        <% } else { %>
+                            <p>No images available for this trip</p>
+                            <% } %>
+                </div>
+                <div class="card-body">
+                    <div class="route">
+                        <img src="../images/route.svg" alt="">
+                        <h3 class="card-title">
+                            <a href="/<%= wishlistTrips[i]._id %>">
+                                <%= wishlistTrips[i].location %>
+                            </a>
+                            <p>
+                                <% if (wishlistTrips[i].departure) { %>
+                                    <%= new Date(wishlistTrips[i].departure).toLocaleDateString('en-US', { month: 'long'
+                                        , day: '2-digit' }) %> ~
+                                        <% } else { %>
+                                            date not available
+                                            <% } %>
+                                                <% if (wishlistTrips[i].endDate) { %>
+                                                    <%= new Date(wishlistTrips[i].endDate).toLocaleDateString('en-US', {
+                                                        month: 'long' , day: '2-digit' }) %>
+                                                        <% } %>
+                            </p>
+                        </h3>
+                    </div>
+                    <div class="title-container">
+                        <h4 class="trip-title">
+                            <%= wishlistTrips[i].title %>
+                        </h4>
+
+                    </div>
+
+                    <div class="ratio-container">
+                        <p class="maleRatio">Male: <%= wishlistTrips[i].maleRatio %>%</p>
+                        <p class="femaleRatio">Female: <%= wishlistTrips[i].femaleRatio %>%</p>
+
+                    </div>
+
+                    
+
+                    <div class="rating-container">
+
+                        <div class="rate rat1">
+                            <!-- 5 Stars -->
+                            <input type="radio" id="locStar5-<%= i %>" name="locationRating-<%= i %>" value="5" <%
+                                if (wishlistTrips[i].averageRating>= 5) { %> checked <% } %> disabled />
+                                <label for="locStar5-<%= i %>">5 stars</label>
+
+                                <!-- 4 Stars -->
+                                <input type="radio" id="locStar4-<%= i %>" name="locationRating-<%= i %>" value="4"
+                                    <% if (wishlistTrips[i].averageRating>= 4 && wishlistTrips[i].averageRating < 5) { %>
+                                    checked <% } %> disabled />
+                                        <label for="locStar4-<%= i %>">4 stars</label>
+
+                                        <!-- 3 Stars -->
+                                        <input type="radio" id="locStar3-<%= i %>" name="locationRating-<%= i %>"
+                                            value="3" <% if (wishlistTrips[i].averageRating>= 3 &&
+                                            wishlistTrips[i].averageRating < 4) { %> checked <% } %> disabled />
+                                                <label for="locStar3-<%= i %>">3 stars</label>
+
+                                                <!-- 2 Stars -->
+                                                <input type="radio" id="locStar2-<%= i %>"
+                                                    name="locationRating-<%= i %>" value="2" <% if
+                                                    (wishlistTrips[i].averageRating>= 2 && wishlistTrips[i].averageRating < 3)
+                                                    { %> checked <% } %> disabled />
+                                                        <label for="locStar2-<%= i %>">2 stars</label>
+
+                                                        <!-- 1 Star -->
+                                                        <input type="radio" id="locStar1-<%= i %>"
+                                                            name="locationRating-<%= i %>" value="1" <% if
+                                                            (wishlistTrips[i].averageRating>= 1 &&
+                                                            wishlistTrips[i].averageRating < 2) { %> checked <% } %> disabled
+                                                                />
+                                                                <label for="locStar1-<%= i %>">1 star</label>
+                        </div>
+
+                        <p><%= wishlistTrips[i].averageRating %></p>
+
+                    </div>
+
+
+
+                    <div class="card-bottom">
+                        <div class="days-container">
+                            <h4 class="days">
+                                <%= wishlistTrips[i].totalDays %> days
+                            </h4>
+                        </div>
+                        <div class="price-container">
+                            <% if (wishlistTrips[i].totalCost) { %>
+                                <span>FROM</span> &nbsp;<b>
+                                    <%= wishlistTrips[i].totalCost.toLocaleString('en-IN', { style: 'currency' ,
+                                        currency: 'INR' }) %>
+                                </b>
+                                <% } else { %>
+                                    Price Not Available
+                                    <% } %>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <% } %>
+    </div>
         
+
+
+
+    <script src="/js/whislist.js"></script>
+    <script src="/js/dropdown.js"></script>
 
 </body>
 </html>

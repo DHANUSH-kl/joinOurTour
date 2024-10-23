@@ -856,7 +856,8 @@ const showWishlist = async (req, res) => {
 
     res.render("trips/wishlist.ejs", {
         wishlistTrips,  // Pass the wishlistTrips to the view
-        user: user, // Pass user for rendering user-specific information
+        user,           // Pass user for rendering user-specific information
+        userWishlist: wishlistIds // Pass user for rendering user-specific information
     });
 }
 

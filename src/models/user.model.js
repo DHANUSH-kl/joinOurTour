@@ -31,7 +31,11 @@ const userSchema = new Schema({
              type: mongoose.Schema.Types.ObjectId,
              ref: 'Trip' 
             }
-        ]
+        ],
+        wallet: {
+            type: Number,
+            default: 0,
+        },
 }, { timestamps: true });
 
 userSchema.plugin(passportLocalMongoose);

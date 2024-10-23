@@ -41,6 +41,7 @@
     <link rel="stylesheet" href="/css/nav.css">
     <link rel="stylesheet" href="/css/account.css">
     <link rel="stylesheet" href="/css/trip.css">
+    <link rel="stylesheet" href="/css/booking.css">
     <title>Document</title>
 
 </head>
@@ -108,6 +109,84 @@
                             <% }); %>
                     </div>
                     <div class="swiper-pagination"></div>
+                </div>
+            </div>
+
+
+            <div class="booking-container">
+                <div class="tickets">
+
+
+                    <div class="top-ticket">
+                        <h3>From &nbsp; <span>&#8377;<%= trip.totalCost.toLocaleString('en-IN') %></span></h3>
+                        <div class="calendar">
+                            <img src="../images/duration.png" alt="">
+                            <div class="ticket-calendar">
+                                <h3>From</h3>
+
+                                <h2>
+                                    <%= new Date(trip.departure).toLocaleDateString('en-US', { month: 'long' ,
+                                        day: 'numeric' }) %>
+                                        ~
+                                        <%= new Date(trip.endDate).toLocaleDateString('en-US', { month: 'long' ,
+                                            day: 'numeric' }) %>
+                                </h2>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="mid-ticket">
+                        <h3>Tickets</h3>
+
+                        <div class="ticket-quantity">
+
+                            <div class="adult-ticket">
+                                <h3>
+                                Adult (18+ years) &nbsp; <span> &#8377;<%= trip.totalCost.toLocaleString('en-IN') %></span>
+                                </h3>
+                                <div class="ticket-counter">
+                                    <button id="decrease-adult"><</button>
+                                    <span id="ticket-count-adult">1</span>
+                                    <button id="increase-adult">></button>
+                                </div>
+                            </div>
+
+                            <div class="adult-ticket">
+                                <h3>
+                                    Youth (13-17 years) &nbsp; <span> &#8377;<%= trip.totalCost.toLocaleString('en-IN') %></span>
+                                </h3>
+                                <div class="ticket-counter">
+                                    <button id="decrease-youth"><</button>
+                                    <span id="ticket-count-youth">1</span>
+                                    <button id="increase-youth">></button>
+                                </div>
+                            </div>
+
+                            <div class="adult-ticket">
+                                <h3>
+                                    Children (0-12 years) &nbsp; <span> &#8377;<%= trip.totalCost.toLocaleString('en-IN') %></span>
+                                </h3>
+                                <div class="ticket-counter">
+                                    <button id="decrease-children"><</button>
+                                    <span id="ticket-count-children">1</span>
+                                    <button id="increase-children">></button>
+                                </div>
+                            </div>
+                            
+
+
+                        </div>
+                    </div>
+
+
+                    <div class="book-container">
+                        <div class="g-total">
+                           <h3> Total: </h3>
+
+                           <h2 id="grand-total">&#8377; <span id="total-amount">0</span></h2>
+                        </div>
+                    </div>
+
                 </div>
             </div>
 
@@ -285,7 +364,7 @@
                             <div class="pfp">
                                 <span class="material-symbols-outlined">
                                     account_circle
-                                    </span>
+                                </span>
                             </div>
                             <p>
                                 <%= review.name %>
@@ -529,6 +608,7 @@
 
                     </script>
 
+                    <script src="/js/ticketcounter.js"></script>
                     <script src="/js/dropdown.js"></script>
 
 

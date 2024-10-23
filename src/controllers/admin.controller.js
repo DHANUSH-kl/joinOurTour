@@ -191,4 +191,15 @@ const editAdminPannel = async(req,res) => {
 
 }
 
-export { editAdminForm , editAdminPannel, posttripPackage, becomeOwnerForm, postOwner, agentAccessForm, postAgentAccess, tripLeaderForm, postTripLeader, displayPackages }
+const walletPage = async(req,res)=> {
+
+    res.render("admin/wallet.ejs")
+
+}
+
+
+const sendCoin = async(req,res) => {
+
+}
+
+export { walletPage , sendCoin , editAdminForm , editAdminPannel, posttripPackage, becomeOwnerForm, postOwner, agentAccessForm, postAgentAccess, tripLeaderForm, postTripLeader, displayPackages }
