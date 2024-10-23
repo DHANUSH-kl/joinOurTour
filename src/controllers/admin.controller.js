@@ -200,6 +200,30 @@ const walletPage = async(req,res)=> {
 
 const sendCoin = async(req,res) => {
 
+    const { email, tokens } = req.body;
+
+    try {
+        // Find the user by email
+        const user = await User.findOne({ username: email }); // Assuming 'username' is the field used for email in passport-local-mongoose
+
+        if (!user) {
+            return res.status(404).send('User not found');
+        }
+
+        // Add tokens to the user's wallet
+        user.wallet += Number(tokens);  // Make sure tokens are treated as a number
+
+        // Save the updated user document
+        await user.save();
+
+        // Respond with a success message
+        res.send(`Successfully added ${tokens} tokens to ${email}'s wallet.`);
+    } catch (error) {
+        console.error('Error sending tokens:', error);
+        res.status(500).send('Internal Server Error');
+    }
+
+
 }
 
 export { walletPage , sendCoin , editAdminForm , editAdminPannel, posttripPackage, becomeOwnerForm, postOwner, agentAccessForm, postAgentAccess, tripLeaderForm, postTripLeader, displayPackages }
