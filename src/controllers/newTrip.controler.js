@@ -26,6 +26,15 @@ const newTripForm = async (req, res) => {
 
 const addNewTrip = async (req, res) => {
 
+
+    // Fetch the user by their ID
+    const user = await User.findById(req.user._id);
+
+    // Check if the user has at least 100 tokens
+    if (user.wallet < 100) {
+        return res.status(400).send("Not enough tokens in the wallet. You need at least 100 tokens to create a trip.");
+    }
+
     let { departure
         , fromLocation
         , endDate
@@ -116,6 +125,10 @@ const addNewTrip = async (req, res) => {
     console.log(req.body);
 
     await newTrip.save();
+
+    // Deduct 100 tokens from the user's wallet after creating the trip
+    user.wallet -= 100;
+    await user.save(); // Save the updated user wallet
 
 
     res.redirect("/");
