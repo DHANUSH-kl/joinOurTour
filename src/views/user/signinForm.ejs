@@ -8,68 +8,51 @@
     crossorigin="anonymous" referrerpolicy="no-referrer" />
 
     <link rel="stylesheet" href="/css/nav.css">
+    <link rel="stylesheet" href="/css/signup.css">
+
     <title>Document</title>
 </head>
 <body>
+
+
     <nav>
         <div class="logo">
-            <h3>LOGO</h3>
+            <h4><b>TRAVELER</b></h4>
         </div>
-        <div class="trips-nav">
-            <a href="/">ALL TRIPS</a>
-        </div>
-        <div class="user-nav">
-            <% if(!currUser){ %>
-                <a href="/user/signup">SIGN UP</a>
-                <a href="/user/signin">SIGN IN</a>
-            <% } %>
-
-            <% if(currUser){ %>
-                <a href="/user/logout">LOG OUT</a>
-            <% } %>
-            <div class="user" id="user">
-                <i class="fa-regular fa-user"></i>
-            </div>
-        </div>
-
-        <div class="dropdown-container" id="dropdown">
-            <div class="close">
-                <i class="fa-solid fa-xmark" id="close"></i>
-            </div>
-            <div class="user-info-container">
-                <% if(!currUser) { %>
-                    <div class="profile"></div>
-                    <p>USERNAME</p>    
-                <% } else { %>
-                    <div class="profile"></div>
-                    <p><%= currUser.username %></p> 
-                <% } %>
-            </div>
-            <div class="nav-links">
-                <a href="/mytrips">MY TRIP</a>
-                <a href="/createtrip">CREATE TRIP</a>
-                <a href="/">PAYMENTS AND PAYOUTS</a>
-                <a href="/user/signup">SIGN UP</a>    
-            </div>
+        <div class="home">
+            <a href="/aboutus">HOME</a>
         </div>
     </nav>
 
-    <div class="row">
-        <div class="col-6 offset-3">
-            <form action="/user/signin" method="POST">
-                <div class="mt-3">
-                    <label for="username" class="form-label mb-2">username</label>
-                    <input type="text" name="username" id="username" class="form-control" novalidate>
-                </div>
-                <div class="mt-3">
-                    <label for="password" class="form-label mb-2">password</label>
-                    <input type="text" name="password" id="password" class="form-control" novalidate>
-                </div>
-                <button class="btn btn-success mt-3">signIN</button>
-            </form>
-        </div>
-    </div>
+    <hr>
 
+
+
+    <main>
+
+
+
+        <div class="row">
+                <form action="/user/signin" method="POST">
+                    <div class="mt-3">
+                        <input type="text" name="username" id="username" class="form-control" novalidate placeholder="username">
+                    </div>
+                    <div class="mt-3">
+                        <input type="text" name="password" id="password" class="form-control" novalidate placeholder="password">
+                    </div>
+
+                    <div class="btns">
+                        <button class="btn btn-success mt-3">signIN</button>
+
+                    </div>
+                </form>
+        </div>
+    
+
+
+    </main>
+
+    
     <script src="/js/nav.js"></script>
 
 </body>

@@ -89,7 +89,7 @@ function submitSecondarySearch() {
         minPrice,
         maxPrice,
         fromdte,
-        todte
+        todte,
     };
 
     console.log('Data to be sent:', data);

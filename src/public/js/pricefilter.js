@@ -19,6 +19,8 @@ document.getElementById('priceFilterToggle').addEventListener('click', function(
 
 
 
+
+
 const rangeMin = document.querySelector(".range-min");
 const rangeMax = document.querySelector(".range-max");
 const progress = document.querySelector(".slider .progress");
