@@ -204,7 +204,7 @@ const sendCoin = async(req,res) => {
 
     try {
         // Find the user by email
-        const user = await User.findOne({ username: email }); // Assuming 'username' is the field used for email in passport-local-mongoose
+        const user = await User.findOne({ email: email }); // Assuming 'username' is the field used for email in passport-local-mongoose
 
         if (!user) {
             return res.status(404).send('User not found');

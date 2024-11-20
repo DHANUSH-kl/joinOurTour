@@ -7,61 +7,180 @@
     integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA=="
     crossorigin="anonymous" referrerpolicy="no-referrer" />
 
+    <link rel="stylesheet" href="/css/mytrip.css">
     <link rel="stylesheet" href="/css/nav.css">
+    <link rel="stylesheet" href="/css/showAll.css">
+    <link rel="stylesheet" href="/css/account.css">
     <title>MY TRIPS</title>
 </head>
 <body>
 
     <nav>
         <div class="logo">
-            <h3>LOGO</h3>
+            <h4><b>TRAVELER</b></h4>
         </div>
-        <div class="trips-nav">
-            <a href="/">ALL TRIPS</a>
+        <div class="home">
+            <a href="/aboutus">HOME</a>
         </div>
-        <div class="user-nav">
-            <% if(!currUser){ %>
-                <a href="/user/signup">SIGN UP</a>
-                <a href="/user/signin">SIGN IN</a>
-            <% } %>
+        <div class="right">
+            <img src="../images/account_circle.png" alt="" class="account-icon">
+            <!-- <img src="../images/search.png" alt=""> -->
 
-            <% if(currUser){ %>
-                <a href="/user/logout">LOG OUT</a>
-            <% } %>
-            <div class="user" id="user">
-                <i class="fa-regular fa-user"></i>
-            </div>
-        </div>
+            <div class="account-container acc-hide">
+                <div class="close">
+                    <i class="fa-solid fa-xmark" id="close"></i>
+                </div>
+                <div class="user-info-container">
+                    <% if(!currUser) { %>
+                        <p>USERNAME</p>
+                        <% } else { %>
+                            <div class="profile"></div>
+                            <p>
+                                <%= currUser.username %>
+                            </p>
+                            
+                            <p>
+                                Wallet Balance: <%= currUser.wallet %> tokens
+                            </p>
 
-        <div class="dropdown-container" id="dropdown">
-            <div class="close">
-                <i class="fa-solid fa-xmark" id="close"></i>
+
+                            <% } %>
+                </div>
+                <div class="nav-links">
+                    <a href="/mytrips">MY TRIP</a>
+                    <a href="/createtrip">CREATE TRIP</a>
+                    <a href="/">PAYMENTS AND PAYOUTS</a>
+                    <% if (!user) { %>
+                        <a href="/user/signin">SIGN IN</a>
+                        <a href="/user/signup">SIGN UP</a>
+                    <% } else { %>
+                        <a href="/user/logout">SIGN OUT</a>
+                    <% } %>
+                    <a href="/showWishlist">WISHLIST</a>
+                    <p></p>
+                </div>
             </div>
-            <div class="user-info-container">
-                <% if(!currUser) { %>
-                    <div class="profile"></div>
-                    <p>USERNAME</p>    
-                <% } else { %>
-                    <div class="profile"></div>
-                    <p><%= currUser.username %></p> 
-                <% } %>
-            </div>
-            <div class="nav-links">
-                <a href="/mytrips">MY TRIP</a>
-                <a href="/createtrip">CREATE TRIP</a>
-                <a href="/">PAYMENTS AND PAYOUTS</a>
-                <a href="/user/signup">SIGN UP</a>    
-            </div>
+
         </div>
     </nav>
+    <hr>
 
     <h1>MY TRIPS PAGE</h1>
 
-    <% for(trip of trips.createdTrips) { %>
-        <h1><%= trip.title %></h1>
-    <%}%>
+    <main>
 
+
+        <div class="cards-container">
+            <% for(let i = 0; i < trips.length; i++) { %>
+                <div class="card-container">
+                    <div class="card-img">
+                        <% if (trips[i].tripImages && trips[i].tripImages.length > 0 && trips[i].tripImages[0].path) { %>
+                            <div class="trip-image">
+                                <img src="<%= trips[i].tripImages[0].path %>" alt="Trip Image">
+                            </div>
+                            
+                        <% } else { %>
+                            <p>No images available for this trip</p>
+                        <% } %>
+                    </div>
+                    <div class="card-body">
+                        <div class="route">
+                            <img src="../images/route.svg" alt="">
+                            <h3 class="card-title">
+                                <a href="/<%= trips[i]._id %>">
+                                    <%= trips[i].location %>
+                                </a>
+                                <p>
+                                    <% if (trips[i].departure) { %>
+                                        <%= new Date(trips[i].departure).toLocaleDateString('en-US', { month: 'long', day: '2-digit' }) %> ~
+                                        <% } else { %>
+                                            date not available
+                                        <% } %>
+                                            <% if (trips[i].endDate) { %>
+                                                <%= new Date(trips[i].endDate).toLocaleDateString('en-US', { month: 'long', day: '2-digit' }) %>
+                                            <% } %>
+                                </p>
+                            </h3>
+                        </div>
+                        <div class="title-container">
+                            <h4 class="trip-title">
+                                <%= trips[i].title %>
+                            </h4>
+                        </div>
+                        <div class="ratio-container">
+                            <p class="maleRatio">Male: <%= trips[i].maleRatio %>%</p>
+                            <p class="femaleRatio">Female: <%= trips[i].femaleRatio %>%</p>
+                        </div>
+                        <div class="rating-container">
+                            <div class="rate rat1">
+                                <!-- 5 Stars -->
+                                <input type="radio" id="locStar5-<%= i %>" name="locationRating-<%= i %>" value="5" <%
+                                    if (trips[i].averageRating >= 5) { %> checked <% } %> disabled />
+                                    <label for="locStar5-<%= i %>">5 stars</label>
+        
+                                    <!-- 4 Stars -->
+                                    <input type="radio" id="locStar4-<%= i %>" name="locationRating-<%= i %>" value="4"
+                                        <% if (trips[i].averageRating >= 4 && trips[i].averageRating < 5) { %> checked <% } %>
+                                        disabled />
+                                    <label for="locStar4-<%= i %>">4 stars</label>
+        
+                                    <!-- 3 Stars -->
+                                    <input type="radio" id="locStar3-<%= i %>" name="locationRating-<%= i %>" value="3"
+                                        <% if (trips[i].averageRating >= 3 && trips[i].averageRating < 4) { %> checked <% } %>
+                                        disabled />
+                                    <label for="locStar3-<%= i %>">3 stars</label>
+        
+                                    <!-- 2 Stars -->
+                                    <input type="radio" id="locStar2-<%= i %>" name="locationRating-<%= i %>" value="2"
+                                        <% if (trips[i].averageRating >= 2 && trips[i].averageRating < 3) { %> checked <% } %>
+                                        disabled />
+                                    <label for="locStar2-<%= i %>">2 stars</label>
+        
+                                    <!-- 1 Star -->
+                                    <input type="radio" id="locStar1-<%= i %>" name="locationRating-<%= i %>" value="1"
+                                        <% if (trips[i].averageRating >= 1 && trips[i].averageRating < 2) { %> checked <% } %>
+                                        disabled />
+                                    <label for="locStar1-<%= i %>">1 star</label>
+                            </div>
+                            <p><%= trips[i].averageRating %></p>
+                        </div>
+                        <div class="card-bottom">
+                            <div class="days-container">
+                                <h4 class="days">
+                                    <%= trips[i].totalDays %> days
+                                </h4>
+                            </div>
+                            <div class="price-container">
+                                <% if (trips[i].totalCost) { %>
+                                    <span>FROM</span> &nbsp;<b>
+                                        <%= trips[i].totalCost.toLocaleString('en-IN', { style: 'currency', currency: 'INR' }) %>
+                                    </b>
+                                <% } else { %>
+                                    Price Not Available
+                                <% } %>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            <% } %>
+        </div>
+        
+    
+
+    </main>
+
+
+
+
+
+    <script src="/js/whislist.js"></script>
+    <script src="/js/dropdown.js"></script>
+    <script src="/js/autoSuggestions.js"></script>
+    <script src="/js/secondarySearch.js"></script>
+    <script src="/js/mainSearch.js"></script>
+    <script src="/js/filter.js"></script>
     <script src="/js/nav.js"></script>
+    <script src="/js/pricefilter.js"></script>
 
 
 </body>

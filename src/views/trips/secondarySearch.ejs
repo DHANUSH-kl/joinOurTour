@@ -78,7 +78,7 @@
     <header>
         <nav>
             <div class="logo">
-                <a href="/"><h4><b>TRAVELER</b></h4></a>
+                <h4><b>TRAVELER</b></h4>
             </div>
             <div class="home">
                 <a href="/aboutus">HOME</a>
@@ -99,20 +99,34 @@
                                 <p>
                                     <%= currUser.username %>
                                 </p>
+                                
+                                <p>
+                                    Wallet Balance: <%= currUser.wallet %> tokens
+                                </p>
+
+
                                 <% } %>
                     </div>
                     <div class="nav-links">
                         <a href="/mytrips">MY TRIP</a>
                         <a href="/createtrip">CREATE TRIP</a>
                         <a href="/">PAYMENTS AND PAYOUTS</a>
-                        <a href="/user/signin">SIGN IN</a>
-                        <a href="/user/signup">SIGN UP</a>
+                        <% if (!user) { %>
+                            <a href="/user/signin">SIGN IN</a>
+                            <a href="/user/signup">SIGN UP</a>
+                        <% } else { %>
+                            <a href="/user/logout">SIGN OUT</a>
+                        <% } %>
+                        <a href="/showWishlist">WISHLIST</a>
+                        <p></p>
                     </div>
                 </div>
 
             </div>
         </nav>
         <hr>
+
+
         <div class="bottom-container">
             <img src="../images/linkedin(3).png" alt="">
             <img src="../images/instagram(4).png" alt="">
@@ -266,7 +280,7 @@
 
 
         <div class="cards-container">
-            <% for(let i=0; i < trips.length; i++) { %>
+            <% for(let i=0; i <  trips.length; i++) { %>
                 <div class="card-container">
                     <div class="card-img">
                         <% if (trips[i].tripImages && trips[i].tripImages.length> 0 &&
@@ -317,9 +331,19 @@
                             <h4 class="trip-title">
                                 <%= trips[i].title %>
                             </h4>
+
                         </div>
 
+                        <div class="ratio-container">
+                            <p class="maleRatio">Male: <%= trips[i].maleRatio %>%</p>
+                            <p class="femaleRatio">Female: <%= trips[i].femaleRatio %>%</p>
+
+                        </div>
+
+                        
+
                         <div class="rating-container">
+
                             <div class="rate rat1">
                                 <!-- 5 Stars -->
                                 <input type="radio" id="locStar5-<%= i %>" name="locationRating-<%= i %>" value="5" <%
@@ -355,7 +379,9 @@
                             </div>
 
                             <p><%= trips[i].averageRating %></p>
+
                         </div>
+
 
 
                         <div class="card-bottom">
@@ -379,7 +405,6 @@
                 </div>
                 <% } %>
         </div>
-
 
     </main>
 

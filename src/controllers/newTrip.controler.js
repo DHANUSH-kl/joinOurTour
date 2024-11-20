@@ -143,6 +143,8 @@ const showAllTrips = async (req, res) => {
 
     const userWishlist = req.user ? req.user.wishlist : [];
 
+    console.log(req.user)
+
     const totalTrips = await Trip.countDocuments(); // Get the total number of trips
     const allTrips = await Trip.find()
         .populate("reviews")
@@ -419,8 +421,18 @@ const deleteTrip = async (req, res) => {
 }
 
 const mytrip = async (req, res) => {
-    const trips = await User.findById(req.user._id).populate("createdTrips");
-    res.render("trips/mytrip.ejs", { trips })
+
+    try {
+        const user = await User.findById(req.user._id)
+            .populate("createdTrips")
+            .populate("wishlist"); // Assuming wishlist is an array of Trip ObjectIds
+        const userWishlist = user.wishlist.map((trip) => trip._id.toString());
+        res.render("trips/mytrip.ejs", { trips: user.createdTrips, user, userWishlist });
+    } catch (error) {
+        console.error("Error fetching trips:", error);
+        res.status(500).send("Internal Server Error");
+    }
+
 }
 
 const catagariesTrips = async (req, res) => {

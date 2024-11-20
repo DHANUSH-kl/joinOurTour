@@ -1,6 +1,6 @@
 import { Router } from "express";
 const router = Router();
-import { signupForm , signupUser ,  signinForm , signinUser, logout  } from "../controllers/user.controller.js";
+import { forgotPasswordPage , resetPasswordPage , forgotPassword, resetPassword , signupForm , signupUser ,  signinForm , signinUser, logout  } from "../controllers/user.controller.js";
 import passport from "passport";
 import { asyncWrap } from "../constants.js";
 
@@ -19,6 +19,12 @@ router.route("/signin")
 router.route("/logout")
     .get(asyncWrap(logout))
 
+router.route('/forgot-password')
+    .get(asyncWrap(forgotPasswordPage))
+    .post(asyncWrap(forgotPassword))
 
+router.route('/reset-password/:token')
+    .get(asyncWrap(resetPasswordPage))
+    .post(asyncWrap(resetPassword))
 
 export default router;

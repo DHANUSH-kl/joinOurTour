@@ -2,6 +2,11 @@ import mongoose, { Schema } from "mongoose";
 import passportLocalMongoose from "passport-local-mongoose";
 
 const userSchema = new Schema({
+
+    username: { type: String, required: true },
+    fullName: { type: String, required: true },
+    phoneNumber: { type: Number, required: true },
+    email: { type: String, required: true, unique: true },
     isAgent: {
         type: Boolean,
         default: false,
@@ -36,6 +41,8 @@ const userSchema = new Schema({
             type: Number,
             default: 0,
         },
+        resetPasswordToken: String,
+        resetPasswordExpires: Date,
 }, { timestamps: true });
 
 userSchema.plugin(passportLocalMongoose);
