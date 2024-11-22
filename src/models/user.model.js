@@ -4,7 +4,9 @@ import passportLocalMongoose from "passport-local-mongoose";
 const userSchema = new Schema({
 
     username: { type: String, required: true },
-    fullName: { type: String, required: true },
+    firstName: { type: String, required: true },
+    lastName: { type: String, required: true },
+    location: { type: String, required: true },
     phoneNumber: { type: Number, required: true },
     email: { type: String, required: true, unique: true },
     isAgent: {

@@ -1,6 +1,6 @@
 import { Router } from "express";
 const router = Router();
-import { forgotPasswordPage , resetPasswordPage , forgotPassword, resetPassword , signupForm , signupUser ,  signinForm , signinUser, logout  } from "../controllers/user.controller.js";
+import {verifyOtpAndSignup, verifyUserPage, forgotPasswordPage , resetPasswordPage , forgotPassword, resetPassword , signupForm , signupUser ,  signinForm , signinUser, logout  } from "../controllers/user.controller.js";
 import passport from "passport";
 import { asyncWrap } from "../constants.js";
 
@@ -15,6 +15,11 @@ router.route("/signin")
     .post( passport.authenticate("local" , {
         failureRedirect : "/user/signup",
     }) , signinUser)
+
+
+router.route("/verify-user")
+    .get(verifyUserPage)
+    .post(verifyOtpAndSignup)
 
 router.route("/logout")
     .get(asyncWrap(logout))

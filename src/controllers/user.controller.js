@@ -10,14 +10,19 @@ const app = express();
 
 app.use(bodyParser.urlencoded({ extended: true }));
 
-const signupForm = async (req,res) => {
+// Temporary storage for OTPs
+const otpStorage = {};
+
+// Function to generate OTP
+const generateOTP = () => Math.floor(100000 + Math.random() * 900000).toString();
+
+// Render the signup page
+const signupForm = async (req, res) => {
     res.render("user/signupForm.ejs");
 }
 
-const signupUser = async(req,res) => {
-   
-
-    const { username, email, password, phoneNumber, fullName} = req.body;
+const signupUser = async (req, res) => {
+    const { username, email, password, phoneNumber, firstName, lastName, location } = req.body;
 
     try {
         // Check if email already exists
@@ -26,25 +31,81 @@ const signupUser = async(req,res) => {
             return res.status(400).send('Email is already registered.');
         }
 
-        // Create a new user
-        const newUser = new User({
-            username,
-            email: email.toLowerCase(),
-            phoneNumber,
-            fullName
+        // Generate OTP
+        const otp = generateOTP();
+
+        // Store user data and OTP temporarily
+        otpStorage[email.toLowerCase()] = { otp, userData: { username, email, password, phoneNumber, firstName, lastName, location } };
+
+        // Store email in session for later use
+        req.session.email = email.toLowerCase();
+
+        // Send OTP via email (same as before)
+        const transporter = nodemailer.createTransport({
+            service: 'gmail',
+            auth: {
+                user: process.env.EMAIL_USER,
+                pass: process.env.EMAIL_PASS,
+            },
         });
+
+        const mailOptions = {
+            from: process.env.EMAIL_USER,
+            to: email,
+            subject: 'Your OTP for Signup',
+            text: `Your OTP is: ${otp}`,
+        };
+
+        await transporter.sendMail(mailOptions);
+
+        console.log(`OTP sent to ${email}: ${otp}`);
+
+        // Redirect to OTP verification page
+        res.redirect('/user/verify-user');
+    } catch (error) {
+        console.error('Signup Error:', error);
+        res.status(500).send('An error occurred. Please try again.');
+    }
+};
+
+const verifyOtpAndSignup = async (req, res) => {
+    const { otp } = req.body;
+    const email = req.session.email; // Retrieve email from session
+
+    if (!email) {
+        return res.status(400).send('Email not found in session.');
+    }
+
+    // Check if OTP exists for the email
+    const storedData = otpStorage[email.toLowerCase()];
+    if (!storedData || storedData.otp !== otp) {
+        return res.status(400).send('Invalid or expired OTP.');
+    }
+
+    try {
+        // OTP is correct, create the user
+        const { username, phoneNumber, firstName, lastName, location, password } = storedData.userData;
+        const newUser = new User({ username, email: email.toLowerCase(), phoneNumber, firstName, lastName, location });
 
         // Register user with Passport local Mongoose
         await User.register(newUser, password);
-        
-        // Redirect or send success message
-        res.redirect('/');  // or any other page after successful signup
+
+        // Clear OTP storage and session email
+        delete otpStorage[email.toLowerCase()];
+        req.session.email = null; // Clear the email from session
+
+        // Redirect to success or login page
+        res.redirect('/user/signin');
     } catch (error) {
-        console.error('Signup Error:', error);  // Log the error
+        console.error('Error during user registration:', error);
         res.status(500).send('An error occurred. Please try again.');
     }
+};
 
 
+// Render OTP verification page
+const verifyUserPage = async (req, res) => {
+    res.render("user/verify.ejs");
 }
 
 const signinForm = async (req,res) => {
@@ -152,4 +213,4 @@ const resetPasswordPage = async(req,res)=> {
 
 }
 
-export {  resetPasswordPage ,forgotPasswordPage , forgotPassword, resetPassword , signupForm , signupUser , signinForm , signinUser , logout };
+export { verifyUserPage, verifyOtpAndSignup , resetPasswordPage ,forgotPasswordPage , forgotPassword, resetPassword , signupForm , signupUser , signinForm , signinUser , logout };
