@@ -1,6 +1,6 @@
 import { Router } from "express";
 const router = Router();
-import {verifyOtpAndSignup, verifyUserPage, forgotPasswordPage , resetPasswordPage , forgotPassword, resetPassword , signupForm , signupUser ,  signinForm , signinUser, logout  } from "../controllers/user.controller.js";
+import {forgotUsername,usernamePage,verifyOtpAndSignup, verifyUserPage, forgotPasswordPage , resetPasswordPage , forgotPassword, resetPassword , signupForm , signupUser ,  signinForm , signinUser, logout  } from "../controllers/user.controller.js";
 import passport from "passport";
 import { asyncWrap } from "../constants.js";
 
@@ -20,6 +20,10 @@ router.route("/signin")
 router.route("/verify-user")
     .get(verifyUserPage)
     .post(verifyOtpAndSignup)
+
+router.route("/forgot-username")
+    .get(usernamePage)
+    .post(forgotUsername)
 
 router.route("/logout")
     .get(asyncWrap(logout))

@@ -28,62 +28,14 @@
 
 
 
-    <link rel="stylesheet" href="/css/signin.css">
-    <link rel="stylesheet" href="/css/nav.css">
-    <link rel="stylesheet" href="/css/signup.css">
-
+    <link rel="stylesheet" href="/css/username.css">
     <title>Document</title>
 </head>
 <body>
-
-
-    <nav>
-        <div class="logo">
-            <h4><b>TRAVELER</b></h4>
-        </div>
-        <div class="home">
-            <a href="/aboutus">HOME</a>
-        </div>
-    </nav>
-
-    <hr>
-
-
-
-    <main>
-
-
-
-        <div class="row">
-                <form action="/user/signin" method="POST">
-                    <div class="mt-3">
-                        <input type="text" name="username" id="username" class="form-control" novalidate placeholder="username">
-                    </div>
-                    <div class="mt-3">
-                        <input type="text" name="password" id="password" class="form-control" novalidate placeholder="password">
-                    </div>
-
-                    <div class="location">
-
-                        <a href="http://localhost:8080/user/forgot-username">forgot username</a>
-                        <a href="http://localhost:8080/user/forgot-password">forgot password</a>
-
-                    </div>
-
-
-                    <div class="btns">
-                        <button class="btn btn-success mt-3">signIN</button>
-
-                    </div>
-                </form>
-        </div>
-    
-
-
-    </main>
-
-    
-    <script src="/js/nav.js"></script>
-
+    <form action="/user/forgot-username" method="POST">
+        <h2>Forgot Username</h2>
+        <input type="email" name="email" placeholder="Enter your email" required>
+        <button type="submit">Submit</button>
+    </form>
 </body>
 </html>

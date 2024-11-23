@@ -43,9 +43,11 @@ main {
 
 .row {
     width: 30vw;
-    height: 70vh;
+    height: auto;
     background-color: #A7C957;
     border-radius: 20% 0 20% 0;
+    padding: 2rem 3rem;
+    
 
 
     background: rgba(167, 201, 87, 0.2); /* Semi-transparent version of #A7C957 */
@@ -69,12 +71,12 @@ main {
     display: flex;
     justify-content: center;
     align-items: center;
-    gap: 1rem;
+    gap: 1.3rem;
     flex-direction: column;
 }
 
 .mt-3 {
-    width: 80%;
+    width: 100%;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -82,7 +84,7 @@ main {
 }
 
 input {
-    width: 70%;
+    width: 100%;
     height: 3rem;
     text-align: center;
     border: none;
@@ -116,8 +118,8 @@ form a {
 }
 
 .btns button {
-    width: 3.5rem;
-    padding: 0.5rem 2.7rem;
+    width: auto;
+    padding: 1rem 2.7rem;
 
 
 
@@ -136,7 +138,11 @@ form a {
     line-height: normal;
 
 }
-
+.btns button:hover{
+    background: #fff;
+    color: #4caf50;
+    transition: 0.2s ease-in;
+}
 .signin {
 
 
@@ -196,6 +202,14 @@ input[type="number"] {
 }
 
 .names {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 1rem;
+}
+
+.location {
     width: 100%;
     display: flex;
     justify-content: space-between;

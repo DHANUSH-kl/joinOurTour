@@ -3,12 +3,12 @@ import passportLocalMongoose from "passport-local-mongoose";
 
 const userSchema = new Schema({
 
-    username: { type: String, required: true },
-    firstName: { type: String, required: true },
-    lastName: { type: String, required: true },
-    location: { type: String, required: true },
-    phoneNumber: { type: Number, required: true },
-    email: { type: String, required: true, unique: true },
+    username: { type: String, },
+    firstName: { type: String,},
+    lastName: { type: String, },
+    location: { type: String, },
+    phoneNumber: { type: Number, },
+    email: { type: String, unique: true },
     isAgent: {
         type: Boolean,
         default: false,
@@ -46,6 +46,8 @@ const userSchema = new Schema({
         resetPasswordToken: String,
         resetPasswordExpires: Date,
 }, { timestamps: true });
+
+
 
 userSchema.plugin(passportLocalMongoose);
 

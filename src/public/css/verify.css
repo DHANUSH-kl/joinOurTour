@@ -1,14 +1,12 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
 
-
-
-
-    <style>
+       
+       * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+       }
+       
+       /* General Body Styling */
         body {
             font-family: Arial, sans-serif;
             background-color: #f3f4f6;
@@ -18,8 +16,11 @@
             justify-content: center;
             align-items: center;
             height: 100vh;
+            flex-direction: column;
+            gap: 0.5rem;
         }
 
+        /* Form Container */
         form {
             background-color: white;
             border: 1px solid #ddd;
@@ -31,29 +32,31 @@
             text-align: center;
         }
 
+        /* Header Styling */
         h2 {
             color: #4CAF50;
             margin-bottom: 20px;
+            font-size: 1.5rem;
         }
 
-        label {
-            font-size: 1rem;
-            color: #555;
-            display: block;
-            margin-bottom: 10px;
-            text-align: left;
-        }
-
-        input[type="email"] {
-            width: 80%;
+        /* Input Styling */
+        input[type="text"] {
+            width: calc(100% - 20px);
             padding: 10px;
-            margin: 10px 0 20px;
+            margin-bottom: 15px;
             border: 1px solid #ddd;
             border-radius: 4px;
-            outline: none;
             font-size: 1rem;
+            box-sizing: border-box;
+            transition: border-color 0.3s ease-in-out;
         }
 
+        input[type="text"]:focus {
+            outline: none;
+            border-color: #4CAF50;
+        }
+
+        /* Button Styling */
         button {
             background-color: #4CAF50;
             color: white;
@@ -68,23 +71,3 @@
         button:hover {
             background-color: #43a047;
         }
-
-        p {
-            font-size: 0.9rem;
-            color: #777;
-            margin-top: 10px;
-        }
-    </style>
-
-
-
-</head>
-<body>
-    <form action="/user/forgot-password" method="POST">
-        <label for="email">Enter your email to reset your password:</label>
-        <input type="email" name="email" required>
-        <button type="submit">Send Reset Link</button>
-    </form>
-    
-</body>
-</html>

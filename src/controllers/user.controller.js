@@ -22,7 +22,7 @@ const signupForm = async (req, res) => {
 }
 
 const signupUser = async (req, res) => {
-    const { username, email, password, phoneNumber, firstName, lastName, location } = req.body;
+    const { username, email, password, phoneNumber, firstName, lastName, state, city } = req.body;
 
     try {
         // Check if email already exists
@@ -35,7 +35,7 @@ const signupUser = async (req, res) => {
         const otp = generateOTP();
 
         // Store user data and OTP temporarily
-        otpStorage[email.toLowerCase()] = { otp, userData: { username, email, password, phoneNumber, firstName, lastName, location } };
+        otpStorage[email.toLowerCase()] = { otp, userData: { username, email, password, phoneNumber, firstName, lastName, state,city} };
 
         // Store email in session for later use
         req.session.email = email.toLowerCase();
@@ -84,8 +84,8 @@ const verifyOtpAndSignup = async (req, res) => {
 
     try {
         // OTP is correct, create the user
-        const { username, phoneNumber, firstName, lastName, location, password } = storedData.userData;
-        const newUser = new User({ username, email: email.toLowerCase(), phoneNumber, firstName, lastName, location });
+        const { username, phoneNumber, firstName, lastName, state,city, password } = storedData.userData;
+        const newUser = new User({ username, email: email.toLowerCase(), phoneNumber, firstName, lastName, state,city });
 
         // Register user with Passport local Mongoose
         await User.register(newUser, password);
@@ -141,7 +141,11 @@ const transporter = nodemailer.createTransport({
 // Forgot password route
 const forgotPassword = async (req, res) => {
     const { email } = req.body;
-    const user = await User.findOne({ email: email.toLowerCase() });
+
+   // Find the user by email, and select only the fields you need
+   const user = await User.findOne({ email: email.toLowerCase() }).select('email username');
+
+    console.log("user details: ",user)
 
     if (!user) {
         return res.status(404).send('No user found with that email.');
@@ -187,20 +191,20 @@ const resetPassword = async (req, res) => {
         return res.status(400).send('Password reset token is invalid or has expired.');
     }
 
-    // Update the user's password
-    await user.setPassword(password);
-    user.resetPasswordToken = undefined;
-    user.resetPasswordExpires = undefined;
-    await user.save();
+   
+        // Update the user's password using the setPassword method
+        await user.setPassword(password);
+        user.resetPasswordToken = undefined;
+        user.resetPasswordExpires = undefined;
+
+        // Save the user without triggering validation
+        await user.save({ validate: false });
 
     res.send('Password has been reset.');
 };
 
 const forgotPasswordPage = async(req,res)=> {
 
-    const user = await User.findOne({ email: "dhanushchandu123@gmail.com" });
-
-    console.log(user)
 
     res.render("user/forgotPassword.ejs");
 
@@ -213,4 +217,45 @@ const resetPasswordPage = async(req,res)=> {
 
 }
 
-export { verifyUserPage, verifyOtpAndSignup , resetPasswordPage ,forgotPasswordPage , forgotPassword, resetPassword , signupForm , signupUser , signinForm , signinUser , logout };
+const forgotUsername = async (req, res) => {
+    const { email } = req.body;
+
+    try {
+        // Check if a user exists with the provided email
+        const user = await User.findOne({ email: email.toLowerCase() });
+
+        if (!user) {
+            return res.status(404).send('No user found with that email.');
+        }
+
+        // Email the username to the user
+        const mailOptions = {
+            to: user.email,
+            from: process.env.EMAIL_USER,
+            subject: 'Your Username',
+            text: `Hello,\n\nWe received a request to retrieve your username. Here it is:\n\n
+            Username: ${user.username}\n\n
+            If you did not request this, please ignore this email.\n`,
+        };
+
+        transporter.sendMail(mailOptions, (err, response) => {
+            if (err) {
+                return res.status(500).send('Error sending email.');
+            }
+            res.send('Username has been sent to your email.');
+        });
+        res.redirect("/user/signin")
+    } catch (error) {
+        console.error(error);
+        res.status(500).send('An error occurred.');
+    }
+};
+
+
+const usernamePage = async(req,res) => {
+    res.render("user/username.ejs")
+}
+
+
+
+export {forgotUsername, usernamePage, verifyUserPage, verifyOtpAndSignup , resetPasswordPage ,forgotPasswordPage , forgotPassword, resetPassword , signupForm , signupUser , signinForm , signinUser , logout };
