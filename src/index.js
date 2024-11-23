@@ -45,7 +45,7 @@ app.use(cookieParser());
 
 // Session setup
 const sessionInfo = {
-  secret: process.env.sessionSecret,
+  secret: process.env.SESSIONSECRET,
   resave: false,
   saveUninitialized: true,
   cookie: {
