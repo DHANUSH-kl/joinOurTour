@@ -83,6 +83,9 @@ const tripSchema = new Schema({
     minAge: {                // New field for minimum age
         type: Number,
         default: 18          // Set a default value for minimum age
+    },
+    transport : {
+        type: String
     }
 } , {timestamps:true});
 

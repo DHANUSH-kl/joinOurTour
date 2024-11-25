@@ -111,7 +111,8 @@ const addNewTrip = async (req, res) => {
         maleTravelers,
         femaleTravelers,
         groupSize,  // Adding group size to the new trip
-        minAge 
+        minAge,
+        transport
     });
 
     totalDays = totalDays[0] ? parseInt(totalDays[0]) : 0;

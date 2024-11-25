@@ -9,7 +9,6 @@
     <link
         href="https://fonts.googleapis.com/css2?family=Lato:wght@400;700;900&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"
         rel="stylesheet">
-        <link rel="stylesheet" href="/css/nav.css">
     <link rel="stylesheet" href="/css/style.css">
     <title>Document</title>
 </head>
@@ -18,68 +17,44 @@
 
     <nav>
         <div class="logo">
-            <h3>LOGO</h3>
+            <h4><b>TRAVELER</b></h4>
         </div>
-        <div class="trips-nav">
+        <div class="home">
             <a href="/">ALL TRIPS</a>
         </div>
-        <div class="user-nav">
-            <% if(!currUser){ %>
-                <a href="/user/signup">SIGN UP</a>
-                <a href="/user/signin">SIGN IN</a>
-            <% } %>
-
-            <% if(currUser){ %>
-                <a href="/user/logout">LOG OUT</a>
-            <% } %>
-            <div class="user" id="user">
-                <i class="fa-regular fa-user"></i>
-            </div>
-        </div>
-
-        <div class="dropdown-container" id="dropdown">
-            <div class="close">
-                <i class="fa-solid fa-xmark" id="close"></i>
-            </div>
-            <div class="user-info-container">
-                <% if(!currUser) { %>
-                    <div class="profile"></div>
-                    <p>USERNAME</p>    
-                <% } else { %>
-                    <div class="profile"></div>
-                    <p><%= currUser.username %></p> 
-                <% } %>
-            </div>
-            <div class="nav-links">
-                <a href="/mytrips">MY TRIP</a>
-                <a href="/createtrip">CREATE TRIP</a>
-                <a href="/">PAYMENTS AND PAYOUTS</a>
-                <a href="/user/signup">SIGN UP</a>    
-            </div>
-        </div>
     </nav>
+
+    <hr>
+
 
     
 
     <div class="form-container">
         <form action="/createtrip" method="POST" enctype="multipart/form-data">
             <h1>CREATE YOUR TRIP</h1>
-            <div class="location-container">
-                <label for="location" class="form-label mb-2">Enter location</label>
-                <input type="text" name="location" id="location" class="form-control ">
-            </div>
 
-            <div class="location-container">
-                <label for="fromLocation" class="form-label mb-2">from location</label>
-                <input type="text" name="fromLocation" id="fromLocation" class="form-control ">
-            </div>
 
             <div class="title-container">
                 <label for="title" class="form-label mb-2">Trip title</label>
                 <input type="text" name="title" id="title" class="form-control ">
             </div>
 
-            <div class="description-container">
+            <div class="wrap">
+                <div class="location-container">
+                    <label for="location" class="form-label mb-2">DESTINATION</label>
+                    <input type="text" name="location" id="location" class="form-control ">
+                </div>
+    
+                <div class="location-container">
+                    <label for="fromLocation" class="form-label mb-2">FROM LOCATION</label>
+                    <input type="text" name="fromLocation" id="fromLocation" class="form-control ">
+                </div>
+    
+            </div>
+
+            
+
+            <div class="description-container ">
                 <span class="input-group-text">Trip description</span>
                 <textarea class="form-control input-container-textarea" name="tripDescription"
                     aria-label="With textarea"
@@ -101,14 +76,18 @@
                 <input type="number" name="minAge" id="minAge" class="form-control">
             </div>
 
-            <div class="maleTravelers-container">
-                <label for="maleTravelers" class="form-label mb-2">Number of Male Travelers</label>
-                <input type="number" name="maleTravelers" id="maleTravelers" class="form-control">
-            </div>
-            
-            <div class="femaleTravelers-container">
-                <label for="femaleTravelers" class="form-label mb-2">Number of Female Travelers</label>
-                <input type="number" name="femaleTravelers" id="femaleTravelers" class="form-control">
+
+            <div class="wrap">
+                <div class="maleTravelers-container">
+                    <label for="maleTravelers" class="form-label mb-2">Number of Male Travelers</label>
+                    <input type="number" name="maleTravelers" id="maleTravelers" class="form-control">
+                </div>
+                
+                <div class="femaleTravelers-container">
+                    <label for="femaleTravelers" class="form-label mb-2">Number of Female Travelers</label>
+                    <input type="number" name="femaleTravelers" id="femaleTravelers" class="form-control">
+                </div>
+    
             </div>
 
             <div class="yturl-container">
@@ -117,7 +96,7 @@
             </div>
             
 
-            <div class="tripmate-container">
+            <div class=" wrap">
 
                 <div class="conatiner">
                     <label for="minTripmates" class="form-label mb-2">Mininmum tripmates</label>
@@ -287,7 +266,6 @@
 
             <div class="trip-calculator-conatiner">
 
-                <h2>Cost per tripmate</h2>
 
 
                 <div class="travel-cost-container">
@@ -299,9 +277,9 @@
                         <input type="number" name="totalCost" class="form-control">
                     </div>
 
-                    <h2>Trip buffer</h2>
                     <div class="total-cost">
                         <label for="buffer" class="form-label mb-2">Enter the buffer : %</label>
+                        <p>approx 10-15%</p>
                         <input type="number" name="buffer" min="0" max="15" class="form-control">
                     </div><br>
 
@@ -321,121 +299,61 @@
 
 
     <script>
-        
-        function addTodo() {
-            // Get the value from the input field
-            var todoValue = document.getElementById('todoInput').value;
-
-            // Create a container div for the todo item
-            var todoContainer = document.createElement('div');
-            todoContainer.className = 'todoItem';
-
-            // Create a new input element for the todo
-            var newTodoInput = document.createElement('input');
-            newTodoInput.type = 'text';
-            newTodoInput.value = todoValue;
-            newTodoInput.name = 'includes';
-
-            // Create a delete button
-            var deleteButton = document.createElement('button');
-            deleteButton.className = 'deleteButton';
-            deleteButton.className = 'btn';
-            deleteButton.innerHTML = 'Delete';
-            deleteButton.onclick = function () {
-                // Remove the todo item when the delete button is clicked
-                todoContainer.remove();
-            };
-
-            // Append the new input and delete button to the todoContainer div
-            todoContainer.appendChild(newTodoInput);
-            todoContainer.appendChild(deleteButton);
-
-            // Append the todoContainer to the todoContainer div
-            document.getElementById('todoContainer').appendChild(todoContainer);
-
-            // Clear the input field for the next todo
-            document.getElementById('todoInput').value = '';
-        }
-
-        function addExclude() {
-        // Get the value from the input field
-        var excludeValue = document.getElementById('excludesInput').value;
-
-        // Create a container div for the exclude item
-        var excludesContainer = document.createElement('div');
-        excludesContainer.className = 'excludeItem';
-
-        // Create a new input element for the exclude
-        var newExcludeInput = document.createElement('input');
-        newExcludeInput.type = 'text';
-        newExcludeInput.value = excludeValue;
-        newExcludeInput.name = 'excludes';
-
-        // Create a delete button
-        var deleteButton = document.createElement('button');
-        deleteButton.className = 'deleteButton btn';
-        deleteButton.innerHTML = 'Delete';
-        deleteButton.onclick = function () {
-            // Remove the exclude item when the delete button is clicked
-            excludesContainer.remove();
-        };
-
-        // Append the new input and delete button to the excludesContainer div
-        excludesContainer.appendChild(newExcludeInput);
-        excludesContainer.appendChild(deleteButton);
-
-        // Append the excludesContainer to the excludesContainer div
-        document.getElementById('excludes-todoContainer').appendChild(excludesContainer);
-
-        // Clear the input field for the next exclude
-        document.getElementById('excludesInput').value = '';
-    }
         let stopCounter = 1;
-
+    
         function addStop() {
-        stopCounter++;
+            stopCounter++;
+    
+            const stopsContainer = document.getElementById('stops-container');
+    
+            const newStopSection = document.createElement('div');
+            newStopSection.className = 'stop-section';
+    
+            newStopSection.innerHTML = `
+                <h3>Stop ${stopCounter}</h3>
+    
+                ${
+                    stopCounter > 1
+                        ? `
+                        
+                    `
+                        : `
+                        <div class="transport-container">
+                            <h2>PLEASE SELECT THE MODE OF transport</h2>
+                            <label for="flight">FLIGHT</label>
+                            <input type="checkbox" name="transport" value="flight">
+    
+                            <label for="train">TRAIN</label>
+                            <input type="checkbox" name="transport" value="train">
+    
+                            <label for="car">CAR</label>
+                            <input type="checkbox" name="transport" value="car">
+    
+                            <label for="walk">WALK</label>
+                            <input type="checkbox" name="transport" value="walk">
+                        </div>
+                    `
+                }
+    
+                <label for="stopImages" class="form-label mb-2">Upload Image</label>
+                <input type="file" name="stopImages" class="form-control">
+    
+                <label for="stopLocation" class="form-label mb-2">Enter Location</label>
+                <input type="text" name="stopLocation" class="form-control">
+    
+                <label for="stopDescription" class="form-label mb-2">Tell Us More</label>
+                <input type="text" name="stopDescription" class="form-control">
 
-        const stopsContainer = document.getElementById('stops-container');
-
-        const newStopSection = document.createElement('div');
-        newStopSection.className = 'stop-section';
-
-        newStopSection.innerHTML = `
-            <h3>Stop ${stopCounter}</h3>
-
-            <div class="transport-container">
-                <h2>PLEASE SELECT THE MODE OF transport</h2>
-                <label for="flight">FLIGHT</label>
-                <input type="checkbox" name="transport" value="flight">
-
-                <label for="train">TRAIN</label>
-                <input type="checkbox" name="transport" value="train">
-
-                <label for="car">CAR</label>
-                <input type="checkbox" name="transport" value="car">
-
-                <label for="walk">WALK</label>
-                <input type="checkbox" name="transport" value="walk">
-            </div>
-
-            <label for="stopImages" class="form-label mb-2">Upload Image</label>
-            <input type="file" name="stopImages" class="form-control">
-
-            <label for="stopLocation" class="form-label mb-2">Enter Location</label>
-            <input type="text" name="stopLocation" class="form-control">
-
-            <label for="stopDescription" class="form-label mb-2">Tell Us More</label>
-            <input type="text" name="stopDescription" class="form-control">
-
-            
-
-            <button type="button" class="btn" onclick="deleteStop(this)">Delete Stop</button>
-        `;
-
-        stopsContainer.appendChild(newStopSection);
-        updateStopNumbers();
-    }
-
+                <label for="transport" class="form-label mb-2">Enter Mode of Transport</label>
+                        <input type="text" name="transport" class="form-control">
+    
+                <button type="button" class="btn" onclick="deleteStop(this)">Delete Stop</button>
+            `;
+    
+            stopsContainer.appendChild(newStopSection);
+            updateStopNumbers();
+        }
+    
         function deleteStop(button) {
             const stopsContainer = document.getElementById('stops-container');
             const stopSection = button.parentNode;
@@ -443,7 +361,7 @@
             stopCounter--;
             updateStopNumbers();
         }
-
+    
         function updateStopNumbers() {
             const stops = document.getElementsByClassName('stop-section');
             Array.from(stops).forEach((stop, index) => {
@@ -451,96 +369,54 @@
                 stop.querySelector('h3').innerText = `Stop ${stopNumber}`;
             });
         }
-
+    
         function calculateDurationAndAddStops() {
-        // Get the departure and end date values
-        const departureDate = new Date(document.getElementById('departure').value);
-        const endDate = new Date(document.getElementById('endDate').value);
-
-        // Calculate the duration in days
-        const durationInDays = Math.floor((endDate - departureDate) / (24 * 60 * 60 * 1000));
-
-        // Call a function to dynamically add stops based on the calculated duration
-        addStopsBasedOnDuration(durationInDays);
-
-        // Add transport container for each stop
-        const stopsContainer = document.getElementById('stops-container');
-        const transportContainers = stopsContainer.querySelectorAll('.transport-container');
-        transportContainers.forEach((transportContainer) => {
-            transportContainer.innerHTML = `
-                <h2>PLEASE SELECT THE MODE OF transport</h2>
-                <label for="flight">FLIGHT</label>
-                <input type="checkbox" name="transport" value="flight">
-
-                <label for="train">TRAIN</label>
-                <input type="checkbox" name="transport" value="train">
-
-                <label for="car">CAR</label>
-                <input type="checkbox" name="transport" value="car">
-
-                <label for="walk">WALK</label>
-                <input type="checkbox" name="transport" value="walk">
-            `;
-        });
-    }
+            const departureDate = new Date(document.getElementById('departure').value);
+            const endDate = new Date(document.getElementById('endDate').value);
+            const durationInDays = Math.floor((endDate - departureDate) / (24 * 60 * 60 * 1000));
+            addStopsBasedOnDuration(durationInDays);
+        }
+    
         function addStopsBasedOnDuration(duration) {
-    const stopsContainer = document.getElementById('stops-container');
-    // Clear existing stops
-    stopsContainer.innerHTML = '';
-
-    // Always keep Stop 1
-    const initialStopSection = document.createElement('div');
-    initialStopSection.className = 'stop-section';
-    initialStopSection.innerHTML = `
-        <h3>Stop 1</h3>
-        <label for="stopImages" class="form-label mb-2">Upload Image</label>
-        <input type="file" name="stopImages" class="form-control">
-        <label for="stopLocation" class="form-label mb-2">Enter Location</label>
-        <input type="text" name="stopLocation" class="form-control">
-        <label for="stopDescription" class="form-label mb-2">Tell Us More</label>
-        <input type="text" name="stopDescription" class="form-control">
-    `;
-    stopsContainer.appendChild(initialStopSection);
-
-    // Add stops dynamically based on the duration, including the departure date
-    for (let i = 2; i <= duration + 1; i++) {
-
-        
-        const newStopSection = document.createElement('div');
-        newStopSection.className = 'stop-section';
-        newStopSection.innerHTML = `
-            <h3>Stop ${i}</h3>
-
-
-            <div class="transport-container">
-                <h2>PLEASE SELECT THE MODE OF transport</h2>
-                <label for="flight">FLIGHT</label>
-                <input type="checkbox" name="transport" value="flight">
-
-                <label for="train">TRAIN</label>
-                <input type="checkbox" name="transport" value="train">
-
-                <label for="car">CAR</label>
-                <input type="checkbox" name="transport" value="car">
-
-                <label for="walk">WALK</label>
-                <input type="checkbox" name="transport" value="walk">
-            </div>
-
-
-            <label for="stopImages" class="form-label mb-2">Upload Image</label>
-            <input type="file" name="stopImages" class="form-control">
-            <label for="stopLocation" class="form-label mb-2">Enter Location</label>
-            <input type="text" name="stopLocation" class="form-control">
-            <label for="stopDescription" class="form-label mb-2">Tell Us More</label>
-            <input type="text" name="stopDescription" class="form-control">
-            <button type="button" class="btn" onclick="deleteStop(this)">Delete Stop</button>
-        `;
-        stopsContainer.appendChild(newStopSection);
-    }
-    updateStopNumbers();
-}
+            const stopsContainer = document.getElementById('stops-container');
+            stopsContainer.innerHTML = '';
+    
+            const initialStopSection = document.createElement('div');
+            initialStopSection.className = 'stop-section';
+            initialStopSection.innerHTML = `
+                <h3>Stop 1</h3>
+               
+                <label for="stopImages" class="form-label mb-2">Upload Image</label>
+                <input type="file" name="stopImages" class="form-control">
+                <label for="stopLocation" class="form-label mb-2">Enter Location</label>
+                <input type="text" name="stopLocation" class="form-control">
+                <label for="stopDescription" class="form-label mb-2">Tell Us More</label>
+                <input type="text" name="stopDescription" class="form-control">
+            `;
+            stopsContainer.appendChild(initialStopSection);
+    
+            for (let i = 2; i <= duration + 1; i++) {
+                const newStopSection = document.createElement('div');
+                newStopSection.className = 'stop-section';
+                newStopSection.innerHTML = `
+                    <h3>Stop ${i}</h3>
+                    
+                    <label for="stopImages" class="form-label mb-2">Upload Image</label>
+                    <input type="file" name="stopImages" class="form-control">
+                    <label for="stopLocation" class="form-label mb-2">Enter Location</label>
+                    <input type="text" name="stopLocation" class="form-control">
+                    <label for="stopDescription" class="form-label mb-2">Tell Us More</label>
+                    <input type="text" name="stopDescription" class="form-control">
+                    <label for="transport" class="form-label mb-2">Enter Mode of Transport</label>
+                    <input type="text" name="transport" class="form-control">
+                    <button type="button" class="btn" onclick="deleteStop(this)">Delete Stop</button>
+                `;
+                stopsContainer.appendChild(newStopSection);
+            }
+            updateStopNumbers();
+        }
     </script>
+    
 
 <script src="/js/nav.js"></script>
 
