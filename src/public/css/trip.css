@@ -237,7 +237,8 @@ main {
   width: 100%;
   height: auto;
   display: flex;
-  justify-content: space-between;
+  justify-content: flex-start;
+  gap: 4rem;
 
   margin-bottom: 3rem;
 }
@@ -893,4 +894,13 @@ ul.rb li .timestamp {
 
 :root {
   --swiper-theme-color: #05A351;
+}
+
+
+.ln-container {
+  width: auto;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
 }

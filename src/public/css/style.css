@@ -331,3 +331,98 @@ form {
     align-items: center;
     gap: 1.5rem;
 }
+
+
+
+.languages-container{
+    width: 70%;
+    height: auto;
+    
+  }
+
+
+  .languages-container {
+    width: 70%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 2rem;
+  }
+
+
+  .languages-container button {
+
+    width: auto;
+    padding: 0.7rem 2rem;
+    background-color: #588157;
+    color: white;
+    border-radius: 10px;
+    border: none;
+    cursor: pointer;
+
+
+  }
+
+  #languagesInput {
+
+    width: 50%;
+    height: 40px;
+    text-align: center;
+    padding: 1rem;
+    border-radius: 10px;
+    border: 3px solid #588157;
+
+  }
+
+  #languages-todoContainer, #includes-todoContainer, #excludes-todoContainer {
+    width: 70%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+
+  #languages-todoContainer input , #includes-todoContainer input, #excludes-todoContainer input{
+
+
+    width: 50%;
+    height: 40px;
+    text-align: center;
+    padding: 1rem;
+    border-radius: 10px;
+    border: 3px solid #588157;
+
+
+
+  }
+
+  #languages-todoContainer button , #includes-todoContainer button, #excludes-todoContainer button{
+
+
+    width: auto;
+    padding: 0.7rem 2rem;
+    background-color: #588157;
+    color: white;
+    border-radius: 10px;
+    border: none;
+    cursor: pointer;
+
+
+  }
+
+
+  
+  #languages-todoContainer div , #includes-todoContainer div, #excludes-todoContainer div{
+
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 0.5rem;
+
+
+  }
+
+

@@ -36,18 +36,18 @@
 
             <div class="title-container">
                 <label for="title" class="form-label mb-2">Trip title</label>
-                <input type="text" name="title" id="title" class="form-control ">
+                <input type="text" name="title" id="title" class="form-control " required>
             </div>
 
             <div class="wrap">
                 <div class="location-container">
                     <label for="location" class="form-label mb-2">DESTINATION</label>
-                    <input type="text" name="location" id="location" class="form-control ">
+                    <input type="text" name="location" id="location" class="form-control " required>
                 </div>
     
                 <div class="location-container">
                     <label for="fromLocation" class="form-label mb-2">FROM LOCATION</label>
-                    <input type="text" name="fromLocation" id="fromLocation" class="form-control ">
+                    <input type="text" name="fromLocation" id="fromLocation" class="form-control " required>
                 </div>
     
             </div>
@@ -58,34 +58,34 @@
                 <span class="input-group-text">Trip description</span>
                 <textarea class="form-control input-container-textarea" name="tripDescription"
                     aria-label="With textarea"
-                    placeholder="Write an overview of the trip giving a unique selling point.."></textarea>
+                    placeholder="Write an overview of the trip giving a unique selling point.." required></textarea>
             </div>
 
             <div class="totalDays-container">
                 <label for="totalDays" class="form-label mb-2">Total days</label>
-                <input type="number" name="totalDays" id="totalDays" class="form-control ">
+                <input type="number" name="totalDays" id="totalDays" class="form-control " required>
             </div>
 
             <div class="groupSize-container">
                 <label for="groupSize" class="form-label mb-2">Group Size</label>
-                <input type="number" name="groupSize" id="groupSize" class="form-control">
+                <input type="number" name="groupSize" id="groupSize" class="form-control" required>
             </div>
             
             <div class="minAge-container">
                 <label for="minAge" class="form-label mb-2">Minimum Age</label>
-                <input type="number" name="minAge" id="minAge" class="form-control">
+                <input type="number" name="minAge" id="minAge" class="form-control" required>
             </div>
 
 
             <div class="wrap">
                 <div class="maleTravelers-container">
                     <label for="maleTravelers" class="form-label mb-2">Number of Male Travelers</label>
-                    <input type="number" name="maleTravelers" id="maleTravelers" class="form-control">
+                    <input type="number" name="maleTravelers" id="maleTravelers" class="form-control" required>
                 </div>
                 
                 <div class="femaleTravelers-container">
                     <label for="femaleTravelers" class="form-label mb-2">Number of Female Travelers</label>
-                    <input type="number" name="femaleTravelers" id="femaleTravelers" class="form-control">
+                    <input type="number" name="femaleTravelers" id="femaleTravelers" class="form-control" required>
                 </div>
     
             </div>
@@ -100,19 +100,19 @@
 
                 <div class="conatiner">
                     <label for="minTripmates" class="form-label mb-2">Mininmum tripmates</label>
-                    <input min="1" type="number" name="minTripmates" id="minTripmates" class="form-control ">
+                    <input min="1" type="number" name="minTripmates" id="minTripmates" class="form-control " required>
                 </div>
 
                 <div class="conatiner">
                     <label for="maxTripmates" class="form-label mb-2">Maximum tripmates</label>
-                    <input min="1" type="number" name="maxTripmates" id="maxTripmates" class="form-control ">
+                    <input min="1" type="number" name="maxTripmates" id="maxTripmates" class="form-control " required>
                 </div>
 
             </div>
 
             <div class="images-container">
                 <label for="tripImages" class="form-label mb-2">Trip images</label>
-                <input type="file" name="tripImages" id="tripImages" class="form-control" multiple>
+                <input type="file" name="tripImages" id="tripImages" class="form-control" multiple required>
             </div>
 
 
@@ -199,35 +199,55 @@
 
             </div>
 
-            <div class="includes-container">
-                <input type="text" class="form-control" id="todoInput" placeholder="Enter includes"
+
+
+
+
+            <div id="languages-todoContainer">
+                <!-- Languages will be added here -->
+            </div>
+            
+            <div class="languages-container">
+                <input type="text" class="form-control" id="languagesInput" placeholder="Enter languages"
                     aria-label="Example text with button addon" aria-describedby="button-addon1">
-                <button onclick="addTodo()" class="btn" type="button" id="button-addon1">Add</button>
+                <button onclick="addLanguage()" class="btn" type="button" id="languagesButton">Add</button>
+            </div>
+            
+
+            <div id="includes-todoContainer">
+                <!-- Includes will be added here -->
+            </div>
+            
+            <div class="includes-container">
+                <input type="text" class="form-control" id="includesInput" placeholder="Enter includes"
+                    aria-label="Example text with button addon" aria-describedby="button-addon1">
+                <button onclick="addInclude()" class="btn" type="button" id="includesButton">Add</button>
+            </div>
+            
+            <div id="excludes-todoContainer">
+                <!-- Excludes will be added here -->
             </div>
 
-            <div id="todoContainer">
-                <!-- Todos will be added here -->
-            </div>
-
+           
+            
+            
             <div class="excludes-container">
                 <input type="text" class="form-control" id="excludesInput" placeholder="Enter excludes"
                     aria-label="Example text with button addon" aria-describedby="button-addon1">
                 <button onclick="addExclude()" class="btn" type="button" id="excludesButton">Add</button>
             </div>
-        
-            <div id="excludes-todoContainer">
-                <!-- Excludes will be added here -->
-            </div>
+
+           
 
             <div class="days-container">
                 <label for="departure" class="form-label mb-2">departure</label>
                 <input type="date" name="departure" id="departure" class="form-control tripDate"
-                    onchange="calculateDurationAndAddStops()">
+                    onchange="calculateDurationAndAddStops()" required>
             </div>
             <div class="days-container">
                 <label for="endDate" class="form-label mb-2">end date</label>
                 <input type="date" name="endDate" id="endDate" class="form-control "
-                    onchange="calculateDurationAndAddStops()">
+                    onchange="calculateDurationAndAddStops()" required>
             </div>
             <button type="button" class="btn" id="addStopBtn" onclick="addStop()">Add Stop</button>
 
@@ -274,13 +294,13 @@
 
                     <div class="total-cost">
                         <label for="totalCost" class="form-label mb-2">Total trip cost : ₹</label>
-                        <input type="number" name="totalCost" class="form-control">
+                        <input type="number" name="totalCost" class="form-control" required>
                     </div>
 
                     <div class="total-cost">
                         <label for="buffer" class="form-label mb-2">Enter the buffer : %</label>
                         <p>approx 10-15%</p>
-                        <input type="number" name="buffer" min="0" max="15" class="form-control">
+                        <input type="number" name="buffer" min="0" max="15" class="form-control" required>
                     </div><br>
 
                     <div class="total-cost">
@@ -299,6 +319,125 @@
 
 
     <script>
+
+
+
+
+
+
+
+function addLanguage() {
+    const languageValue = document.getElementById('languagesInput').value.trim();
+    if (languageValue) {
+        createItem('languages', languageValue); // Pass 'languages' as the type
+        document.getElementById('languagesInput').value = ''; // Clear the input field
+    } else {
+        alert('Please enter a valid language.');
+    }
+}
+
+// Reusable function to create an item
+function createItem(type, value) {
+    // Determine the correct container based on the type
+    const containerId =
+        type === 'includes'
+            ? 'includes-todoContainer'
+            : type === 'excludes'
+            ? 'excludes-todoContainer'
+            : 'languages-todoContainer'; // Correctly handle 'languages'
+    
+    const container = document.getElementById(containerId);
+
+    if (!container) {
+        console.error(`Container not found for type: ${type}`);
+        return;
+    }
+
+    const itemContainer = document.createElement('div');
+
+    // Create input for the value
+    const newInput = document.createElement('input');
+    newInput.type = 'text';
+    newInput.value = value;
+    newInput.name = type; // 'includes', 'excludes', or 'languages'
+    newInput.className = 'form-control me-2';
+
+    // Create delete button
+    const deleteButton = document.createElement('button');
+    deleteButton.type = 'button';
+    deleteButton.className = 'btn btn-danger btn-sm';
+    deleteButton.innerHTML = 'Delete';
+    deleteButton.onclick = function () {
+        itemContainer.remove();
+    };
+
+    // Append input and button to the container
+    itemContainer.appendChild(newInput);
+    itemContainer.appendChild(deleteButton);
+
+    // Add the new item to the appropriate container
+    container.appendChild(itemContainer);
+}
+
+
+
+
+
+
+
+
+
+
+
+
+function addInclude() {
+        // Get the value from the input field
+        const includeValue = document.getElementById('includesInput').value.trim();
+        if (includeValue) {
+            createItem('includes', includeValue);
+            document.getElementById('includesInput').value = ''; // Clear input field
+        } else {
+            alert('Please enter a valid include.');
+        }
+    }
+
+    function addExclude() {
+        // Get the value from the input field
+        const excludeValue = document.getElementById('excludesInput').value.trim();
+        if (excludeValue) {
+            createItem('excludes', excludeValue);
+            document.getElementById('excludesInput').value = ''; // Clear input field
+        } else {
+            alert('Please enter a valid exclude.');
+        }
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
         let stopCounter = 1;
     
         function addStop() {

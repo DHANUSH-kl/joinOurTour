@@ -84,9 +84,24 @@ const tripSchema = new Schema({
         type: Number,
         default: 18          // Set a default value for minimum age
     },
+    minTripmats: {
+        type: Number
+    },
+    maxTripmats: {
+        type: Number
+    },
     transport : {
-        type: String
-    }
+        type: [String]
+    },
+    languages : {
+        type : [String]
+    },
+    buffer : {
+        type: Number,
+    },
+    deposit : {
+        type: Number
+    },
 } , {timestamps:true});
 
 

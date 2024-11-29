@@ -62,6 +62,8 @@ const addNewTrip = async (req, res) => {
         ,femaleTravelers 
         ,groupSize // New input for group size
         ,minAge  
+        ,languages
+        ,deposit
 
     } = req.body;
 
@@ -112,7 +114,10 @@ const addNewTrip = async (req, res) => {
         femaleTravelers,
         groupSize,  // Adding group size to the new trip
         minAge,
-        transport
+        transport,
+        languages,
+        deposit,
+        buffer
     });
 
     totalDays = totalDays[0] ? parseInt(totalDays[0]) : 0;
@@ -296,7 +301,9 @@ const postEditTrip = async (req, res) => {
             maleTravelers, // Extract male travelers
             femaleTravelers,
             groupSize,       // New input for group size
-            minAge  
+            minAge,
+            languages,
+            deposit
         } = req.body;
 
         // Convert totalDays to integer
@@ -358,6 +365,8 @@ const postEditTrip = async (req, res) => {
         flightTicket = flightTicket || '';
         totalCost = totalCost || '';
         buffer = buffer || '';
+        languages = languages || '';
+        deposit = deposit || '';
 
         // Merge the new data with the existing data, replacing the old tripImages array if new images are provided
         const mergedData = {
@@ -387,7 +396,9 @@ const postEditTrip = async (req, res) => {
             maleTravelers, 
             femaleTravelers,
             groupSize,  // Add group size to the merged data
-            minAge
+            minAge,
+            languages,
+            deposit
         };
 
         // Update the trip with the merged data

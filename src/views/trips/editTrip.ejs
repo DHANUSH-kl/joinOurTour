@@ -4,11 +4,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
-    integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA=="
-    crossorigin="anonymous" referrerpolicy="no-referrer" />
-
-    <link rel="stylesheet" href="/css/nav.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Lato:wght@400;700;900&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="/css/style.css">
     <title>Document</title>
 </head>
 <body>
@@ -19,204 +20,284 @@
         <div class="trips-nav">
             <a href="/">ALL TRIPS</a>
         </div>
-        <div class="user-nav">
-            <% if(!currUser){ %>
-                <a href="/user/signup">SIGN UP</a>
-                <a href="/user/signin">SIGN IN</a>
-            <% } %>
-
-            <% if(currUser){ %>
-                <a href="/user/logout">LOG OUT</a>
-            <% } %>
-            <div class="user" id="user">
-                <i class="fa-regular fa-user"></i>
-            </div>
-        </div>
-
-        <div class="dropdown-container" id="dropdown">
-            <div class="close">
-                <i class="fa-solid fa-xmark" id="close"></i>
-            </div>
-            <div class="user-info-container">
-                <% if(!currUser) { %>
-                    <div class="profile"></div>
-                    <p>USERNAME</p>    
-                <% } else { %>
-                    <div class="profile"></div>
-                    <p><%= currUser.username %></p> 
-                <% } %>
-            </div>
-            <div class="nav-links">
-                <a href="/mytrips">MY TRIP</a>
-                <a href="/createtrip">CREATE TRIP</a>
-                <a href="/">PAYMENTS AND PAYOUTS</a>
-                <a href="/user/signup">SIGN UP</a>    
-            </div>
-        </div>
+       
     </nav>
 
 
     <% if (trip) {%>
 
 
-        <h1>Edit your trip</h1>
+
+
+        <div class="form-container">
+
+            <h1>Edit your trip</h1>
+
     
         <form action="/<%= trip._id %>/editTrip?_method=PUT" method="POST" class="col-6 offset-2 mt-5"
             enctype="multipart/form-data">
-            <div>
-                <label for="departure" class="form-label mb-2">departure</label>
-                <input type="date" name="departure" id="departure" class="form-control " value="<%= trip.departure ? new Date(trip.departure).toISOString().split('T')[0] : '' %>">
-            </div>
-    
-            <div>
-                <label for="endDate" class="form-label mb-2">endDate</label>
-                <input type="date" name="endDate" id="endDate" class="form-control " value="<%= trip.endDate ? new Date(trip.endDate).toISOString().split('T')[0] : '' %>">
-            </div>
-    
-            <div>
-                <label for="location" class="form-label mb-2">Enter location</label>
-                <input type="text" name="location" id="location" value="<%= trip.location %>" class="form-control ">
-            </div>
-    
-
-            <div>
-                <label for="fromLocation" class="form-label mb-2">from location</label>
-                <input type="text" name="fromLocation" id="fromLocation" value="<%= trip.fromLocation %>" class="form-control ">
-            </div>
 
 
-            <div class="total-cost">
-                <label for="totalCost" class="form-label mb-2">Total trip cost : ₹</label>
-                <input type="number" name="totalCost" class="form-control" value="<%= trip.totalCost %>">
-            </div>
-
-            <div class="totalDays-container">
-                <label for="totalDays">Total days</label>
-                <input type="number" name="totalDays" id="totalDays" class="form-control " value="<%= trip.totalDays %>">
-            </div>
-    
-            <div class="mt-3">
-                <label class="label-btns" for="one"><i class="fa-solid fa-utensils"></i> Foods</label>
-                <input type="checkbox" class="input-btns" id="one" autocomplete="off" value="foods" name="categories"  <% if (trip && trip.categories && trip.categories.includes('foods')) { %>checked<% } %>>
-    
-                <label class="label-btns" for="two"><i class="fa-solid fa-umbrella-beach"></i> Beach</label>
-                <input type="checkbox" class="input-btns" id="two" autocomplete="off" value="beach" name="categories"  <% if (trip && trip.categories && trip.categories.includes('beach')) { %>checked<% } %>>
-    
-                <label class="label-btns" for="three"><i class="fa-brands fa-fort-awesome"></i> Culture</label>
-                <input type="checkbox" class="input-btns" id="three" autocomplete="off" value="culture" name="categories"  <% if (trip && trip.categories && trip.categories.includes('culture')) { %>checked<% } %>>
-    
-                <label class="label-btns" for="four"><i class="fa-solid fa-champagne-glasses"></i> Party</label>
-                <input type="checkbox" class="input-btns" id="four" autocomplete="off" value="party" name="categories"  <% if (trip && trip.categories && trip.categories.includes('party')) { %>checked<% } %>>
-    
-                <label class="label-btns" for="five"><i class="fa-solid fa-volleyball"></i> Sports</label>
-                <input type="checkbox" class="input-btns" id="five" autocomplete="off" value="sports" name="categories"  <% if (trip && trip.categories && trip.categories.includes('sports')) { %>checked<% } %>>
-    
-                <label class="label-btns" for="six"><i class="fa-solid fa-mountain-sun"></i> Nature</label>
-                <input type="checkbox" class="input-btns" id="six" autocomplete="off" value="nature" name="categories"  <% if (trip && trip.categories && trip.categories.includes('nature')) { %>checked<% } %>>
-    
-            </div>
-    
-            <div class="mt-3">
+            <div class=" title-container">
                 <label for="title" class="form-label mb-2">Trip title</label>
                 <input type="text" name="title" id="title" value="<%= trip.title %>" class="form-control ">
             </div>
+
+            <div class="wrap">
+
+
+                <div class="location-container">
+                    <label for="location" class="form-label mb-2">DESTINATION</label>
+                    <input type="text" name="location" id="location" value="<%= trip.location %>" class="form-control ">
+                </div>
+        
     
-            <div class="input-group mt-3">
+                <div class="location-container">
+                    <label for="fromLocation" class="form-label mb-2">FROM LOCATION</label>
+                    <input type="text" name="fromLocation" id="fromLocation" value="<%= trip.fromLocation %>" class="form-control ">
+                </div>
+
+
+            </div>
+
+            <div class="description-container">
                 <span class="input-group-text">Trip description</span>
                 <textarea class="form-control" name="tripDescription"
                     aria-label="With textarea"><%= trip.tripDescription %> </textarea>
             </div>
+    
+
             
-            <div class="accomodations mt-3">
-                <label class="form-check-label" for="1">
-                    Hotels
-                </label>
-                <input class="form-check-input" type="checkbox" value="hotel" id="1" name="accomodations" <% if (trip && trip.accomodations && trip.accomodations.includes('hotel')) { %>checked<% } %>>
-    
-                <label class="form-check-label" for="2">
-                    Hostels
-                </label>
-                <input class="form-check-input" type="checkbox" value="hostels" id="2" name="accomodations" <% if (trip && trip.accomodations && trip.accomodations.includes('hostels')) { %>checked<% } %>>
-    
-                <label class="form-check-label" for="3">
-                    Apartments
-                </label>
-                <input class="form-check-input" type="checkbox" value="apartments" id="3" name="accomodations" <% if (trip && trip.accomodations && trip.accomodations.includes('apartments')) { %>checked<% } %>>
-    
-                <label class="form-check-label" for="4">
-                    Camping
-                </label>
-                <input class="form-check-input" type="checkbox" value="camping" id="4" name="accomodations" <% if (trip && trip.accomodations && trip.accomodations.includes('camping')) { %>checked<% } %>>
-    
-                <label class="form-check-label" for="5">
-                    Bed & Breakfast
-                </label>
-                <input class="form-check-input" type="checkbox" value="bed & breakfast" id="5" name="accomodations" <% if (trip && trip.accomodations && trip.accomodations.includes("bed & breakfast")) { %>checked<% } %>>
-            </div>
-    
-            <div class="input-group mt-3 mb-3">
-                <input type="text" class="form-control" id="todoInput" placeholder="Enter includes"
-                    aria-label="Example text with button addon" aria-describedby="button-addon1">
-                <button onclick="addTodo()" class="btn btn-outline-secondary" type="button" id="button-addon1">Add</button>
-            </div>
-    
-            <div id="todoContainer">
-                <!-- Render existing includes -->
-                <% for (let i = 0; i < trip.includes.length; i++) { %>
-                    <div class="todoItem">
-                        <input type="text" name="includes" value="<%= trip.includes[i] %>">
-                        <button class="deleteButton" type="button" onclick="deleteInclude(this)">Delete</button>
-                    </div>
-                <% } %>
-            </div>
-
-            <div class="excludes-container">
-                <input type="text" class="form-control" id="excludesInput" placeholder="Enter excludes"
-                    aria-label="Example text with button addon" aria-describedby="button-addon1">
-                <button onclick="addExclude()" class="btn" type="button" id="excludesButton">Add</button>
-            </div>
-
-            <div id="excludes-todoContainer">
-                <% if (trip && trip.excludes && trip.excludes.length > 0) { %>
-                    <!-- Render existing excludes -->
-                    <% for (let i = 0; i < trip.excludes.length; i++) { %>
-                        <div class="excludeItem">
-                            <input type="text" name="excludes" value="<%= trip.excludes[i] %>">
-                            <button class="deleteButton" type="button" onclick="deleteInclude(this)">Delete</button>
-                        </div>
-                    <% } %>
-                <% } %>
-            </div>
-
-            <div class="mt-3">
-                <label for="tripImages" class="form-label mb-2">Trip images</label>
-                <input type="file" name="tripImages" id="tripImages" class="form-control  " multiple>
-            </div>
-    
-            <div class="mt-3">
-                <label for="totalDays" class="form-label mb-2">Total days</label>
+            <div class="totalDays-container">
+                <label for="totalDays">Total days</label>
                 <input type="number" name="totalDays" id="totalDays" class="form-control " value="<%= trip.totalDays %>">
             </div>
 
-            <div class="mt-3">
+
+            <div class="groupSize-container">
                 <label for="groupSize" class="form-label mb-2">Group Size</label>
                 <input type="number" name="groupSize" id="groupSize" class="form-control" value="<%= trip.groupSize %>">
             </div>
-            
-            <div class="mt-3">
+
+
+
+            <div class="minAge-container">
                 <label for="minAge" class="form-label mb-2">Minimum Age</label>
                 <input type="number" name="minAge" id="minAge" class="form-control" value="<%= trip.minAge %>">
             </div>
 
-            <div class="mt-3">
+            <div class="wrap">
+
+
+                 
+            <div class="maleTravelers-container">
                 <label for="maleTravelers" class="form-label mb-2">Male Travelers</label>
                 <input type="number" name="maleTravelers" id="maleTravelers" class="form-control" value="<%= trip.maleTravelers %>">
             </div>
             
-            <div class="mt-3">
+            <div class="femaleTravelers-container">
                 <label for="femaleTravelers" class="form-label mb-2">Female Travelers</label>
                 <input type="number" name="femaleTravelers" id="femaleTravelers" class="form-control" value="<%= trip.femaleTravelers %>">
             </div>
+
+            </div>
+
+
+            <div class="yturl-container">
+                <label for="youtubeUrl">YouTube Video URL</label>
+                <input type="text" name="youtubeUrl" id="youtubeUrl" placeholder="Enter YouTube URL" value="<%= trip.youtubeUrl %>">
+            </div>
+
+
+            <div class=" wrap">
+
+                <div class="conatiner">
+                    <label for="minTripmates" class="form-label mb-2">Mininmum tripmates</label>
+                    <input min="1" type="number" name="minTripmates" id="minTripmates" class="form-control "  value="<%= trip.minTripmates %>">
+                </div>
+
+                <div class="conatiner">
+                    <label for="maxTripmates" class="form-label mb-2">Maximum tripmates</label>
+                    <input min="1" type="number" name="maxTripmates" id="maxTripmates" class="form-control " value="<%= trip.minTripmates %>">
+                </div>
+
+            </div>
+
+            <div class="images-container">
+                <label for="tripImages" class="form-label mb-2">Trip images </label>
+                <p>(to update the images reselct all the previous images)</p>
+                <input type="file" name="tripImages" id="tripImages" class="form-control  " multiple >
+            </div>
+
+            <h2 class="catagaries-text">SELECT CATAGARIES</h2>
+
+            <div class="catagaries-container">
+                <div>
+                    <label class="label-btns" for="one"><i class="fa-solid fa-utensils"></i> Foods</label>
+                    <input type="checkbox" class="input-btns" id="one" autocomplete="off" value="foods" name="categories"  <% if (trip && trip.categories && trip.categories.includes('foods')) { %>checked<% } %>>
+    
+                </div>
+                <div>
+                    <label class="label-btns" for="two"><i class="fa-solid fa-umbrella-beach"></i> Beach</label>
+                    <input type="checkbox" class="input-btns" id="two" autocomplete="off" value="beach" name="categories"  <% if (trip && trip.categories && trip.categories.includes('beach')) { %>checked<% } %>>
+            
+                </div>
+                <div>
+                    <label class="label-btns" for="three"><i class="fa-brands fa-fort-awesome"></i> Culture</label>
+                    <input type="checkbox" class="input-btns" id="three" autocomplete="off" value="culture" name="categories"  <% if (trip && trip.categories && trip.categories.includes('culture')) { %>checked<% } %>>
+    
+                </div>
+                <div>
+                    <label class="label-btns" for="four"><i class="fa-solid fa-champagne-glasses"></i> Party</label>
+                    <input type="checkbox" class="input-btns" id="four" autocomplete="off" value="party" name="categories"  <% if (trip && trip.categories && trip.categories.includes('party')) { %>checked<% } %>>
+    
+                </div>
+                <div>
+                    <label class="label-btns" for="five"><i class="fa-solid fa-volleyball"></i> Sports</label>
+                    <input type="checkbox" class="input-btns" id="five" autocomplete="off" value="sports" name="categories"  <% if (trip && trip.categories && trip.categories.includes('sports')) { %>checked<% } %>>
+    
+                </div>
+                <div>
+                    <label class="label-btns" for="six"><i class="fa-solid fa-mountain-sun"></i> Nature</label>
+                    <input type="checkbox" class="input-btns" id="six" autocomplete="off" value="nature" name="categories"  <% if (trip && trip.categories && trip.categories.includes('nature')) { %>checked<% } %>>
+    
+                </div>
+    
+
+                </div>
+    
+
+                <h2 class="catagaries-text">ACCOMODATIONS</h2>
+
+
+                <div class="accomodations-container mt-3">
+
+
+                    <div>
+                        <label class="form-check-label" for="1">
+                            Hotels
+                        </label>
+                        <input class="form-check-input" type="checkbox" value="hotel" id="1" name="accomodations" <% if (trip && trip.accomodations && trip.accomodations.includes('hotel')) { %>checked<% } %>>
+    
+                    </div>
+                    <div>
+                        <label class="form-check-label" for="2">
+                            Hostels
+                        </label>
+                        <input class="form-check-input" type="checkbox" value="hostels" id="2" name="accomodations" <% if (trip && trip.accomodations && trip.accomodations.includes('hostels')) { %>checked<% } %>>
+    
+                    </div>
+                    <div>
+                        <label class="form-check-label" for="3">
+                            Apartments
+                        </label>
+                        <input class="form-check-input" type="checkbox" value="apartments" id="3" name="accomodations" <% if (trip && trip.accomodations && trip.accomodations.includes('apartments')) { %>checked<% } %>>
+    
+                    </div>
+                    <div>
+                        <label class="form-check-label" for="4">
+                            Camping
+                        </label>
+                        <input class="form-check-input" type="checkbox" value="camping" id="4" name="accomodations" <% if (trip && trip.accomodations && trip.accomodations.includes('camping')) { %>checked<% } %>>
+    
+                    </div>
+                    <div>
+                        <label class="form-check-label" for="5">
+                            Bed & Breakfast
+                        </label>
+                        <input class="form-check-input" type="checkbox" value="bed & breakfast" id="5" name="accomodations" <% if (trip && trip.accomodations && trip.accomodations.includes("bed & breakfast")) { %>checked<% } %>>
+    
+                    </div>
+        
+        
+                </div>
+    
+
+
+                <div class="input-group mt-3 mb-3  includes-container">
+                    <input type="text" class="form-control" id="todoInput" placeholder="Enter includes"
+                        aria-label="Example text with button addon" aria-describedby="button-addon1">
+                    <button onclick="addTodo()" class="btn btn-outline-secondary" type="button" id="button-addon1">Add</button>
+                </div>
+        
+                <div id="todoContainer">
+                    <!-- Render existing includes -->
+                    <% for (let i = 0; i < trip.includes.length; i++) { %>
+                        <div class="todoItem">
+                            <input type="text" name="includes" value="<%= trip.includes[i] %>">
+                            <button class="deleteButton" type="button" onclick="deleteInclude(this)">Delete</button>
+                        </div>
+                    <% } %>
+                </div>
+    
+                <div class="excludes-container">
+                    <input type="text" class="form-control" id="excludesInput" placeholder="Enter excludes"
+                        aria-label="Example text with button addon" aria-describedby="button-addon1">
+                    <button onclick="addExclude()" class="btn" type="button" id="excludesButton">Add</button>
+                </div>
+    
+                <div id="excludes-todoContainer">
+                    <% if (trip && trip.excludes && trip.excludes.length > 0) { %>
+                        <!-- Render existing excludes -->
+                        <% for (let i = 0; i < trip.excludes.length; i++) { %>
+                            <div class="excludeItem">
+                                <input type="text" name="excludes" value="<%= trip.excludes[i] %>">
+                                <button class="deleteButton" type="button" onclick="deleteInclude(this)">Delete</button>
+                            </div>
+                        <% } %>
+                    <% } %>
+                </div>
+
+
+                <div class="languages-container">
+    <input type="text" class="form-control" id="languagesInput" placeholder="Enter language"
+        aria-label="Example text with button addon" aria-describedby="button-addon1">
+    <button onclick="addLanguage()" class="btn" type="button" id="languagesButton">Add</button>
+</div>
+
+<div id="languages-todoContainer">
+    <% if (trip && trip.languages && trip.languages.length > 0) { %>
+        <!-- Render existing languages -->
+        <% for (let i = 0; i < trip.languages.length; i++) { %>
+            <div class="languageItem">
+                <input type="text" name="languages" value="<%= trip.languages[i] %>">
+                <button class="deleteButton" type="button" onclick="deleteLanguage(this)">Delete</button>
+            </div>
+        <% } %>
+    <% } %>
+</div>
+
+    
+
+
+
+
+
+
+
+            <div class="days-container">
+                <label for="departure" class="form-label mb-2">departure</label>
+                <input type="date" name="departure" id="departure" class="form-control " value="<%= trip.departure ? new Date(trip.departure).toISOString().split('T')[0] : '' %>">
+            </div>
+    
+            <div class="days-container">
+                <label for="endDate" class="form-label mb-2">endDate</label>
+                <input type="date" name="endDate" id="endDate" class="form-control "  value="<%= trip.endDate ? new Date(trip.endDate).toISOString().split('T')[0] : '' %>">
+            </div>
+    
+           
+
+    
+           
+           
+            
+            
+    
+           
+           
+
+            
+           
             
     
             <% if (trip && trip.stopLocation && trip.stopDescription) { %>
@@ -247,12 +328,81 @@
                 <p>Error loading Stop details. Please try again.</p>
             <% } %>
 
+            <button type="button" class="btn add-stop" onclick="addStop()">Add Stop</button>
+
+
+
+        
+
+
+            <div class="trip-calculator-conatiner">
+
+
+
+                <div class="travel-cost-container">
+
+                    <h2>TRIP COST PER TRIPMATE</h2>
+
+                    <div class="total-cost">
+                        <label for="totalCost" class="form-label mb-2">Total trip cost : ₹</label>
+                        <input type="number" name="totalCost" class="form-control" value="<%= trip.totalCost %>">
+                    </div>
+
+                    <div class="total-cost">
+                        <label for="buffer" class="form-label mb-2">Enter the buffer : %</label>
+                        <p>approx 10-15%</p>
+                        <input type="number" name="buffer" min="0" max="15" class="form-control" value="<%= trip.buffer %>">
+                    </div><br>
+
+                    <div class="total-cost">
+                        <label for="deposit" class="form-label mb-2">Enter the deposit : %</label>
+                        <p>Enter the percent of total trip cost for deposit </p>
+                        <input type="number" name="deposit" class="form-control" value="<%= trip.deposit %>">
+                    </div>
+
+                </div>
+
+            </div>
+
+
 
     
             <button class="mt-3">SUBMIT</button>
         </form>
+
+    </div>
+
     
         <script>
+
+
+
+
+
+
+function addLanguage() {
+    const inputField = document.getElementById('languagesInput');
+    const container = document.getElementById('languages-todoContainer');
+    const language = inputField.value.trim();
+
+    if (language) {
+        const newDiv = document.createElement('div');
+        newDiv.classList.add('languageItem');
+        newDiv.innerHTML = `
+            <input type="text" name="languages" value="${language}">
+            <button class="deleteButton" type="button" onclick="deleteLanguage(this)">Delete</button>
+        `;
+        container.appendChild(newDiv);
+        inputField.value = ''; // Clear the input field
+    }
+}
+
+function deleteLanguage(button) {
+    const languageItem = button.parentElement;
+    languageItem.remove();
+}
+
+
 
             
             function addTodo() {
@@ -323,106 +473,125 @@
             // Clear the input field for the next exclude
             document.getElementById('excludesInput').value = '';
         }
-            let stopCounter = 1;
-    
-            function addStop() {
-                stopCounter++;
-    
-                const stopsContainer = document.getElementById('stops-container');
-    
-                const newStopSection = document.createElement('div');
-                newStopSection.className = 'stop-section';
-    
-                newStopSection.innerHTML = `
-                    <h3>Stop ${stopCounter}</h3>
-        
-                    <label for="stopImages" class="form-label mb-2">Upload Image</label>
-                    <input type="file" name="stopImages" class="form-control">
-        
-                    <label for="stopLocation" class="form-label mb-2">Enter Location</label>
-                    <input type="text" name="stopLocation" class="form-control">
-        
-                    <label for="stopDescription" class="form-label mb-2">Tell Us More</label>
-                    <input type="text" name="stopDescription" class="form-control">
-        
-                    <button type="button" class="btn" onclick="deleteStop(this)">Delete Stop</button>
-                `;
-    
-                stopsContainer.appendChild(newStopSection);
-                updateStopNumbers();
-            }
 
-            function deleteInclude(button) {
-    const todoContainer = button.parentNode;
-    todoContainer.remove();
-}
+
+
+        let stopCounter = 1;
     
-            function deleteStop(button) {
-                const stopsContainer = document.getElementById('stops-container');
-                const stopSection = button.parentNode;
-                stopsContainer.removeChild(stopSection);
-                stopCounter--;
-                updateStopNumbers();
-            }
+        function addStop() {
+            stopCounter++;
     
-            function updateStopNumbers() {
-                const stops = document.getElementsByClassName('stop-section');
-                Array.from(stops).forEach((stop, index) => {
-                    const stopNumber = index + 1;
-                    stop.querySelector('h3').innerText = `Stop ${stopNumber}`;
-                });
-            }
+            const stopsContainer = document.getElementById('stops-container');
     
-            function calculateDurationAndAddStops() {
-                // Get the departure and end date values
-                const departureDate = new Date(document.getElementById('departure').value);
-                const endDate = new Date(document.getElementById('endDate').value);
-    
-                // Calculate the duration in days
-                const durationInDays = Math.floor((endDate - departureDate) / (24 * 60 * 60 * 1000));
-    
-                // Call a function to dynamically add stops based on the calculated duration
-                addStopsBasedOnDuration(durationInDays);
-            }
-    
-            function addStopsBasedOnDuration(duration) {
-        const stopsContainer = document.getElementById('stops-container');
-        // Clear existing stops
-        stopsContainer.innerHTML = '';
-    
-        // Always keep Stop 1
-        const initialStopSection = document.createElement('div');
-        initialStopSection.className = 'stop-section';
-        initialStopSection.innerHTML = `
-            <h3>Stop 1</h3>
-            <label for="stopImages" class="form-label mb-2">Upload Image</label>
-            <input type="file" name="stopImages" class="form-control">
-            <label for="stopLocation" class="form-label mb-2">Enter Location</label>
-            <input type="text" name="stopLocation" class="form-control">
-            <label for="stopDescription" class="form-label mb-2">Tell Us More</label>
-            <input type="text" name="stopDescription" class="form-control">
-        `;
-        stopsContainer.appendChild(initialStopSection);
-    
-        // Add stops dynamically based on the duration, including the departure date
-        for (let i = 2; i <= duration + 1; i++) {
             const newStopSection = document.createElement('div');
             newStopSection.className = 'stop-section';
+    
             newStopSection.innerHTML = `
-                <h3>Stop ${i}</h3>
+                <h3>Stop ${stopCounter}</h3>
+    
+                ${
+                    stopCounter > 1
+                        ? `
+                        
+                    `
+                        : `
+                        <div class="transport-container">
+                            <h2>PLEASE SELECT THE MODE OF transport</h2>
+                            <label for="flight">FLIGHT</label>
+                            <input type="checkbox" name="transport" value="flight">
+    
+                            <label for="train">TRAIN</label>
+                            <input type="checkbox" name="transport" value="train">
+    
+                            <label for="car">CAR</label>
+                            <input type="checkbox" name="transport" value="car">
+    
+                            <label for="walk">WALK</label>
+                            <input type="checkbox" name="transport" value="walk">
+                        </div>
+                    `
+                }
+    
+                <label for="stopImages" class="form-label mb-2">Upload Image</label>
+                <input type="file" name="stopImages" class="form-control">
+    
+                <label for="stopLocation" class="form-label mb-2">Enter Location</label>
+                <input type="text" name="stopLocation" class="form-control">
+    
+                <label for="stopDescription" class="form-label mb-2">Tell Us More</label>
+                <input type="text" name="stopDescription" class="form-control">
+
+                <label for="transport" class="form-label mb-2">Enter Mode of Transport</label>
+                        <input type="text" name="transport" class="form-control">
+    
+                <button type="button" class="btn" onclick="deleteStop(this)">Delete Stop</button>
+            `;
+    
+            stopsContainer.appendChild(newStopSection);
+            updateStopNumbers();
+        }
+    
+        function deleteStop(button) {
+            const stopsContainer = document.getElementById('stops-container');
+            const stopSection = button.parentNode;
+            stopsContainer.removeChild(stopSection);
+            stopCounter--;
+            updateStopNumbers();
+        }
+    
+        function updateStopNumbers() {
+            const stops = document.getElementsByClassName('stop-section');
+            Array.from(stops).forEach((stop, index) => {
+                const stopNumber = index + 1;
+                stop.querySelector('h3').innerText = `Stop ${stopNumber}`;
+            });
+        }
+    
+        function calculateDurationAndAddStops() {
+            const departureDate = new Date(document.getElementById('departure').value);
+            const endDate = new Date(document.getElementById('endDate').value);
+            const durationInDays = Math.floor((endDate - departureDate) / (24 * 60 * 60 * 1000));
+            addStopsBasedOnDuration(durationInDays);
+        }
+    
+        function addStopsBasedOnDuration(duration) {
+            const stopsContainer = document.getElementById('stops-container');
+            stopsContainer.innerHTML = '';
+    
+            const initialStopSection = document.createElement('div');
+            initialStopSection.className = 'stop-section';
+            initialStopSection.innerHTML = `
+                <h3>Stop 1</h3>
+               
                 <label for="stopImages" class="form-label mb-2">Upload Image</label>
                 <input type="file" name="stopImages" class="form-control">
                 <label for="stopLocation" class="form-label mb-2">Enter Location</label>
                 <input type="text" name="stopLocation" class="form-control">
                 <label for="stopDescription" class="form-label mb-2">Tell Us More</label>
                 <input type="text" name="stopDescription" class="form-control">
-                <button type="button" class="btn" onclick="deleteStop(this)">Delete Stop</button>
             `;
-            stopsContainer.appendChild(newStopSection);
+            stopsContainer.appendChild(initialStopSection);
+    
+            for (let i = 2; i <= duration + 1; i++) {
+                const newStopSection = document.createElement('div');
+                newStopSection.className = 'stop-section';
+                newStopSection.innerHTML = `
+                    <h3>Stop ${i}</h3>
+                    
+                    <label for="stopImages" class="form-label mb-2">Upload Image</label>
+                    <input type="file" name="stopImages" class="form-control">
+                    <label for="stopLocation" class="form-label mb-2">Enter Location</label>
+                    <input type="text" name="stopLocation" class="form-control">
+                    <label for="stopDescription" class="form-label mb-2">Tell Us More</label>
+                    <input type="text" name="stopDescription" class="form-control">
+                    <label for="transport" class="form-label mb-2">Enter Mode of Transport</label>
+                    <input type="text" name="transport" class="form-control">
+                    <button type="button" class="btn" onclick="deleteStop(this)">Delete Stop</button>
+                `;
+                stopsContainer.appendChild(newStopSection);
+            }
+            updateStopNumbers();
         }
-        updateStopNumbers();
-    }
-
     
         </script>
     <%} else {%>

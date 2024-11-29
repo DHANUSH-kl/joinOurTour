@@ -223,9 +223,15 @@
                     <img src="../images/lang.png" alt="">
                     <div class="ov-details">
                         <p>Languages</p>
-                        <p>
-                            <%= trip.totalDays %> days
-                        </p>
+                        <div class="ln-container">
+                            <% if (trip.languages && trip.languages.length > 0) { %>
+                                <% for (let i = 0; i < trip.languages.length; i++) { %>
+                                    <p><%= trip.languages[i], %></p>
+                                <% } %>
+                            <% } else { %>
+                                <li>No languages specified.</li>
+                            <% } %>
+                            </div>
                     </div>
                 </div>
             </div>
