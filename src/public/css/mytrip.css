@@ -3,3 +3,30 @@
     padding: 0;
     box-sizing: border-box;
 }
+
+
+nav {
+    padding: 1rem 3rem;
+}
+
+nav a {
+    color: black;
+}
+
+.cards-container {
+    align-items: center;
+    justify-content: center;
+}
+
+.title {
+    font-size: 6rem;
+    color: #05A351;
+    font-family: Poppins;
+    font-style: normal;
+    font-weight: 400;
+    margin-top: 7rem;
+    margin-bottom: 5rem;
+    text-align: center;
+    
+}
+
