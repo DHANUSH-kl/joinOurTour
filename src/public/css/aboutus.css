@@ -98,7 +98,7 @@ nav img:hover{
 .hero-content-container {
     position: absolute;
     left: 16vw;
-    top: 6.5vh;
+    top: 22vh;
     color: rgba(255, 255, 255, 0.75);
     font-family: Poppins;
     font-size: 3rem;
@@ -661,3 +661,134 @@ nav img:hover{
 
 
 
+.alltrips {
+    border-radius: 25px;
+    border: 1px solid #FFF;
+    background: rgba(0, 0, 0, 0.30);
+    position: absolute;
+    top: 5%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    padding: 0.2rem 0.5rem;
+}
+
+.alltrips a {
+
+    color: rgba(255, 255, 255, 0.75);
+    font-family: Poppins;
+    font-size: 17px;
+    font-style: normal;
+    font-weight: 500;
+    line-height: normal;
+    text-decoration: none;
+}
+
+
+
+/* account nav  */
+
+
+nav .right {
+    margin-right: 0;
+    margin-top: 2rem;
+    z-index: 999;
+}
+
+.account-container {
+    right: -20rem;
+}
+
+nav .bottom-container {
+    width: 100%;
+}
+
+
+/* arrows  */
+
+
+.container {
+    position: absolute;
+    top: 28rem;
+    left: 16.5rem;
+    width: 44px;
+    height: 64px;
+
+
+  }
+  
+  .chevron {
+    position: absolute;
+    width: 28px;
+    height: 2px;
+    opacity: 0;
+    transform: scale3d(0.5, 0.5, 0.5);
+    animation: move 3s ease-out infinite;
+
+  }
+  
+  .chevron:first-child {
+    animation: move 3s ease-out 1s infinite;
+  }
+  
+  .chevron:nth-child(2) {
+    animation: move 3s ease-out 2s infinite;
+  }
+  
+  .chevron:before,
+  .chevron:after {
+    content: ' ';
+    position: absolute;
+    top: 0;
+    height: 100%;
+    width: 51%;
+    background: #fff;
+  }
+  
+  .chevron:before {
+    left: 0;
+    transform: skew(0deg, 30deg);
+  }
+  
+  .chevron:after {
+    right: 0;
+    width: 50%;
+    transform: skew(0deg, -30deg);
+  }
+  
+  @keyframes move {
+    25% {
+      opacity: 1;
+  
+    }
+    33% {
+      opacity: 1;
+      transform: translateY(30px);
+    }
+    67% {
+      opacity: 1;
+      transform: translateY(40px);
+    }
+    100% {
+      opacity: 0;
+      transform: translateY(55px) scale3d(0.5, 0.5, 0.5);
+    }
+  }
+  
+  .text {
+    display: block;
+    margin-top: 75px;
+    margin-left: -30px;
+    font-family: "Helvetica Neue", "Helvetica", Arial, sans-serif;
+    font-size: 12px;
+    color: #fff;
+    text-transform: uppercase;
+    white-space: nowrap;
+    opacity: .25;
+    animation: pulse 2s linear alternate infinite;
+  }
+  
+  @keyframes pulse {
+    to {
+      opacity: 1;
+    }
+  }

@@ -733,7 +733,7 @@ const aboutus = async (req, res) => {
 
     const tripPackages = [tripPackage1, tripPackage2, tripPackage3, tripPackage4]
 
-    res.render("trips/aboutus.ejs", { tripPackages, exploreTrips })
+    res.render("trips/aboutus.ejs", { tripPackages, exploreTrips, user: req.user || null, })
 }
 
 const getSecondarySearch = async (req, res) => {

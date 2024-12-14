@@ -107,7 +107,7 @@
                                 <p>
                                     <%= currUser.username %>
                                 </p>
-                                
+
                                 <p>
                                     Wallet Balance: <%= currUser.wallet %> tokens
                                 </p>
@@ -122,11 +122,12 @@
                         <% if (!user) { %>
                             <a href="/user/signin">SIGN IN</a>
                             <a href="/user/signup">SIGN UP</a>
-                        <% } else { %>
-                            <a href="/user/logout">SIGN OUT</a>
-                        <% } %>
-                        <a href="/showWishlist">WISHLIST</a>
-                        <p></p>
+                            <% } else { %>
+                                <a href="/user/logout">SIGN OUT</a>
+                                <% } %>
+                                    <a href="/showWishlist">WISHLIST</a>
+                                    <a href="/admin/adminpannel">ADMIN PANNEL</a>
+                                    <p></p>
                     </div>
                 </div>
 
@@ -290,7 +291,7 @@
                         </div>
                     </div>
 
-                    
+
                 </div>
             </div>
         </div>
@@ -357,7 +358,7 @@
 
                         </div>
 
-                        
+
 
                         <div class="rating-container">
 
@@ -395,7 +396,9 @@
                                                                     <label for="locStar1-<%= i %>">1 star</label>
                             </div>
 
-                            <p><%= allTrips[i].averageRating %></p>
+                            <p>
+                                <%= allTrips[i].averageRating %>
+                            </p>
 
                         </div>
 
@@ -486,10 +489,54 @@
 
 
 
+        
+
+
+        // dates correction
 
 
 
-       
+
+
+        // Get today's date in the format 'YYYY-MM-DD'
+        const today = new Date().toISOString().split('T')[0];
+
+        // Get input elements
+        const fromDateInput = document.getElementById('fromDate');
+        const toDateInput = document.getElementById('toDate');
+
+        // Set the min date for the "from" input
+        fromDateInput.setAttribute('min', today);
+
+        // Add an event listener to update the "to" input based on "from" input selection
+        fromDateInput.addEventListener('change', () => {
+            const selectedFromDate = fromDateInput.value;
+
+            // Update the min date for the "to" input
+            toDateInput.setAttribute('min', selectedFromDate);
+
+            // Ensure the "to" date is greater than or equal to the "from" date
+            if (toDateInput.value && toDateInput.value < selectedFromDate) {
+                toDateInput.value = ""; // Clear the "to" input if it violates the rule
+                alert("The 'To' date must be greater than or equal to the 'From' date.");
+            }
+        });
+
+        // Add an event listener to validate "to" date when changed
+        toDateInput.addEventListener('change', () => {
+            const selectedFromDate = fromDateInput.value;
+            const selectedToDate = toDateInput.value;
+
+            // Ensure the "to" date is greater than or equal to the "from" date
+            if (selectedFromDate && selectedToDate < selectedFromDate) {
+                toDateInput.value = ""; // Clear the "to" input if it violates the rule
+                alert("The 'To' date must be greater than or equal to the 'From' date.");
+            }
+        });
+
+
+
+
 
 
 

@@ -107,7 +107,7 @@ const displayPackages = async (req, res) => {
 
     // const tripPackage = [p1,p2,p3,p4]
 
-    res.render("admin/adminPannel.ejs", { tripPackages, destinationPackages })
+    res.render("admin/admin.ejs", { tripPackages, destinationPackages })
 
 
 }
@@ -226,4 +226,11 @@ const sendCoin = async(req,res) => {
 
 }
 
-export { walletPage , sendCoin , editAdminForm , editAdminPannel, posttripPackage, becomeOwnerForm, postOwner, agentAccessForm, postAgentAccess, tripLeaderForm, postTripLeader, displayPackages }
+const adminPerks = async(req,res) => {
+
+    res.render("admin/adminPerks.ejs")
+
+
+}
+
+export { adminPerks , walletPage , sendCoin , editAdminForm , editAdminPannel, posttripPackage, becomeOwnerForm, postOwner, agentAccessForm, postAgentAccess, tripLeaderForm, postTripLeader, displayPackages }
