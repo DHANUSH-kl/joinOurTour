@@ -1,3 +1,28 @@
 main {
     margin-bottom: 5rem;
 }
+
+.cards {
+    display: flex;
+    flex-direction: column;
+    
+}
+
+.card-title {
+    color: #00A651;
+    font-family: Poppins;
+    font-size: 40px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 71px;
+    letter-spacing: -0.5px;
+    margin-bottom: 2rem;
+}
+
+.dates-match,.destination-match {
+    margin-top: 3rem;
+}
+
+hr {
+    margin-bottom: 2rem;
+}

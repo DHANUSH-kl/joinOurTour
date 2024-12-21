@@ -531,7 +531,7 @@ const searchTrips = async (req, res) => {
 const mainSearch = async (req, res) => {
     const { startingLocation, destinationLocation, fromDate, toDate, minPrice, maxPrice, categories } = req.body;
 
-    // Build the query object dynamically
+    // Build the query object dynamically for exact match
     let query = {};
 
     // Handle the starting location (departure)
@@ -576,51 +576,95 @@ const mainSearch = async (req, res) => {
     }
 
     try {
-        // Execute the search query
+        // Execute the search query for exact matches
         const exactMatchTrips = await Trip.find(query).populate('owner').populate('reviews');
+
+        // Fetch all trips to compare for date and destination matches
+        const allTrips = await Trip.find().populate('owner').populate('reviews');
+        const datesMatchTrips = [];
+        const destinationMatchTrips = [];
+
+        const fromDateObj = fromDate ? new Date(fromDate) : null;
+        const toDateObj = toDate ? new Date(toDate) : null;
+
+        allTrips.forEach((trip) => {
+            const tripFromDate = new Date(trip.departure);
+            const tripToDate = new Date(trip.endDate);
+
+            // Dates Match: Matches only the fromDate and toDate, regardless of location
+            if (
+                fromDateObj &&
+                toDateObj &&
+                tripFromDate.getTime() === fromDateObj.getTime() &&
+                tripToDate.getTime() === toDateObj.getTime()
+            ) {
+                datesMatchTrips.push(trip);
+            }
+
+            // Destination Match: Matches only the destinationLocation
+            if (
+                destinationLocation &&
+                trip.location.match(new RegExp('^' + destinationLocation.trim(), 'i'))
+            ) {
+                destinationMatchTrips.push(trip);
+            }
+        });
 
         // Check if the user is logged in and retrieve their wishlist
         let userWishlist = [];
         if (req.user) {
             const user = await User.findById(req.user._id).populate('wishlist');
-            userWishlist = user.wishlist.map(trip => trip._id.toString());
+            userWishlist = user.wishlist.map((trip) => trip._id.toString());
         }
 
         // Calculate average rating for each trip
-        const tripsWithRatings = exactMatchTrips.map(trip => {
-            let totalRatings = 0;
-            let count = 0;
-            trip.reviews.forEach(review => {
-                const locationRating = review.locationRating || 0;
-                const amenitiesRating = review.amenitiesRating || 0;
-                const foodRating = review.foodRating || 0;
-                const roomRating = review.roomRating || 0;
-                const priceRating = review.priceRating || 0;
-                const operatorRating = review.operatorRating || 0;
-                const overallRating = (locationRating + amenitiesRating + foodRating + roomRating + priceRating + operatorRating) / 6;
-                totalRatings += overallRating;
-                count++;
+        const calculateRatings = (trips) => {
+            return trips.map((trip) => {
+                let totalRatings = 0;
+                let count = 0;
+                trip.reviews.forEach((review) => {
+                    const locationRating = review.locationRating || 0;
+                    const amenitiesRating = review.amenitiesRating || 0;
+                    const foodRating = review.foodRating || 0;
+                    const roomRating = review.roomRating || 0;
+                    const priceRating = review.priceRating || 0;
+                    const operatorRating = review.operatorRating || 0;
+                    const overallRating =
+                        (locationRating + amenitiesRating + foodRating + roomRating + priceRating + operatorRating) / 6;
+                    totalRatings += overallRating;
+                    count++;
+                });
+                trip.averageRating = count > 0 ? (totalRatings / count).toFixed(1) : 0;
+                return trip;
             });
-            trip.averageRating = count > 0 ? (totalRatings / count).toFixed(1) : 0;
-            return trip;
-        });
+        };
+
+        const exactMatchesWithRatings = calculateRatings(exactMatchTrips);
+        const datesMatchesWithRatings = calculateRatings(datesMatchTrips);
+        const destinationMatchesWithRatings = calculateRatings(destinationMatchTrips);
+
+        console.log("exact match :  " ,exactMatchesWithRatings);
+        console.log("dates match :  " ,datesMatchesWithRatings);
+        console.log("destination match :  " ,destinationMatchesWithRatings);
 
         // Render the results in the mainSearch.ejs view
-        res.render("trips/mainSearch.ejs", {
-            exactMatchTrips: tripsWithRatings,
+        res.render('trips/mainSearch.ejs', {
+            exactMatchTrips: exactMatchesWithRatings,
+            datesMatchTrips: datesMatchesWithRatings,
+            destinationMatchTrips: destinationMatchesWithRatings,
             user: req.user,
             userWishlist,
             startingLocation,
             destinationLocation,
             fromDate,
-            toDate
+            toDate,
         });
-
     } catch (error) {
         console.error('Error during trip search:', error);
-        res.status(500).send("Server error");
+        res.status(500).send('Server error');
     }
-}
+};
+
 
 
 const reviews = async (req, res) => {

@@ -119,7 +119,7 @@ $(document).ready(function() {
     // Apply autocomplete to both Starting Location and Destination Location
     initializeAutocomplete("#startingLocation");
     initializeAutocomplete("#destinationLocation");
-    initializeAutocomplete("#destinationLocation");
+    initializeAutocomplete("#secondaryDestination"); 
 })
 
 
