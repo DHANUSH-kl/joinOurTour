@@ -330,6 +330,7 @@ input[type="date"]:hover {
     color: #05A351;
     transition: 0.2s ease-in;
     box-shadow: 0 0 5px rgba(0, 255, 47, 0.5);
+    cursor: pointer;
 
 }
 
@@ -347,7 +348,8 @@ input[type="date"]:hover {
 .filters .top [type="date"] {
     border-color: #007bff;
     outline: none;
-    box-shadow: 0 0 5px rgba(0, 255, 47, 0.5);
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.5);
+    cursor: pointer;
 }
 
 

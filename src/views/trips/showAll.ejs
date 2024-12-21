@@ -101,7 +101,7 @@
                     </div>
                     <div class="user-info-container">
                         <% if(!currUser) { %>
-                            <p>USERNAME</p>
+
                             <% } else { %>
                                 <div class="profile"></div>
                                 <p>
@@ -125,7 +125,8 @@
                             <% } else { %>
                                 <a href="/user/logout">SIGN OUT</a>
                                 <% } %>
-                                    <a href="/showWishlist">WISHLIST</a>
+                                    <a href="/showWishlist">WISHLIST &nbsp; <i class="fa-solid fa-heart"
+                                            style="cursor: pointer;"></i></a>
                                     <a href="/admin/adminpannel">ADMIN PANNEL</a>
                                     <p></p>
                     </div>
@@ -145,7 +146,8 @@
 
         <div class="bottom-container">
             <img src="../images/linkedin(3).png" alt="">
-            <img src="../images/instagram(4).png" alt="">
+            <a href="https://www.instagram.com/join.our.tours/profilecard/?igsh=MWQ1dXdkbzZ0d3ExcQ==hhwcccc "> <img
+                    src="../images/instagram(4).png" alt=""></a>
             <img src="../images/facebook-app-symbol(1).png
             " alt="">
         </div>
@@ -158,7 +160,9 @@
                 <img src="../images/searchloc.png" alt="">
                 <div class="startingLocation-container search-locations-container">
                     <label for="startingLocation">Starting from</label>
-                    <input type="text" name="startingLocation" id="startingLocation" placeholder="Delhi">
+                    <input type="text" name="startingLocation" id="startingLocation" placeholder="Delhi"
+                        value="<%= user && user.city ? user.city : '' %>">
+
 
                 </div>
                 <hr class="location-break">
@@ -489,7 +493,7 @@
 
 
 
-        
+
 
 
         // dates correction
@@ -533,6 +537,10 @@
                 alert("The 'To' date must be greater than or equal to the 'From' date.");
             }
         });
+
+
+
+
 
 
 

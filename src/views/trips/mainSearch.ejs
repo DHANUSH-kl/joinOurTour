@@ -35,42 +35,7 @@
 <body>
 
 
-    <!-- <nav>
-        <div class="top-container">
-            <img src="../images/account_circle.png" alt="">
-            <img src="../images/search.png" alt="">
-        </div>
-        <div class="bottom-container">
-            <img src="../images/linkedin(3).png" alt="">
-            <img src="../images/instagram(4).png" alt="">
-            <img src="../images/facebook-app-symbol(1).png
-            " alt="">
-        </div>
-    </nav> -->
-
-
-
-
-    <!-- <form action="/searchTrips" method="POST" id="searchTripForm" class="search-container">
-        <div class="search-bar">
-            <div class="location-search-container">
-                <label for="location">Where</label>
-                <input type="text" name="location" id="location" placeholder="Search destinations">
-            </div>
-
-            <div class="checkin-search-container">
-                <label for="checkIn">Check in</label>
-                <input type="date" placeholder="Check in" name="checkIn" id="checkIn">
-            </div>
-
-            <div class="checkout-search-container">
-                <label for="checkOut">Check out</label>
-                <input type="date" placeholder="Check out" name="checkOut" id="checkOut">
-            </div>
-
-            <button type="button" onclick="searchTrip()">Search</button>
-        </div>
-    </form> -->
+    
 
 
 
@@ -98,6 +63,12 @@
                                 <p>
                                     <%= currUser.username %>
                                 </p>
+
+                                <p>
+                                    Wallet Balance: <%= currUser.wallet %> tokens
+                                </p>
+
+
                                 <% } %>
                     </div>
                     <div class="nav-links">
@@ -107,10 +78,12 @@
                         <% if (!user) { %>
                             <a href="/user/signin">SIGN IN</a>
                             <a href="/user/signup">SIGN UP</a>
-                        <% } else { %>
-                            <a href="/user/logout">SIGN OUT</a>
-                        <% } %>
-                        <a href="/showWishlist">WISHLIST</a>
+                            <% } else { %>
+                                <a href="/user/logout">SIGN OUT</a>
+                                <% } %>
+                                    <a href="/showWishlist">WISHLIST</a>
+                                    <a href="/admin/adminpannel">ADMIN PANNEL</a>
+                                    <p></p>
                     </div>
                 </div>
 
@@ -128,7 +101,8 @@
 
         <div class="bottom-container">
             <img src="../images/linkedin(3).png" alt="">
-            <img src="../images/instagram(4).png" alt="">
+            <a href="https://www.instagram.com/join.our.tours/profilecard/?igsh=MWQ1dXdkbzZ0d3ExcQ==hhwcccc "> <img
+                    src="../images/instagram(4).png" alt=""></a>
             <img src="../images/facebook-app-symbol(1).png
             " alt="">
         </div>
@@ -141,13 +115,13 @@
                 <img src="../images/searchloc.png" alt="">
                 <div class="startingLocation-container search-locations-container">
                     <label for="startingLocation">Starting from</label>
-                    <input type="text" name="startingLocation" id="startingLocation" placeholder="Delhi">
+                    <input type="text" name="startingLocation" id="startingLocation" placeholder="Delhi"  value="<%= startingLocation || '' %>">
 
                 </div>
                 <hr class="location-break">
                 <div class="destinationLocation-container search-locations-container">
                     <label for="destinationLocation">Going to</label>
-                    <input type="text" name="destinationLocation" id="destinationLocation" placeholder="Goa">
+                    <input type="text" name="destinationLocation" id="destinationLocation" placeholder="Goa"  value="<%= destinationLocation || '' %>">
                 </div>
             </div>
 
@@ -157,12 +131,12 @@
                 <div class="search-dates-container">
                     <div class="trip-dates trip-from-date">
                         <label for="fromDate">from </label>
-                        <input type="date" class="fromDate" id="fromDate">
+                        <input type="date" class="fromDate" id="fromDate" value="<%= fromDate || '' %>">
                     </div>
 
                     <div class="trip-dates trip-to-date">
                         <label for="toDate">to</label>
-                        <input type="date" class="toDate" id="toDate">
+                        <input type="date" class="toDate" id="toDate" value="<%= toDate || '' %>">
                     </div>
 
 
@@ -273,6 +247,8 @@
                             </div>
                         </div>
                     </div>
+
+
                 </div>
             </div>
         </div>
@@ -314,14 +290,15 @@
                                 </a>
                                 <p>
                                     <% if (exactMatchTrips[i].departure) { %>
-                                        <%= new Date(exactMatchTrips[i].departure).toLocaleDateString('en-US', { month: 'long'
-                                            , day: '2-digit' }) %> ~
+                                        <%= new Date(exactMatchTrips[i].departure).toLocaleDateString('en-US', {
+                                            month: 'long' , day: '2-digit' }) %> ~
                                             <% } else { %>
                                                 date not available
                                                 <% } %>
                                                     <% if (exactMatchTrips[i].endDate) { %>
-                                                        <%= new Date(exactMatchTrips[i].endDate).toLocaleDateString('en-US', {
-                                                            month: 'long' , day: '2-digit' }) %>
+                                                        <%= new
+                                                            Date(exactMatchTrips[i].endDate).toLocaleDateString('en-US',
+                                                            { month: 'long' , day: '2-digit' }) %>
                                                             <% } %>
                                 </p>
                             </h3>
@@ -341,33 +318,38 @@
 
                                     <!-- 4 Stars -->
                                     <input type="radio" id="locStar4-<%= i %>" name="locationRating-<%= i %>" value="4"
-                                        <% if (exactMatchTrips[i].averageRating>= 4 && exactMatchTrips[i].averageRating < 5) { %>
+                                        <% if (exactMatchTrips[i].averageRating>= 4 && exactMatchTrips[i].averageRating
+                                    < 5) { %>
                                         checked <% } %> disabled />
                                             <label for="locStar4-<%= i %>">4 stars</label>
 
                                             <!-- 3 Stars -->
                                             <input type="radio" id="locStar3-<%= i %>" name="locationRating-<%= i %>"
                                                 value="3" <% if (exactMatchTrips[i].averageRating>= 3 &&
-                                                exactMatchTrips[i].averageRating < 4) { %> checked <% } %> disabled />
+                                            exactMatchTrips[i].averageRating < 4) { %> checked <% } %> disabled />
                                                     <label for="locStar3-<%= i %>">3 stars</label>
 
                                                     <!-- 2 Stars -->
                                                     <input type="radio" id="locStar2-<%= i %>"
                                                         name="locationRating-<%= i %>" value="2" <% if
-                                                        (exactMatchTrips[i].averageRating>= 2 && exactMatchTrips[i].averageRating < 3)
-                                                        { %> checked <% } %> disabled />
+                                                        (exactMatchTrips[i].averageRating>= 2 &&
+                                                    exactMatchTrips[i].averageRating < 3) { %> checked <% } %> disabled
+                                                            />
                                                             <label for="locStar2-<%= i %>">2 stars</label>
 
                                                             <!-- 1 Star -->
                                                             <input type="radio" id="locStar1-<%= i %>"
                                                                 name="locationRating-<%= i %>" value="1" <% if
                                                                 (exactMatchTrips[i].averageRating>= 1 &&
-                                                                exactMatchTrips[i].averageRating < 2) { %> checked <% } %> disabled
+                                                            exactMatchTrips[i].averageRating < 2) { %> checked <% } %>
+                                                                    disabled
                                                                     />
                                                                     <label for="locStar1-<%= i %>">1 star</label>
                             </div>
 
-                            <p><%= exactMatchTrips[i].averageRating %></p>
+                            <p>
+                                <%= exactMatchTrips[i].averageRating %>
+                            </p>
                         </div>
 
 
@@ -396,81 +378,8 @@
 
 
 
-    <form action="/searchTrips" method="POST" id="searchTripForm">
-        <div class="search-bar">
-            <i class="fa-solid fa-magnifying-glass"></i>
-            <div class="location-search-container">
-                <label for="location">Where</label>
-                <input type="text" name="location" id="location" placeholder="Search destinations">
-            </div>
 
-            <div class="checkin-search-container">
-                <label for="checkIn">Check in</label>
-                <input type="date" placeholder="Check in" name="checkIn" id="checkIn">
-            </div>
-
-            <div class="checkout-search-container">
-                <label for="checkOut">Check out</label>
-                <input type="date" placeholder="Check out" name="checkOut" id="checkOut">
-            </div>
-
-            <button type="button" onclick="searchTrip()">Search</button>
-        </div>
-    </form>
-
-    <main>
-        <div class="sort-container">
-            <div class="filter">
-                <h1 class="filter-heading">TRIP STYLE</h1>
-
-                <div class="catagories-container">
-                    <!-- <form id="categoryFilterForm" method="POST" action="/searchtrips">
-                        <label for="nature"><input type="checkbox" name="category" value="nature" id="nature"
-                                onclick="toggleCategory('nature')"> Nature</label>
-                        <label for="party"><input type="checkbox" name="category" value="party" id="party"
-                                onclick="toggleCategory('party')"> Party</label>
-                        <label for="food"><input type="checkbox" name="category" value="food" id="food"
-                                onclick="toggleCategory('food')"> Food</label>
-                        <label for="beach"><input type="checkbox" name="category" value="beach" id="beach"
-                                onclick="toggleCategory('beach')"> Beach</label>
-                        <label for="culture"><input type="checkbox" name="category" value="culture" id="culture"
-                                onclick="toggleCategory('culture')"> Culture</label>
-                        <label for="sports"><input type="checkbox" name="category" value="sports" id="sports"
-                                onclick="toggleCategory('sports')"> Sports</label>
-                        <input type="hidden" name="selectedCategories" id="selectedCategories">
-                        <button type="button" onclick="searchCategory()">Apply Categories</button>
-                    </form> -->
-                </div>
-
-                <h1 class="trip-typo">TRIP</h1>
-                <h1 class="style-typo">STYLE</h1>
-            </div>
-
-            <form id="priceFilterForm" action="/priceFilter" method="POST">
-                <div class="price-filter">
-                    <h1 class="pricebg">PRICE</h1>
-                    <h1 class="rangebg">RANGE</h1>
-                    <div class="price-heading">
-                        <h2>Price Range</h2>
-                    </div>
-                    <div class="price-input">
-                        <div>
-                            <!-- <label for="minTotal">Min Price</label> -->
-                            <input type="number" name="minTotal" id="minTotal" placeholder="min price">
-                        </div>
-
-                        <div>
-                            <!-- <label for="maxTotal">Max Price</label> -->
-                            <input type="number" name="maxTotal" id="maxTotal" placeholder="max price">
-                        </div>
-
-                        <button type="button" onclick="filterByPrice()">Apply</button>
-                    </div>
-                </div>
-            </form>
-        </div>
-
-    </main>
+   
 
 
 
@@ -514,7 +423,71 @@
             });
         });
 
+
+
+
+
+
+
+
+
+
+
+
+        // dates correction
+
+
+
+
+
+        // Get today's date in the format 'YYYY-MM-DD'
+        const today = new Date().toISOString().split('T')[0];
+
+        // Get input elements
+        const fromDateInput = document.getElementById('fromDate');
+        const toDateInput = document.getElementById('toDate');
+
+        // Set the min date for the "from" input
+        fromDateInput.setAttribute('min', today);
+
+        // Add an event listener to update the "to" input based on "from" input selection
+        fromDateInput.addEventListener('change', () => {
+            const selectedFromDate = fromDateInput.value;
+
+            // Update the min date for the "to" input
+            toDateInput.setAttribute('min', selectedFromDate);
+
+            // Ensure the "to" date is greater than or equal to the "from" date
+            if (toDateInput.value && toDateInput.value < selectedFromDate) {
+                toDateInput.value = ""; // Clear the "to" input if it violates the rule
+                alert("The 'To' date must be greater than or equal to the 'From' date.");
+            }
+        });
+
+        // Add an event listener to validate "to" date when changed
+        toDateInput.addEventListener('change', () => {
+            const selectedFromDate = fromDateInput.value;
+            const selectedToDate = toDateInput.value;
+
+            // Ensure the "to" date is greater than or equal to the "from" date
+            if (selectedFromDate && selectedToDate < selectedFromDate) {
+                toDateInput.value = ""; // Clear the "to" input if it violates the rule
+                alert("The 'To' date must be greater than or equal to the 'From' date.");
+            }
+        });
+
+
+
+
+
+
+
+
+
     </script>
+
+
+    <script src="/js/whislist.js"></script>
     <script src="/js/dropdown.js"></script>
     <script src="/js/autoSuggestions.js"></script>
     <script src="/js/secondarySearch.js"></script>

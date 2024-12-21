@@ -610,6 +610,10 @@ const mainSearch = async (req, res) => {
             exactMatchTrips: tripsWithRatings,
             user: req.user,
             userWishlist,
+            startingLocation,
+            destinationLocation,
+            fromDate,
+            toDate
         });
 
     } catch (error) {

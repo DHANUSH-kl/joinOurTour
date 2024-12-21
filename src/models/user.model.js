@@ -6,7 +6,8 @@ const userSchema = new Schema({
     username: { type: String, },
     firstName: { type: String,},
     lastName: { type: String, },
-    location: { type: String, },
+    state: { type: String, },
+    city: { type: String, },
     phoneNumber: { type: Number, },
     email: { type: String, unique: true },
     isAgent: {
