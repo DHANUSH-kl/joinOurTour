@@ -3,7 +3,6 @@
     padding: 0;
     margin: 0;
     box-sizing: border-box;
-    overflow-x: hidden;
 
 }
 
@@ -30,3 +29,34 @@ nav a {
 
 }
 
+.action-buttons {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 2rem;
+}
+
+.acceptTrip , .rejectTrip {
+    padding: 0.3em 1.5rem;
+    border: none;
+    border-radius: 5px;
+    color: white;
+    font-family: poppins;
+}
+
+.acceptTrip {
+    background-color: green;
+
+}
+
+.rejectTrip {
+    background-color: red;
+}
+
+main {
+    width: 100vw;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}

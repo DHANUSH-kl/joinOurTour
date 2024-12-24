@@ -64,7 +64,7 @@ const addNewTrip = async (req, res) => {
         ,minAge  
         ,languages
         ,deposit
-
+        
     } = req.body;
 
     // Extract the trip and stop images from req.files
@@ -79,6 +79,8 @@ const addNewTrip = async (req, res) => {
     console.log(stopImages);
 
     let userId = req.user._id;
+
+    const operatorEmail = userId.email;
 
     // Transform the YouTube URL for embedding
     if (youtubeUrl.includes("youtu.be")) {
@@ -117,7 +119,9 @@ const addNewTrip = async (req, res) => {
         transport,
         languages,
         deposit,
-        buffer
+        buffer,
+        operatorEmail, // Capture operator's email for notifications
+        status: 'pending',
     });
 
     totalDays = totalDays[0] ? parseInt(totalDays[0]) : 0;
@@ -132,9 +136,9 @@ const addNewTrip = async (req, res) => {
 
     await newTrip.save();
 
-    // Deduct 100 tokens from the user's wallet after creating the trip
-    user.wallet -= 100;
-    await user.save(); // Save the updated user wallet
+    // // Deduct 100 tokens from the user's wallet after creating the trip
+    // user.wallet -= 100;
+    // await user.save(); // Save the updated user wallet
 
 
     res.redirect("/");
@@ -149,19 +153,16 @@ const showAllTrips = async (req, res) => {
 
     const userWishlist = req.user ? req.user.wishlist : [];
 
-    console.log(req.user)
+    console.log(req.user);
 
-    const totalTrips = await Trip.countDocuments(); // Get the total number of trips
-    const allTrips = await Trip.find()
+    // Get the total number of accepted trips (instead of all trips)
+    const totalTrips = await Trip.countDocuments({ status: 'accepted' }); // Count only accepted trips
+
+    const allTrips = await Trip.find({ status: 'accepted' })
         .populate("reviews")
         .populate("owner")
         .skip((perPage * page) - perPage) // Skip trips to get the correct page
         .limit(perPage); // Limit the number of trips per page
-
-
-
-
-
 
     // Calculate average ratings for each trip
     allTrips.forEach(trip => {
@@ -182,7 +183,6 @@ const showAllTrips = async (req, res) => {
         });
         trip.averageRating = count > 0 ? (totalRatings / count).toFixed(1) : 0; // Add average rating to trip object
 
-
         // Calculate male-to-female ratio
         const totalTravelers = trip.maleTravelers + trip.femaleTravelers;
         const maleRatio = totalTravelers > 0 ? ((trip.maleTravelers / totalTravelers) * 100).toFixed(1) : 0;
@@ -193,10 +193,7 @@ const showAllTrips = async (req, res) => {
         trip.femaleRatio = femaleRatio;
     });
 
-
-
-
-
+    // Render the page with the correct pagination
     res.render("trips/showAll", {
         allTrips,
         currentPage: page,
@@ -204,8 +201,8 @@ const showAllTrips = async (req, res) => {
         user: req.user,
         userWishlist
     });
-
 };
+
 // showing particular trip 
 
 const showTrip = async (req, res) => {

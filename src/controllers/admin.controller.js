@@ -9,6 +9,8 @@ import { User } from '../models/user.model.js';
 import Admin from '../models/admin.model.js';
 import { Trip } from '../models/travel.model.js';
 import { Review } from '../models/review.model.js';
+import nodemailer from 'nodemailer';
+
 
 app.use(bodyParser.urlencoded({ extended: true }));
 
@@ -228,9 +230,73 @@ const sendCoin = async(req,res) => {
 
 const adminPerks = async(req,res) => {
 
-    res.render("admin/adminPerks.ejs")
+    try {
+        const pendingTrips = await Trip.find({ status: 'pending' });
+        res.render('admin/adminPerks.ejs', { pendingTrips });
+      } catch (error) {
+        console.error('Error fetching trips:', error);
+        res.status(500).send('Internal Server Error');
+    }
 
 
 }
 
-export { adminPerks , walletPage , sendCoin , editAdminForm , editAdminPannel, posttripPackage, becomeOwnerForm, postOwner, agentAccessForm, postAgentAccess, tripLeaderForm, postTripLeader, displayPackages }
+
+
+const updateTripStatus = async (req, res) => {
+    const { id } = req.params;
+    const { action, rejectionReason } = req.body;
+  
+    try {
+      const trip = await Trip.findById(id).populate('owner');
+  
+      if (!trip) return res.status(404).send('Trip not found');
+  
+      if (action === 'accept') {
+        trip.status = 'accepted';
+        await trip.save();
+
+      } else if (action === 'reject') {
+        trip.status = 'rejected';
+        trip.rejectionReason = rejectionReason;
+
+         // Check if the owner and email exist
+         if (!trip.owner || !trip.owner.email) {
+            return res.status(400).send('Owner email not found');
+        }
+
+
+         // Get the owner's email dynamically using getOwnerEmail method
+         const ownerEmail = await trip.owner.email;
+         if (!ownerEmail) {
+             return res.status(400).send('Owner email not found');
+         }
+  
+        // Send rejection email
+        const transporter = nodemailer.createTransport({
+          service: 'gmail',
+          auth: {
+            user: process.env.EMAIL_USER, // Your email
+            pass: process.env.EMAIL_PASS, // Your email password
+          },
+        });
+  
+        await transporter.sendMail({
+          from: process.env.EMAIL_USER,
+          to: ownerEmail,
+          subject: 'Trip Rejection Notification',
+          text: `Your trip titled "${trip.title}" has been rejected. Reason: ${rejectionReason}`,
+        });
+      }
+  
+      res.redirect('/admin/adminpannel');
+    } catch (error) {
+      console.error('Error updating trip status:', error);
+      res.status(500).send('Internal Server Error');
+    }
+  };
+  
+
+
+
+export { updateTripStatus , adminPerks , walletPage , sendCoin , editAdminForm , editAdminPannel, posttripPackage, becomeOwnerForm, postOwner, agentAccessForm, postAgentAccess, tripLeaderForm, postTripLeader, displayPackages }

@@ -102,7 +102,20 @@ const tripSchema = new Schema({
     deposit : {
         type: Number
     },
+    status: {
+        type: String,
+        enum: ['pending', 'accepted', 'rejected'],
+        default: 'pending', // All newly created trips are pending by default
+      },
+    
+    rejectionReason: String, // Store rejection reason if rejected
+    operatorEmail: String, // Store the trip operator's email
+      
+    
 } , {timestamps:true});
+
+
+
 
 
 // Mongoose middleware to remove trip ID from users' createdTrips when a trip is deleted

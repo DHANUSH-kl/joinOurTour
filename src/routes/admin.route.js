@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { adminPerks , sendCoin , walletPage , editAdminForm ,editAdminPannel, posttripPackage , displayPackages,becomeOwnerForm, postOwner, agentAccessForm, postAgentAccess, tripLeaderForm, postTripLeader } from "../controllers/admin.controller.js";
+import { updateTripStatus , adminPerks , sendCoin , walletPage , editAdminForm ,editAdminPannel, posttripPackage , displayPackages,becomeOwnerForm, postOwner, agentAccessForm, postAgentAccess, tripLeaderForm, postTripLeader } from "../controllers/admin.controller.js";
 import { asyncWrap } from "../constants.js";
 import { isAgent, isLoggedIn, isOwner } from "../middlewares.js";
 import multer from 'multer';
@@ -13,8 +13,12 @@ router.route("/featuredTrips")
     .get(displayPackages)
     .post(posttripPackage)
 
-router.route(("/adminpannel"))
+router.route("/adminpannel")
     .get(adminPerks)
+
+router.route("/:id/update-status")
+    .post(updateTripStatus);
+
 
 
 router.route("/featuredTrips/editfeaturedTrips")
