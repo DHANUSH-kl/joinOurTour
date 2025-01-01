@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Trips Report</title>
+    <link rel="stylesheet" href="/css/analyticsPage.css">
+</head>
+<body>
+    <div class="container">
+        <h1>Trips Report</h1>
+
+        <form method="GET" action="/admin/reports">
+            <div class="filters">
+                <label>
+                    Rating Filter:
+                    <input type="number" name="ratingFilter" min="1" max="5" step="0.1" placeholder="1 - 5">
+                </label>
+                <label>
+                    Minimum Rating Count:
+                    <input type="number" name="minRatingCount" min="0" placeholder="Minimum Ratings">
+                </label>
+                <label>
+                    Sort Revenue:
+                    <select name="sortRevenue">
+                        <option value="">--Sort By--</option>
+                        <option value="asc">Low to High</option>
+                        <option value="desc">High to Low</option>
+                    </select>
+                </label>
+                <button type="submit">Apply Filters</button>
+            </div>
+        </form>
+
+        <table>
+            <thead>
+                <tr>
+                    <th>Operator Name</th>
+                    <th>Trip Name</th>
+                    <th>Trips Created</th>
+                    <th>Trips Completed</th>
+                    <th>Revenue</th>
+                    <th>Reported Trips</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                <% operators.forEach(operator => { %>
+                    <% operator.trips.forEach(trip => { %>
+                        <tr>
+                            <td><%= operator.username %></td>
+                            <td><%= trip.title %></td>
+                            <td><%= operator.trips.length %></td>
+                            <td><%= operator.completedTrips %></td>
+                            <td>$<%= trip.revenue %></td>
+                            <td>
+                                <% trip.reports.length > 0 ? trip.reports.length : 'N/A' %>
+                            </td>
+                            <td>
+                                <% if (trip.reports.length > 0) { %>
+                                    <button onclick="emailOperator('<%= operator.username %>')">Email Operator</button>
+                                    <button onclick="suspendTrip('<%= trip._id %>')">Suspend</button>
+                                <% } %>
+                            </td>
+                        </tr>
+                    <% }); %>
+                <% }); %>
+            </tbody>
+        </table>
+
+        <div class="pagination">
+            <% for (let i = 1; i <= totalPages; i++) { %>
+                <a href="?page=<%= i %>" class="<%= i == currentPage ? 'active' : '' %>"><%= i %></a>
+            <% } %>
+        </div>
+    </div>
+
+    <script>
+        function emailOperator(operatorName) {
+            alert(`Email sent to ${operatorName}`);
+        }
+
+        function suspendTrip(tripId) {
+            alert(`Trip ${tripId} suspended`);
+        }
+    </script>
+</body>
+</html>

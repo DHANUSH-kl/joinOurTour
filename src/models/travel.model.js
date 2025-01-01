@@ -111,6 +111,10 @@ const tripSchema = new Schema({
     rejectionReason: String, // Store rejection reason if rejected
     operatorEmail: String, // Store the trip operator's email
       
+    report: [{
+        reason: String,
+        reportedAt: { type: Date, default: Date.now }
+    }]
     
 } , {timestamps:true});
 

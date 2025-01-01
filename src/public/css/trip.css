@@ -904,3 +904,53 @@ ul.rb li .timestamp {
   align-items: center;
   gap: 10px;
 }
+
+.report-btn {
+  padding: 0.2rem 1.2rem;
+  border: none;
+  color: #FFF;
+  background-color: red;
+  border-radius: 10px;
+  font-family: Poppins;
+  font-size: 14px;
+  font-style: normal;
+  font-weight: 700;
+  line-height: 30px; 
+  cursor: pointer;
+  margin-top: 1.5rem;
+}
+
+.report-btn:hover {
+  color: red;
+  background-color: #FFF;
+  transition: 0.2s ease-in-out;
+  border: 2px dotted red;
+}
+
+.report-section textarea {
+  width: 20rem;
+  margin-top: 2rem;
+  border: 2px dotted red;
+  font-family: Poppins;
+  font-size: 12px;
+  font-style: normal;
+  font-weight: 400;
+  text-align: center;
+
+}
+
+.submit-btn {
+  padding: 0.2rem 1.2rem;
+  border: none;
+  color: #FFF;
+  background-color: #05A351;
+  border-radius: 10px;
+  font-family: Poppins;
+  font-size: 14px;
+  font-style: normal;
+  font-weight: 700;
+  display: block;
+  line-height: 30px; 
+  cursor: pointer;
+  margin-top: 1.5rem;
+}

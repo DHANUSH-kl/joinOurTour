@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Reported Trips</title>
+
+    <link rel="stylesheet" href="/css/report.css">
+
+</head>
+<body>
+
+    <div class="container">
+        <h1>Reported Trips</h1>
+
+
+        <table class="trip-table">
+            <thead>
+                <tr>
+                    <th>Trip ID</th>
+                    <th>Number of Reports</th>
+                    <th>Top Report Reason</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                <% tripData.forEach(trip => { %>
+                    <tr>
+                        <td><a href="/<%= trip.tripId %>" class="trip-id-link"><%= trip.tripId %></a></td>
+                        <td><%= trip.count %></td>
+                        <td><%= trip.topReason %></td>
+                        <td>
+                            <button class="view-reports-btn" onclick="viewReports('<%= trip.tripId %>')">View All Reports</button>
+                        </td>
+                    </tr>
+                <% }) %>
+            </tbody>
+        </table>
+    </div>
+
+    <!-- Modal for Viewing Reports -->
+    <div id="reportsModal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <h2>All Reports</h2>
+            <div id="reportsContainer"></div>
+        </div>
+    </div>
+
+    <script>
+        // Sorting function
+        function sortTrips() {
+            const sortValue = document.getElementById("sortReports").value;
+            window.location.href = `/admin/reportedTrips?sort=${sortValue}`;
+        }
+
+        // Function to fetch and display all reports for a specific trip
+        function viewReports(tripId) {
+            fetch(`/admin/reportedTrips/${tripId}`)
+                .then(response => response.json())
+                .then(data => {
+                    const reportsContainer = document.getElementById("reportsContainer");
+                    reportsContainer.innerHTML = ""; // Clear previous reports
+
+                    if (Array.isArray(data.reports) && data.reports.length > 0) {
+                        data.reports.forEach(report => {
+                            const reportDiv = document.createElement("div");
+                            reportDiv.classList.add("report-item");
+                            reportDiv.innerHTML = `
+                                <p><strong>Reason:</strong> ${report.reason}</p>
+                                <p><strong>Reported At:</strong> ${new Date(report.reportedAt).toLocaleString()}</p>
+                            `;
+                            reportsContainer.appendChild(reportDiv);
+                        });
+                    } else {
+                        reportsContainer.innerHTML = "<p>No reports available for this trip.</p>";
+                    }
+
+                    // Display the modal
+                    document.getElementById("reportsModal").style.display = "block";
+                })
+                .catch(error => {
+                    console.error("Error fetching reports:", error);
+                });
+        }
+
+        // Close modal when clicking on 'X'
+        document.querySelector(".close").onclick = () => {
+            document.getElementById("reportsModal").style.display = "none";
+        };
+
+        // Close modal if clicked outside
+        window.onclick = (event) => {
+            if (event.target === document.getElementById("reportsModal")) {
+                document.getElementById("reportsModal").style.display = "none";
+            }
+        };
+    </script>
+
+</body>
+</html>

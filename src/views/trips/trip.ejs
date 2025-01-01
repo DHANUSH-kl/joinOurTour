@@ -142,37 +142,43 @@
 
                             <div class="adult-ticket">
                                 <h3>
-                                Adult (18+ years) &nbsp; <span> &#8377;<%= trip.totalCost.toLocaleString('en-IN') %></span>
+                                    Adult (18+ years) &nbsp; <span> &#8377;<%= trip.totalCost.toLocaleString('en-IN') %>
+                                            </span>
                                 </h3>
                                 <div class="ticket-counter">
-                                    <button id="decrease-adult"><</button>
-                                    <span id="ticket-count-adult">1</span>
-                                    <button id="increase-adult">></button>
+                                    <button id="decrease-adult">
+                                        << /button>
+                                            <span id="ticket-count-adult">1</span>
+                                            <button id="increase-adult">></button>
                                 </div>
                             </div>
 
                             <div class="adult-ticket">
                                 <h3>
-                                    Youth (13-17 years) &nbsp; <span> &#8377;<%= trip.totalCost.toLocaleString('en-IN') %></span>
+                                    Youth (13-17 years) &nbsp; <span> &#8377;<%= trip.totalCost.toLocaleString('en-IN')
+                                            %></span>
                                 </h3>
                                 <div class="ticket-counter">
-                                    <button id="decrease-youth"><</button>
-                                    <span id="ticket-count-youth">1</span>
-                                    <button id="increase-youth">></button>
+                                    <button id="decrease-youth">
+                                        << /button>
+                                            <span id="ticket-count-youth">1</span>
+                                            <button id="increase-youth">></button>
                                 </div>
                             </div>
 
                             <div class="adult-ticket">
                                 <h3>
-                                    Children (0-12 years) &nbsp; <span> &#8377;<%= trip.totalCost.toLocaleString('en-IN') %></span>
+                                    Children (0-12 years) &nbsp; <span> &#8377;<%=
+                                            trip.totalCost.toLocaleString('en-IN') %></span>
                                 </h3>
                                 <div class="ticket-counter">
-                                    <button id="decrease-children"><</button>
-                                    <span id="ticket-count-children">1</span>
-                                    <button id="increase-children">></button>
+                                    <button id="decrease-children">
+                                        << /button>
+                                            <span id="ticket-count-children">1</span>
+                                            <button id="increase-children">></button>
                                 </div>
                             </div>
-                            
+
 
 
                         </div>
@@ -181,9 +187,9 @@
 
                     <div class="book-container">
                         <div class="g-total">
-                           <h3> Total: </h3>
+                            <h3> Total: </h3>
 
-                           <h2 id="grand-total">&#8377; <span id="total-amount">0</span></h2>
+                            <h2 id="grand-total">&#8377; <span id="total-amount">0</span></h2>
                         </div>
                     </div>
 
@@ -224,17 +230,32 @@
                     <div class="ov-details">
                         <p>Languages</p>
                         <div class="ln-container">
-                            <% if (trip.languages && trip.languages.length > 0) { %>
-                                <% for (let i = 0; i < trip.languages.length; i++) { %>
-                                    <p><%= trip.languages[i], %></p>
-                                <% } %>
-                            <% } else { %>
-                                <li>No languages specified.</li>
-                            <% } %>
-                            </div>
+                            <% if (trip.languages && trip.languages.length> 0) { %>
+                                <% for (let i=0; i < trip.languages.length; i++) { %>
+                                    <p>
+                                        <%= trip.languages[i], %>
+                                    </p>
+                                    <% } %>
+                                        <% } else { %>
+                                            <li>No languages specified.</li>
+                                            <% } %>
+                        </div>
                     </div>
                 </div>
             </div>
+
+            <div class="trip-details">
+
+                <div class="report-section">
+                    <button id="show-report-form" class="report-btn">Report Trip</button>
+                    <form id="report-form" action="/report-trip/<%= trip._id %>" method="POST" style="display: none;">
+                        <textarea name="reason" id="report-reason" rows="4"
+                            placeholder="Enter the reason for reporting this trip" required></textarea>
+                        <button type="submit" class="submit-btn">Submit Report</button>
+                    </form>
+                </div>
+            </div>
+
 
 
             <div class="description">
@@ -612,7 +633,21 @@
 
 
 
+
+
+
+
                     </script>
+
+
+
+                    <script>
+                        document.getElementById('show-report-form').addEventListener('click', function () {
+                            const reportForm = document.getElementById('report-form');
+                            reportForm.style.display = reportForm.style.display === 'none' ? 'block' : 'none';
+                        });
+                    </script>
+
 
                     <script src="/js/ticketcounter.js"></script>
                     <script src="/js/dropdown.js"></script>

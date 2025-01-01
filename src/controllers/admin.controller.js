@@ -289,7 +289,7 @@ const updateTripStatus = async (req, res) => {
         });
       }
   
-      res.redirect('/admin/adminpannel');
+      res.redirect('admin/adminpannel');
     } catch (error) {
       console.error('Error updating trip status:', error);
       res.status(500).send('Internal Server Error');
@@ -298,5 +298,118 @@ const updateTripStatus = async (req, res) => {
   
 
 
+const analytics = async(req,res) => {
 
-export { updateTripStatus , adminPerks , walletPage , sendCoin , editAdminForm , editAdminPannel, posttripPackage, becomeOwnerForm, postOwner, agentAccessForm, postAgentAccess, tripLeaderForm, postTripLeader, displayPackages }
+
+    const { ratingFilter, minRatingCount, sortRevenue, page = 1 } = req.query;
+    const limit = 10; // Items per page
+    const skip = (page - 1) * limit;
+
+    try {
+        const operators = await User.find({ isTourOperator: true })
+            .populate({
+                path: 'trips',
+                match: {
+                    ratingsAverage: ratingFilter ? { $gte: ratingFilter } : undefined,
+                    ratingsQuantity: minRatingCount ? { $gte: minRatingCount } : undefined,
+                },
+                options: {
+                    sort: sortRevenue ? { revenue: sortRevenue === 'asc' ? 1 : -1 } : undefined,
+                },
+            });
+
+        const totalTrips = await Trip.countDocuments();
+        const totalPages = Math.ceil(totalTrips / limit);
+
+        // Ensure `trips` is always an array
+        const sanitizedOperators = operators.map(operator => ({
+            ...operator.toObject(),
+            trips: operator.trips || [], // Default to an empty array if trips is undefined
+        }));
+
+        res.render('admin/analyticsPage', {
+            operators: sanitizedOperators,
+            totalPages,
+            currentPage: Number(page),
+        });
+    } catch (err) {
+        console.error('Error generating trip reports:', err);
+        res.status(500).send('Server Error');
+    }
+
+
+}
+
+
+
+
+
+const reportedTrips = async (req, res) => {
+    try {
+        console.log("Fetching reported trips...");
+
+        const sortOrder = req.query.sort === 'asc' ? 1 : -1; // Determine the sort order based on the query parameter
+
+        // Fetch all trips with their reports and sort by the number of reports (high to low or low to high)
+        const trips = await Trip.aggregate([
+            { $match: { "report.0": { $exists: true } } }, // Only trips with reports
+            {
+                $project: {
+                    title: 1,
+                    reportCount: { $size: "$report" },
+                    topReason: { $arrayElemAt: ["$report.reason", 0] },
+                    reports: { $ifNull: ["$report", []] } // Safeguard: Ensure reports is always an array
+                }
+            },
+            { $sort: { reportCount: sortOrder } } // Sort based on reportCount (ascending or descending)
+        ]);
+
+        console.log("Trips fetched:", trips);
+
+        if (trips.length === 0) {
+            console.log("No trips found with reports.");
+        }
+
+        // Map the trips to the necessary format
+        const tripData = trips.map(trip => ({
+            tripId: trip._id,
+            title: trip.title,
+            count: trip.reportCount,
+            topReason: trip.topReason || "No reason provided",
+            allReports: Array.isArray(trip.reports) 
+                ? trip.reports.map(r => ({
+                    reason: r.reason,
+                    reportedAt: r.reportedAt // Show the report creation time
+                }))
+                : [] // Ensure it's an empty array if reports is not an array
+        }));
+
+        // Render the EJS template
+        res.render("admin/reportedTrips", { tripData });
+    } catch (err) {
+        console.error("Error fetching reported trips:", err);
+        res.status(500).send("An error occurred while fetching reported trips.");
+    }
+};
+
+// Fetch all reports for a specific trip
+const fetchTripReports = async (req, res) => {
+    try {
+        const tripId = req.params.tripId;
+
+        const trip = await Trip.findById(tripId);
+        if (!trip) {
+            return res.status(404).send("Trip not found");
+        }
+
+        res.json({ reports: trip.report });
+    } catch (err) {
+        console.error("Error fetching trip reports:", err);
+        res.status(500).send("An error occurred while fetching trip reports.");
+    }
+};
+
+
+
+
+export { fetchTripReports , reportedTrips , analytics , updateTripStatus , adminPerks , walletPage , sendCoin , editAdminForm , editAdminPannel, posttripPackage, becomeOwnerForm, postOwner, agentAccessForm, postAgentAccess, tripLeaderForm, postTripLeader, displayPackages }

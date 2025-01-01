@@ -975,5 +975,32 @@ const discoverPage = async (req, res) => {
 
 }
 
-export { showWishlist, fetchWhislist, deleteReview, discoverPage, mainSearch, getSecondarySearch, aboutus, reviews, whislist, searchTrips, newTripForm, showAllTrips, addNewTrip, editTripForm, showTrip, deleteTrip, mytrip, postEditTrip, catagariesTrips, priceFilter };
+
+
+const reportTrip = async(req,res) => {
+    const { id } = req.params;
+    const { reason } = req.body;
+
+    if (!reason) {
+        return res.status(400).send('Reason for reporting is required.');
+    }
+
+    try {
+        const trip = await Trip.findById(id);
+        if (!trip) {
+            return res.status(404).send('Trip not found.');
+        }
+
+        trip.report.push({ reason });
+        await trip.save();
+
+        res.redirect(`/${id}`); // Redirect back to the trip page
+    } catch (error) {
+        console.error(error);
+        res.status(500).send('Server error.');
+    }
+}
+
+
+export { reportTrip , showWishlist, fetchWhislist, deleteReview, discoverPage, mainSearch, getSecondarySearch, aboutus, reviews, whislist, searchTrips, newTripForm, showAllTrips, addNewTrip, editTripForm, showTrip, deleteTrip, mytrip, postEditTrip, catagariesTrips, priceFilter };
 
