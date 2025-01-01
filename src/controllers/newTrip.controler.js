@@ -793,6 +793,21 @@ const getSecondarySearch = async (req, res) => {
     // Handle categories correctly whether it's an array or a single value
     const categories = Array.isArray(req.body.categories) ? req.body.categories.map(cat => cat.trim()) : (req.body.categories ? [req.body.categories.trim()] : []);
 
+
+    const languages = Array.isArray(req.body.languages)
+    ? req.body.languages.map(lang => lang.trim())
+    : req.body.languages
+    ? [req.body.languages.trim()]
+    : [];
+
+
+      // Handle days filter
+      const minDays = req.body.minDays ? parseInt(req.body.minDays) : null;
+      const maxDays = req.body.maxDays ? parseInt(req.body.maxDays) : null;
+     
+
+
+
     let query = {};
 
     // Add location to query if destination is provided and not empty
@@ -804,6 +819,24 @@ const getSecondarySearch = async (req, res) => {
     if (categories.length > 0) {
         query.categories = { $in: categories }; // Match any of the provided categories
     }
+
+
+    if (languages.length > 0) {
+        query.languages = { $in: languages.map(lang => new RegExp(`^${lang}$`, 'i')) };
+    }
+    
+
+    // Add totalDays filter if minDays or maxDays are provided
+    if (minDays || maxDays) {
+        query.totalDays = {};
+        if (minDays) {
+            query.totalDays.$gte = minDays;
+        }
+        if (maxDays) {
+            query.totalDays.$lte = maxDays;
+        }
+    }
+
 
     // Only add totalCost to the query if minPrice and maxPrice are not both '0'
     if (minPrice !== '0' || maxPrice !== '0') {
@@ -1002,5 +1035,5 @@ const reportTrip = async(req,res) => {
 }
 
 
-export { reportTrip , showWishlist, fetchWhislist, deleteReview, discoverPage, mainSearch, getSecondarySearch, aboutus, reviews, whislist, searchTrips, newTripForm, showAllTrips, addNewTrip, editTripForm, showTrip, deleteTrip, mytrip, postEditTrip, catagariesTrips, priceFilter };
+export { reportTrip ,  showWishlist, fetchWhislist, deleteReview, discoverPage, mainSearch, getSecondarySearch, aboutus, reviews, whislist, searchTrips, newTripForm, showAllTrips, addNewTrip, editTripForm, showTrip, deleteTrip, mytrip, postEditTrip, catagariesTrips, priceFilter };
 

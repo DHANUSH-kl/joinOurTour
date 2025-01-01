@@ -65,3 +65,5 @@ inputMax.addEventListener("input", () => {
 rangeMin.value = 0;
 rangeMax.value = 0;
 updateSlider();
+
+
