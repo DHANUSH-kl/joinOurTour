@@ -346,51 +346,45 @@ const analytics = async(req,res) => {
 
 const reportedTrips = async (req, res) => {
     try {
-        console.log("Fetching reported trips...");
+        const sortOrder = req.query.sort === 'asc' ? 1 : -1; // Determine sort order
 
-        const sortOrder = req.query.sort === 'asc' ? 1 : -1; // Determine the sort order based on the query parameter
-
-        // Fetch all trips with their reports and sort by the number of reports (high to low or low to high)
         const trips = await Trip.aggregate([
             { $match: { "report.0": { $exists: true } } }, // Only trips with reports
+            {
+                $lookup: {
+                    from: "users",
+                    localField: "owner",
+                    foreignField: "_id",
+                    as: "ownerDetails"
+                }
+            },
             {
                 $project: {
                     title: 1,
                     reportCount: { $size: "$report" },
                     topReason: { $arrayElemAt: ["$report.reason", 0] },
-                    reports: { $ifNull: ["$report", []] } // Safeguard: Ensure reports is always an array
+                    reports: { $ifNull: ["$report", []] },
+                    ownerUsername: { $arrayElemAt: ["$ownerDetails.username", 0] } // Extract owner's username
                 }
             },
-            { $sort: { reportCount: sortOrder } } // Sort based on reportCount (ascending or descending)
+            { $sort: { reportCount: sortOrder } }
         ]);
 
-        console.log("Trips fetched:", trips);
-
-        if (trips.length === 0) {
-            console.log("No trips found with reports.");
-        }
-
-        // Map the trips to the necessary format
         const tripData = trips.map(trip => ({
             tripId: trip._id,
             title: trip.title,
             count: trip.reportCount,
             topReason: trip.topReason || "No reason provided",
-            allReports: Array.isArray(trip.reports) 
-                ? trip.reports.map(r => ({
-                    reason: r.reason,
-                    reportedAt: r.reportedAt // Show the report creation time
-                }))
-                : [] // Ensure it's an empty array if reports is not an array
+            ownerUsername: trip.ownerUsername || "Unknown Owner",
         }));
 
-        // Render the EJS template
         res.render("admin/reportedTrips", { tripData });
     } catch (err) {
         console.error("Error fetching reported trips:", err);
         res.status(500).send("An error occurred while fetching reported trips.");
     }
 };
+
 
 // Fetch all reports for a specific trip
 const fetchTripReports = async (req, res) => {

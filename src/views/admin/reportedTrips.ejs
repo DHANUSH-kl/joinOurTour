@@ -6,18 +6,16 @@
     <title>Reported Trips</title>
 
     <link rel="stylesheet" href="/css/report.css">
-
 </head>
 <body>
 
     <div class="container">
         <h1>Reported Trips</h1>
 
-
         <table class="trip-table">
             <thead>
                 <tr>
-                    <th>Trip ID</th>
+                    <th>Owner Username</th>
                     <th>Number of Reports</th>
                     <th>Top Report Reason</th>
                     <th>Actions</th>
@@ -25,12 +23,12 @@
             </thead>
             <tbody>
                 <% tripData.forEach(trip => { %>
-                    <tr>
-                        <td><a href="/<%= trip.tripId %>" class="trip-id-link"><%= trip.tripId %></a></td>
+                    <tr class="clickable-row" data-trip-id="<%= trip.tripId %>">
+                        <td><%= trip.ownerUsername %></td>
                         <td><%= trip.count %></td>
                         <td><%= trip.topReason %></td>
                         <td>
-                            <button class="view-reports-btn" onclick="viewReports('<%= trip.tripId %>')">View All Reports</button>
+                            <button class="view-reports-btn" onclick="viewReports('<%= trip.tripId %>'); event.stopPropagation();">View All Reports</button>
                         </td>
                     </tr>
                 <% }) %>
@@ -48,11 +46,13 @@
     </div>
 
     <script>
-        // Sorting function
-        function sortTrips() {
-            const sortValue = document.getElementById("sortReports").value;
-            window.location.href = `/admin/reportedTrips?sort=${sortValue}`;
-        }
+        // Make rows clickable and redirect to the trip page
+        document.querySelectorAll(".clickable-row").forEach(row => {
+            row.addEventListener("click", () => {
+                const tripId = row.getAttribute("data-trip-id");
+                window.location.href = `/${tripId}`;
+            });
+        });
 
         // Function to fetch and display all reports for a specific trip
         function viewReports(tripId) {

@@ -106,3 +106,14 @@ h1 {
     border: 1px solid #ddd;
     background-color: #f9f9f9;
 }
+
+
+.clickable-row {
+    cursor: pointer; /* Change cursor to pointer when hovering */
+    transition: background-color 0.3s ease; /* Smooth transition for background color */
+}
+
+/* Darken the row on hover */
+.clickable-row:hover {
+    background-color: rgba(0, 0, 0, 0.1); /* Darken the background slightly */
+}
