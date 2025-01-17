@@ -81,19 +81,15 @@ app.use('/', tripRoutes);
 app.use('/user', userRoutes);
 app.use('/admin', adminRoutes);
 
-// Error handling
+app.get("/favicon.ico", (req, res) => res.status(204));
+
+
 app.use((err, req, res, next) => {
-  let { statusCode = 500, message = "Something went wrong!" } = err;
+  console.error(`Error occurred: ${err.message}`);
+  console.error(err.stack); // Logs the full stack trace for debugging
+
+  const { statusCode = 500, message = "Something went wrong!" } = err;
   res.status(statusCode).send(message);
 });
 
-app.all('*', (req, res, next) => {
-  next(new expressError(404, 'Page not found'));
-});
 
-// Default route
-app.get('/', (req, res) => {
-  const jsonData = { message: 'Hello, world!' };
-  res.setHeader('Content-Type', 'application/json');
-  res.status(200).json(jsonData);
-});

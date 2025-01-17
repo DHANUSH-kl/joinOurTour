@@ -50,7 +50,7 @@
         document.querySelectorAll(".clickable-row").forEach(row => {
             row.addEventListener("click", () => {
                 const tripId = row.getAttribute("data-trip-id");
-                window.location.href = `/${tripId}`;
+                window.location.href = `/tour/${tripId}`;
             });
         });
 

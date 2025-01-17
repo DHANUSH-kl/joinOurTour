@@ -246,6 +246,7 @@ const adminPerks = async(req,res) => {
 const updateTripStatus = async (req, res) => {
     const { id } = req.params;
     const { action, rejectionReason } = req.body;
+    const user = await User.findById(req.user._id);
   
     try {
       const trip = await Trip.findById(id).populate('owner');
@@ -254,6 +255,9 @@ const updateTripStatus = async (req, res) => {
   
       if (action === 'accept') {
         trip.status = 'accepted';
+       // Deduct 100 tokens from the user's wallet after creating the trip
+        user.wallet -= 100;
+        await user.save(); // Save the updated user wallet
         await trip.save();
 
       } else if (action === 'reject') {
@@ -289,7 +293,7 @@ const updateTripStatus = async (req, res) => {
         });
       }
   
-      res.redirect('admin/adminpannel');
+      res.redirect('/');
     } catch (error) {
       console.error('Error updating trip status:', error);
       res.status(500).send('Internal Server Error');

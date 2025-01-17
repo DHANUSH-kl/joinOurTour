@@ -1,5 +1,6 @@
 import express from 'express';
 import bodyParser from 'body-parser';
+import mongoose from 'mongoose';  
 import { User } from '../models/user.model.js';
 import { storage } from '../cloudinary.js';
 import multer from 'multer';
@@ -153,7 +154,6 @@ const showAllTrips = async (req, res) => {
 
     const userWishlist = req.user ? req.user.wishlist : [];
 
-    console.log(req.user);
 
     // Get the total number of accepted trips (instead of all trips)
     const totalTrips = await Trip.countDocuments({ status: 'accepted' }); // Count only accepted trips
@@ -206,7 +206,25 @@ const showAllTrips = async (req, res) => {
 // showing particular trip 
 
 const showTrip = async (req, res) => {
-    let { id } = req.params;
+    let  id  = req.params.id;
+    console.log( "id of the trip :" ,id);
+
+
+
+    // ✅ Ignore "favicon.ico" and other invalid strings
+    if (id === "favicon.ico" || id === "user-wishlist") {
+        return res.status(400).send("Invalid Trip ID");
+    }
+
+    // ✅ Check if ID is a valid MongoDB ObjectId **before querying**
+    if (!mongoose.Types.ObjectId.isValid(id)) {
+        return res.status(400).send("Invalid Trip ID");
+    }
+
+
+
+
+
     const trip = await Trip.findById(id).populate({
         path: 'owner',
         populate: {
@@ -963,7 +981,7 @@ const showWishlist = async (req, res) => {
     // Find the user by their ID
     const user = await User.findById(id);
     // Access the user's wishlist
-    const wishlistIds = user.wishlist; // Correct spelling of 'wishlist'
+    const wishlistIds = user.wishlist; 
 
 
     // Fetch details of trips that are in the user's wishlist
@@ -977,7 +995,7 @@ const showWishlist = async (req, res) => {
 }
 
 const fetchWhislist = async (req, res) => {
-    const userId = req.query.userId;
+    const userId = req.user._id;
 
     try {
         const user = await User.findById(userId).select('wishlist');
