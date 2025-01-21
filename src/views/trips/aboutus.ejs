@@ -281,23 +281,30 @@
 
       <div class="swiffy-slider slider-item-show2 slider-nav-autoplay">
         <ul class="slider-container">
-          <% for (let i=0; i < exploreTrips.length; i++) { %>
+          <% for (let i = 0; i < 4; i++) { %>
             <li>
-              <img src="<%= exploreTrips[i].tripImages[0].path %>" alt="">
-              <button class="explore-trip"><a href="/tour/<%= exploreTrips[i]._id %>">Explore Tour</a></button>
+              <% if (exploreTrips[i]) { %>
+                <!-- Render actual explore trip details if available -->
+                <img src="<%= exploreTrips[i].tripImages[0]?.path %>" alt="Explore Trip">
+                <button class="explore-trip">
+                  <a href="/tour/<%= exploreTrips[i]._id %>">Explore Tour</a>
+                </button>
+              <% } else { %>
+                <!-- Render a placeholder if no explore trip is available -->
+                <img src="placeholder-image.jpg" alt="No Explore Trip Available">
+                <button class="explore-trip">
+                  <a href="#">Explore Tour</a>
+                </button>
+              <% } %>
             </li>
-            <% } %>
+          <% } %>
 
         </ul>
 
         <button type="button" class="slider-nav"></button>
         <button type="button" class="slider-nav slider-nav-next"></button>
 
-        <!-- <div class="slider-indicators">
-          <button class="active"></button>
-          <button></button>
-          <button></button>
-        </div> -->
+
       </div>
 
     </div>
@@ -312,60 +319,32 @@
 
     <div class="package-cards" data-scroll-container>
 
-      <% for (let i=0; i < tripPackages.length; i++) { %>
-        <div class="card  card<%= i %>" data-scroll data-scroll-call="animate-card">
-          <img src="<%= tripPackages[i].tripImages[0].path %>" alt="">
-          <p>
-            <%= tripPackages[i].title %>
-          </p>
-
-          <form action="/discover" method="POST">
-            <input type="hidden" name="tripId" value="<%= tripPackages[i]._id %>">
-            <button type="submit">Discover more</button>
-          </form>
+      <% for (let i = 0; i < 4; i++) { %>
+        <div class="card card<%= i %>" data-scroll data-scroll-call="animate-card">
+          <% if (tripPackages[i]) { %>
+            <!-- Render actual trip details if available -->
+            <img src="<%= tripPackages[i].tripImages[0]?.path %>" alt="">
+            <p>
+              <%= tripPackages[i].title %>
+            </p>
+            <form action="/discover" method="POST">
+              <input type="hidden" name="tripId" value="<%= tripPackages[i]._id %>">
+              <button type="submit">Discover more</button>
+            </form>
+          <% } else { %>
+            <!-- Render placeholder card if trip is not available -->
+            <img src="placeholder-image.jpg" alt="No Trip Available">
+            <p>Trip Not Available</p>
+            <form action="#" method="POST">
+              <button type="submit" disabled>Discover more</button>
+            </form>
+          <% } %>
         </div>
-        <% } %>
-
+      <% } %>
     </div>
   </div>
 
 
-  <!-- <section class="testimonial-container">
-    <h1>What People Say About Us</h1>
-    <div class="testimonial-slider">
-      <div class="testimonial-slides">
-        <div class="t-content">
-          <div class="t-logo"></div>
-          <div class="t-review">Lorem ipsum dolor sit amet, consectetur adipiscing elit ut aliquam, purus sit amet
-            luctus venenatis, lectus magna fringilla urna, porttitor
-          </div>
-          <div class="t-name">-Jeo Stanlee</div>
-        </div>
-      </div>
-
-      <div class="testimonial-slides">
-        <div class="t-content">
-          <div class="t-logo"></div>
-          <div class="t-review">Lorem ipsum dolor sit amet, consectetur adipiscing elit ut aliquam, purus sit amet
-            luctus venenatis, lectus magna fringilla urna, porttitor
-          </div>
-          <div class="t-name">-Jeo Stanlee</div>
-        </div>
-      </div>
-
-      <div class="testimonial-slides">
-        <div class="t-content">
-          <div class="t-logo"></div>
-          <div class="t-review">Lorem ipsum dolor sit amet, consectetur adipiscing elit ut aliquam, purus sit amet
-            luctus venenatis, lectus magna fringilla urna, porttitor
-          </div>
-          <div class="t-name">-Jeo Stanlee</div>
-        </div>
-      </div>
-
-
-    </div>
-  </section> -->
 
 
 
@@ -504,29 +483,6 @@
 
   </footer>
 
-
-  <!-- 
-    <form action="/searchTrips" method="POST" id="searchTripForm">
-        <div class="search-bar">
-            <i class="fa-solid fa-magnifying-glass"></i>
-            <div class="location-search-container">
-                <label for="location">Where</label>
-                <input type="text" name="location" id="location" placeholder="Search destinations">
-            </div>
-
-            <div class="checkin-search-container">
-                <label for="checkIn">Check in</label>
-                <input type="date" placeholder="Check in" name="checkIn" id="checkIn">
-            </div>
-
-            <div class="checkout-search-container">
-                <label for="checkOut">Check out</label>
-                <input type="date" placeholder="Check out" name="checkOut" id="checkOut">
-            </div>
-
-            <button type="button" onclick="searchTrip()">Search</button>
-        </div>
-    </form> -->
 
 
 

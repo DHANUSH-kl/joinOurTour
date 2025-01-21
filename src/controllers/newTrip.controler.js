@@ -207,7 +207,6 @@ const showAllTrips = async (req, res) => {
 
 const showTrip = async (req, res) => {
     let  id  = req.params.id;
-    console.log( "id of the trip :" ,id);
 
 
 

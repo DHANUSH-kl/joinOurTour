@@ -113,88 +113,59 @@
             </div>
 
 
-            <div class="booking-container">
-                <div class="tickets">
-
-
-                    <div class="top-ticket">
-                        <h3>From &nbsp; <span>&#8377;<%= trip.totalCost.toLocaleString('en-IN') %></span></h3>
-                        <div class="calendar">
-                            <img src="../images/duration.png" alt="">
-                            <div class="ticket-calendar">
-                                <h3>From</h3>
-
-                                <h2>
-                                    <%= new Date(trip.departure).toLocaleDateString('en-US', { month: 'long' ,
-                                        day: 'numeric' }) %>
-                                        ~
-                                        <%= new Date(trip.endDate).toLocaleDateString('en-US', { month: 'long' ,
+            <div class="payment-ov-container">
+                <div class="booking-container">
+                    <div class="tickets">
+    
+    
+                        <div class="top-ticket">
+                            <h3>From &nbsp; <span>&#8377;<%= trip.totalCost.toLocaleString('en-IN') %></span></h3>
+                            <div class="calendar">
+                                <img src="../images/duration.png" alt="">
+                                <div class="ticket-calendar">
+                                    <h3>From</h3>
+    
+                                    <h2>
+                                        <%= new Date(trip.departure).toLocaleDateString('en-US', { month: 'long' ,
                                             day: 'numeric' }) %>
-                                </h2>
+                                            ~
+                                            <%= new Date(trip.endDate).toLocaleDateString('en-US', { month: 'long' ,
+                                                day: 'numeric' }) %>
+                                    </h2>
+                                </div>
                             </div>
                         </div>
-                    </div>
 
-                    <div class="mid-ticket">
-                        <h3>Tickets</h3>
+                        <div class="mid-ticket">
 
-                        <div class="ticket-quantity">
+                            <div class="child-mid-ticket">
+                                <h3>no of tickets</h3>
 
-                            <div class="adult-ticket">
-                                <h3>
-                                    Adult (18+ years) &nbsp; <span> &#8377;<%= trip.totalCost.toLocaleString('en-IN') %>
-                                            </span>
-                                </h3>
-                                <div class="ticket-counter">
-                                    <button id="decrease-adult">
-                                        << /button>
-                                            <span id="ticket-count-adult">1</span>
-                                            <button id="increase-adult">></button>
+                                <div class="arrows">
+                                    <button id="decrement"><</button>
+                                    <h1 id="counter">0</h1>
+                                    <button id="increment">></button>
                                 </div>
                             </div>
 
-                            <div class="adult-ticket">
-                                <h3>
-                                    Youth (13-17 years) &nbsp; <span> &#8377;<%= trip.totalCost.toLocaleString('en-IN')
-                                            %></span>
-                                </h3>
-                                <div class="ticket-counter">
-                                    <button id="decrease-youth">
-                                        << /button>
-                                            <span id="ticket-count-youth">1</span>
-                                            <button id="increase-youth">></button>
-                                </div>
-                            </div>
-
-                            <div class="adult-ticket">
-                                <h3>
-                                    Children (0-12 years) &nbsp; <span> &#8377;<%=
-                                            trip.totalCost.toLocaleString('en-IN') %></span>
-                                </h3>
-                                <div class="ticket-counter">
-                                    <button id="decrease-children">
-                                        << /button>
-                                            <span id="ticket-count-children">1</span>
-                                            <button id="increase-children">></button>
-                                </div>
+                            <div class="grand-total">
+                                <!-- Store trip cost as a data attribute -->
+                                <div id="tripData" data-cost="<%= trip.totalCost %>"></div>
+                                <h1>Total:</h1>
+                                <h3 id="totalAmount">&#8377;0</h3>
                             </div>
 
 
-
+                            
                         </div>
+
+                        <button class="booking-btn">Reserve Spot</button>
+
+    
                     </div>
-
-
-                    <div class="book-container">
-                        <div class="g-total">
-                            <h3> Total: </h3>
-
-                            <h2 id="grand-total">&#8377; <span id="total-amount">0</span></h2>
-                        </div>
-                    </div>
-
                 </div>
             </div>
+
 
 
             <div class="overview-container">
@@ -560,7 +531,7 @@
 
 
     <% if ( currUser && currUser._id.toString()==trip.owner._id.toString() ) { %>
-        <form action="/<%= trip._id %>/?_method=DELETE" method="POST">
+        <form action="/tour/<%= trip._id %>/?_method=DELETE" method="POST">
             <button>Delete</button>
         </form>
         <% } %>

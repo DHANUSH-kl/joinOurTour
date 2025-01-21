@@ -1,14 +1,25 @@
+.payment-ov-container {
+
+
+    position: absolute;
+    width: 30rem;
+    height: 70%;
+    right: -7rem;
+    top: 50rem;
+
+
+
+}
+
+
+
 .booking-container {
-    width: auto;
+    width: 22rem;
     height: auto;
     padding: 2rem;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    position: absolute;
-    top: 110vh;
+    position: sticky;
+    top: 15rem;
     z-index: 99999;
-    right: 4.5rem;
     border-radius: 12px;
     border: 1px solid #E7E6E6;
     background: #FFF;
@@ -26,7 +37,6 @@
 
 .top-ticket {
     width: 100%;
-    height: 25%;
     display: flex;
     flex-direction: column;
     justify-content: space-between;
@@ -66,6 +76,7 @@
 
 
 
+
 .ticket-calendar {
     width: auto;
     height: 70%;
@@ -95,69 +106,107 @@
 
 .mid-ticket {
     width: 100%;
-    height: 40%;
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-    align-items: flex-start;
+    height: 5rem;
 }
 
-.ticket-quantity {
-    width: 100%;
-    height: auto;
-}
-.adult-ticket {
-    display: flex;
-    justify-content: space-between;
-    gap: 2rem;
-    align-items: center;
-    width: 100%;
-}
-
-.adult-ticket h3 {
+.mid-ticket h2 {
     color: #05073C;
     font-family: Poppins;
-    font-size: 12px;
+    font-size: 28px;
     font-style: normal;
     font-weight: 400;
-    line-height: 26.25px;
-}
-
-.adult-ticket h3 span {
-    font-size: 14px;
-}
-
-.ticket-counter button {
-    width: 1.5rem;
-    border: none;
-    text-align: center;
-    cursor: pointer;
-    height: 1.5rem;
-    border-radius: 50%;
-    border: 1px solid #E7E6E6;
-    color: white;
-    font-size: 1rem;
-}
-.ticket-counter span {
-    font-family: Poppins;
-    font-size: 18px;
-    color: #05073C;
+    line-height: 28.13px;
 
 }
 
-.book-container {
-    width: 100%;
-    border-top: 1px solid #E7E6E6;
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-    align-items: flex-start;
-}
-
-.g-total {
+.child-mid-ticket {
     width: 100%;
     display: flex;
     justify-content: space-between;
     align-items: center;
-    
+}
+
+.child-mid-ticket h3 {
+    color: #05073C;
+    font-family: Poppins;
+    font-size: 20px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 28.13px;
+    margin-top: 0.5rem;
+}
+
+.arrows {
+    width: auto;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 1rem;
+}
+
+.arrows button {
+    width: 2rem;
+    height: 2rem;
+    border: none;
+    border-radius: 50%;
+    text-align: center;
+    font-family: Poppins;
+    font-size: 20px;
+    color: E7E6E6;
+    background-color: transparent;
+    border: 2px solid #E7E6E6;
+    cursor: pointer;
+}
+
+.arrows button:hover{
+    background-color: #E7E6E6;
+    border: none;
+    transition: 0.2s ease-in;
+
+}
+
+#counter {
+    font-family: Poppins;
+    font-size: 16px;
+    font-weight: 400;
+}
+
+.grand-total {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    margin-top: 1rem;
+
+}
+
+.grand-total #tripData {
+    display: none;
+}
+
+.grand-total h1 {
+    font-family: Poppins;
+    font-size: 25px;
+    font-weight: 600;
+}
+
+.grand-total h3 {
+    font-family: Poppins;
+    font-size: 20px;
+    font-weight: 600;
+}
+
+.booking-btn {
+    width: 100%;
+    height: 3rem;
+    background-color: #05A351;
+    color: #DDD;
+    font-family: Poppins;
+    font-weight: 700;
+    border: none;
+    cursor: pointer;
+}
+.booking-btn:hover{
+    color: white;
+    transition: 0.1s ease-in;
 }

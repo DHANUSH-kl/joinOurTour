@@ -228,18 +228,17 @@ const sendCoin = async(req,res) => {
 
 }
 
-const adminPerks = async(req,res) => {
-
+const adminPerks = async (req, res) => {
     try {
-        const pendingTrips = await Trip.find({ status: 'pending' });
+        // Fetch trips where status is 'pending' and exclude those with 'rejected' or 'accepted' status
+        const pendingTrips = await Trip.find({ status: 'pending' });  // Fetch only 'pending' trips
+        
         res.render('admin/adminPerks.ejs', { pendingTrips });
-      } catch (error) {
+    } catch (error) {
         console.error('Error fetching trips:', error);
         res.status(500).send('Internal Server Error');
     }
-
-
-}
+};
 
 
 
@@ -291,9 +290,14 @@ const updateTripStatus = async (req, res) => {
           subject: 'Trip Rejection Notification',
           text: `Your trip titled "${trip.title}" has been rejected. Reason: ${rejectionReason}`,
         });
+
+        // Delete the rejected trip
+    await trip.deleteOne();  // This will remove the trip from the database
+
       }
   
       res.redirect('/');
+
     } catch (error) {
       console.error('Error updating trip status:', error);
       res.status(500).send('Internal Server Error');
