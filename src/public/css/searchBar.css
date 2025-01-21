@@ -17,6 +17,8 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
+    margin-right: 2rem;
+
 }
 
 .search-locations-container {
@@ -76,8 +78,9 @@
 }
 
 .search-bar {
-    width: 55vw;
-    height: 10vh;
+    width: 60rem;
+    height: auto;
+    padding: 1rem;
     border-radius: 200px;
     background: #FFF;
     box-shadow: 0px 10px 40px 0px rgba(0, 0, 0, 0.05);
