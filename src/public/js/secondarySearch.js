@@ -80,3 +80,23 @@ function submitSecondarySearch() {
 
 
 
+
+
+//responsive code 
+
+
+
+
+document.addEventListener("DOMContentLoaded", function () {
+    const filterContainer = document.querySelector(".mb-filter-container");
+    const editFilterBtn = document.querySelector(".mb-filters h3");
+    const closeFilterBtn = document.querySelector(".filter-close-btn");
+
+    editFilterBtn.addEventListener("click", function () {
+        filterContainer.classList.add("open-filter");
+    });
+
+    closeFilterBtn.addEventListener("click", function () {
+        filterContainer.classList.remove("open-filter");
+    });
+});

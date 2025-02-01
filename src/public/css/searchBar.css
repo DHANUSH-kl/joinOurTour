@@ -85,7 +85,7 @@
     background: #FFF;
     box-shadow: 0px 10px 40px 0px rgba(0, 0, 0, 0.05);
     margin-top: -5rem;
-    z-index: 99;
+    z-index: 2;
 }
 
 .search-locations img {
@@ -219,3 +219,89 @@ input[type="date"]:focus {
 }
 
 
+@media ( max-width: 1345px ) {
+    .search-bar {
+        width: 55rem;
+
+    }
+
+    .search-locations {
+        width: 43%;
+
+    }
+
+    .cards-container {
+        width: 53vw;
+    }
+}
+
+
+
+@media (max-width: 1035px) {
+    .search-bar {
+      width: 40rem;
+    }
+
+    .search-locations-container label {
+        font-size: 14px;
+    }
+    .trip-dates label {
+        font-size: 14px;
+    }
+    .search-locations img {
+        width: 2.3rem;
+    }
+    .search-locations {
+        width: 41%;
+      }
+      .search-dates img {
+        width: 2.3rem;
+      }
+      .search-dates {
+        margin-left: 0.7rem;
+      }
+      input[type="date"] {
+        font-size: 0.45rem;
+      }
+      .mainSearchBtn-container {
+        width: 3rem;
+        height: 3rem;
+        margin-right: 0rem;
+      }
+  }
+
+
+  @media(max-width:650px) {
+    .search-bar {
+        width: 25rem;
+      } 
+
+      .search-locations-container input {
+        font-size: 12px;
+      }
+      .search-locations-container label {
+        font-size: 10px;
+      }
+      .search-locations img {
+        width: 1.5rem;
+        margin-left: 0;
+      }
+      .search-dates img {
+        width: 1.5rem;
+      }
+      .trip-dates label {
+        font-size: 10px;
+      }
+      input[type="date"] {
+        width: 30px;
+      }
+
+      .mainSearchBtn-container {
+        width: 2rem;
+        height: 2rem;
+        margin-right: 0rem;
+      }
+      .material-symbols-outlined {
+        font-family: 15px;
+      }
+  }

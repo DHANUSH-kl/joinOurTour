@@ -203,6 +203,186 @@
 
 
 
+    <div class="mb-filter-container">
+
+        <div class="filter-container">
+
+            <div class="close-btn-filter">
+
+
+                <div class="secondary-search">
+                    <i class="fa-solid fa-location-dot loc"></i>
+                    <form action="">
+                        <input type="text" placeholder="Search destinations" class="secondary-location"
+                            id="secondaryDestination" name="destination">
+                    </form>
+    
+                    <button class="secondary-search-button" onclick="submitSecondarySearch()">
+                        <i class="fa-solid fa-arrow-right"></i>
+                    </button>
+    
+                </div>
+
+                <h3 class="filter-close-btn">X</h3>
+
+            </div>
+
+            <div class="filters">
+                <div class="top">
+                    <h1>When are you traveling?</h1>
+
+                    <div class="filters-dates">
+                        <input type="date" id="fromdte" name="fromdte" placeholder="july 4" />
+                        <input type="date" id="todte" name="todte" />
+
+                    </div>
+                </div>
+                <div class="bottom">
+                    <div class="your-trip">
+                        <div class="you-type-filter-body">
+                            <p>Tour Type</p>
+                            <img src="../images/arrow.svg" alt="" id="filterToggle" class="filter-controller">
+                        </div>
+                        <div class="you-type-filter-content">
+                            <form id="categoryFilterForm" method="POST" action="/searchtrips">
+                                <label for="nature"><img src="../images/nature-style.png" alt=""
+                                        class="style-img"><input type="checkbox" class="categoryCheckbox"
+                                        name="category" value="nature" id="nature" onclick="toggleCategory('nature')">
+                                    Nature</label>
+                                <label for="party"><img src="../images/party.png" alt="" class="style-img"><input
+                                        type="checkbox" class="categoryCheckbox" name="category" value="party"
+                                        id="party" onclick="toggleCategory('party')"> Party</label>
+                                <label for="food"><img src="../images/food.png" alt="" class="style-img"><input
+                                        type="checkbox" class="categoryCheckbox" name="category" value="food" id="food"
+                                        onclick="toggleCategory('food')"> Food</label>
+                                <label for="beach"><img src="../images/beach.png" alt="" class="style-img"><input
+                                        type="checkbox" class="categoryCheckbox" name="category" value="beach"
+                                        id="beach" onclick="toggleCategory('beach')"> Beach</label>
+                                <label for="culture"><img src="../images/culture.png" alt="" class="style-img"><input
+                                        type="checkbox" class="categoryCheckbox" name="category" value="culture"
+                                        id="culture" onclick="toggleCategory('culture')"> Culture</label>
+                                <label for="sports"><img src="../images/sports.png" alt="" class="style-img"><input
+                                        type="checkbox" class="categoryCheckbox" name="category" value="sports"
+                                        id="sports" onclick="toggleCategory('sports')">
+                                    Sports</label>
+                                <input type="hidden" name="selectedCategories" id="selectedCategories">
+                                <!-- <button type="button" onclick="searchCategory()">Apply Categories</button> -->
+                            </form>
+                        </div>
+
+                        <div class="price-slider-header">
+                            <p>Price filter</p>
+                            <img src="../images/arrow.svg" alt="" id="priceFilterToggle" class="filter-controller">
+
+                        </div>
+                        <div class="price-filter-container">
+                            <div class="wrapper">
+
+
+                                <div class="slider">
+                                    <div class="progress"></div>
+                                </div>
+                                <div class="range-input">
+                                    <form action="">
+                                        <input type="range" id="minPrice" class="range-min" min="0" max="70000"
+                                            step="100">
+                                        <input type="range" id="maxPrice" class="range-max" min="0" max="70000"
+                                            step="100">
+
+                                    </form>
+                                </div>
+
+                                <div class="price-input">
+                                    <div class="field">
+                                        <input type="number" class="input-min" value="0">
+                                    </div>
+                                    <div class="field">
+                                        <input type="number" class="input-max" value="100000">
+                                    </div>
+                                </div>
+
+
+                            </div>
+                        </div>
+
+
+                        <div class="price-slider-header">
+                            <p>languages filter</p>
+                            <img src="../images/arrow.svg" alt="" id="languageToggle" class="filter-controller">
+
+                        </div>
+
+                        <div class="languages-filter-container">
+                            <form id="languagesFilterForm" method="POST" action="/searchtrips">
+                                <label for="kannada">
+                                    <input type="checkbox" class="languageCheckbox" name="languages" value="Kannada"
+                                        id="kannada">
+                                    Kannada
+                                </label>
+                                <label for="english">
+                                    <input type="checkbox" class="languageCheckbox" name="languages" value="English"
+                                        id="english">
+                                    English
+                                </label>
+                                <label for="hindi">
+                                    <input type="checkbox" class="languageCheckbox" name="languages" value="Hindi"
+                                        id="hindi">
+                                    Hindi
+                                </label>
+                                <label for="gujarati">
+                                    <input type="checkbox" class="languageCheckbox" name="languages" value="Gujarati"
+                                        id="gujarati">
+                                    Gujarati
+                                </label>
+                                <label for="marathi">
+                                    <input type="checkbox" class="languageCheckbox" name="languages" value="Marathi"
+                                        id="marathi">
+                                    Marathi
+                                </label>
+                                <input type="hidden" name="selectedLanguages" id="selectedLanguages">
+                            </form>
+                        </div>
+
+
+                        <div class="price-slider-header">
+                            <p>No of days</p>
+                            <img src="../images/arrow.svg" alt="" id="daysToggle" class="filter-controller">
+
+                        </div>
+
+                        <div class="days-filter-container">
+                            <div class="days">
+                                <label for="minDays">Min Days:</label>
+                                <input type="number" id="minDays" name="minDays" min="1" placeholder="Minimum days">
+                            </div>
+
+
+                            <div class="days">
+                                <label for="maxDays">Max Days:</label>
+                                <input type="number" id="maxDays" name="maxDays" min="1" placeholder="Maximum days">
+
+                            </div>
+                        </div>
+
+
+
+                    </div>
+
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+    
+    <div class="mb-container">
+        <div class="mb-filters">
+            <h3>edit filters</h3>
+        </div>
+    </div>
+
+
+
     <main>
         <div class="filter-container">
             <div class="secondary-search">

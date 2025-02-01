@@ -430,3 +430,64 @@ input[type="date"]:hover {
 }
 
 
+
+
+
+
+@media ( max-width: 1345px ) {
+
+
+    .filter-container {
+        width: 23rem;
+    }
+
+    .secondary-search input {
+        font-size: 11px;
+    }
+
+    .secondary-search-button {
+        width: 2rem;
+        height: 2rem;
+    }
+}
+
+@media (max-width:1100px) {
+
+    .secondary-search input {
+        width: 120%;
+    }
+
+    .secondary-search-button {
+        right: -23.5%;
+    }
+
+    .cards-container {
+        width: 38vw;
+      }
+}
+
+
+@media ( max-width:950px ) {
+
+      .filter-container {
+        display: none;
+      }
+      .cards-container {
+        width: 96vw;
+        justify-content: center;
+
+      }
+
+
+
+
+
+}
+
+
+@media (max-width:580px) {
+    .card-container {
+        width: 20rem;
+        height: 29rem;
+    }
+}

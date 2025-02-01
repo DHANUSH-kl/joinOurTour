@@ -1,6 +1,6 @@
 import { Router } from "express";
 import express from 'express';
-import { reportTrip, showWishlist, deleteReview, discoverPage, mainSearch, getSecondarySearch, whislist, aboutus, addNewTrip, showAllTrips, newTripForm, showTrip, editTripForm, deleteTrip, mytrip, postEditTrip, catagariesTrips, priceFilter, searchTrips, reviews, fetchWhislist } from "../controllers/newTrip.controler.js";
+import { getpayment , reportTrip, showWishlist, deleteReview, discoverPage, mainSearch, getSecondarySearch, whislist, aboutus, addNewTrip, showAllTrips, newTripForm, showTrip, editTripForm, deleteTrip, mytrip, postEditTrip, catagariesTrips, priceFilter, searchTrips, reviews, fetchWhislist } from "../controllers/newTrip.controler.js";
 import { storage } from "../cloudinary.js";
 import bodyParser from 'body-parser';
 import { isLoggedIn, isAgent, isOwner } from "../middlewares.js";
@@ -61,6 +61,10 @@ router.route("/")
     .post(asyncWrap(whislist));
 
 // Dynamic Routes
+
+router.route("/:id/payment")
+    .get(getpayment)
+
 router.route("/tour/:id")
     .get(asyncWrap(showTrip))
     .delete(asyncWrap(deleteTrip));

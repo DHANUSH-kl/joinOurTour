@@ -143,6 +143,7 @@ const addNewTrip = async (req, res) => {
 
 
     res.redirect("/");
+    
 
 }
 
@@ -1051,6 +1052,11 @@ const reportTrip = async(req,res) => {
     }
 }
 
+const getpayment = async(req,res) => {
 
-export { reportTrip ,  showWishlist, fetchWhislist, deleteReview, discoverPage, mainSearch, getSecondarySearch, aboutus, reviews, whislist, searchTrips, newTripForm, showAllTrips, addNewTrip, editTripForm, showTrip, deleteTrip, mytrip, postEditTrip, catagariesTrips, priceFilter };
+    res.render("trips/payment.ejs")
+
+}
+
+export { getpayment , reportTrip ,  showWishlist, fetchWhislist, deleteReview, discoverPage, mainSearch, getSecondarySearch, aboutus, reviews, whislist, searchTrips, newTripForm, showAllTrips, addNewTrip, editTripForm, showTrip, deleteTrip, mytrip, postEditTrip, catagariesTrips, priceFilter };
 
