@@ -484,6 +484,7 @@ main {
         display: flex;
         justify-content: flex-end;
         align-items: center;
+        margin-top: 3rem;
       }
       .mb-filters {
         width: 7rem;
@@ -557,4 +558,16 @@ main {
 
 
 
+}
+
+@media( max-width:650px ) {
+
+    .bottom-container {
+        margin: 0;
+    }
+
+    .bottom-container img {
+        width: 1rem;
+        cursor: pointer;
+      }
 }
