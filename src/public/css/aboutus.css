@@ -793,3 +793,325 @@ nav .bottom-container {
       opacity: 1;
     }
   }
+
+
+  @media( max-width: 1420px ) {
+
+    .why-images img {
+        width: 200px;
+    }
+
+
+    .left .one {
+        left: 4rem;
+    }
+
+    .left .two {
+        top: 22rem;
+        left: 8rem;
+    }
+
+    .why-container .rigth {
+        right: 2rem;
+    }
+
+    .left .three {
+        bottom: -3rem;
+        left: 27rem;
+    }
+
+    .left .four {
+    bottom: -7rem;
+    right: -37rem;
+}
+    
+  }
+
+
+  @media( max-width:1200px ) {
+
+    .why-images img {
+        width: 160px;
+    }
+
+
+    .left .boxes {
+        width: 250px;
+    }
+
+    .left p {
+        font-size: 10px;
+    }
+
+    .why-container .rigth p {
+
+        font-family: 12px;
+
+    }
+
+    .left h1{
+        font-size: 19px;
+    }
+
+    .why-images .two {
+        left: 8rem;
+        top: 2.5rem;
+    }
+
+    .left .three {
+        bottom: 0;
+    }
+
+    .left .four {
+        bottom: -4rem;
+        right: -31rem;
+    }
+
+    .middle h1 {
+        text-align: center;
+    }
+
+    
+  }
+
+  @media( max-width:1080px ) {
+
+
+    .left .boxes {
+        width: 150px;
+    }
+
+    .left h1 {
+        font-size: 12px;
+    }
+
+    .left p {
+        font-size: 7px;
+    }
+
+    .why-container .rigth p {
+        font-size: 12px;
+        line-height: 25px;
+    }
+
+    .why-container .rigth {
+        width: 250px;
+    }
+
+
+    .why-container .middle .why-images {
+        margin-left: 8rem;
+    }
+
+    .left .one {
+        left: 7rem;
+    }
+
+    .left .two {
+        top: 18rem;
+        left: 11rem;
+    }
+
+    .why-container {
+        height: 80vh;
+    }
+
+    .left .three {
+        bottom: 6rem;
+    }
+
+    .left .four {
+        bottom: 4rem;
+        right: -25rem;
+    }
+
+    .left .boxes svg {
+        width: 30px;
+    }
+
+
+}
+
+@media( max-width:910px ) {
+
+    .left .one {
+        top: 8;
+        left: 5rem;
+    }
+
+    .left .two {
+        top: 18rem;
+        left: 8rem;
+    }
+
+    .left .three {
+        bottom: 6rem;
+        left: 22rem;
+    }
+
+
+}
+
+@media( max-width:830px ) {
+
+
+    .why-images img {
+        width: 100px;
+    }
+
+    .why-images .one {
+        left: 4rem;
+    }
+
+    .why-container .rigth {
+        right: -10px;
+    }
+
+    .why-container .rigth p {
+        font-size: 10px;
+        margin-right: 2rem;
+    }
+
+    .middle h1 {
+        margin-bottom: 1.5rem;
+        font-size: 55px;
+    }
+
+    .ptext h1 {
+        font-size: 55px;
+    }
+    .ptext p {
+        font-size: 15px;
+    }
+
+    .left .two {
+        top: 17rem;
+        left: 8rem;
+    }
+
+    .left .three {
+        bottom: 8rem;
+        left: 18rem;
+    }
+
+    .left .four {
+        bottom: 6rem;
+        right: -25rem;
+    }
+
+}
+
+.package {
+    height: auto;
+}
+
+
+@media( max-width:1250px ) {
+    .find h1 {
+        width: 100%;
+        padding: 0;
+    }
+
+    .ptext {
+        position: relative;
+        display: inline-block;
+        text-align: center;
+        top: 0;
+        right: 0;
+        margin-top: 5rem;
+    }
+
+    .package-cards {
+        align-items: normal;
+        margin-top: 5rem;
+        flex-wrap: wrap;
+    }
+    
+    .destination-container {
+
+        flex-direction: column;
+
+    }
+
+    .find {
+        text-align: center;
+        width: 100%;
+        display: inline-block;
+        height: auto;
+    }
+    .find p {
+        text-align: center;
+        width: 100%;
+        padding: 0;
+    }
+
+
+}
+
+@media(max-width:850px) {
+    .hero-content-container {
+        font-size: 2rem;
+    }
+    .container {
+        position: absolute;
+        top: 23rem;
+        left: 13.5rem;
+    }
+    .find p {
+        font-size: 15px;
+    }
+
+    .slider-container li {
+        height: 81%;
+        width: 65%;
+    }
+}
+
+
+@media(max-width:700px) {
+    .left .one {
+        left: 2rem;
+    }
+    .boxes {
+        gap: 3px;
+    }
+    .left .two {
+        left: 4rem;
+    }
+    .left .three {
+        bottom: 9rem;
+        left: 15rem;
+    }
+    .left .four {
+        bottom: 6rem;
+        right: -19rem;
+    }
+}
+
+@media(max-width:650px) {
+    .why-container .rigth p {
+        line-height: 15px;
+        font-size: 7px;
+    }
+    .left .boxes svg {
+        width: 15px;
+        margin-bottom: -1.5rem;
+    }
+    .left h1 {
+        font-size: 9px;
+    }
+    .left .two {
+        top: 15rem;
+    }
+    .left .three {
+        bottom: 13rem;
+        left: 14rem;
+    }
+    .left .four {
+        bottom: 16rem;
+        right: -19rem;
+    }
+    .why-container .rigth {
+        top: 10rem;
+    }
+}
