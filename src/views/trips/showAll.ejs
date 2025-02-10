@@ -552,6 +552,7 @@
                             <div class="trip-image">
                                 <img src="<%= allTrips[i].tripImages[0].path %>" alt="Trip Image">
                             </div>
+                            
                             <div class="heart-container">
                                 <% if (user) { %>
                                     <% const isInWishlist=userWishlist.includes(allTrips[i]._id.toString()); %>

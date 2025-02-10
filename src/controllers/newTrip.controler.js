@@ -6,6 +6,7 @@ import { storage } from '../cloudinary.js';
 import multer from 'multer';
 import { Trip } from '../models/travel.model.js';
 import { Review } from '../models/review.model.js';
+import { Booking } from '../models/booking.model.js';
 import Admin from '../models/admin.model.js';
 const upload = multer({ storage });
 const app = express();
@@ -1054,9 +1055,62 @@ const reportTrip = async(req,res) => {
 
 const getpayment = async(req,res) => {
 
-    res.render("trips/payment.ejs")
+    try {
+        const tripId = req.params.id; // Get trip ID from URL
 
+        if (!tripId) {
+            return res.status(400).send("Trip ID is required");
+        }
+
+        const trip = await Trip.findById(tripId); // Find trip in the database
+        if (!trip) {
+            return res.status(404).send("Trip not found");
+        }
+
+        if (!req.user) {
+            return res.redirect("/user/signin"); // Ensure user is logged in
+        }
+
+        const user = req.user; // Get logged-in user
+
+        // Parse totalAmount safely from query params
+        const totalAmount = req.query.totalAmount ? parseFloat(req.query.totalAmount) : trip.totalCost;
+
+        res.render("trips/payment.ejs", { trip, totalAmount, user }); // Pass data to EJS template
+    } catch (error) {
+        console.error("Error in getPayment:", error);
+        res.status(500).send("Server Error");
+    }
+    
 }
 
-export { getpayment , reportTrip ,  showWishlist, fetchWhislist, deleteReview, discoverPage, mainSearch, getSecondarySearch, aboutus, reviews, whislist, searchTrips, newTripForm, showAllTrips, addNewTrip, editTripForm, showTrip, deleteTrip, mytrip, postEditTrip, catagariesTrips, priceFilter };
+const createOrder = async(req,res) => {
+    try {
+        const {tripId } = req.body;
+        const userId = req.user._id;
+
+        // Fetch Trip Details
+        const trip = await Trip.findById(tripId);
+        if (!trip) return res.status(404).json({ success: false, message: "Trip not found" });
+
+        const { totalCost, deposit } = trip;
+
+        // Create Razorpay Order
+        const options = {
+            amount: totalCost * 100, // Amount in paise
+            currency: "INR",
+            receipt: `trip_${tripId}_${Date.now()}`
+        };
+        const order = await razorpay.orders.create(options);
+
+        // Save Booking to Database
+        const booking = new Booking({ userId, tripId, totalCost, deposit, orderId: order.id });
+        await booking.save();
+
+    } catch (error) {
+        res.status(500).json({ success: false, error: error.message });
+    }
+}
+
+export { createOrder , getpayment , reportTrip ,  showWishlist, fetchWhislist, deleteReview, discoverPage, mainSearch, getSecondarySearch, aboutus, reviews, whislist, searchTrips, newTripForm, showAllTrips, addNewTrip, editTripForm, showTrip, deleteTrip, mytrip, postEditTrip, catagariesTrips, priceFilter };
 

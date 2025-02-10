@@ -159,7 +159,15 @@
                             
                         </div>
 
-                        <button class="booking-btn"><a href="/<%= trip._id %>/payment">Reserve Spot</a></button>
+                        <!-- <button class="booking-btn"><a href="/<%= trip._id %>/payment">Reserve Spot</a></button> -->
+
+
+                        <!-- Form for submitting the total amount -->
+                        <form id="paymentForm" action="/<%= trip._id %>/payment" method="GET">
+                            <!-- Hidden input to store total amount -->
+                            <input type="hidden" id="totalAmountInput" name="totalAmount" value="0">
+                            <button type="submit" class="booking-btn">Reserve Spot</button>
+                        </form>
 
     
                     </div>

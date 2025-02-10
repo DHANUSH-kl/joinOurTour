@@ -202,12 +202,18 @@
     background-color: #05A351;
     border: none;
     cursor: pointer;
+    color: #fff;
+  font-family: Poppins;
+  font-weight: 700;
 }
 
+#paymentForm {
+    width: 100%;
+}
 
-.booking-btn a {
+/* .booking-btn a {
     color: #fff;
     font-family: Poppins;
     font-weight: 700;
 
-}
+} */
