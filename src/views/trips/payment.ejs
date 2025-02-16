@@ -23,7 +23,6 @@
       crossorigin="anonymous">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
 
-    <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
 
     <link rel="stylesheet" href="/css/payment.css">
     <title>Document</title>
@@ -150,65 +149,7 @@
 
 
 
-    document.getElementById("payBtn").addEventListener("click", async function () {
-            try {
-                // Step 1: Create an order
-                const response = await fetch("/create-order", {
-                    method: "POST",
-                    headers: { "Content-Type": "application/json" },
-                    body: JSON.stringify({
-                        userId: "<%= user._id %>",   // Pass User ID from EJS
-                        tripId: "<%= trip._id %>"    // Pass Trip ID from EJS
-                    })
-                });
-
-                const data = await response.json();
-                if (!data.success) {
-                    alert("Error creating order. Please try again.");
-                    return;
-                }
-
-                const { id: order_id, amount, currency } = data.order;
-
-                // Step 2: Open Razorpay Checkout
-                const options = {
-                    key: "<%= RAZORPAY_KEY_ID %>",  // Razorpay Key from Backend
-                    amount: amount,
-                    currency: currency,
-                    name: "Trip Booking",
-                    description: "Complete your trip booking",
-                    order_id: order_id,
-                    handler: async function (response) {
-                        // Step 3: Verify payment
-                        const verifyRes = await fetch("/verify-payment", {
-                            method: "POST",
-                            headers: { "Content-Type": "application/json" },
-                            body: JSON.stringify({
-                                order_id: response.razorpay_order_id,
-                                payment_id: response.razorpay_payment_id,
-                                razorpay_signature: response.razorpay_signature
-                            })
-                        });
-
-                        const verifyData = await verifyRes.json();
-                        if (verifyData.success) {
-                            alert("Payment Successful!");
-                            window.location.href = "/booking-success";
-                        } else {
-                            alert("Payment Verification Failed");
-                        }
-                    },
-                    theme: { color: "#3399cc" }
-                };
-
-                const rzp = new Razorpay(options);
-                rzp.open();
-            } catch (error) {
-                console.error("Payment Error:", error);
-                alert("Payment failed. Try again.");
-            }
-        });
-
+   
 
 
 

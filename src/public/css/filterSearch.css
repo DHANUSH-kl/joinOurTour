@@ -431,7 +431,14 @@ input[type="date"]:hover {
 
 
 
+.close-filter-btn , .open-filter-btn {
+    display: none;
+}
 
+.filter-popup-overlay {
+    display: flex;
+    align-self: flex-start;  
+}
 
 
 @media ( max-width: 1345px ) {
@@ -467,27 +474,163 @@ input[type="date"]:hover {
 }
 
 
-@media ( max-width:950px ) {
+@media (max-width: 950px) {
+    .cards-container {
+      width: 98vw;
+      justify-content: center;
+    }
 
-      .filter-container {
+    .close-filter-btn , .open-filter-btn {
+        display: inline-block;
+    }
+
+    main {
+        margin-top: 1rem;
+        padding-top: 8rem;
+    }
+    
+    .open-filter-btn {
+        border: none;
+        padding: 0.5rem 1rem;
+        font-family: poppins;
+        font-size: 0.7rem;
+        font-weight: 500;
+        border-radius: 10px;
+        position: absolute;
+        top: 0;
+        right: 6rem;
+        margin-top: 1rem;
+        color: white;
+        background-color: #05A351;
+        cursor: pointer;
+    }
+    .secondary-search input {
+        background-color: #05A351;
+        color: #fff;
+
+    }
+    .secondary-search .loc {
+        color: #fff;
+    }
+    .secondary-search {
+        width: 50%;
+    }
+    .secondary-search-button {
         display: none;
+    }
+    .filter-submit {
+        display: none;
+    }
+
+
+    .suborclose {
+        display: flex;
+        width: 100%;
+        justify-content: center;
+        align-items: center;
+        padding: 1.5rem;
+
+    }
+
+    .suborclose .filter-submit {
+        display: inline-block;
+    }
+  
+    /* Overlay that covers the entire screen */
+    .filter-popup-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      background-color: rgba(0, 0, 0, 0.7);
+      display: none; /* Hidden by default */
+      justify-content: center;
+      align-items: flex-start;
+      z-index: 9999;
+      overflow-y: auto;
+    }
+  
+    /* Filter content box */
+    .filter-container {
+      background-color: #F5F5F5;
+      width: 90vw;
+      padding: 20px;
+      margin-top: 20px;
+      border-radius: 12px;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+      position: relative;
+    }
+  
+    /* Close button */
+    .close-filter-btn {
+      position: absolute;
+      top: 10px;
+      right: 15px;
+      background: none;
+      border: none;
+      font-size: 24px;
+      cursor: pointer;
+      color: #333;
+    }
+  }
+  
+
+  @media (max-width:580px) {
+    .cards-container {
+        gap: 1rem;
+      }
+      .card-container {
+        width: 10rem;
+        height: auto;
+      }
+
+      .route img {
+        width: 1rem;
+      }
+      .card-title {
+        line-height: 0;
+        margin-bottom: 0;
+      }
+      .card-title a {
+        font-size: 9px;
+        line-height: 8px;
+
+      }
+      .title-container {
+        height: auto;
+      }
+      .title-container h4 {
+        font-size: 10px;
+      }
+      .ratio-container p {
+        font-size: 6px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+      }
+      .rating-container p {
+        font-size: 8px;
+      }
+
+      .card-bottom h4, .price-container {
+        font-size: 8px;
+      }
+      .price-container span {
+        font-size: 10px;
+      }
+
+  }
+
+  .card-bottom {
+    position: relative;
+  }
+
+@media (max-width:480px) {
+    .card-container {
+        width: 10rem;
       }
       .cards-container {
-        width: 96vw;
-        justify-content: center;
-
+        gap: 1rem;
       }
-
-
-
-
-
-}
-
-
-@media (max-width:580px) {
-    .card-container {
-        width: 20rem;
-        height: 29rem;
-    }
 }

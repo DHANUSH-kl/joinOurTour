@@ -433,38 +433,25 @@ main {
     display: none;
 }
 
-.mb-filter-container .filter-container{
-    display: none;
-}
 
 
-.close-btn-filter {
-    width: 100%;
-    display: flex;
-    flex-direction: row;
-    justify-content: center;
-    gap: 6rem;
-    align-items: center;
-}
 
-.filter-close-btn {
-    font-family: Poppins;
-    font-size: 1.5rem;
+
+.filter-submit , .filter-close {
+    border: none;
+    padding: 0.5rem 1.2rem;
+    margin-bottom: 1rem;
     cursor: pointer;
-    font-weight: 400;
-    color: #FFF;
-    text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.7);
+    font-family: poppins;
+    font-size: 0.7rem;
+    background-color: #05A351;
+    color: white;
+    border-radius: 10px;
+    margin-left: 1rem;
+    font-weight: 500;
+    margin-top: 1rem;
+    align-self: flex-start;
 }
-
-.filter-close-btn:hover{
-    transform: scale(1.2);
-    transition: 0.1s ease-in;
-}
-
-.mb-filter-container.open-filter {
-    width: 100vw;
-}
-
 
 
 @media ( max-width:950px ) {
@@ -571,3 +558,4 @@ main {
         cursor: pointer;
       }
 }
+

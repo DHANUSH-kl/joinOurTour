@@ -32,27 +32,80 @@
     <div class="form-container">
         <form action="/createtrip" method="POST" enctype="multipart/form-data">
             <h1>CREATE YOUR TRIP</h1>
+            <h3 class="td">Trip Details</h3>
 
 
             <div class="title-container">
-                <label for="title" class="form-label mb-2">Trip title</label>
-                <input type="text" name="title" id="title" class="form-control " required>
+                <label for="title" class="form-label mb-2">Trip Name</label>
+                <input type="text" name="title" id="title" class="form-control " placeholder="Enter trip name" required>
             </div>
 
             <div class="wrap">
+
                 <div class="location-container">
-                    <label for="location" class="form-label mb-2">DESTINATION</label>
+                    <label for="fromLocation" class="form-label mb-2">Starting Location</label>
+                    <input type="text" name="fromLocation" id="fromLocation" class="form-control " required>
+                </div>
+
+                <div class="location-container">
+                    <label for="location" class="form-label mb-2">End Location</label>
                     <input type="text" name="location" id="location" class="form-control " required>
                 </div>
     
-                <div class="location-container">
-                    <label for="fromLocation" class="form-label mb-2">FROM LOCATION</label>
-                    <input type="text" name="fromLocation" id="fromLocation" class="form-control " required>
+                
+    
+            </div>
+
+            <div class="days-container">
+                <label for="departure" class="form-label mb-2">Trip Startind Date</label>
+                <input type="date" name="departure" id="departure" class="form-control tripDate"
+                    onchange="calculateDurationAndAddStops()" required>
+            </div>
+            <div class="days-container">
+                <label for="endDate" class="form-label mb-2">Trip Ending Date</label>
+                <input type="date" name="endDate" id="endDate" class="form-control "
+                    onchange="calculateDurationAndAddStops()" required>
+            </div>
+
+
+            <div class=" wrap">
+
+                <div class="conatiner">
+                    <label for="maxTripmates" class="form-label mb-2">Max Number of People Allowed</label>
+                    <input min="1" type="number" name="maxTripmates" id="maxTripmates" class="form-control " required>
+                </div>
+
+                <div class="conatiner">
+                    <label for="minTripmates" class="form-label mb-2">Min Number of People Required</label>
+                    <input min="1" type="number" name="minTripmates" id="minTripmates" class="form-control " required>
+                </div>
+
+            
+            </div>
+
+            <div class="wrap">
+                <div class="maleTravelers-container">
+                    <label for="maleTravelers" class="form-label mb-2">Number of Male Travelers Booked</label>
+                    <input type="number" name="maleTravelers" id="maleTravelers" class="form-control" required>
+                </div>
+                
+                <div class="femaleTravelers-container">
+                    <label for="femaleTravelers" class="form-label mb-2">Number of Female Travelers Booked</label>
+                    <input type="number" name="femaleTravelers" id="femaleTravelers" class="form-control" required>
                 </div>
     
             </div>
 
+            <div class="images-container">
+                <label for="tripImages" class="form-label mb-2">Trip images</label>
+                <input type="file" name="tripImages" id="tripImages" class="form-control" multiple required>
+            </div>
             
+
+            <!-- <div class="yturl-container">
+                <label for="youtubeUrl">YouTube Video URL</label>
+                <input type="text" name="youtubeUrl" id="youtubeUrl" placeholder="Enter YouTube URL">
+            </div> -->
 
             <div class="description-container ">
                 <span class="input-group-text">Trip description</span>
@@ -66,10 +119,10 @@
                 <input type="number" name="totalDays" id="totalDays" class="form-control " required>
             </div>
 
-            <div class="groupSize-container">
+            <!-- <div class="groupSize-container">
                 <label for="groupSize" class="form-label mb-2">Group Size</label>
                 <input type="number" name="groupSize" id="groupSize" class="form-control" required>
-            </div>
+            </div> -->
             
             <div class="minAge-container">
                 <label for="minAge" class="form-label mb-2">Minimum Age</label>
@@ -77,82 +130,82 @@
             </div>
 
 
-            <div class="wrap">
-                <div class="maleTravelers-container">
-                    <label for="maleTravelers" class="form-label mb-2">Number of Male Travelers</label>
-                    <input type="number" name="maleTravelers" id="maleTravelers" class="form-control" required>
-                </div>
-                
-                <div class="femaleTravelers-container">
-                    <label for="femaleTravelers" class="form-label mb-2">Number of Female Travelers</label>
-                    <input type="number" name="femaleTravelers" id="femaleTravelers" class="form-control" required>
-                </div>
-    
-            </div>
-
-            <div class="yturl-container">
-                <label for="youtubeUrl">YouTube Video URL</label>
-                <input type="text" name="youtubeUrl" id="youtubeUrl" placeholder="Enter YouTube URL">
-            </div>
             
 
-            <div class=" wrap">
+           
+            
 
-                <div class="conatiner">
-                    <label for="minTripmates" class="form-label mb-2">Mininmum tripmates</label>
-                    <input min="1" type="number" name="minTripmates" id="minTripmates" class="form-control " required>
-                </div>
+            
 
-                <div class="conatiner">
-                    <label for="maxTripmates" class="form-label mb-2">Maximum tripmates</label>
-                    <input min="1" type="number" name="maxTripmates" id="maxTripmates" class="form-control " required>
-                </div>
-
-            </div>
-
-            <div class="images-container">
-                <label for="tripImages" class="form-label mb-2">Trip images</label>
-                <input type="file" name="tripImages" id="tripImages" class="form-control" multiple required>
-            </div>
+           
 
 
-            <h2 class="catagaries-text">SELECT CATAGARIES</h2>
+            <h2 class="catagaries-text lang">Trip Categories</h2>
             <div class="catagaries-container">
                 <div>
-                    <label class="label-btns" for="one"><i class="fa-solid fa-utensils"></i> Foods</label>
                     <input type="checkbox" class="input-btns" id="one" autocomplete="off" value="foods"
-                        name="categories">
+                    name="categories">
+                    <label class="label-btns" for="one"><i class="fa-solid fa-utensils"></i> Foods</label>
 
                 </div>
                 <div>
-                    <label class="label-btns" for="two"><i class="fa-solid fa-umbrella-beach"></i> Beach</label>
                     <input type="checkbox" class="input-btns" id="two" autocomplete="off" value="beach"
-                        name="categories">
+                    name="categories">
+                    <label class="label-btns" for="two"><i class="fa-solid fa-umbrella-beach"></i> Beach</label>
 
                 </div>
                 <div>
-                    <label class="label-btns" for="three"><i class="fa-brands fa-fort-awesome"></i> Culture</label>
                     <input type="checkbox" class="input-btns" id="three" autocomplete="off" value="culture"
-                        name="categories">
+                    name="categories">
+                    <label class="label-btns" for="three"><i class="fa-brands fa-fort-awesome"></i> Culture</label>
 
 
                 </div>
+                
                 <div>
-                    <label class="label-btns" for="four"><i class="fa-solid fa-champagne-glasses"></i> Party</label>
                     <input type="checkbox" class="input-btns" id="four" autocomplete="off" value="party"
-                        name="categories">
+                    name="categories">
+                    <label class="label-btns" for="four"><i class="fa-solid fa-champagne-glasses"></i> Party</label>
 
                 </div>
                 <div>
-                    <label class="label-btns" for="five"><i class="fa-solid fa-volleyball"></i> Sports</label>
                     <input type="checkbox" class="input-btns" id="five" autocomplete="off" value="sports"
-                        name="categories">
+                    name="categories">
+                    <label class="label-btns" for="five"><i class="fa-solid fa-volleyball"></i> Sports</label>
 
                 </div>
                 <div>
-                    <label class="label-btns" for="six"><i class="fa-solid fa-mountain-sun"></i> Nature</label>
                     <input type="checkbox" class="input-btns" id="six" autocomplete="off" value="nature"
-                        name="categories">
+                    name="categories">
+                    <label class="label-btns" for="six"><i class="fa-solid fa-mountain-sun"></i> Nature</label>
+                </div>
+
+                <div>
+                    <input type="checkbox" class="input-btns" id="seven" autocomplete="off" value="adventure"
+                    name="categories">
+                    <label class="label-btns" for="seven"><i class="fa-solid fa-utensils"></i> Adventure</label>
+
+                </div>
+
+                <div>
+                    <input type="checkbox" class="input-btns" id="eight" autocomplete="off" value="hiking"
+                    name="categories">
+                    <label class="label-btns" for="eight"><i class="fa-solid fa-utensils"></i> Hiking</label>
+
+                </div>
+
+                <div>
+                    <input type="checkbox" class="input-btns" id="nine" autocomplete="off" value="roadtrip"
+                    name="categories">
+                    <label class="label-btns" for="nine"><i class="fa-solid fa-utensils"></i> Road Trip</label>
+
+                </div>
+
+                <div>
+                    <input type="checkbox" class="input-btns" id="ten" autocomplete="off" value="other"
+                    name="categories">
+                    <label class="label-btns" for="ten"><i class="fa-solid fa-utensils"></i> other</label>
+
                 </div>
 
 
@@ -161,40 +214,52 @@
             </div>
 
 
-            <h2 class="catagaries-text">ACCOMODATIONS</h2>
+            <h2 class="catagaries-text lang">Accommodation Type</h2>
             <div class="accomodations-container mt-3">
                 <div>
+                    <input type="checkbox" value="hotel" id="1" name="accomodations">
                     <label for="1">
                         Hotels
                     </label>
-                    <input type="checkbox" value="hotel" id="1" name="accomodations">
                 </div>
                 <div>
+                    <input type="checkbox" value="hostels" id="2" name="accomodations">
                     <label for="2">
                         Hostels
                     </label>
-                    <input type="checkbox" value="hostels" id="2" name="accomodations">
                 </div>
                 <div>
+                    <input class="form-check-input acc-input" type="checkbox" value="homestays" id="3"
+                        name="accomodations">
                     <label for="3">
-                        Apartments
+                        Homestays
                     </label>
-                    <input class="form-check-input acc-input" type="checkbox" value="apartments" id="3"
-                        name="accomodations">
+                    
                 </div>
                 <div>
+                    <input class="form-check-input acc-input" type="checkbox" value="luxurious stays" id="4"
+                        name="accomodations">
                     <label class="form-check-label" for="4">
-                        Camping
+                        Luxurious Stays
                     </label>
-                    <input class="form-check-input acc-input" type="checkbox" value="camping" id="4"
-                        name="accomodations">
+                    
                 </div>
                 <div>
-                    <label class="form-check-label" for="5">
-                        Bed & Breakfast
-                    </label>
-                    <input class="form-check-input acc-input" type="checkbox" value="bed & breakfast" id="5"
+                    <input class="form-check-input acc-input" type="checkbox" value="budget stays" id="5"
                         name="accomodations">
+                    <label class="form-check-label" for="5">
+                        Budget Stays
+                    </label>
+                    
+                </div>
+
+                <div>
+                    <input class="form-check-input acc-input" type="checkbox" value="other" id="6"
+                        name="accomodations">
+                    <label class="form-check-label" for="6">
+                        Other
+                    </label>
+                    
                 </div>
 
             </div>
@@ -202,7 +267,7 @@
 
 
 
-
+            <h3 class="lang">Languages Spoken by Trip Leader</h3>
             <div id="languages-todoContainer">
                 <!-- Languages will be added here -->
             </div>
@@ -213,6 +278,7 @@
                 <button onclick="addLanguage()" class="btn" type="button" id="languagesButton">Add</button>
             </div>
             
+            <h3 class="lang">Enter Inclusions</h3>
 
             <div id="includes-todoContainer">
                 <!-- Includes will be added here -->
@@ -223,7 +289,8 @@
                     aria-label="Example text with button addon" aria-describedby="button-addon1">
                 <button onclick="addInclude()" class="btn" type="button" id="includesButton">Add</button>
             </div>
-            
+            <h3 class="lang">Enter Exclusions</h3>
+
             <div id="excludes-todoContainer">
                 <!-- Excludes will be added here -->
             </div>
@@ -239,7 +306,7 @@
 
            
 
-            <div class="days-container">
+            <!-- <div class="days-container">
                 <label for="departure" class="form-label mb-2">departure</label>
                 <input type="date" name="departure" id="departure" class="form-control tripDate"
                     onchange="calculateDurationAndAddStops()" required>
@@ -248,8 +315,11 @@
                 <label for="endDate" class="form-label mb-2">end date</label>
                 <input type="date" name="endDate" id="endDate" class="form-control "
                     onchange="calculateDurationAndAddStops()" required>
-            </div>
-            <button type="button" class="btn" id="addStopBtn" onclick="addStop()">Add Stop</button>
+            </div> -->
+            <!-- <button type="button" class="btn" id="addStopBtn" onclick="addStop()">Add Stop</button> -->
+
+            <h3 class="lang">Day-wise itenerary  </h3>
+
 
             <div class="stop-container" id="stops-container">
                 <!-- Initial stop section for Stop 1 -->
@@ -284,28 +354,28 @@
 
             </div> -->
 
+
+            <h2 class="lang ">TRIP COST PER TRIPMATE</h2>
+
             <div class="trip-calculator-conatiner">
 
 
 
                 <div class="travel-cost-container">
 
-                    <h2>TRIP COST PER TRIPMATE</h2>
 
                     <div class="total-cost">
-                        <label for="totalCost" class="form-label mb-2">Total trip cost : ₹</label>
+                        <label for="totalCost" class="form-label mb-2">Cost of the Trip: </label>
                         <input type="number" name="totalCost" class="form-control" required>
                     </div>
 
                     <div class="total-cost">
-                        <label for="buffer" class="form-label mb-2">Enter the buffer : %</label>
-                        <p>approx 10-15%</p>
+                        <label for="buffer" class="form-label mb-2">Buffer % (for discounts):</label>
                         <input type="number" name="buffer" min="0" max="15" class="form-control" required>
                     </div><br>
 
                     <div class="total-cost">
-                        <label for="deposit" class="form-label mb-2">Enter the deposit : %</label>
-                        <p>Enter the percent of total trip cost for deposit </p>
+                        <label for="deposit" class="form-label mb-2">Minimum Booking Amount (Flight/Train)</label>
                         <input type="number" name="deposit" class="form-control">
                     </div>
 
