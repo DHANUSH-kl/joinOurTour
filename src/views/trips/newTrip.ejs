@@ -56,15 +56,18 @@
     
             </div>
 
-            <div class="days-container">
-                <label for="departure" class="form-label mb-2">Trip Startind Date</label>
-                <input type="date" name="departure" id="departure" class="form-control tripDate"
-                    onchange="calculateDurationAndAddStops()" required>
-            </div>
-            <div class="days-container">
-                <label for="endDate" class="form-label mb-2">Trip Ending Date</label>
-                <input type="date" name="endDate" id="endDate" class="form-control "
-                    onchange="calculateDurationAndAddStops()" required>
+            <div class="wrap">
+                <div class="days-container">
+                    <label for="departure" class="form-label mb-2">Trip Starting Date</label>
+                    <input type="date" name="departure" id="departure" class="form-control tripDate"
+                        onchange="calculateDurationAndAddStops()" required>
+                </div>
+                <div class="days-container">
+                    <label for="endDate" class="form-label mb-2">Trip Ending Date</label>
+                    <input type="date" name="endDate" id="endDate" class="form-control "
+                        onchange="calculateDurationAndAddStops()" required>
+                </div>
+    
             </div>
 
 
