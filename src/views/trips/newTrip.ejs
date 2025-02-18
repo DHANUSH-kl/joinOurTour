@@ -271,40 +271,59 @@
 
 
             <h3 class="lang">Languages Spoken by Trip Leader</h3>
-            <div id="languages-todoContainer">
-                <!-- Languages will be added here -->
+            <div id="languages-container" class="languages-container">
+                <label><input type="checkbox" name="languages" value="English"> English</label>
+                <label><input type="checkbox" name="languages" value="Hindi"> Hindi</label>
+                <label><input type="checkbox" name="languages" value="Hindi"> Kannada</label>
+                <label><input type="checkbox" name="languages" value="Hindi"> Marathi</label>
+                <label><input type="checkbox" name="languages" value="Hindi"> Tamil</label>
             </div>
-            
-            <div class="languages-container">
-                <input type="text" class="form-control" id="languagesInput" placeholder="Enter languages"
-                    aria-label="Example text with button addon" aria-describedby="button-addon1">
-                <button onclick="addLanguage()" class="btn" type="button" id="languagesButton">Add</button>
-            </div>
-            
-            <h3 class="lang">Enter Inclusions</h3>
-
-            <div id="includes-todoContainer">
-                <!-- Includes will be added here -->
-            </div>
-            
-            <div class="includes-container">
-                <input type="text" class="form-control" id="includesInput" placeholder="Enter includes"
-                    aria-label="Example text with button addon" aria-describedby="button-addon1">
-                <button onclick="addInclude()" class="btn" type="button" id="includesButton">Add</button>
-            </div>
-            <h3 class="lang">Enter Exclusions</h3>
-
-            <div id="excludes-todoContainer">
-                <!-- Excludes will be added here -->
+            <div class="lang-input-cont">
+                <input type="text" id="newLanguageInput" placeholder="Add new language">
+                <button type="button" onclick="addCheckbox('languages-container', 'languages', 'newLanguageInput')">Add</button>
             </div>
 
            
+        
+           
             
-            
-            <div class="excludes-container">
-                <input type="text" class="form-control" id="excludesInput" placeholder="Enter excludes"
-                    aria-label="Example text with button addon" aria-describedby="button-addon1">
-                <button onclick="addExclude()" class="btn" type="button" id="excludesButton">Add</button>
+            <h3 class="lang">Enter Inclusions</h3>
+
+            <div id="includes-container" class="languages-container">
+                <label><input type="checkbox" name="includes" value="Accommodation"> Accommodation</label>
+                <label><input type="checkbox" name="includes" value="Food"> Meals</label>
+                <label><input type="checkbox" name="includes" value="Local Transport"> Local Transportation</label>
+                <label><input type="checkbox" name="includes" value="Local Transport"> Guided Tours & Sightseeing</label>
+                <label><input type="checkbox" name="includes" value="Local Transport"> Entry Fees & Permits</label>
+                <label><input type="checkbox" name="includes" value="Local Transport"> Travel Insurance (Basic)</label>
+                <label><input type="checkbox" name="includes" value="Local Transport"> Tour Leader or Guide Services</label>
+                <label><input type="checkbox" name="includes" value="Local Transport"> Group Activities</label>
+                <label><input type="checkbox" name="includes" value="Local Transport"> Welcome & Farewell Events</label>
+                <label><input type="checkbox" name="includes" value="Local Transport"> Emergency Assistance</label>
+            </div>
+            <div class="lang-input-cont">
+                <input type="text" id="newIncludeInput" placeholder="Add new include">
+                <button type="button" onclick="addCheckbox('includes-container', 'includes', 'newIncludeInput')">Add</button>
+            </div>
+
+
+            <h3 class="lang">Enter Exclusions</h3>
+
+            <div id="excludes-container" class="languages-container ">
+                <label><input type="checkbox" name="excludes" value="Flight Tickets"> Meals Not Mentioned</label>
+                <label><input type="checkbox" name="excludes" value="Personal Expenses"> Personal Expenses </label>
+                <label><input type="checkbox" name="excludes" value="Personal Expenses"> Optional Activities & Excursions </label>
+                <label><input type="checkbox" name="excludes" value="Personal Expenses"> Travel Insurance (Comprehensive) </label>
+                <label><input type="checkbox" name="excludes" value="Personal Expenses"> Tips & Gratuities </label>
+                <label><input type="checkbox" name="excludes" value="Personal Expenses"> Extra Baggage Fees </label>
+                <label><input type="checkbox" name="excludes" value="Personal Expenses"> Medical Expenses </label>
+                <label><input type="checkbox" name="excludes" value="Personal Expenses"> Transportation Outside Itinerary </label>
+                <label><input type="checkbox" name="excludes" value="Personal Expenses"> Internet & Communication Costs </label>
+                <label><input type="checkbox" name="excludes" value="Personal Expenses"> Pre/Post-Trip Accommodation </label>
+            </div>
+            <div class="lang-input-cont">
+                <input type="text" id="newExcludeInput" placeholder="Add new exclude">
+                <button type="button" onclick="addCheckbox('excludes-container', 'excludes', 'newExcludeInput')">Add</button>
             </div>
 
            
@@ -386,10 +405,40 @@
 
             </div>
 
+            
+        
+           
+
             <button class="submit-btn">SUBMIT</button>
         </form>
     </div>
 
+
+    <script>
+    function addCheckbox(containerId, name, inputId) {
+        const container = document.getElementById(containerId);
+        const inputValue = document.getElementById(inputId).value.trim();
+
+        if (inputValue) {
+            const label = document.createElement('label');
+            const checkbox = document.createElement('input');
+            checkbox.type = 'checkbox';
+            checkbox.name = name;
+            checkbox.value = inputValue;
+            checkbox.checked = true;
+
+            label.appendChild(checkbox);
+            label.appendChild(document.createTextNode(' ' + inputValue));
+
+            container.appendChild(label);
+
+            // Clear input
+            document.getElementById(inputId).value = '';
+        } else {
+            alert('Please enter a valid value.');
+        }
+    }
+</script>
 
     <script>
 
@@ -399,91 +448,12 @@
 
 
 
-function addLanguage() {
-    const languageValue = document.getElementById('languagesInput').value.trim();
-    if (languageValue) {
-        createItem('languages', languageValue); // Pass 'languages' as the type
-        document.getElementById('languagesInput').value = ''; // Clear the input field
-    } else {
-        alert('Please enter a valid language.');
-    }
-}
-
-// Reusable function to create an item
-function createItem(type, value) {
-    // Determine the correct container based on the type
-    const containerId =
-        type === 'includes'
-            ? 'includes-todoContainer'
-            : type === 'excludes'
-            ? 'excludes-todoContainer'
-            : 'languages-todoContainer'; // Correctly handle 'languages'
-    
-    const container = document.getElementById(containerId);
-
-    if (!container) {
-        console.error(`Container not found for type: ${type}`);
-        return;
-    }
-
-    const itemContainer = document.createElement('div');
-
-    // Create input for the value
-    const newInput = document.createElement('input');
-    newInput.type = 'text';
-    newInput.value = value;
-    newInput.name = type; // 'includes', 'excludes', or 'languages'
-    newInput.className = 'form-control me-2';
-
-    // Create delete button
-    const deleteButton = document.createElement('button');
-    deleteButton.type = 'button';
-    deleteButton.className = 'btn btn-danger btn-sm';
-    deleteButton.innerHTML = 'Delete';
-    deleteButton.onclick = function () {
-        itemContainer.remove();
-    };
-
-    // Append input and button to the container
-    itemContainer.appendChild(newInput);
-    itemContainer.appendChild(deleteButton);
-
-    // Add the new item to the appropriate container
-    container.appendChild(itemContainer);
-}
 
 
 
 
 
 
-
-
-
-
-
-
-function addInclude() {
-        // Get the value from the input field
-        const includeValue = document.getElementById('includesInput').value.trim();
-        if (includeValue) {
-            createItem('includes', includeValue);
-            document.getElementById('includesInput').value = ''; // Clear input field
-        } else {
-            alert('Please enter a valid include.');
-        }
-    }
-
-    function addExclude() {
-        // Get the value from the input field
-        const excludeValue = document.getElementById('excludesInput').value.trim();
-        if (excludeValue) {
-            createItem('excludes', excludeValue);
-            document.getElementById('excludesInput').value = ''; // Clear input field
-        } else {
-            alert('Please enter a valid exclude.');
-        }
-    }
 
 
 

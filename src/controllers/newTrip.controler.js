@@ -25,128 +25,127 @@ const newTripForm = async (req, res) => {
 }
 
 // posting new trip 
-
 const addNewTrip = async (req, res) => {
+    try {
+        // Fetch the user by their ID
+        const user = await User.findById(req.user._id);
 
+        // Check if the user has at least 100 tokens
+        if (user.wallet < 100) {
+            return res.status(400).send("Not enough tokens in the wallet. You need at least 100 tokens to create a trip.");
+        }
 
-    // Fetch the user by their ID
-    const user = await User.findById(req.user._id);
+        let {
+            departure,
+            fromLocation,
+            endDate,
+            categories,
+            location,
+            minTripmates,
+            maxTripmates,
+            title,
+            tripDescription,
+            accomodations,
+            aboutLeader,
+            includes,
+            totalDays,
+            stopLocation,
+            stopDescription,
+            trainTicket,
+            flightTicket,
+            totalCost,
+            buffer,
+            transport,
+            excludes,
+            maleTravelers,
+            femaleTravelers,
+            groupSize,
+            minAge,
+            languages,
+            deposit,
+        } = req.body;
 
-    // Check if the user has at least 100 tokens
-    if (user.wallet < 100) {
-        return res.status(400).send("Not enough tokens in the wallet. You need at least 100 tokens to create a trip.");
+        // Handle arrays properly in case only one item is selected (EJS sometimes sends as a string instead of array)
+        includes = Array.isArray(includes) ? includes : includes ? [includes] : [];
+        excludes = Array.isArray(excludes) ? excludes : excludes ? [excludes] : [];
+        languages = Array.isArray(languages) ? languages : languages ? [languages] : [];
+
+        // Extract the trip and stop images from req.files
+        const tripImages = req.files.tripImages
+            ? req.files.tripImages.map((file) => ({
+                  path: file.path,
+              }))
+            : [];
+
+        const stopImages = req.files.stopImages
+            ? req.files.stopImages.map((file) => ({
+                  path: file.path,
+              }))
+            : [];
+
+        let userId = req.user._id;
+        const operatorEmail = user.email;
+
+        let youtubeUrl = req.body.youtubeUrl || "";
+
+        if (youtubeUrl.includes("youtu.be")) {
+            youtubeUrl = youtubeUrl.replace("youtu.be", "www.youtube.com/embed");
+            youtubeUrl = youtubeUrl.split("?")[0];
+        } else if (youtubeUrl.includes("watch?v=")) {
+            youtubeUrl = youtubeUrl.replace("watch?v=", "embed/");
+            youtubeUrl = youtubeUrl.split("&")[0];
+        }
+
+        const newTrip = new Trip({
+            departure,
+            fromLocation,
+            endDate,
+            location,
+            categories,
+            title,
+            tripDescription,
+            accomodations,
+            includes,
+            excludes,
+            totalDays,
+            totalCost,
+            stopLocation,
+            stopDescription,
+            tripImages,
+            stopImages,
+            transport,
+            owner: userId,
+            youtubeUrl,
+            maleTravelers,
+            femaleTravelers,
+            groupSize,
+            minAge,
+            languages,
+            deposit,
+            buffer,
+            operatorEmail,
+            status: "pending",
+        });
+
+        totalDays = totalDays[0] ? parseInt(totalDays[0]) : 0;
+
+        await User.findByIdAndUpdate(req.user._id, {
+            $push: { createdTrips: newTrip._id },
+        });
+
+        await newTrip.save();
+
+        // Deduct 100 tokens from the user's wallet after creating the trip
+        // user.wallet -= 100;
+        // await user.save();
+
+        res.redirect("/");
+    } catch (err) {
+        console.error(err);
+        res.status(500).send("Something went wrong while creating the trip.");
     }
+};
 
-    let { departure
-        , fromLocation
-        , endDate
-        , categories
-        , location
-        , minTripmates
-        , maxTripmates
-        , tripimages
-        , title
-        , tripDescription
-        , accomodations
-        , aboutLeader
-        , includes
-        , totalDays
-        , stopLocation
-        , stopDescription
-        , trainTicket
-        , flightTicket
-        , totalCost
-        , buffer
-        , transport
-        , excludes
-        ,maleTravelers
-        ,femaleTravelers 
-        ,groupSize // New input for group size
-        ,minAge  
-        ,languages
-        ,deposit
-        
-    } = req.body;
-
-    // Extract the trip and stop images from req.files
-    const tripImages = req.files.tripImages ? req.files.tripImages.map(file => ({
-        path: file.path,
-    })) : [];
-
-    const stopImages = req.files.stopImages ? req.files.stopImages.map(file => ({
-        path: file.path,
-    })) : [];
-
-    console.log(stopImages);
-
-    let userId = req.user._id;
-
-    const operatorEmail = userId.email;
-
-    let youtubeUrl = req.body.youtubeUrl || ""; // Use let to allow reassigning
-
-    if (youtubeUrl.includes("youtu.be")) {
-        youtubeUrl = youtubeUrl.replace("youtu.be", "www.youtube.com/embed");
-        youtubeUrl = youtubeUrl.split('?')[0]; // Remove query parameters
-    } else if (youtubeUrl.includes("watch?v=")) {
-        youtubeUrl = youtubeUrl.replace("watch?v=", "embed/");
-        youtubeUrl = youtubeUrl.split('&')[0]; // Remove other parameters
-    }
-    
-
-    const newTrip = new Trip({
-        departure,
-        fromLocation,
-        endDate,
-        location,
-        categories,
-        title,
-        tripDescription,
-        accomodations,
-        includes,
-        excludes,
-        totalDays,
-        totalCost,
-        stopLocation,
-        stopDescription,
-        tripImages,
-        stopImages,
-        transport,
-        owner: userId,
-        youtubeUrl,
-        maleTravelers,
-        femaleTravelers,
-        groupSize,  // Adding group size to the new trip
-        minAge,
-        transport,
-        languages,
-        deposit,
-        buffer,
-        operatorEmail, // Capture operator's email for notifications
-        status: 'pending',
-    });
-
-    totalDays = totalDays[0] ? parseInt(totalDays[0]) : 0;
-
-
-
-    await User.findByIdAndUpdate(req.user._id, {
-        $push: { createdTrips: newTrip._id },
-    });
-
-    console.log(req.body);
-
-    await newTrip.save();
-
-    // // Deduct 100 tokens from the user's wallet after creating the trip
-    // user.wallet -= 100;
-    // await user.save(); // Save the updated user wallet
-
-
-    res.redirect("/");
-    
-
-}
 
 // displaying all trips 
 

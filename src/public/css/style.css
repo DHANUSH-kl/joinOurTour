@@ -440,4 +440,47 @@ form {
 
   }
 
+.lang-input-cont {
+    width: 70%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 2rem;
+}
+.lang-input-cont button {
+    width: auto;
+    padding: 0.7rem 2rem;
+    background-color: #588157;
+    color: white;
+    border-radius: 10px;
+    border: none;
+    cursor: pointer;
+}
+
+.languages-container label {
+    width: auto;
+    color: #588157;
+    font-family: poppins;
+    font-size: 1rem;
+    font-weight: 600;
+    padding: 0.5rem 0.5rem; 
+}
+.languages-container {
+    width: 70%;
+    height: auto;
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 3rem;
+    margin-bottom: 4rem;
+}
+.lang-input-cont input{
+    width: 50%;
+    height: 40px;
+    text-align: center;
+    padding: 1rem;
+    border-radius: 10px;
+    border: 3px solid #588157;
+}
 
