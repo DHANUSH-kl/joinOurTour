@@ -191,7 +191,7 @@
             </div>
 
             <div class="mainSearchBtn-container">
-                <button class="mainSearchBtn" onclick="submitSearch()">
+                <button class="mainSearchBtn" onclick="submitCombinedSearch()">
                     <span class="material-symbols-outlined">
                         east
                     </span>
@@ -230,7 +230,7 @@
                             id="secondaryDestination" name="destination">
                     </form>
     
-                    <button class="secondary-search-button" onclick="submitSecondarySearch()">
+                    <button class="secondary-search-button" onclick="submitCombinedSearch()">
                         <i class="fa-solid fa-arrow-right"></i>
                     </button>
                 </div>
@@ -275,7 +275,7 @@
                                     <input type="hidden" name="selectedCategories" id="selectedCategories">
                                     <!-- <button type="button" onclick="searchCategory()">Apply Categories</button> -->
                                 </form>
-                                <button class="filter-submit" onclick="submitSecondarySearch()">submit</button>
+                                <button class="filter-submit" onclick="submitCombinedSearch()">submit</button>
                                 
                             </div>
                             
@@ -314,7 +314,7 @@
     
                                 </div>
                                
-                                <button class="filter-submit" onclick="submitSecondarySearch()">submit</button>
+                                <button class="filter-submit" onclick="submitCombinedSearch()">submit</button>
     
                             </div>
     
@@ -354,7 +354,7 @@
                                     </label>
                                     <input type="hidden" name="selectedLanguages" id="selectedLanguages">
                                 </form>
-                                <button class="filter-submit" onclick="submitSecondarySearch()">submit</button>
+                                <button class="filter-submit" onclick="submitCombinedSearch()">submit</button>
     
                             </div>
     
@@ -376,7 +376,7 @@
                                     <input type="number" id="maxDays" name="maxDays" min="1" placeholder="Maximum days">
     
                                 </div>
-                                <button class="filter-submit" onclick="submitSecondarySearch()">submit</button>
+                                <button class="filter-submit" onclick="submitCombinedSearch()">submit</button>
     
                             </div>
     
@@ -389,7 +389,7 @@
 
 
                 <div class="suborclose">
-                    <button class="filter-submit" onclick="submitSecondarySearch()">submit</button>
+                    <button class="filter-submit" onclick="submitCombinedSearch()">submit</button>
                     <button class="filter-close" onclick="closeFilterPopup()">close</button>
 
                 </div>

@@ -59,7 +59,6 @@ const addNewTrip = async (req, res) => {
         , buffer
         , transport
         , excludes
-        , youtubeUrl
         ,maleTravelers
         ,femaleTravelers 
         ,groupSize // New input for group size
@@ -84,7 +83,8 @@ const addNewTrip = async (req, res) => {
 
     const operatorEmail = userId.email;
 
-    // Transform the YouTube URL for embedding
+    let youtubeUrl = req.body.youtubeUrl || ""; // Use let to allow reassigning
+
     if (youtubeUrl.includes("youtu.be")) {
         youtubeUrl = youtubeUrl.replace("youtu.be", "www.youtube.com/embed");
         youtubeUrl = youtubeUrl.split('?')[0]; // Remove query parameters
@@ -92,7 +92,7 @@ const addNewTrip = async (req, res) => {
         youtubeUrl = youtubeUrl.replace("watch?v=", "embed/");
         youtubeUrl = youtubeUrl.split('&')[0]; // Remove other parameters
     }
-
+    
 
     const newTrip = new Trip({
         departure,
@@ -545,108 +545,32 @@ const searchTrips = async (req, res) => {
 
 
 const mainSearch = async (req, res) => {
-    const { startingLocation, destinationLocation, fromDate, toDate, minPrice, maxPrice, categories } = req.body;
+    const { startingLocation, destinationLocation, fromDate, toDate, minPrice, maxPrice, minDays, maxDays } = req.body;
 
-    // Build the query object dynamically for exact match
-    let query = {};
+    const destination = req.body.destination?.trim();
+    const fromdte = req.body.fromdte;
+    const todte = req.body.todte;
 
-    // Handle the starting location (departure)
-    if (startingLocation && startingLocation.trim()) {
-        query.fromLocation = { $regex: new RegExp('^' + startingLocation.trim(), 'i') }; // Case-insensitive match
-    }
+    const categories = Array.isArray(req.body.categories) ? req.body.categories.map(cat => cat.trim()) : (req.body.categories ? [req.body.categories.trim()] : []);
+    const languages = Array.isArray(req.body.languages) ? req.body.languages.map(lang => lang.trim()) : (req.body.languages ? [req.body.languages.trim()] : []);
 
-    // Handle the destination location
-    if (destinationLocation && destinationLocation.trim()) {
-        query.location = { $regex: new RegExp('^' + destinationLocation.trim(), 'i') }; // Case-insensitive match
-    }
-
-    // Parse the input dates
-    if (fromDate) {
-        const departureDate = new Date(fromDate);
-        const departureBufferStart = new Date(departureDate.getTime() - 24 * 60 * 60 * 1000); // 1-day buffer
-        const departureBufferEnd = new Date(departureDate.getTime() + 24 * 60 * 60 * 1000); // 1-day buffer
-        query.departure = { $gte: departureBufferStart, $lte: departureBufferEnd };
-    }
-
-    if (toDate) {
-        const endDate = new Date(toDate);
-        const extendedEndDate = new Date(endDate.getTime() + 6 * 24 * 60 * 60 * 1000); // Extend end date by 6 days
-        query.endDate = { $gte: endDate, $lte: extendedEndDate };
-    }
-
-    // Add price filter to query if minPrice or maxPrice is provided
-    if (minPrice || maxPrice) {
-        query.totalCost = {};
-        if (minPrice) {
-            query.totalCost.$gte = Number(minPrice);
-        }
-        if (maxPrice) {
-            query.totalCost.$lte = Number(maxPrice);
-        }
-    }
-
-    // Handle categories whether it's an array or a single value
-    if (categories) {
-        const categoryArray = Array.isArray(categories) ? categories : [categories.trim()];
-        query.categories = { $in: categoryArray };
-    }
+    const minDaysInt = minDays ? parseInt(minDays) : null;
+    const maxDaysInt = maxDays ? parseInt(maxDays) : null;
 
     try {
-        // Execute the search query for exact matches
-        const exactMatchTrips = await Trip.find(query).populate('owner').populate('reviews');
-
-        // Fetch all trips to compare for date and destination matches
         const allTrips = await Trip.find().populate('owner').populate('reviews');
-        const datesMatchTrips = [];
-        const destinationMatchTrips = [];
 
-        const fromDateObj = fromDate ? new Date(fromDate) : null;
-        const toDateObj = toDate ? new Date(toDate) : null;
-
-        allTrips.forEach((trip) => {
-            const tripFromDate = new Date(trip.departure);
-            const tripToDate = new Date(trip.endDate);
-
-            // Dates Match: Matches only the fromDate and toDate, regardless of location
-            if (
-                fromDateObj &&
-                toDateObj &&
-                tripFromDate.getTime() === fromDateObj.getTime() &&
-                tripToDate.getTime() === toDateObj.getTime()
-            ) {
-                datesMatchTrips.push(trip);
-            }
-
-            // Destination Match: Matches only the destinationLocation
-            if (
-                destinationLocation &&
-                trip.location.match(new RegExp('^' + destinationLocation.trim(), 'i'))
-            ) {
-                destinationMatchTrips.push(trip);
-            }
-        });
-
-        // Check if the user is logged in and retrieve their wishlist
         let userWishlist = [];
         if (req.user) {
             const user = await User.findById(req.user._id).populate('wishlist');
             userWishlist = user.wishlist.map((trip) => trip._id.toString());
         }
 
-        // Calculate average rating for each trip
         const calculateRatings = (trips) => {
             return trips.map((trip) => {
-                let totalRatings = 0;
-                let count = 0;
+                let totalRatings = 0, count = 0;
                 trip.reviews.forEach((review) => {
-                    const locationRating = review.locationRating || 0;
-                    const amenitiesRating = review.amenitiesRating || 0;
-                    const foodRating = review.foodRating || 0;
-                    const roomRating = review.roomRating || 0;
-                    const priceRating = review.priceRating || 0;
-                    const operatorRating = review.operatorRating || 0;
-                    const overallRating =
-                        (locationRating + amenitiesRating + foodRating + roomRating + priceRating + operatorRating) / 6;
+                    const overallRating = (review.locationRating + review.amenitiesRating + review.foodRating + review.roomRating + review.priceRating + review.operatorRating) / 6;
                     totalRatings += overallRating;
                     count++;
                 });
@@ -655,19 +579,131 @@ const mainSearch = async (req, res) => {
             });
         };
 
-        const exactMatchesWithRatings = calculateRatings(exactMatchTrips);
-        const datesMatchesWithRatings = calculateRatings(datesMatchTrips);
-        const destinationMatchesWithRatings = calculateRatings(destinationMatchTrips);
+        const matchesAllFilters = [];
+        const matchesSomeFilters = [];
 
-        console.log("exact match :  " ,exactMatchesWithRatings);
-        console.log("dates match :  " ,datesMatchesWithRatings);
-        console.log("destination match :  " ,destinationMatchesWithRatings);
+        allTrips.forEach((trip) => {
+            let matchesAll = true;
+            let matchesPartial = false;
+            let priorityScore = 0;
 
-        // Render the results in the mainSearch.ejs view
+            // Starting Location
+            if (startingLocation?.trim()) {
+                if (!trip.fromLocation.toLowerCase().includes(startingLocation.trim().toLowerCase())) {
+                    matchesAll = false;
+                } else {
+                    matchesPartial = true;
+                    priorityScore += 2;
+                }
+            }
+
+            // Destination Location
+            if (destinationLocation?.trim()) {
+                if (!trip.location.toLowerCase().includes(destinationLocation.trim().toLowerCase())) {
+                    matchesAll = false;
+                } else {
+                    matchesPartial = true;
+                    priorityScore += 2;
+                }
+            }
+
+            // Departure Date (±1 day buffer)
+            if (fromDate) {
+                const tripDeparture = new Date(trip.departure).setHours(0, 0, 0, 0);
+                const selectedDate = new Date(fromDate).setHours(0, 0, 0, 0);
+                const bufferStart = selectedDate - 24 * 60 * 60 * 1000;
+                const bufferEnd = selectedDate + 24 * 60 * 60 * 1000;
+
+                if (tripDeparture < bufferStart || tripDeparture > bufferEnd) {
+                    matchesAll = false;
+                } else {
+                    matchesPartial = true;
+                    priorityScore += 1;
+                }
+            }
+
+            // End Date (±6 days buffer)
+            if (toDate) {
+                const tripEndDate = new Date(trip.endDate).setHours(0, 0, 0, 0);
+                const selectedEndDate = new Date(toDate).setHours(0, 0, 0, 0);
+                const bufferStart = selectedEndDate;
+                const bufferEnd = selectedEndDate + 6 * 24 * 60 * 60 * 1000;
+
+                if (tripEndDate < bufferStart || tripEndDate > bufferEnd) {
+                    matchesAll = false;
+                } else {
+                    matchesPartial = true;
+                    priorityScore += 1;
+                }
+            }
+
+            // Price Range
+            if (minPrice || maxPrice) {
+                const price = trip.totalCost;
+                if ((minPrice && price < Number(minPrice)) || (maxPrice && price > Number(maxPrice))) {
+                    matchesAll = false;
+                } else {
+                    matchesPartial = true;
+                    priorityScore += 1;
+                }
+            }
+
+            // Duration Range
+            if (minDaysInt || maxDaysInt) {
+                const days = trip.totalDays;
+                if ((minDaysInt && days < minDaysInt) || (maxDaysInt && days > maxDaysInt)) {
+                    matchesAll = false;
+                } else {
+                    matchesPartial = true;
+                    priorityScore += 1;
+                }
+            }
+
+            // Categories
+            if (categories.length > 0) {
+                const matchesCategory = categories.some(cat => trip.categories.includes(cat));
+                if (!matchesCategory) {
+                    matchesAll = false;
+                } else {
+                    matchesPartial = true;
+                    priorityScore += 3;
+                }
+            }
+
+            if (matchesAll) {
+                matchesAllFilters.push({ trip, priorityScore });
+            } else if (matchesPartial) {
+                matchesSomeFilters.push({ trip, priorityScore });
+            }
+        });
+
+        const calculateFinalScore = (tripData) => {
+            return tripData.priorityScore + parseFloat(tripData.trip.averageRating || 0);
+        };
+
+        const exactMatchesWithRatings = calculateRatings(matchesAllFilters.map(m => m.trip));
+        const partialMatchesWithRatings = calculateRatings(matchesSomeFilters.map(m => m.trip));
+
+        const rankedExactMatches = matchesAllFilters
+            .map((match, index) => ({
+                ...match,
+                trip: exactMatchesWithRatings[index],
+            }))
+            .sort((a, b) => calculateFinalScore(b) - calculateFinalScore(a))
+            .map((m) => m.trip);
+
+        const rankedPartialMatches = matchesSomeFilters
+            .map((match, index) => ({
+                ...match,
+                trip: partialMatchesWithRatings[index],
+            }))
+            .sort((a, b) => calculateFinalScore(b) - calculateFinalScore(a))
+            .map((m) => m.trip);
+
+        const finalResults = [...rankedExactMatches, ...rankedPartialMatches];
+
         res.render('trips/mainSearch.ejs', {
-            exactMatchTrips: exactMatchesWithRatings,
-            datesMatchTrips: datesMatchesWithRatings,
-            destinationMatchTrips: destinationMatchesWithRatings,
+            exactMatchTrips: finalResults,
             user: req.user,
             userWishlist,
             startingLocation,
@@ -675,11 +711,13 @@ const mainSearch = async (req, res) => {
             fromDate,
             toDate,
         });
+
     } catch (error) {
         console.error('Error during trip search:', error);
         res.status(500).send('Server error');
     }
 };
+
 
 
 

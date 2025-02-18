@@ -258,459 +258,134 @@
 
 
 
-        <div class="cards">
-
-
-            <% if (exactMatchTrips && exactMatchTrips.length> 0) { %>
-                <h1 class="card-title">Exact Match Tours</h1>
-
-                <div class="cards-container">
-                    <% for(let i=0; i < exactMatchTrips.length; i++) { %>
-                        <div class="card-container">
-                            <div class="card-img">
-                                <% if (exactMatchTrips[i].tripImages && exactMatchTrips[i].tripImages.length> 0 &&
-                                    exactMatchTrips[i].tripImages[0].path) { %>
-                                    <div class="trip-image">
-                                        <img src="<%= exactMatchTrips[i].tripImages[0].path %>" alt="Trip Image">
-                                    </div>
-                                    <div class="heart-container">
-                                        <% if (user) { %>
-                                            <% const
-                                                isInWishlist=userWishlist.includes(exactMatchTrips[i]._id.toString());
-                                                %>
-                                                <i class="<%= isInWishlist ? 'fa-solid fa-heart wishlist-active' : 'fa-regular fa-heart' %> wishlist-icon"
-                                                    data-id="<%= exactMatchTrips[i]._id %>"
-                                                    style="cursor: pointer;"></i>
-                                                <% } else { %>
-                                                    <i class="fa-regular fa-heart wishlist-icon redirect-i"
-                                                        data-id="<%= exactMatchTrips[i]._id %>"></i>
-                                                    <% } %>
-                                    </div>
-
-
-
-
-                                    <% } else { %>
-                                        <p>No images available for this trip</p>
-                                        <% } %>
+        <div class="cards-container">
+            <% for(let i=0; i < exactMatchTrips.length; i++) { %>
+                <div class="card-container">
+                    <div class="card-img">
+                        <% if (exactMatchTrips[i].tripImages && exactMatchTrips[i].tripImages.length> 0 &&
+                            exactMatchTrips[i].tripImages[0].path) { %>
+                            <div class="trip-image">
+                                <img src="<%= exactMatchTrips[i].tripImages[0].path %>" alt="Trip Image">
                             </div>
-                            <div class="card-body">
-                                <div class="route">
-                                    <img src="../images/route.svg" alt="">
-                                    <h3 class="card-title">
-                                        <a href="/tour/<%= exactMatchTrips[i]._id %>">
-                                            <%= exactMatchTrips[i].location %>
-                                        </a>
-                                        <p>
-                                            <% if (exactMatchTrips[i].departure) { %>
-                                                <%= new Date(exactMatchTrips[i].departure).toLocaleDateString('en-US', {
-                                                    month: 'long' , day: '2-digit' }) %> ~
-                                                    <% } else { %>
-                                                        date not available
-                                                        <% } %>
-                                                            <% if (exactMatchTrips[i].endDate) { %>
-                                                                <%= new
-                                                                    Date(exactMatchTrips[i].endDate).toLocaleDateString('en-US',
-                                                                    { month: 'long' , day: '2-digit' }) %>
-                                                                    <% } %>
-                                        </p>
-                                    </h3>
-                                </div>
-                                <div class="title-container">
-                                    <h4 class="trip-title">
-                                        <%= exactMatchTrips[i].title %>
-                                    </h4>
-                                </div>
-
-                                <div class="rating-container">
-                                    <div class="rate rat1">
-                                        <!-- 5 Stars -->
-                                        <input type="radio" id="locStar5-<%= i %>" name="locationRating-<%= i %>"
-                                            value="5" <% if (exactMatchTrips[i].averageRating>= 5) { %> checked <% } %>
-                                            disabled />
-                                            <label for="locStar5-<%= i %>">5 stars</label>
-
-                                            <!-- 4 Stars -->
-                                            <input type="radio" id="locStar4-<%= i %>" name="locationRating-<%= i %>"
-                                                value="4" <% if (exactMatchTrips[i].averageRating>= 4 &&
-                                            exactMatchTrips[i].averageRating
-                                            < 5) { %>
-                                                checked <% } %> disabled />
-                                                    <label for="locStar4-<%= i %>">4 stars</label>
-
-                                                    <!-- 3 Stars -->
-                                                    <input type="radio" id="locStar3-<%= i %>"
-                                                        name="locationRating-<%= i %>" value="3" <% if
-                                                        (exactMatchTrips[i].averageRating>= 3 &&
-                                                    exactMatchTrips[i].averageRating < 4) { %> checked <% } %> disabled
-                                                            />
-                                                            <label for="locStar3-<%= i %>">3 stars</label>
-
-                                                            <!-- 2 Stars -->
-                                                            <input type="radio" id="locStar2-<%= i %>"
-                                                                name="locationRating-<%= i %>" value="2" <% if
-                                                                (exactMatchTrips[i].averageRating>= 2 &&
-                                                            exactMatchTrips[i].averageRating < 3) { %> checked <% } %>
-                                                                    disabled
-                                                                    />
-                                                                    <label for="locStar2-<%= i %>">2 stars</label>
-
-                                                                    <!-- 1 Star -->
-                                                                    <input type="radio" id="locStar1-<%= i %>"
-                                                                        name="locationRating-<%= i %>" value="1" <% if
-                                                                        (exactMatchTrips[i].averageRating>= 1 &&
-                                                                    exactMatchTrips[i].averageRating < 2) { %> checked
-                                                                        <% } %>
-                                                                            disabled
-                                                                            />
-                                                                            <label for="locStar1-<%= i %>">1
-                                                                                star</label>
-                                    </div>
-
-                                    <p>
-                                        <%= exactMatchTrips[i].averageRating %>
-                                    </p>
-                                </div>
+                            
+                            <div class="heart-container">
+                                <% if (user) { %>
+                                    <% const isInWishlist=userWishlist.includes(exactMatchTrips[i]._id.toString()); %>
+                                        <i class="<%= isInWishlist ? 'fa-solid fa-heart wishlist-active' : 'fa-regular fa-heart' %> wishlist-icon"
+                                            data-id="<%= exactMatchTrips[i]._id %>" style="cursor: pointer;"></i>
+                                        <% } else { %>
+                                            <i class="fa-regular fa-heart wishlist-icon redirect-i"
+                                                data-id="<%= exactMatchTrips[i]._id %>"></i>
+                                            <% } %>
+                            </div>
 
 
-                                <div class="card-bottom">
-                                    <div class="days-container">
-                                        <h4 class="days">
-                                            <%= exactMatchTrips[i].totalDays %> days
-                                        </h4>
-                                    </div>
-                                    <div class="price-container">
-                                        <% if (exactMatchTrips[i].totalCost) { %>
-                                            <span>FROM</span> &nbsp;<b>
-                                                <%= exactMatchTrips[i].totalCost.toLocaleString('en-IN', {
-                                                    style: 'currency' , currency: 'INR' }) %>
-                                            </b>
+
+
+                            <% } else { %>
+                                <p>No images available for this trip</p>
+                                <% } %>
+                    </div>
+                    <div class="card-body">
+                        <div class="route">
+                            <img src="../images/route.svg" alt="">
+                            <h3 class="card-title">
+                                <a href="/tour/<%= exactMatchTrips[i]._id %>">
+                                    <%= exactMatchTrips[i].location %>
+                                </a>
+                                <p>
+                                    <% if (exactMatchTrips[i].departure) { %>
+                                        <%= new Date(exactMatchTrips[i].departure).toLocaleDateString('en-US', { month: 'long'
+                                            , day: '2-digit' }) %> ~
                                             <% } else { %>
-                                                Price Not Available
+                                                date not available
                                                 <% } %>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <% } %>
-                </div>
-
-
-                <hr>
-
-                <% } %>
-
-
-
-
-                    <% if (datesMatchTrips && datesMatchTrips.length> 0) { %>
-                        <h1 class="card-title">dates match tours</h1>
-
-                        <div class="cards-container dates-match">
-                            <% for(let i=0; i < datesMatchTrips.length; i++) { %>
-                                <div class="card-container">
-                                    <div class="card-img">
-                                        <% if (datesMatchTrips[i].tripImages && datesMatchTrips[i].tripImages.length> 0
-                                            &&
-                                            datesMatchTrips[i].tripImages[0].path) { %>
-                                            <div class="trip-image">
-                                                <img src="<%= datesMatchTrips[i].tripImages[0].path %>"
-                                                    alt="Trip Image">
-                                            </div>
-                                            <div class="heart-container">
-                                                <% if (user) { %>
-                                                    <% const
-                                                        isInWishlist=userWishlist.includes(datesMatchTrips[i]._id.toString());
-                                                        %>
-                                                        <i class="<%= isInWishlist ? 'fa-solid fa-heart wishlist-active' : 'fa-regular fa-heart' %> wishlist-icon"
-                                                            data-id="<%= datesMatchTrips[i]._id %>"
-                                                            style="cursor: pointer;"></i>
-                                                        <% } else { %>
-                                                            <i class="fa-regular fa-heart wishlist-icon redirect-i"
-                                                                data-id="<%= datesMatchTrips[i]._id %>"></i>
+                                                    <% if (exactMatchTrips[i].endDate) { %>
+                                                        <%= new Date(exactMatchTrips[i].endDate).toLocaleDateString('en-US', {
+                                                            month: 'long' , day: '2-digit' }) %>
                                                             <% } %>
-                                            </div>
+                                </p>
+                            </h3>
+                        </div>
+                        <div class="title-container">
+                            <h4 class="trip-title">
+                                <%= exactMatchTrips[i].title %>
+                            </h4>
 
-
-
-
-                                            <% } else { %>
-                                                <p>No images available for this trip</p>
-                                                <% } %>
-                                    </div>
-                                    <div class="card-body">
-                                        <div class="route">
-                                            <img src="../images/route.svg" alt="">
-                                            <h3 class="card-title">
-                                                <a href="/tour/<%= datesMatchTrips[i]._id %>">
-                                                    <%= datesMatchTrips[i].location %>
-                                                </a>
-                                                <p>
-                                                    <% if (datesMatchTrips[i].departure) { %>
-                                                        <%= new
-                                                            Date(datesMatchTrips[i].departure).toLocaleDateString('en-US',
-                                                            { month: 'long' , day: '2-digit' }) %> ~
-                                                            <% } else { %>
-                                                                date not available
-                                                                <% } %>
-                                                                    <% if (datesMatchTrips[i].endDate) { %>
-                                                                        <%= new
-                                                                            Date(datesMatchTrips[i].endDate).toLocaleDateString('en-US',
-                                                                            { month: 'long' , day: '2-digit' }) %>
-                                                                            <% } %>
-                                                </p>
-                                            </h3>
-                                        </div>
-                                        <div class="title-container">
-                                            <h4 class="trip-title">
-                                                <%= datesMatchTrips[i].title %>
-                                            </h4>
-                                        </div>
-
-                                        <div class="rating-container">
-                                            <div class="rate rat1">
-                                                <!-- 5 Stars -->
-                                                <input type="radio" id="locStar5-<%= i %>"
-                                                    name="locationRating-<%= i %>" value="5" <% if
-                                                    (datesMatchTrips[i].averageRating>= 5) { %> checked <% } %> disabled
-                                                    />
-                                                    <label for="locStar5-<%= i %>">5 stars</label>
-
-                                                    <!-- 4 Stars -->
-                                                    <input type="radio" id="locStar4-<%= i %>"
-                                                        name="locationRating-<%= i %>" value="4" <% if
-                                                        (datesMatchTrips[i].averageRating>= 4 &&
-                                                    datesMatchTrips[i].averageRating
-                                                    < 5) { %>
-                                                        checked <% } %> disabled />
-                                                            <label for="locStar4-<%= i %>">4 stars</label>
-
-                                                            <!-- 3 Stars -->
-                                                            <input type="radio" id="locStar3-<%= i %>"
-                                                                name="locationRating-<%= i %>" value="3" <% if
-                                                                (datesMatchTrips[i].averageRating>= 3 &&
-                                                            datesMatchTrips[i].averageRating < 4) { %> checked <% } %>
-                                                                    disabled />
-                                                                    <label for="locStar3-<%= i %>">3 stars</label>
-
-                                                                    <!-- 2 Stars -->
-                                                                    <input type="radio" id="locStar2-<%= i %>"
-                                                                        name="locationRating-<%= i %>" value="2" <% if
-                                                                        (datesMatchTrips[i].averageRating>= 2 &&
-                                                                    datesMatchTrips[i].averageRating < 3) { %> checked
-                                                                        <% } %> disabled
-                                                                            />
-                                                                            <label for="locStar2-<%= i %>">2
-                                                                                stars</label>
-
-                                                                            <!-- 1 Star -->
-                                                                            <input type="radio" id="locStar1-<%= i %>"
-                                                                                name="locationRating-<%= i %>" value="1"
-                                                                                <% if
-                                                                                (datesMatchTrips[i].averageRating>= 1 &&
-                                                                            datesMatchTrips[i].averageRating < 2) { %>
-                                                                                checked <% } %>
-                                                                                    disabled
-                                                                                    />
-                                                                                    <label for="locStar1-<%= i %>">1
-                                                                                        star</label>
-                                            </div>
-
-                                            <p>
-                                                <%= datesMatchTrips[i].averageRating %>
-                                            </p>
-                                        </div>
-
-
-                                        <div class="card-bottom">
-                                            <div class="days-container">
-                                                <h4 class="days">
-                                                    <%= datesMatchTrips[i].totalDays %> days
-                                                </h4>
-                                            </div>
-                                            <div class="price-container">
-                                                <% if (datesMatchTrips[i].totalCost) { %>
-                                                    <span>FROM</span> &nbsp;<b>
-                                                        <%= datesMatchTrips[i].totalCost.toLocaleString('en-IN', {
-                                                            style: 'currency' , currency: 'INR' }) %>
-                                                    </b>
-                                                    <% } else { %>
-                                                        Price Not Available
-                                                        <% } %>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <% } %>
                         </div>
 
-                        <hr>
+                        <div class="ratio-container">
+                            <p class="maleRatio">Male: <%= exactMatchTrips[i].maleRatio %>%</p>
+                            <p class="femaleRatio">Female: <%= exactMatchTrips[i].femaleRatio %>%</p>
 
-                        <% } %>
-
-
-
-
-                            <% if (destinationMatchTrips && destinationMatchTrips.length> 0) { %>
-                                <h1 class="card-title">destination match tours</h1>
-
-                                <div class="cards-container destination-match">
-                                    <% for(let i=0; i < destinationMatchTrips.length; i++) { %>
-                                        <div class="card-container">
-                                            <div class="card-img">
-                                                <% if (destinationMatchTrips[i].tripImages &&
-                                                    destinationMatchTrips[i].tripImages.length> 0 &&
-                                                    destinationMatchTrips[i].tripImages[0].path) { %>
-                                                    <div class="trip-image">
-                                                        <img src="<%= destinationMatchTrips[i].tripImages[0].path %>"
-                                                            alt="Trip Image">
-                                                    </div>
-                                                    <div class="heart-container">
-                                                        <% if (user) { %>
-                                                            <% const
-                                                                isInWishlist=userWishlist.includes(destinationMatchTrips[i]._id.toString());
-                                                                %>
-                                                                <i class="<%= isInWishlist ? 'fa-solid fa-heart wishlist-active' : 'fa-regular fa-heart' %> wishlist-icon"
-                                                                    data-id="<%= destinationMatchTrips[i]._id %>"
-                                                                    style="cursor: pointer;"></i>
-                                                                <% } else { %>
-                                                                    <i class="fa-regular fa-heart wishlist-icon redirect-i"
-                                                                        data-id="<%= destinationMatchTrips[i]._id %>"></i>
-                                                                    <% } %>
-                                                    </div>
+                        </div>
 
 
 
+                        <div class="rating-container">
 
-                                                    <% } else { %>
-                                                        <p>No images available for this trip</p>
-                                                        <% } %>
-                                            </div>
-                                            <div class="card-body">
-                                                <div class="route">
-                                                    <img src="../images/route.svg" alt="">
-                                                    <h3 class="card-title">
-                                                        <a href="/tour/<%= destinationMatchTrips[i]._id %>">
-                                                            <%= destinationMatchTrips[i].location %>
-                                                        </a>
-                                                        <p>
-                                                            <% if (destinationMatchTrips[i].departure) { %>
-                                                                <%= new
-                                                                    Date(destinationMatchTrips[i].departure).toLocaleDateString('en-US',
-                                                                    { month: 'long' , day: '2-digit' }) %> ~
-                                                                    <% } else { %>
-                                                                        date not available
-                                                                        <% } %>
-                                                                            <% if (destinationMatchTrips[i].endDate) {
-                                                                                %>
-                                                                                <%= new
-                                                                                    Date(destinationMatchTrips[i].endDate).toLocaleDateString('en-US',
-                                                                                    { month: 'long' , day: '2-digit' })
-                                                                                    %>
-                                                                                    <% } %>
-                                                        </p>
-                                                    </h3>
-                                                </div>
-                                                <div class="title-container">
-                                                    <h4 class="trip-title">
-                                                        <%= destinationMatchTrips[i].title %>
-                                                    </h4>
-                                                </div>
+                            <div class="rate rat1">
+                                <!-- 5 Stars -->
+                                <input type="radio" id="locStar5-<%= i %>" name="locationRating-<%= i %>" value="5" <%
+                                    if (exactMatchTrips[i].averageRating>= 5) { %> checked <% } %> disabled />
+                                    <label for="locStar5-<%= i %>">5 stars</label>
 
-                                                <div class="rating-container">
-                                                    <div class="rate rat1">
-                                                        <!-- 5 Stars -->
-                                                        <input type="radio" id="locStar5-<%= i %>"
-                                                            name="locationRating-<%= i %>" value="5" <% if
-                                                            (destinationMatchTrips[i].averageRating>= 5) { %> checked <%
-                                                            } %> disabled />
-                                                            <label for="locStar5-<%= i %>">5 stars</label>
+                                    <!-- 4 Stars -->
+                                    <input type="radio" id="locStar4-<%= i %>" name="locationRating-<%= i %>" value="4"
+                                        <% if (exactMatchTrips[i].averageRating>= 4 && exactMatchTrips[i].averageRating < 5) { %>
+                                        checked <% } %> disabled />
+                                            <label for="locStar4-<%= i %>">4 stars</label>
 
-                                                            <!-- 4 Stars -->
-                                                            <input type="radio" id="locStar4-<%= i %>"
-                                                                name="locationRating-<%= i %>" value="4" <% if
-                                                                (destinationMatchTrips[i].averageRating>= 4 &&
-                                                            destinationMatchTrips[i].averageRating
-                                                            < 5) { %>
-                                                                checked <% } %> disabled />
-                                                                    <label for="locStar4-<%= i %>">4 stars</label>
+                                            <!-- 3 Stars -->
+                                            <input type="radio" id="locStar3-<%= i %>" name="locationRating-<%= i %>"
+                                                value="3" <% if (exactMatchTrips[i].averageRating>= 3 &&
+                                                exactMatchTrips[i].averageRating < 4) { %> checked <% } %> disabled />
+                                                    <label for="locStar3-<%= i %>">3 stars</label>
 
-                                                                    <!-- 3 Stars -->
-                                                                    <input type="radio" id="locStar3-<%= i %>"
-                                                                        name="locationRating-<%= i %>" value="3" <% if
-                                                                        (destinationMatchTrips[i].averageRating>= 3 &&
-                                                                    destinationMatchTrips[i].averageRating < 4) { %>
-                                                                        checked <% } %> disabled />
-                                                                            <label for="locStar3-<%= i %>">3
-                                                                                stars</label>
+                                                    <!-- 2 Stars -->
+                                                    <input type="radio" id="locStar2-<%= i %>"
+                                                        name="locationRating-<%= i %>" value="2" <% if
+                                                        (exactMatchTrips[i].averageRating>= 2 && exactMatchTrips[i].averageRating < 3)
+                                                        { %> checked <% } %> disabled />
+                                                            <label for="locStar2-<%= i %>">2 stars</label>
 
-                                                                            <!-- 2 Stars -->
-                                                                            <input type="radio" id="locStar2-<%= i %>"
-                                                                                name="locationRating-<%= i %>" value="2"
-                                                                                <% if
-                                                                                (destinationMatchTrips[i].averageRating>=
-                                                                            2 &&
-                                                                            destinationMatchTrips[i].averageRating < 3)
-                                                                                { %> checked <% } %> disabled
-                                                                                    />
-                                                                                    <label for="locStar2-<%= i %>">2
-                                                                                        stars</label>
+                                                            <!-- 1 Star -->
+                                                            <input type="radio" id="locStar1-<%= i %>"
+                                                                name="locationRating-<%= i %>" value="1" <% if
+                                                                (exactMatchTrips[i].averageRating>= 1 &&
+                                                                exactMatchTrips[i].averageRating < 2) { %> checked <% } %> disabled
+                                                                    />
+                                                                    <label for="locStar1-<%= i %>">1 star</label>
+                            </div>
 
-                                                                                    <!-- 1 Star -->
-                                                                                    <input type="radio"
-                                                                                        id="locStar1-<%= i %>"
-                                                                                        name="locationRating-<%= i %>"
-                                                                                        value="1" <% if
-                                                                                        (destinationMatchTrips[i].averageRating>=
-                                                                                    1 &&
-                                                                                    destinationMatchTrips[i].averageRating
-                                                                                    < 2) { %> checked <% } %>
-                                                                                            disabled
-                                                                                            />
-                                                                                            <label
-                                                                                                for="locStar1-<%= i %>">1
-                                                                                                star</label>
-                                                    </div>
+                            <p>
+                                <%= exactMatchTrips[i].averageRating %>
+                            </p>
 
-                                                    <p>
-                                                        <%= destinationMatchTrips[i].averageRating %>
-                                                    </p>
-                                                </div>
+                        </div>
 
 
-                                                <div class="card-bottom">
-                                                    <div class="days-container">
-                                                        <h4 class="days">
-                                                            <%= destinationMatchTrips[i].totalDays %> days
-                                                        </h4>
-                                                    </div>
-                                                    <div class="price-container">
-                                                        <% if (destinationMatchTrips[i].totalCost) { %>
-                                                            <span>FROM</span> &nbsp;<b>
-                                                                <%= destinationMatchTrips[i].totalCost.toLocaleString('en-IN',
-                                                                    { style: 'currency' , currency: 'INR' }) %>
-                                                            </b>
-                                                            <% } else { %>
-                                                                Price Not Available
-                                                                <% } %>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
+
+                        <div class="card-bottom">
+                            <div class="days-container">
+                                <h4 class="days">
+                                    <%= exactMatchTrips[i].totalDays %> days
+                                </h4>
+                            </div>
+                            <div class="price-container">
+                                <% if (exactMatchTrips[i].totalCost) { %>
+                                    <span>FROM</span> &nbsp;<b>
+                                        <%= exactMatchTrips[i].totalCost.toLocaleString('en-IN', { style: 'currency' ,
+                                            currency: 'INR' }) %>
+                                    </b>
+                                    <% } else { %>
+                                        Price Not Available
                                         <% } %>
-                                </div>
-
-                                <hr>
-
-                                <% } %>
-
-
-                                <h1 class="card-title cards-container">tour not found</h1>
-
-
-
-
-
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <% } %>
         </div>
 
 
