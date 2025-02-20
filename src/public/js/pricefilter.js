@@ -1,20 +1,3 @@
-// JavaScript code to toggle the filter content
-document.getElementById('filterToggle').addEventListener('click', function() {
-    const filterContent = document.querySelector('.you-type-filter-content');
-    filterContent.classList.toggle('filter-hide');
-
-     // Toggle the .invert class on the clicked image
-     this.classList.toggle('invert');
-});
-
-// JavaScript code to toggle the filter content
-document.getElementById('priceFilterToggle').addEventListener('click', function() {
-    const filterContent = document.querySelector('.price-filter-container');
-    filterContent.classList.toggle('filter-hide');
-
-     // Toggle the .invert class on the clicked image
-     this.classList.toggle('invert');
-});
 
 
 

@@ -44,7 +44,8 @@ router.route("/searchTrips")
     .post(asyncWrap(searchTrips));
 
 router.route("/secondarysearch")
-    .post(asyncWrap(getSecondarySearch));
+    .get(asyncWrap(getSecondarySearch));
+    
 
 router.route("/mainSearch")
     .post(asyncWrap(mainSearch));

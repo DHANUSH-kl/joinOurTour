@@ -280,22 +280,22 @@
 
 
         <div class="cards-container">
-            <% for(let i=0; i < trips.length; i++) { %>
+            <% for(let i=0; i < allTrips.length; i++) { %>
                 <div class="card-container">
                     <div class="card-img">
-                        <% if (trips[i].tripImages && trips[i].tripImages.length> 0 &&
-                            trips[i].tripImages[0].path) { %>
+                        <% if (allTrips[i].tripImages && allTrips[i].tripImages.length> 0 &&
+                            allTrips[i].tripImages[0].path) { %>
                             <div class="trip-image">
-                                <img src="<%= trips[i].tripImages[0].path %>" alt="Trip Image">
+                                <img src="<%= allTrips[i].tripImages[0].path %>" alt="Trip Image">
                             </div>
                             <div class="heart-container">
                                 <% if (user) { %>
-                                    <% const isInWishlist=userWishlist.includes(trips[i]._id.toString()); %>
+                                    <% const isInWishlist=userWishlist.includes(allTrips[i]._id.toString()); %>
                                         <i class="<%= isInWishlist ? 'fa-solid fa-heart wishlist-active' : 'fa-regular fa-heart' %> wishlist-icon"
-                                            data-id="<%= trips[i]._id %>" style="cursor: pointer;"></i>
+                                            data-id="<%= allTrips[i]._id %>" style="cursor: pointer;"></i>
                                         <% } else { %>
                                             <i class="fa-regular fa-heart wishlist-icon redirect-i"
-                                                data-id="<%= trips[i]._id %>"></i>
+                                                data-id="<%= allTrips[i]._id %>"></i>
                                             <% } %>
                             </div>
 
@@ -310,18 +310,18 @@
                         <div class="route">
                             <img src="../images/route.svg" alt="">
                             <h3 class="card-title">
-                                <a href="/tour/<%= trips[i]._id %>">
-                                    <%= trips[i].location %>
+                                <a href="/tour/<%= allTrips[i]._id %>">
+                                    <%= allTrips[i].location %>
                                 </a>
                                 <p>
-                                    <% if (trips[i].departure) { %>
-                                        <%= new Date(trips[i].departure).toLocaleDateString('en-US', { month: 'long' ,
+                                    <% if (allTrips[i].departure) { %>
+                                        <%= new Date(allTrips[i].departure).toLocaleDateString('en-US', { month: 'long' ,
                                             day: '2-digit' }) %> ~
                                             <% } else { %>
                                                 date not available
                                                 <% } %>
-                                                    <% if (trips[i].endDate) { %>
-                                                        <%= new Date(trips[i].endDate).toLocaleDateString('en-US', {
+                                                    <% if (allTrips[i].endDate) { %>
+                                                        <%= new Date(allTrips[i].endDate).toLocaleDateString('en-US', {
                                                             month: 'long' , day: '2-digit' }) %>
                                                             <% } %>
                                 </p>
@@ -329,14 +329,14 @@
                         </div>
                         <div class="title-container">
                             <h4 class="trip-title">
-                                <%= trips[i].title %>
+                                <%= allTrips[i].title %>
                             </h4>
 
                         </div>
 
                         <div class="ratio-container">
-                            <p class="maleRatio">Male: <%= trips[i].maleRatio %>%</p>
-                            <p class="femaleRatio">Female: <%= trips[i].femaleRatio %>%</p>
+                            <p class="maleRatio">Male: <%= allTrips[i].maleRatio %>%</p>
+                            <p class="femaleRatio">Female: <%= allTrips[i].femaleRatio %>%</p>
 
                         </div>
 
@@ -347,39 +347,39 @@
                             <div class="rate rat1">
                                 <!-- 5 Stars -->
                                 <input type="radio" id="locStar5-<%= i %>" name="locationRating-<%= i %>" value="5" <%
-                                    if (trips[i].averageRating>= 5) { %> checked <% } %> disabled />
+                                    if (allTrips[i].averageRating>= 5) { %> checked <% } %> disabled />
                                     <label for="locStar5-<%= i %>">5 stars</label>
 
                                     <!-- 4 Stars -->
                                     <input type="radio" id="locStar4-<%= i %>" name="locationRating-<%= i %>" value="4"
-                                        <% if (trips[i].averageRating>= 4 && trips[i].averageRating < 5) { %>
+                                        <% if (allTrips[i].averageRating>= 4 && allTrips[i].averageRating < 5) { %>
                                         checked <% } %> disabled />
                                             <label for="locStar4-<%= i %>">4 stars</label>
 
                                             <!-- 3 Stars -->
                                             <input type="radio" id="locStar3-<%= i %>" name="locationRating-<%= i %>"
-                                                value="3" <% if (trips[i].averageRating>= 3 &&
-                                            trips[i].averageRating < 4) { %> checked <% } %> disabled />
+                                                value="3" <% if (allTrips[i].averageRating>= 3 &&
+                                                allTrips[i].averageRating < 4) { %> checked <% } %> disabled />
                                                     <label for="locStar3-<%= i %>">3 stars</label>
 
                                                     <!-- 2 Stars -->
                                                     <input type="radio" id="locStar2-<%= i %>"
                                                         name="locationRating-<%= i %>" value="2" <% if
-                                                        (trips[i].averageRating>= 2 && trips[i].averageRating < 3) { %>
+                                                        (allTrips[i].averageRating>= 2 && allTrips[i].averageRating < 3) { %>
                                                         checked <% } %> disabled />
                                                             <label for="locStar2-<%= i %>">2 stars</label>
 
                                                             <!-- 1 Star -->
                                                             <input type="radio" id="locStar1-<%= i %>"
                                                                 name="locationRating-<%= i %>" value="1" <% if
-                                                                (trips[i].averageRating>= 1 &&
-                                                            trips[i].averageRating < 2) { %> checked <% } %> disabled
+                                                                (allTrips[i].averageRating>= 1 &&
+                                                                allTrips[i].averageRating < 2) { %> checked <% } %> disabled
                                                                     />
                                                                     <label for="locStar1-<%= i %>">1 star</label>
                             </div>
 
                             <p>
-                                <%= trips[i].averageRating %>
+                                <%= allTrips[i].averageRating %>
                             </p>
 
                         </div>
@@ -389,13 +389,13 @@
                         <div class="card-bottom">
                             <div class="days-container">
                                 <h4 class="days">
-                                    <%= trips[i].totalDays %> days
+                                    <%= allTrips[i].totalDays %> days
                                 </h4>
                             </div>
                             <div class="price-container">
-                                <% if (trips[i].totalCost) { %>
+                                <% if (allTrips[i].totalCost) { %>
                                     <span>FROM</span> &nbsp;<b>
-                                        <%= trips[i].totalCost.toLocaleString('en-IN', { style: 'currency' ,
+                                        <%= allTrips[i].totalCost.toLocaleString('en-IN', { style: 'currency' ,
                                             currency: 'INR' }) %>
                                     </b>
                                     <% } else { %>
@@ -410,6 +410,22 @@
 
     </main>
 
+    
+    <div class="pagination">
+    <% if (currentPage > 1) { %>
+        <a href="?page=<%= currentPage - 1 %><%= sort ? '&sort=' + sort : '' %>" class="prev">Previous</a>
+    <% } %>
+
+    <% for (let i = 1; i <= totalPages; i++) { %>
+        <a href="?page=<%= i %><%= sort ? '&sort=' + sort : '' %>" class="<%= i === currentPage ? 'active' : '' %>">
+            <%= i %>
+        </a>
+    <% } %>
+
+    <% if (currentPage < totalPages) { %>
+        <a href="?page=<%= currentPage + 1 %><%= sort ? '&sort=' + sort : '' %>" class="next">Next</a>
+    <% } %>
+</div>
 
 
     <footer>

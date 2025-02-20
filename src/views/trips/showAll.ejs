@@ -201,9 +201,32 @@
         </div>
     </div>
 
+    <div class="breadcrumb-nav">
+        <a href="/aboutus">Home</a> <span>&gt;</span>
+        <span>All Trips</span>
+    </div>
 
 
+    <div class="sortdiv">
+        <p class="total-trips">Total Trips : <%= totalTrips %></p>
 
+
+        <form method="GET" action="/secondarysearch" id="sortForm">
+            <input type="hidden" name="page" value="<%= currentPage %>">
+            <label for="sort">Sort by:</label>
+            <select name="sort" id="sort" onchange="document.getElementById('sortForm').submit()">
+                <option value="">-- Select --</option>
+                <option value="priceLowHigh" <%= sort === 'priceLowHigh' ? 'selected' : '' %>>Price: Low to High</option>
+                <option value="priceHighLow" <%= sort === 'priceHighLow' ? 'selected' : '' %>>Price: High to Low</option>
+                <option class="op4" value="recentlyListed" <%= sort === 'recentlyListed' ? 'selected' : '' %>>Recently Listed (Last 10 Days)</option>
+                <option value="leavingSoon" <%= sort === 'leavingSoon' ? 'selected' : '' %>>Leaving Soon (Next 15 Days)</option>
+            </select>
+        </form>
+        
+    
+    </div>
+
+      
 
     
     <!-- <div class="open-filter-btn mb-container">
@@ -250,34 +273,27 @@
                                 <p>Tour Type</p>
                                 <img src="../images/arrow.svg" alt="" id="filterToggle" class="filter-controller">
                             </div>
+                            
+
                             <div class="you-type-filter-content">
                                 <form id="categoryFilterForm" method="POST" action="/searchtrips">
-                                    <label for="nature"><img src="../images/nature-style.png" alt=""
-                                            class="style-img"><input type="checkbox" class="categoryCheckbox"
-                                            name="category" value="nature" id="nature" onclick="toggleCategory('nature')">
-                                        Nature</label>
-                                    <label for="party"><img src="../images/party.png" alt="" class="style-img"><input
-                                            type="checkbox" class="categoryCheckbox" name="category" value="party"
-                                            id="party" onclick="toggleCategory('party')"> Party</label>
-                                    <label for="food"><img src="../images/food.png" alt="" class="style-img"><input
-                                            type="checkbox" class="categoryCheckbox" name="category" value="food" id="food"
-                                            onclick="toggleCategory('food')"> Food</label>
-                                    <label for="beach"><img src="../images/beach.png" alt="" class="style-img"><input
-                                            type="checkbox" class="categoryCheckbox" name="category" value="beach"
-                                            id="beach" onclick="toggleCategory('beach')"> Beach</label>
-                                    <label for="culture"><img src="../images/culture.png" alt="" class="style-img"><input
-                                            type="checkbox" class="categoryCheckbox" name="category" value="culture"
-                                            id="culture" onclick="toggleCategory('culture')"> Culture</label>
-                                    <label for="sports"><img src="../images/sports.png" alt="" class="style-img"><input
-                                            type="checkbox" class="categoryCheckbox" name="category" value="sports"
-                                            id="sports" onclick="toggleCategory('sports')">
-                                        Sports</label>
+                                    <div id="categoryInputs">
+                                        <label for="nature"><img src="../images/nature-style.png" alt="" class="style-img"><input type="checkbox" class="categoryCheckbox" name="category" value="nature" id="nature" onclick="toggleCategory('nature')"> Nature</label>
+                                        <label for="party"><img src="../images/party.png" alt="" class="style-img"><input type="checkbox" class="categoryCheckbox" name="category" value="party" id="party" onclick="toggleCategory('party')"> Party</label>
+                                        <label for="food"><img src="../images/food.png" alt="" class="style-img"><input type="checkbox" class="categoryCheckbox" name="category" value="food" id="food" onclick="toggleCategory('food')"> Food</label>
+                                        <label for="beach"><img src="../images/beach.png" alt="" class="style-img"><input type="checkbox" class="categoryCheckbox" name="category" value="beach" id="beach" onclick="toggleCategory('beach')"> Beach</label>
+                                        <label for="culture"><img src="../images/culture.png" alt="" class="style-img"><input type="checkbox" class="categoryCheckbox" name="category" value="culture" id="culture" onclick="toggleCategory('culture')"> Culture</label>
+                                        <label for="sports"><img src="../images/sports.png" alt="" class="style-img"><input type="checkbox" class="categoryCheckbox" name="category" value="sports" id="sports" onclick="toggleCategory('sports')"> Sports</label>
+                                        <p id="seeMoreText" class="see-more-text" onclick="toggleSeeMore()">See More</p>
+
+                                    </div>
+                            
                                     <input type="hidden" name="selectedCategories" id="selectedCategories">
-                                    <!-- <button type="button" onclick="searchCategory()">Apply Categories</button> -->
                                 </form>
-                                <button class="filter-submit" onclick="submitCombinedSearch()">submit</button>
-                                
+                            
+                                <button class="filter-submit" onclick="submitCombinedSearch()">Submit</button>
                             </div>
+                            
                             
     
                             <div class="price-slider-header">
@@ -647,33 +663,6 @@
 
 
 
-        // Get the toggle button and the filter container
-        const languageToggle = document.getElementById('languageToggle');
-        const languagesFilterContainer = document.querySelector('.languages-filter-container');
-
-        // Add a click event listener to the toggle button
-        languageToggle.addEventListener('click', () => {
-            // Toggle the 'invert' class on the toggle button
-            languageToggle.classList.toggle('invert');
-
-            // Toggle the 'filter-hide' class on the filter container
-            languagesFilterContainer.classList.toggle('filter-hide');
-        });
-
-
-        // Get the toggle image and the days filter container
-        const daysToggle = document.getElementById('daysToggle');
-        const daysFilterContainer = document.querySelector('.days-filter-container');
-
-        // Add click event to toggle visibility
-        daysToggle.addEventListener('click', () => {
-            // Toggle the filter visibility
-            daysFilterContainer.classList.toggle('filter-hide');
-
-            // Toggle the rotation of the arrow
-            daysToggle.classList.toggle('invert');
-        });
-
 
 
 
@@ -682,6 +671,7 @@
 
 
     </script>
+    <script src="/js/seemore.js"></script>
     <script src="/js/whislist.js"></script>
     <script src="/js/dropdown.js"></script>
     <script src="/js/autoSuggestions.js"></script>

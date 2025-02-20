@@ -200,7 +200,9 @@ const showAllTrips = async (req, res) => {
         currentPage: page,
         totalPages: Math.ceil(totalTrips / perPage),
         user: req.user,
-        userWishlist
+        totalTrips,
+        userWishlist,
+        sort: req.query.sort || '' // Pass the current sort query to EJS
     });
 };
 
@@ -840,154 +842,79 @@ const aboutus = async (req, res) => {
 }
 
 const getSecondarySearch = async (req, res) => {
+    const perPage = 6;
+    const page = parseInt(req.query.page) || 1;
+    const sortOption = req.query.sort || "";
+    const userWishlist = req.user ? req.user.wishlist : [];
 
-    // Extract values from req.body
-    const destination = req.body.destination.trim(); // Use trim() to remove any leading/trailing spaces
-    const minPrice = req.body.minPrice;
-    const maxPrice = req.body.maxPrice;
-    const fromdte = req.body.fromdte;
-    const todte = req.body.todte;
+    const filter = { status: 'accepted', totalCost: { $ne: null } };
+    let sortQuery = {};
 
-    // Handle categories correctly whether it's an array or a single value
-    const categories = Array.isArray(req.body.categories) ? req.body.categories.map(cat => cat.trim()) : (req.body.categories ? [req.body.categories.trim()] : []);
+    const today = new Date();
 
-
-    const languages = Array.isArray(req.body.languages)
-    ? req.body.languages.map(lang => lang.trim())
-    : req.body.languages
-    ? [req.body.languages.trim()]
-    : [];
-
-
-      // Handle days filter
-      const minDays = req.body.minDays ? parseInt(req.body.minDays) : null;
-      const maxDays = req.body.maxDays ? parseInt(req.body.maxDays) : null;
-     
-
-
-
-    let query = {};
-
-    // Add location to query if destination is provided and not empty
-    if (destination) {
-        query.location = { $regex: new RegExp(destination, 'i') }; // Case-insensitive match
-    }
-
-    // Add categories to query if any are provided
-    if (categories.length > 0) {
-        query.categories = { $in: categories }; // Match any of the provided categories
-    }
-
-
-    if (languages.length > 0) {
-        query.languages = { $in: languages.map(lang => new RegExp(`^${lang}$`, 'i')) };
-    }
-    
-
-    // Add totalDays filter if minDays or maxDays are provided
-    if (minDays || maxDays) {
-        query.totalDays = {};
-        if (minDays) {
-            query.totalDays.$gte = minDays;
+    switch (sortOption) {
+        case 'priceLowHigh':
+            sortQuery = { totalCost: 1 };
+            break;
+        case 'priceHighLow':
+            sortQuery = { totalCost: -1 };
+            break;
+        case 'recentlyListed': {
+            const tenDaysAgo = new Date();
+            tenDaysAgo.setDate(today.getDate() - 10);
+            filter.createdAt = { $gte: tenDaysAgo };
+            sortQuery = { createdAt: -1 };
+            break;
         }
-        if (maxDays) {
-            query.totalDays.$lte = maxDays;
+        case 'leavingSoon': {
+            const fifteenDaysLater = new Date();
+            fifteenDaysLater.setDate(today.getDate() + 15);
+            filter.departure = { $gte: today, $lte: fifteenDaysLater };
+            sortQuery = { departure: 1 };
+            break;
         }
+        default:
+            break;
     }
 
+    // Get the number of filtered trips based on the filter and the date constraints
+    const totalTrips = await Trip.countDocuments(filter);
 
-    // Only add totalCost to the query if minPrice and maxPrice are not both '0'
-    if (minPrice !== '0' || maxPrice !== '0') {
-        if (minPrice && maxPrice) {
-            query.totalCost = { $gte: Number(minPrice), $lte: Number(maxPrice) };
-        } else if (minPrice) {
-            query.totalCost = { $gte: Number(minPrice) };
-        } else if (maxPrice) {
-            query.totalCost = { $lte: Number(maxPrice) };
-        }
-    }
+    const allTrips = await Trip.find(filter)
+        .populate("reviews")
+        .populate("owner")
+        .sort(sortQuery)
+        .skip((perPage * (page - 1)))
+        .limit(perPage);
 
-    // Parse 'fromdte' and 'todte' into Date objects
-    if (fromdte) {
-        const fromDate = new Date(fromdte); // Ensure fromdte is in YYYY-MM-DD format
-        if (!isNaN(fromDate.getTime())) { // Check if the date is valid
-            query.departure = { $gte: fromDate };
-        }
-    }
-
-    if (todte) {
-        const toDate = new Date(todte); // Ensure todte is in YYYY-MM-DD format
-        if (!isNaN(toDate.getTime())) { // Check if the date is valid
-            query.endDate = { $lte: toDate };
-        }
-    }
-
-    console.log("Query Object:", query);
-    console.log("req.body:", req.body);
-
-    try {
-        // Find trips that match the query
-        const trips = await Trip.find(query)
-            .populate('owner')  // Populate owner information
-            .populate('reviews')  // Populate reviews to calculate the average rating
-            .exec();
-
-
-
-        // If the user is logged in, retrieve their wishlist
-        let userWishlist = [];
-        if (req.user) {
-            const user = await User.findById(req.user._id).populate('wishlist');
-            userWishlist = user.wishlist.map(trip => trip._id.toString()); // Convert ObjectIds to strings
-        }
-
-
-        // Add rating calculation for each trip
-        trips.forEach(trip => {
-            let totalRatings = 0;
-            let count = 0;
-
-            // Calculate average rating based on the reviews
-            trip.reviews.forEach(review => {
-                const locationRating = review.locationRating || 0;
-                const amenitiesRating = review.amenitiesRating || 0;
-                const foodRating = review.foodRating || 0;
-                const roomRating = review.roomRating || 0;
-                const priceRating = review.priceRating || 0;
-                const operatorRating = review.operatorRating || 0;
-
-                const overallRating = (locationRating + amenitiesRating + foodRating + roomRating + priceRating + operatorRating) / 6;
-
-                totalRatings += overallRating;
-                count++;
-            });
-
-            trip.averageRating = count > 0 ? (totalRatings / count).toFixed(1) : 0; // Add averageRating to each trip
-            trip.hasReviews = count > 0; // Add hasReviews flag to each trip
+    allTrips.forEach(trip => {
+        let totalRatings = 0;
+        let count = 0;
+        trip.reviews.forEach(review => {
+            const { locationRating, amenitiesRating, foodRating, roomRating, priceRating, operatorRating } = review;
+            const overallRating = (locationRating + amenitiesRating + foodRating + roomRating + priceRating + operatorRating) / 6;
+            totalRatings += overallRating;
+            count++;
         });
 
-        // Function to get rating description
-        function getRatingDescription(rating) {
-            if (rating <= 1) return 'Worse';
-            if (rating <= 2) return 'Bad';
-            if (rating <= 3) return 'Okay';
-            if (rating <= 4) return 'Good';
-            return 'Excellent';
-        }
+        trip.averageRating = count > 0 ? (totalRatings / count).toFixed(1) : 0;
 
-        res.render("trips/secondarySearch", {
-            trips,
-            user: req.user, // Pass user info
-            userWishlist,
-            getRatingDescription, // Pass the rating description function
-        });
+        const totalTravelers = trip.maleTravelers + trip.femaleTravelers;
+        trip.maleRatio = totalTravelers > 0 ? ((trip.maleTravelers / totalTravelers) * 100).toFixed(1) : 0;
+        trip.femaleRatio = totalTravelers > 0 ? ((trip.femaleTravelers / totalTravelers) * 100).toFixed(1) : 0;
+    });
 
-    } catch (error) {
-        console.error('Error fetching trips:', error);
-        res.status(500).send('Error fetching trips');
-    }
+    res.render("trips/secondarySearch.ejs", {
+        allTrips,
+        currentPage: page,
+        totalPages: Math.ceil(totalTrips / perPage),
+        user: req.user,
+        userWishlist,
+        sort: sortOption
+    });
+};
 
-}
+
 
 const whislist = async (req, res) => {
     const { tripId, addToWishlist } = req.body;
