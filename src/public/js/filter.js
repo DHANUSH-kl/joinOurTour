@@ -64,3 +64,26 @@ daysToggle.addEventListener('click', () => {
         daysToggle.style.transform = 'rotate(0deg)';
     }
 });
+
+
+
+
+
+
+
+
+//full tile click
+
+document.addEventListener("DOMContentLoaded", function () {
+    document.querySelectorAll(".card-container").forEach(card => {
+        card.addEventListener("click", function (event) {
+            // Prevent triggering when clicking on heart icon or other interactive elements
+            if (!event.target.closest(".wishlist-icon, .rating-container input, a")) {
+                const tripId = this.getAttribute("data-id");
+                if (tripId) {
+                    window.location.href = `/tour/${tripId}`;
+                }
+            }
+        });
+    });
+});

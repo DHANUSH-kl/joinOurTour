@@ -16,6 +16,17 @@ app.use(bodyParser.urlencoded({ extended: true }));
 
 app.use(methodOverride('_method'));
 
+
+// Create a transporter instance
+const transporter = nodemailer.createTransport({
+    service: 'gmail', // or your email provider
+    auth: {
+        user: process.env.EMAIL_USER, // Your email
+        pass: process.env.EMAIL_PASS, // App password or real password
+    }
+});
+
+
 const becomeOwnerForm = async (req, res) => {
     res.render("admin/ownerForm.ejs")
 }
@@ -232,8 +243,51 @@ const adminPerks = async (req, res) => {
     try {
         // Fetch trips where status is 'pending' and exclude those with 'rejected' or 'accepted' status
         const pendingTrips = await Trip.find({ status: 'pending' });  // Fetch only 'pending' trips
+
+
+
+        const today = new Date(); // Get today's date
+        const users = await User.find({ isAgent: true }).populate("createdTrips");
+
+
+        const formattedUsers = users.map((user, index) => {
+            const createdTrips = user.createdTrips.length;
+
+            // Count completed and ongoing trips
+            let completedTrips = 0;
+            let ongoingTrips = 0;
+
+            user.createdTrips.forEach(trip => {
+                if (trip.endDate && new Date(trip.endDate) < today) {
+                    completedTrips++;
+                } else {
+                    ongoingTrips++;
+                }
+            });
+
+            return {
+                id: user._id,
+                username: user.username,
+                email: user.email,
+                createdTrips,
+                completedTrips,
+                ongoingTrips,
+                revenue: `$${user.wallet ? user.wallet.toLocaleString() : "0"}`,
+                
+            };
+        });
+
+        const agents = formattedUsers;
+
+
+        console.log("AGENTS DATA BEFORE RENDER:", agents);
+console.log("Type of agents:", typeof agents);
+console.log("Is agents an array?", Array.isArray(agents));
+
+
+
         
-        res.render('admin/adminPerks.ejs', { pendingTrips });
+        res.render('admin/adminPerks.ejs', { pendingTrips , agents: agents || [] } );
     } catch (error) {
         console.error('Error fetching trips:', error);
         res.status(500).send('Internal Server Error');
@@ -412,6 +466,112 @@ const fetchTripReports = async (req, res) => {
 };
 
 
+const revokeAgent = async(req,res) => {
+    try {
+        const user = await User.findById(req.params.id);
+        if (!user) return res.status(404).json({ message: "User not found" });
+
+        user.isAgent = false;
+        user.revoked = true;
+        user.suspendedUntil = null;
+        await user.save();
+
+        await transporter.sendMail({
+            from: process.env.EMAIL_USER,
+            to: user.email,
+            subject: "Agent Access Revoked",
+            text: `Dear ${user.username}, your agent access has been revoked.`
+        });
+
+        res.json({ message: "Agent access revoked" });
+    } catch (error) {
+        res.status(500).json({ message: "Server Error" });
+    }
+}
 
 
-export { fetchTripReports , reportedTrips , analytics , updateTripStatus , adminPerks , walletPage , sendCoin , editAdminForm , editAdminPannel, posttripPackage, becomeOwnerForm, postOwner, agentAccessForm, postAgentAccess, tripLeaderForm, postTripLeader, displayPackages }
+const suspendAgent = async(req,res) => {
+
+    try {
+        const { days } = req.body;
+        const user = await User.findById(req.params.id);
+        if (!user) return res.status(404).json({ message: "User not found" });
+
+        user.isAgent = false;
+        user.suspendedUntil = new Date(Date.now() + days * 24 * 60 * 60 * 1000);
+        await user.save();
+
+        res.json({ message: `User suspended for ${days} days` });
+    } catch (error) {
+        res.status(500).json({ message: "Server Error" });
+    }
+
+} 
+
+
+const liftSuspension = async(req,res) => {
+    try {
+        const user = await User.findById(req.params.id);
+        user.suspendedUntil = null;
+        user.isAgent = true;
+        await user.save();
+        res.json({ message: "User suspension lifted" });
+    } catch (error) {
+        res.status(500).json({ message: "Server Error" });
+    }
+}
+
+const revokedPage = async (req, res) => {
+    try {
+        const users = await User.find({ suspendedUntil: { $exists: true } }); // Fetch suspended users
+        res.render("admin/revokedAc.ejs", { users }); // Pass data to EJS
+    } catch (error) {
+        console.error("Error fetching revoked users:", error);
+        res.status(500).send("Internal Server Error");
+    }
+};
+
+
+const revokedData = async(req,res) => {
+    try {
+        const users = await User.find({
+            $or: [{ isAgent: false }, { suspendedUntil: { $exists: true, $gt: new Date() } }]
+        });
+
+        res.json({ success: true, users });
+    } catch (error) {
+        console.error("Error fetching revoked users:", error);
+        res.status(500).json({ success: false, message: "Server Error" });
+    }
+}
+
+const agentTrips = async(req,res) => {
+    try {
+        const { type, agentId } = req.params;
+        let trips = [];
+
+        if (type === "created") {
+            trips = await Trip.find({ owner: agentId });
+        } else if (type === "completed") {
+            trips = await Trip.find({
+                owner: agentId,
+                endDate: { $lt: new Date() } // Completed trips (end date is in the past)
+            });
+        } else if (type === "ongoing") {
+            trips = await Trip.find({
+                owner: agentId,
+                endDate: { $gte: new Date() } // Ongoing trips (end date is in the future)
+            });
+        } else {
+            return res.status(400).send("Invalid trip type");
+        }
+
+        res.render("admin/agentTrips.ejs", { trips, type });
+    } catch (error) {
+        console.error("Error fetching trips:", error);
+        res.status(500).send("Internal Server Error");
+    }
+}
+
+
+export {agentTrips ,revokedData, revokedPage ,  liftSuspension ,suspendAgent , revokeAgent , fetchTripReports , reportedTrips , analytics , updateTripStatus , adminPerks , walletPage , sendCoin , editAdminForm , editAdminPannel, posttripPackage, becomeOwnerForm, postOwner, agentAccessForm, postAgentAccess, tripLeaderForm, postTripLeader, displayPackages }

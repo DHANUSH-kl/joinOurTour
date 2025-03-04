@@ -92,11 +92,145 @@
     <main>
         <div class="main-container">
 
+            <p class="tripID">
+                Tour-ID: <%= trip._id %>
+            </p>
+
+            <div class="breadcrumb-nav">
+                <a class="crumbSAME" href="/aboutus">Home</a> <span>&gt;</span>
+                <a class="crumbSAME" href="/">All Trips</a> <span>&gt;</span>
+                <a href="/tour/<%= trip._id %>">
+                    <%= trip.title || trip._id %>
+                </a>
+            </div>
+
+
+
             <div class="title-container">
                 <h1>
                     <%= trip.title %>
                 </h1>
             </div>
+
+
+            <div class="trip-overall-rating">
+                <fieldset class="rating">
+                    <input type="radio" id="star5" name="rating" value="5" <% if (averageRating>= 4.75) { %> checked <%
+                        } %> disabled />
+                        <label class="full" for="star5" title="Awesome - 5 stars"></label>
+
+                        <input type="radio" id="star4half" name="rating" value="4.5" <% if (averageRating>= 4.25 &&
+                        averageRating < 4.75) { %> checked <% } %> disabled />
+                                <label class="half" for="star4half" title="Pretty good - 4.5 stars"></label>
+
+                                <input type="radio" id="star4" name="rating" value="4" <% if (averageRating>= 3.75 &&
+                                averageRating < 4.25) { %> checked <% } %> disabled />
+                                        <label class="full" for="star4" title="Pretty good - 4 stars"></label>
+
+                                        <input type="radio" id="star3half" name="rating" value="3.5" <% if
+                                            (averageRating>= 3.25 && averageRating < 3.75) { %> checked <% } %> disabled
+                                                />
+                                                <label class="half" for="star3half" title="Meh - 3.5 stars"></label>
+
+                                                <input type="radio" id="star3" name="rating" value="3" <% if
+                                                    (averageRating>= 2.75 && averageRating < 3.25) { %> checked <% } %>
+                                                        disabled />
+                                                        <label class="full" for="star3" title="Meh - 3 stars"></label>
+
+                                                        <input type="radio" id="star2half" name="rating" value="2.5" <%
+                                                            if (averageRating>= 2.25 && averageRating < 2.75) { %>
+                                                            checked <% } %> disabled />
+                                                                <label class="half" for="star2half"
+                                                                    title="Kinda bad - 2.5 stars"></label>
+
+                                                                <input type="radio" id="star2" name="rating" value="2"
+                                                                    <% if (averageRating>= 1.75 && averageRating < 2.25)
+                                                                    { %> checked <% } %> disabled />
+                                                                        <label class="full" for="star2"
+                                                                            title="Kinda bad - 2 stars"></label>
+
+                                                                        <input type="radio" id="star1half" name="rating"
+                                                                            value="1.5" <% if (averageRating>= 1.25 &&
+                                                                        averageRating < 1.75) { %> checked <% } %>
+                                                                                disabled />
+                                                                                <label class="half" for="star1half"
+                                                                                    title="Meh - 1.5 stars"></label>
+
+                                                                                <input type="radio" id="star1"
+                                                                                    name="rating" value="1" <% if
+                                                                                    (averageRating>= 0.75 &&
+                                                                                averageRating < 1.25) { %> checked <% }
+                                                                                        %> disabled />
+                                                                                        <label class="full" for="star1"
+                                                                                            title="Sucks big time - 1 star"></label>
+
+                                                                                        <input type="radio"
+                                                                                            id="starhalf" name="rating"
+                                                                                            value="0.5" <% if
+                                                                                            (averageRating> 0 &&
+                                                                                        averageRating < 0.75) { %>
+                                                                                            checked <% } %> disabled />
+                                                                                                <label class="half"
+                                                                                                    for="starhalf"
+                                                                                                    title="Sucks big time - 0.5 stars"></label>
+
+
+                </fieldset>
+
+                <% let avgRating=Number(averageRating) || 0; %>
+                    <p>
+                        <%= avgRating.toFixed(1) %> - <%= getRatingDescription(avgRating) %>
+                    </p>
+
+
+                    <div class="fromAndToLocation">
+                        <img src="../images/route.svg" alt="">
+                        <%= trip.location %> , <%= trip.fromLocation %>
+                    </div>
+
+            </div>
+
+
+            <div class="shareAndWhishlist">
+                <!-- Store Trip URL as a Data Attribute -->
+                <div id="shareBtn" class="shareTrip" data-trip-url="http://localhost:8080/tour/<%= trip._id %>">
+                    <span class="material-symbols-outlined">ios_share</span>
+                    <p>Share</p>
+                </div>
+
+                <!-- Custom Share Modal -->
+                <div id="customShareModal" class="hidden">
+                    <div class="share-options">
+                        <a id="whatsappShare" target="_blank">Share on WhatsApp</a>
+                        <a id="facebookShare" target="_blank">Share on Facebook</a>
+                        <a id="twitterShare" target="_blank">Share on Twitter</a>
+                        <button id="copyLink">Copy Link</button>
+                        <button id="closeShare">Close</button>
+                    </div>
+                </div>
+
+
+
+                <div class="heart-container">
+                                <% if (user) { %>
+                                    <% const isInWishlist=userWishlist.includes(trip._id.toString()); %>
+                                        <i class="<%= isInWishlist ? 'fa-solid fa-heart wishlist-active' : 'fa-regular fa-heart' %> wishlist-icon"
+                                            data-id="<%= trip._id %>" style="cursor: pointer;"></i>
+                                        <% } else { %>
+                                            <i class="fa-regular fa-heart wishlist-icon redirect-i"
+                                                data-id="<%= trip._id %>"></i>
+                                            <% } %>
+
+                                            <p>wishlist</p>
+                            </div>
+
+                            
+
+
+            </div>
+
+
+
 
             <div class="image-gallery">
 
@@ -116,15 +250,15 @@
             <div class="payment-ov-container">
                 <div class="booking-container">
                     <div class="tickets">
-    
-    
+
+
                         <div class="top-ticket">
                             <h3>From &nbsp; <span>&#8377;<%= trip.totalCost.toLocaleString('en-IN') %></span></h3>
                             <div class="calendar">
                                 <img src="../images/duration.png" alt="">
                                 <div class="ticket-calendar">
                                     <h3>From</h3>
-    
+
                                     <h2>
                                         <%= new Date(trip.departure).toLocaleDateString('en-US', { month: 'long' ,
                                             day: 'numeric' }) %>
@@ -142,9 +276,11 @@
                                 <h3>no of tickets</h3>
 
                                 <div class="arrows">
-                                    <button id="decrement"><</button>
-                                    <h1 id="counter">0</h1>
-                                    <button id="increment">></button>
+                                    <button id="decrement">
+                                        <
+                                        </button>
+                                            <h1 id="counter">0</h1>
+                                            <button id="increment">></button>
                                 </div>
                             </div>
 
@@ -156,7 +292,7 @@
                             </div>
 
 
-                            
+
                         </div>
 
                         <!-- <button class="booking-btn"><a href="/<%= trip._id %>/payment">Reserve Spot</a></button> -->
@@ -169,7 +305,7 @@
                             <button type="submit" class="booking-btn">Reserve Spot</button>
                         </form>
 
-    
+
                     </div>
                 </div>
             </div>
@@ -404,7 +540,8 @@
             <div class="review-container">
                 <h1>Leave a Reply</h1>
                 <p class="revp">Your email address will not be published. Required fields are marked *</p>
-                <form action="/<%= id %>/reviews" method="POST" id="reviewForm" class="reviews">
+                <form action="/tour/<%= id %>/reviews" method="POST" id="reviewForm" class="reviews">
+
 
 
                     <div class="tstar">
@@ -628,6 +765,10 @@
                     </script>
 
 
+
+
+                    <script src="/js/whislist.js"></script>
+                    <script src="/js/share.js"></script>
                     <script src="/js/ticketcounter.js"></script>
                     <script src="/js/dropdown.js"></script>
 

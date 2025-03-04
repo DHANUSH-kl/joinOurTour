@@ -14,6 +14,8 @@ const userSchema = new Schema({
         type: Boolean,
         default: false,
     },
+    revoked: { type: Boolean, default: false }, 
+    suspendedUntil: { type: Date, default: null },
     isOwner: {
         type: Boolean,
         default: false,

@@ -161,14 +161,14 @@
                 <img src="../images/searchloc.png" alt="">
                 <div class="startingLocation-container search-locations-container">
                     <label for="startingLocation">Starting from</label>
-                    <input type="text" name="startingLocation" id="startingLocation" placeholder="Delhi"
+                    <input type="text" name="startingLocation" id="startingLocation" placeholder="---"
                         value="<%= user && user.city ? user.city : '' %>">
 
 
                 </div>
                 <div class="destinationLocation-container search-locations-container">
                     <label for="destinationLocation">Going to</label>
-                    <input type="text" name="destinationLocation" id="destinationLocation" placeholder="Goa">
+                    <input type="text" name="destinationLocation" id="destinationLocation" placeholder="---">
                 </div>
             </div>
 
@@ -208,27 +208,39 @@
 
 
     <div class="sortdiv">
-        <p class="total-trips">Total Trips : <%= totalTrips %></p>
 
 
-        <form method="GET" action="/secondarysearch" id="sortForm">
-            <input type="hidden" name="page" value="<%= currentPage %>">
-            <label for="sort">Sort by:</label>
-            <select name="sort" id="sort" onchange="document.getElementById('sortForm').submit()">
-                <option value="">-- Select --</option>
-                <option value="priceLowHigh" <%= sort === 'priceLowHigh' ? 'selected' : '' %>>Price: Low to High</option>
-                <option value="priceHighLow" <%= sort === 'priceHighLow' ? 'selected' : '' %>>Price: High to Low</option>
-                <option class="op4" value="recentlyListed" <%= sort === 'recentlyListed' ? 'selected' : '' %>>Recently Listed (Last 10 Days)</option>
-                <option value="leavingSoon" <%= sort === 'leavingSoon' ? 'selected' : '' %>>Leaving Soon (Next 15 Days)</option>
-            </select>
-        </form>
-        
-    
+        <% if (totalTrips) { %>
+            <p class="total-trips">Total Trips : <%= totalTrips %>
+            </p>
+            <% } else { %>
+                <p class="total-trips">Total Trips : 0</p>
+                <% } %>
+
+
+
+                    <form method="GET" action="/secondarysearch" id="sortForm">
+                        <input type="hidden" name="page" value="<%= currentPage %>">
+                        <label for="sort">Sort by:</label>
+                        <select name="sort" id="sort" onchange="document.getElementById('sortForm').submit()">
+                            <option value="">-- Select --</option>
+                            <option value="priceLowHigh" <%=sort==='priceLowHigh' ? 'selected' : '' %>>Price: Low to
+                                High</option>
+                            <option value="priceHighLow" <%=sort==='priceHighLow' ? 'selected' : '' %>>Price: High to
+                                Low</option>
+                            <option class="op4" value="recentlyListed" <%=sort==='recentlyListed' ? 'selected' : '' %>
+                                >Recently Listed (Last 10 Days)</option>
+                            <option value="leavingSoon" <%=sort==='leavingSoon' ? 'selected' : '' %>>Leaving Soon (Next
+                                15 Days)</option>
+                        </select>
+                    </form>
+
+
     </div>
 
-      
 
-    
+
+
     <!-- <div class="open-filter-btn mb-container">
         <div class="mb-filters">
             <h3>edit filters</h3>
@@ -252,7 +264,7 @@
                         <input type="text" placeholder="Search destinations" class="secondary-location"
                             id="secondaryDestination" name="destination">
                     </form>
-    
+
                     <button class="secondary-search-button" onclick="submitCombinedSearch()">
                         <i class="fa-solid fa-arrow-right"></i>
                     </button>
@@ -260,11 +272,11 @@
                 <div class="filters">
                     <div class="top">
                         <h1>When are you traveling?</h1>
-    
+
                         <div class="filters-dates">
                             <input type="date" id="fromdte" name="fromdte" placeholder="july 4" />
                             <input type="date" id="todte" name="todte" />
-    
+
                         </div>
                     </div>
                     <div class="bottom">
@@ -273,38 +285,55 @@
                                 <p>Tour Type</p>
                                 <img src="../images/arrow.svg" alt="" id="filterToggle" class="filter-controller">
                             </div>
-                            
+
 
                             <div class="you-type-filter-content">
                                 <form id="categoryFilterForm" method="POST" action="/searchtrips">
                                     <div id="categoryInputs">
-                                        <label for="nature"><img src="../images/nature-style.png" alt="" class="style-img"><input type="checkbox" class="categoryCheckbox" name="category" value="nature" id="nature" onclick="toggleCategory('nature')"> Nature</label>
-                                        <label for="party"><img src="../images/party.png" alt="" class="style-img"><input type="checkbox" class="categoryCheckbox" name="category" value="party" id="party" onclick="toggleCategory('party')"> Party</label>
-                                        <label for="food"><img src="../images/food.png" alt="" class="style-img"><input type="checkbox" class="categoryCheckbox" name="category" value="food" id="food" onclick="toggleCategory('food')"> Food</label>
-                                        <label for="beach"><img src="../images/beach.png" alt="" class="style-img"><input type="checkbox" class="categoryCheckbox" name="category" value="beach" id="beach" onclick="toggleCategory('beach')"> Beach</label>
-                                        <label for="culture"><img src="../images/culture.png" alt="" class="style-img"><input type="checkbox" class="categoryCheckbox" name="category" value="culture" id="culture" onclick="toggleCategory('culture')"> Culture</label>
-                                        <label for="sports"><img src="../images/sports.png" alt="" class="style-img"><input type="checkbox" class="categoryCheckbox" name="category" value="sports" id="sports" onclick="toggleCategory('sports')"> Sports</label>
+                                        <label for="nature"><img src="../images/nature-style.png" alt=""
+                                                class="style-img"><input type="checkbox" class="categoryCheckbox"
+                                                name="category" value="nature" id="nature"
+                                                onclick="toggleCategory('nature')"> Nature</label>
+                                        <label for="party"><img src="../images/party.png" alt=""
+                                                class="style-img"><input type="checkbox" class="categoryCheckbox"
+                                                name="category" value="party" id="party"
+                                                onclick="toggleCategory('party')"> Party</label>
+                                        <label for="foods"><img src="../images/food.png" alt="" class="style-img"><input
+                                                type="checkbox" class="categoryCheckbox" name="category" value="foods"
+                                                id="foods" onclick="toggleCategory('foods')"> Food</label>
+                                        <label for="beach"><img src="../images/beach.png" alt=""
+                                                class="style-img"><input type="checkbox" class="categoryCheckbox"
+                                                name="category" value="beach" id="beach"
+                                                onclick="toggleCategory('beach')"> Beach</label>
+                                        <label for="culture"><img src="../images/culture.png" alt=""
+                                                class="style-img"><input type="checkbox" class="categoryCheckbox"
+                                                name="category" value="culture" id="culture"
+                                                onclick="toggleCategory('culture')"> Culture</label>
+                                        <label for="sports"><img src="../images/sports.png" alt=""
+                                                class="style-img"><input type="checkbox" class="categoryCheckbox"
+                                                name="category" value="sports" id="sports"
+                                                onclick="toggleCategory('sports')"> Sports</label>
                                         <p id="seeMoreText" class="see-more-text" onclick="toggleSeeMore()">See More</p>
 
                                     </div>
-                            
+
                                     <input type="hidden" name="selectedCategories" id="selectedCategories">
                                 </form>
-                            
+
                                 <button class="filter-submit" onclick="submitCombinedSearch()">Submit</button>
                             </div>
-                            
-                            
-    
+
+
+
                             <div class="price-slider-header">
                                 <p>Price filter</p>
                                 <img src="../images/arrow.svg" alt="" id="priceFilterToggle" class="filter-controller">
-    
+
                             </div>
                             <div class="price-filter-container">
                                 <div class="wrapper">
-    
-    
+
+
                                     <div class="slider">
                                         <div class="progress"></div>
                                     </div>
@@ -314,10 +343,10 @@
                                                 step="100">
                                             <input type="range" id="maxPrice" class="range-max" min="0" max="70000"
                                                 step="100">
-    
+
                                         </form>
                                     </div>
-    
+
                                     <div class="price-input">
                                         <div class="field">
                                             <input type="number" class="input-min" value="0">
@@ -326,21 +355,21 @@
                                             <input type="number" class="input-max" value="100000">
                                         </div>
                                     </div>
-    
-    
+
+
                                 </div>
-                               
+
                                 <button class="filter-submit" onclick="submitCombinedSearch()">submit</button>
-    
+
                             </div>
-    
-    
+
+
                             <div class="price-slider-header">
                                 <p>languages filter</p>
                                 <img src="../images/arrow.svg" alt="" id="languageToggle" class="filter-controller">
-    
+
                             </div>
-    
+
                             <div class="languages-filter-container">
                                 <form id="languagesFilterForm" method="POST" action="/searchtrips">
                                     <label for="kannada">
@@ -359,8 +388,8 @@
                                         Hindi
                                     </label>
                                     <label for="gujarati">
-                                        <input type="checkbox" class="languageCheckbox" name="languages" value="Gujarati"
-                                            id="gujarati">
+                                        <input type="checkbox" class="languageCheckbox" name="languages"
+                                            value="gujarati" id="gujarati">
                                         Gujarati
                                     </label>
                                     <label for="marathi">
@@ -371,35 +400,35 @@
                                     <input type="hidden" name="selectedLanguages" id="selectedLanguages">
                                 </form>
                                 <button class="filter-submit" onclick="submitCombinedSearch()">submit</button>
-    
+
                             </div>
-    
+
                             <div class="price-slider-header">
                                 <p>No of days</p>
                                 <img src="../images/arrow.svg" alt="" id="daysToggle" class="filter-controller">
-    
+
                             </div>
-    
+
                             <div class="days-filter-container">
                                 <div class="days">
                                     <label for="minDays">Min Days:</label>
                                     <input type="number" id="minDays" name="minDays" min="1" placeholder="Minimum days">
                                 </div>
-    
-    
+
+
                                 <div class="days">
                                     <label for="maxDays">Max Days:</label>
                                     <input type="number" id="maxDays" name="maxDays" min="1" placeholder="Maximum days">
-    
+
                                 </div>
                                 <button class="filter-submit" onclick="submitCombinedSearch()">submit</button>
-    
+
                             </div>
-    
-    
+
+
                         </div>
-    
-    
+
+
                     </div>
                 </div>
 
@@ -418,14 +447,15 @@
 
         <div class="cards-container">
             <% for(let i=0; i < allTrips.length; i++) { %>
-                <div class="card-container">
+
+                <div class="card-container" data-id="<%= allTrips[i]._id %>">
                     <div class="card-img">
                         <% if (allTrips[i].tripImages && allTrips[i].tripImages.length> 0 &&
                             allTrips[i].tripImages[0].path) { %>
                             <div class="trip-image">
                                 <img src="<%= allTrips[i].tripImages[0].path %>" alt="Trip Image">
                             </div>
-                            
+
                             <div class="heart-container">
                                 <% if (user) { %>
                                     <% const isInWishlist=userWishlist.includes(allTrips[i]._id.toString()); %>
@@ -449,7 +479,8 @@
                             <img src="../images/route.svg" alt="">
                             <h3 class="card-title">
                                 <a href="/tour/<%= allTrips[i]._id %>">
-                                    <%= allTrips[i].location %>
+                                    <%= allTrips[i].fromLocation %> ->
+                                        <%= allTrips[i].location %>
                                 </a>
                                 <p>
                                     <% if (allTrips[i].departure) { %>
@@ -473,8 +504,15 @@
                         </div>
 
                         <div class="ratio-container">
-                            <p class="maleRatio">Male: <%= allTrips[i].maleRatio %>%</p>
-                            <p class="femaleRatio">Female: <%= allTrips[i].femaleRatio %>%</p>
+                            <p class="maleRatio"> <span class="material-symbols-outlined">
+                                    male
+                                </span><%= allTrips[i].maleRatio %>%</p>
+                            <p class="femaleRatio">
+                                <span class="material-symbols-outlined">
+                                    female
+                                </span>
+                                 <%= allTrips[i].femaleRatio %>%
+                            </p>
 
                         </div>
 
@@ -562,6 +600,8 @@
                             <a href="?page=<%= currentPage + 1 %>" class="next">Next</a>
                             <% } %>
     </div>
+
+
 
 
 

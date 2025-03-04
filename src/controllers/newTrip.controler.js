@@ -64,7 +64,6 @@ const addNewTrip = async (req, res) => {
             languages,
             deposit,
         } = req.body;
-
         // Handle arrays properly in case only one item is selected (EJS sometimes sends as a string instead of array)
         includes = Array.isArray(includes) ? includes : includes ? [includes] : [];
         excludes = Array.isArray(excludes) ? excludes : excludes ? [excludes] : [];
@@ -209,54 +208,39 @@ const showAllTrips = async (req, res) => {
 // showing particular trip 
 
 const showTrip = async (req, res) => {
-    let  id  = req.params.id;
+    let id = req.params.id;
 
-
-
-    // ✅ Ignore "favicon.ico" and other invalid strings
     if (id === "favicon.ico" || id === "user-wishlist") {
         return res.status(400).send("Invalid Trip ID");
     }
 
-    // ✅ Check if ID is a valid MongoDB ObjectId **before querying**
     if (!mongoose.Types.ObjectId.isValid(id)) {
         return res.status(400).send("Invalid Trip ID");
     }
 
-
-
-
-
     const trip = await Trip.findById(id).populate({
         path: 'owner',
-        populate: {
-            path: 'tripLeader'
-        }
-    })
-        .populate('reviews');
+        populate: { path: 'tripLeader' }
+    }).populate('reviews');
 
-
-    // Calculate average rating
-    let totalRatings = 0;
-    let count = 0;
+    // ✅ Calculate overall average rating
+    let totalRatings = 0, count = 0;
     trip.reviews.forEach(review => {
-        const locationRating = review.locationRating || 0;
-        const amenitiesRating = review.amenitiesRating || 0;
-        const foodRating = review.foodRating || 0;
-        const roomRating = review.roomRating || 0;
-        const priceRating = review.priceRating || 0;
-        const operatorRating = review.operatorRating || 0;
+        const ratings = [
+            review.locationRating || 0,
+            review.amenitiesRating || 0,
+            review.foodRating || 0,
+            review.roomRating || 0,
+            review.priceRating || 0,
+            review.operatorRating || 0
+        ];
 
-        const overallRating = (locationRating + amenitiesRating + foodRating + roomRating + priceRating + operatorRating) / 6;
-
+        const overallRating = ratings.reduce((sum, r) => sum + r, 0) / ratings.length;
         totalRatings += overallRating;
         count++;
     });
 
-
-
-    const averageRating = count > 0 ? totalRatings / count : 0;
-
+    const averageRating = count > 0 ? (totalRatings / count).toFixed(1) : "0.0";
 
     function getRatingDescription(rating) {
         if (rating <= 1) return 'Worse';
@@ -266,16 +250,18 @@ const showTrip = async (req, res) => {
         return 'Excellent';
     }
 
+    const userWishlist = req.user ? req.user.wishlist : [];
+
     res.render("trips/trip.ejs", {
         trip, id: req.params.id,
         user: req.user,
-        averageRating: averageRating.toFixed(1),
+        averageRating,
         hasReviews: count > 0,
-        getRatingDescription
-    })
+        getRatingDescription,
+        userWishlist
+    });
+};
 
-
-}
 
 // edit trip 
 
@@ -548,30 +534,33 @@ const searchTrips = async (req, res) => {
 const mainSearch = async (req, res) => {
     const { startingLocation, destinationLocation, fromDate, toDate, minPrice, maxPrice, minDays, maxDays } = req.body;
 
-    const destination = req.body.destination?.trim();
-    const fromdte = req.body.fromdte;
-    const todte = req.body.todte;
+    // Normalize inputs (trim, lowercase)
+    const normalizeArray = (input) => 
+        Array.isArray(input) 
+            ? input.map(item => item.trim().toLowerCase()) 
+            : input ? [input.trim().toLowerCase()] : [];
 
-    const categories = Array.isArray(req.body.categories) ? req.body.categories.map(cat => cat.trim()) : (req.body.categories ? [req.body.categories.trim()] : []);
-    const languages = Array.isArray(req.body.languages) ? req.body.languages.map(lang => lang.trim()) : (req.body.languages ? [req.body.languages.trim()] : []);
-
-    const minDaysInt = minDays ? parseInt(minDays) : null;
-    const maxDaysInt = maxDays ? parseInt(maxDays) : null;
+    const categories = normalizeArray(req.body.categories);
+    const languages = normalizeArray(req.body.languages);
 
     try {
-        const allTrips = await Trip.find().populate('owner').populate('reviews');
+        const allTrips = await Trip.find().populate('owner reviews');
 
         let userWishlist = [];
         if (req.user) {
             const user = await User.findById(req.user._id).populate('wishlist');
-            userWishlist = user.wishlist.map((trip) => trip._id.toString());
+            userWishlist = user.wishlist.map(trip => trip._id.toString());
         }
 
         const calculateRatings = (trips) => {
-            return trips.map((trip) => {
+            return trips.map(trip => {
                 let totalRatings = 0, count = 0;
-                trip.reviews.forEach((review) => {
-                    const overallRating = (review.locationRating + review.amenitiesRating + review.foodRating + review.roomRating + review.priceRating + review.operatorRating) / 6;
+                trip.reviews.forEach(review => {
+                    const overallRating = (
+                        review.locationRating + review.amenitiesRating +
+                        review.foodRating + review.roomRating + 
+                        review.priceRating + review.operatorRating
+                    ) / 6;
                     totalRatings += overallRating;
                     count++;
                 });
@@ -582,104 +571,107 @@ const mainSearch = async (req, res) => {
 
         const matchesAllFilters = [];
         const matchesSomeFilters = [];
+        const uniqueCategories = new Set();
+        const uniqueLanguages = new Set();
 
-        allTrips.forEach((trip) => {
+        allTrips.forEach(trip => {
             let matchesAll = true;
             let matchesPartial = false;
             let priorityScore = 0;
 
-            // Starting Location
+            // Normalize trip data
+            const tripFromLocation = trip.fromLocation.trim().toLowerCase();
+            const tripDestination = trip.location.trim().toLowerCase();
+            const tripCategories = trip.categories.map(cat => cat.trim().toLowerCase());
+            const tripLanguages = trip.languages.map(lang => lang.trim().toLowerCase());
+
+            // Check filters
             if (startingLocation?.trim()) {
-                if (!trip.fromLocation.toLowerCase().includes(startingLocation.trim().toLowerCase())) {
-                    matchesAll = false;
-                } else {
+                const searchStart = startingLocation.trim().toLowerCase();
+                if (!tripFromLocation.includes(searchStart)) matchesAll = false;
+                else {
                     matchesPartial = true;
                     priorityScore += 2;
                 }
             }
 
-            // Destination Location
             if (destinationLocation?.trim()) {
-                if (!trip.location.toLowerCase().includes(destinationLocation.trim().toLowerCase())) {
-                    matchesAll = false;
-                } else {
+                const searchDestination = destinationLocation.trim().toLowerCase();
+                if (!tripDestination.includes(searchDestination)) matchesAll = false;
+                else {
                     matchesPartial = true;
                     priorityScore += 2;
                 }
             }
 
-            // Departure Date (±1 day buffer)
             if (fromDate) {
                 const tripDeparture = new Date(trip.departure).setHours(0, 0, 0, 0);
                 const selectedDate = new Date(fromDate).setHours(0, 0, 0, 0);
-                const bufferStart = selectedDate - 24 * 60 * 60 * 1000;
-                const bufferEnd = selectedDate + 24 * 60 * 60 * 1000;
-
-                if (tripDeparture < bufferStart || tripDeparture > bufferEnd) {
-                    matchesAll = false;
-                } else {
+                if (tripDeparture !== selectedDate) matchesAll = false;
+                else {
                     matchesPartial = true;
                     priorityScore += 1;
                 }
             }
 
-            // End Date (±6 days buffer)
             if (toDate) {
                 const tripEndDate = new Date(trip.endDate).setHours(0, 0, 0, 0);
                 const selectedEndDate = new Date(toDate).setHours(0, 0, 0, 0);
-                const bufferStart = selectedEndDate;
-                const bufferEnd = selectedEndDate + 6 * 24 * 60 * 60 * 1000;
-
-                if (tripEndDate < bufferStart || tripEndDate > bufferEnd) {
-                    matchesAll = false;
-                } else {
+                if (tripEndDate !== selectedEndDate) matchesAll = false;
+                else {
                     matchesPartial = true;
                     priorityScore += 1;
                 }
             }
 
-            // Price Range
             if (minPrice || maxPrice) {
                 const price = trip.totalCost;
-                if ((minPrice && price < Number(minPrice)) || (maxPrice && price > Number(maxPrice))) {
-                    matchesAll = false;
-                } else {
+                if ((minPrice && price < Number(minPrice)) || (maxPrice && price > Number(maxPrice))) matchesAll = false;
+                else {
                     matchesPartial = true;
                     priorityScore += 1;
                 }
             }
 
-            // Duration Range
-            if (minDaysInt || maxDaysInt) {
+            if (minDays || maxDays) {
                 const days = trip.totalDays;
-                if ((minDaysInt && days < minDaysInt) || (maxDaysInt && days > maxDaysInt)) {
-                    matchesAll = false;
-                } else {
+                if ((minDays && days < minDays) || (maxDays && days > maxDays)) matchesAll = false;
+                else {
                     matchesPartial = true;
                     priorityScore += 1;
                 }
             }
 
-            // Categories
+            // **Categories Filtering (Case Insensitive)**
             if (categories.length > 0) {
-                const matchesCategory = categories.some(cat => trip.categories.includes(cat));
-                if (!matchesCategory) {
-                    matchesAll = false;
-                } else {
+                const matchesCategory = categories.some(cat => tripCategories.includes(cat));
+                if (!matchesCategory) matchesAll = false;
+                else {
                     matchesPartial = true;
                     priorityScore += 3;
                 }
             }
 
-            if (matchesAll) {
-                matchesAllFilters.push({ trip, priorityScore });
-            } else if (matchesPartial) {
-                matchesSomeFilters.push({ trip, priorityScore });
+            // **Languages Filtering (Case Insensitive)**
+            if (languages.length > 0) {
+                const matchesLanguage = languages.some(lang => tripLanguages.includes(lang));
+                if (!matchesLanguage) matchesAll = false;
+                else {
+                    matchesPartial = true;
+                    priorityScore += 3;
+                }
             }
+
+            trip.categories.forEach(cat => uniqueCategories.add(cat));
+            trip.languages.forEach(lang => uniqueLanguages.add(lang));
+
+            if (matchesAll) matchesAllFilters.push({ trip, priorityScore });
+            else if (matchesPartial) matchesSomeFilters.push({ trip, priorityScore });
         });
 
         const calculateFinalScore = (tripData) => {
-            return tripData.priorityScore + parseFloat(tripData.trip.averageRating || 0);
+            const ratingWeight = tripData.trip.averageRating ? parseFloat(tripData.trip.averageRating) : 0.5;
+            return tripData.priorityScore + ratingWeight;
         };
 
         const exactMatchesWithRatings = calculateRatings(matchesAllFilters.map(m => m.trip));
@@ -691,7 +683,7 @@ const mainSearch = async (req, res) => {
                 trip: exactMatchesWithRatings[index],
             }))
             .sort((a, b) => calculateFinalScore(b) - calculateFinalScore(a))
-            .map((m) => m.trip);
+            .map(m => m.trip);
 
         const rankedPartialMatches = matchesSomeFilters
             .map((match, index) => ({
@@ -699,9 +691,15 @@ const mainSearch = async (req, res) => {
                 trip: partialMatchesWithRatings[index],
             }))
             .sort((a, b) => calculateFinalScore(b) - calculateFinalScore(a))
-            .map((m) => m.trip);
+            .map(m => m.trip);
 
         const finalResults = [...rankedExactMatches, ...rankedPartialMatches];
+
+        const gujaratiTrips = allTrips.filter(trip =>
+            trip.languages.some(lang => lang.toLowerCase() === "Gujarati")
+        );
+
+        console.log(gujaratiTrips)
 
         res.render('trips/mainSearch.ejs', {
             exactMatchTrips: finalResults,
@@ -711,6 +709,9 @@ const mainSearch = async (req, res) => {
             destinationLocation,
             fromDate,
             toDate,
+            totalTrips: finalResults.length,
+            uniqueCategories: Array.from(uniqueCategories),
+            uniqueLanguages: Array.from(uniqueLanguages)
         });
 
     } catch (error) {
@@ -718,6 +719,7 @@ const mainSearch = async (req, res) => {
         res.status(500).send('Server error');
     }
 };
+
 
 
 
@@ -780,7 +782,7 @@ const reviews = async (req, res) => {
 
         console.log(trip.reviews)
 
-        res.redirect(`/${id}`);
+        res.redirect(`/tour/${id}`);
 
 
 

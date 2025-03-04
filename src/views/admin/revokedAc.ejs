@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Revoked & Suspended Accounts</title>
+    <link rel="stylesheet" href="/css/revoked.css"> <!-- Include your CSS -->
+</head>
+<body>
+    <h2>Revoked & Suspended Accounts</h2>
+    <a href="/admin/adminpannel" class="btn btn-primary">Back to Admin Panel</a>
+
+    <table id="revoked-table">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Email</th>
+                <th>Is Agent</th>
+                <th>Suspended</th>
+                <th>Suspended Until</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+        <tbody>
+            <% users.forEach(user => { 
+                const isSuspended = user.suspendedUntil && new Date(user.suspendedUntil) > new Date();
+                const suspensionEndDate = isSuspended ? new Date(user.suspendedUntil).toLocaleDateString() : "-";
+            %>
+                <tr>
+                    <td><%= user._id %></td>
+                    <td><%= user.email %></td>
+                    <td><%= user.isAgent ? "Yes" : "No" %></td>
+                    <td><%= isSuspended ? "Yes" : "No" %></td>
+                    <td><%= suspensionEndDate %></td>
+                    <td>
+                        <button class="lift-btn btn btn-success" data-id="<%= user._id %>">Lift</button>
+                    </td>
+                </tr>
+            <% }); %>
+        </tbody>
+    </table>
+    
+    <script src="/js/revokedUsers.js"></script> <!-- Separate JS file for revoked users -->
+</body>
+</html>

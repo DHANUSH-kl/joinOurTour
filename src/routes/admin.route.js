@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { fetchTripReports , reportedTrips , analytics , updateTripStatus , adminPerks , sendCoin , walletPage , editAdminForm ,editAdminPannel, posttripPackage , displayPackages,becomeOwnerForm, postOwner, agentAccessForm, postAgentAccess, tripLeaderForm, postTripLeader } from "../controllers/admin.controller.js";
+import {agentTrips ,revokedPage,revokedData,liftSuspension,suspendAgent,revokeAgent, fetchTripReports , reportedTrips , analytics , updateTripStatus , adminPerks , sendCoin , walletPage , editAdminForm ,editAdminPannel, posttripPackage , displayPackages,becomeOwnerForm, postOwner, agentAccessForm, postAgentAccess, tripLeaderForm, postTripLeader } from "../controllers/admin.controller.js";
 import { asyncWrap } from "../constants.js";
 import { isAgent, isLoggedIn, isOwner } from "../middlewares.js";
 import multer from 'multer';
@@ -7,6 +7,28 @@ import { storage } from "../cloudinary.js";
 
 const upload = multer({ storage });
 const router = Router();
+
+
+
+router.route("/trips/:type/:agentId")
+    .get(agentTrips)
+
+
+router
+    .get("/revoked-users", revokedPage);
+
+router
+    .get("/revoked-users-data", revokedData);
+
+router
+    .put("/revoke-access/:id", revokeAgent);
+
+router
+    .put("/suspend/:id", suspendAgent);
+
+router
+    .put("/lift-suspension/:id", liftSuspension);
+
 
 
 router.route("/featuredTrips")

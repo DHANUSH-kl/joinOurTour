@@ -6,28 +6,56 @@
 
 }
 
-nav {
-    width: 100vw;
-    height: 5rem;
-    padding: 1rem 1.5rem;
+body {
     display: flex;
     justify-content: space-between;
+    
+
+}
+
+nav {
+    width: 30vw;
+    height: 100vh;
+    background-color: #333 ;
+    display: flex;
+    justify-content: flex-start;
     align-items: center;
+    gap: 2rem;
+    flex-direction: column;
 }
 
-nav a {
+nav h1 {
+    font-family: poppins;
+    font-size: 2rem;
+    color: #888;
+    margin-top: 1.5rem;
 
-    color: black;
-    font-family: Poppins;
-    font-size: 20px;
-    font-style: normal;
-    font-weight: 500;
-    line-height: normal;
+}
+
+.links {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
+    width: 100%;
+    gap: 2rem;
+
+}
+
+.links a {
+    font-family: poppins;
+    color: #888;
+    font-size: 1.5rem;
     cursor: pointer;
-    text-decoration: none;
-
 
 }
+
+.links a:hover{
+    color: white;
+}
+
+
+
 
 .action-buttons {
     width: 100%;
@@ -54,9 +82,107 @@ nav a {
     background-color: red;
 }
 
-main {
-    width: 100vw;
+
+.userTable {
+    width: 70vw;
+    display: flex;
+    justify-content: flex-start;
+    flex-direction: column;
+    align-items: center;
+}
+
+
+.container {
+    width: 80%;
+    padding: 3rem;
     display: flex;
     justify-content: center;
-    align-items: center;
+    border-radius: 8px;
+    margin-top: 3rem;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    background: white;
+}
+thead {
+    background: #222;
+    color: white;
+}
+th, td {
+    padding: 12px;
+    text-align: left;
+    border-bottom: 1px solid #ddd;
+}
+tbody tr:hover {
+    background: #f5f5f5;
+}
+.btn {
+    padding: 6px 12px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 14px;
+}
+.btn-primary {
+    background: #28a745;
+    color: white;
+}
+.btn-danger {
+    background: #dc3545;
+    color: white;
+}
+.btn-info {
+    background: #007bff;
+    color: white;
+}
+.btn-warning {
+    background: #ffc107;
+    color: black;
+}
+
+*{
+    font-family: poppins;
+}
+
+th{
+    border-right: 1px solid white;
+    background-color: #28a745;
+}
+
+td {
+    border-right: 1px solid #ddd;
+}
+
+td:hover {
+    background-color: #888;
+    cursor: pointer;
+}
+
+.btns-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: flex-start;
+    gap: 0.3rem;
+    width: 10rem;
+}
+
+.btns-container button {
+    padding: 0.4rem 0.8rem;
+    width: 90%;
+}
+.btns-container input{
+    width: 90%;
+}
+
+.tdmail {
+    font-size: 10px;
+}
+
+.btns-container button a {
+    text-align: center;
+    font-size: 14px;
+    color: #222;
 }

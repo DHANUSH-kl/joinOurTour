@@ -196,7 +196,7 @@ main {
 .card-title a{
     color: #05A351;
     font-family: Poppins;
-    font-size: 15px;
+    font-size: 14px;
     font-style: normal;
     font-weight: 400;
     line-height: 24.38px;
@@ -403,7 +403,7 @@ main {
     font-weight: 400;
 }
 
-.maleRatio::before{
+/* .maleRatio::before{
     content: "";
     width: 0.5rem;
     height: 0.5rem;
@@ -423,6 +423,28 @@ main {
     background-color: #F23DE0;
     display: inline-block;
     text-align: center;
+} */
+
+
+.maleRatio , .femaleRatio {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 0.2rem;
+}
+
+
+.maleRatio span , .femaleRatio span {
+    font-size: 18px;
+} 
+
+.maleRatio span {
+    color: blue;
+}
+
+.femaleRatio span {
+    color: palevioletred;
+    
 }
 
 
@@ -670,4 +692,68 @@ main {
 
 .suborclose {
     display: none;
+}
+
+
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap');
+
+#sortForm {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    background-color: #05A351;
+    padding: 10px 15px;
+    border-radius: 8px;
+    width: fit-content;
+    font-family: 'Poppins', sans-serif;
+}
+
+#sortForm label {
+    color: #FFF;
+    font-size: 16px;
+    font-weight: 600;
+}
+
+#sort {
+    background-color: #FFF;
+    color: #05A351;
+    border: 2px solid #FFF;
+    padding: 6px 12px;
+    border-radius: 6px;
+    font-size: 14px;
+    font-family: 'Poppins', sans-serif;
+    cursor: pointer;
+    transition: 0.3s ease;
+    appearance: none; /* Removes default styles for better customization */
+}
+
+/* Custom dropdown styling */
+#sort:hover {
+    background-color: #E6F9EC;
+    color: #038E45;
+}
+
+#sort:focus {
+    outline: none;
+    border-color: #038E45;
+}
+
+/* Ensuring styles apply to options */
+#sort option {
+    background-color: #FFF;
+    color: #05A351;
+    font-family: 'Poppins', sans-serif;
+    font-size: 14px;
+    padding: 10px;
+}
+
+/* Customizing selected option */
+#sort option:checked {
+    background-color: #05A351;
+    color: #FFF;
+}
+
+
+.card-container {
+    cursor: pointer;
 }
