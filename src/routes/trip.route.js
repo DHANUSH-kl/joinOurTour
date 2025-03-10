@@ -1,6 +1,6 @@
 import { Router } from "express";
 import express from 'express';
-import { contactPage,tourbydestination,showgroupdestination ,contactUsPost , getpayment , reportTrip, showWishlist,searchTrips, deleteReview, discoverPage, mainSearch, getSecondarySearch, whislist, aboutus, addNewTrip, showAllTrips, newTripForm, showTrip, editTripForm, deleteTrip, mytrip, postEditTrip, catagariesTrips, priceFilter, reviews, fetchWhislist } from "../controllers/newTrip.controler.js";
+import { contactPage,showtoursbymonth,tourbymonths,tourbydestination,showgroupdestination ,contactUsPost , getpayment , reportTrip, showWishlist,searchTrips, deleteReview, discoverPage, mainSearch, getSecondarySearch, whislist, aboutus, addNewTrip, showAllTrips, newTripForm, showTrip, editTripForm, deleteTrip, mytrip, postEditTrip, catagariesTrips, priceFilter, reviews, fetchWhislist } from "../controllers/newTrip.controler.js";
 import { storage } from "../cloudinary.js";
 import bodyParser from 'body-parser';
 import { isLoggedIn, isAgent, isOwner } from "../middlewares.js";
@@ -16,6 +16,13 @@ const router = Router();
 router.use(express.urlencoded({ extended: true }));
 
 // Specific Routes
+
+
+router.route("/showtourbymonths/:month")
+    .get(showtoursbymonth)
+
+router.route("/tourbymonths")
+    .get(tourbymonths)
 
 router.route("/group/:fromLocation/:location")
     .get(showgroupdestination)

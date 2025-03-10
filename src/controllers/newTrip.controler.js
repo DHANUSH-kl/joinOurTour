@@ -1276,6 +1276,107 @@ const showgroupdestination = async (req, res) => {
     }
 };
 
+const tourbymonths = async(req,res) => {
+    res.render("trips/tourbymonths.ejs");
+}
 
-export {contactUsPost,showgroupdestination, tourbydestination ,contactPage, getpayment , reportTrip ,  showWishlist, fetchWhislist, deleteReview, discoverPage, mainSearch, getSecondarySearch, aboutus, reviews, whislist, searchTrips, newTripForm, showAllTrips, addNewTrip, editTripForm, showTrip, deleteTrip, mytrip, postEditTrip, catagariesTrips, priceFilter };
+const showtoursbymonth = async (req, res) => {
+    try {
+        let { month } = req.params;
+        let today = new Date();
+        let currentYear = today.getFullYear();
+
+        // Ensure month is a valid number between 01 and 12
+        if (!/^(0?[1-9]|1[0-2])$/.test(month)) {
+            return res.status(400).send("Invalid month parameter.");
+        }
+
+        // Ensure month is zero-padded (e.g., "3" -> "03")
+        month = String(month).padStart(2, "0");
+
+        // Create start and end dates
+        let startDate = new Date(`${currentYear}-${month}-01`);
+        let endDate = new Date(startDate);
+        endDate.setMonth(endDate.getMonth() + 1);
+        endDate.setDate(0); // Last day of the month
+
+        // Validate the date
+        if (isNaN(startDate) || isNaN(endDate)) {
+            return res.status(400).send("Error processing the date.");
+        }
+
+        const perPage = 6;
+        const page = parseInt(req.query.page) || 1;
+        const userWishlist = req.user ? req.user.wishlist : [];
+
+        // Fetch total trips count for pagination
+        const totalTrips = await Trip.countDocuments({
+            departure: { 
+                $gte: startDate,  
+                $lte: endDate     
+            },
+            status: "accepted"
+        });
+
+        // Fetch trips with pagination
+        const allTrips = await Trip.find({
+            departure: { 
+                $gte: startDate,  
+                $lte: endDate     
+            },
+            status: "accepted"
+        })
+            .populate("reviews")
+            .populate("owner")
+            .skip((perPage * page) - perPage)
+            .limit(perPage)
+            .lean(); // Use lean() for better performance if only reading data
+
+        // Calculate ratings & ratios
+        allTrips.forEach(trip => {
+            let totalRatings = 0, count = 0;
+            if (trip.reviews) {
+                trip.reviews.forEach(review => {
+                    const overallRating = (
+                        (review.locationRating || 0) + 
+                        (review.amenitiesRating || 0) + 
+                        (review.foodRating || 0) + 
+                        (review.roomRating || 0) + 
+                        (review.priceRating || 0) + 
+                        (review.operatorRating || 0)
+                    ) / 6;
+                    totalRatings += overallRating;
+                    count++;
+                });
+            }
+            trip.averageRating = count > 0 ? (totalRatings / count).toFixed(1) : 0;
+
+            const totalTravelers = (trip.maleTravelers || 0) + (trip.femaleTravelers || 0);
+            trip.maleRatio = totalTravelers > 0 ? ((trip.maleTravelers / totalTravelers) * 100).toFixed(1) : 0;
+            trip.femaleRatio = totalTravelers > 0 ? ((trip.femaleTravelers / totalTravelers) * 100).toFixed(1) : 0;
+        });
+
+        res.render("trips/showtoursbymonth.ejs", {
+            allTrips,
+            currentPage: page,
+            totalPages: Math.ceil(totalTrips / perPage),
+            user: req.user,
+            totalTrips,
+            userWishlist,
+            month,
+            sort: req.query.sort || '',
+        });
+
+    } catch (error) {
+        console.error("Error in showtoursbymonth:", error);
+        res.status(500).send("Server error.");
+    }
+};
+
+
+
+
+
+
+export {contactUsPost,showtoursbymonth,tourbymonths,showgroupdestination, tourbydestination ,contactPage, getpayment , reportTrip ,  showWishlist, fetchWhislist, deleteReview, discoverPage, mainSearch, getSecondarySearch, aboutus, reviews, whislist, searchTrips, newTripForm, showAllTrips, addNewTrip, editTripForm, showTrip, deleteTrip, mytrip, postEditTrip, catagariesTrips, priceFilter };
 
