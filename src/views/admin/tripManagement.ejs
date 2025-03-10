@@ -3,6 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
     <link rel="stylesheet" href="/css/showAll.css">
 
     <title>Document</title>
@@ -11,7 +12,7 @@
     
 
     <div class="cards-container">
-        <% trips.forEach(trip=> { %>
+        <% pendingTrips.forEach(trip=> { %>
             <div class="card-container">
                 <div class="card-img">
                     <% if (trip.tripImages && trip.tripImages.length> 0 && trip.tripImages[0].path) { %>
@@ -110,12 +111,66 @@
 
 
                 </div>
+                <!-- Accept and Reject Buttons -->
+                <div class="action-buttons">
+                    <form action="/admin/<%= trip._id %>/update-status" method="POST">
+                        <button type="submit" name="action" value="accept" class="acceptTrip">Accept</button>
+                    </form>
+                    <button type="button" class="rejectTrip"
+                        onclick="showRejectionReason('<%= trip._id %>')">Reject</button>
+
+                    <div id="reason-<%= trip._id %>" style="display:none;">
+                        <form action="/admin/<%= trip._id %>/update-status" method="POST">
+                            <textarea name="rejectionReason" placeholder="Enter rejection reason"></textarea>
+                            <button type="submit" name="action" value="reject">Submit</button>
+                        </form>
+                    </div>
+                </div>
             </div>
             <% }) %>
     </div>
 
-<a href="/admin/adminpannel">Back to Admin Panel</a>
 
+
+
+    <script>
+        // Function to toggle the visibility of the rejection reason textarea
+        function showRejectionReason(tripId) {
+            const reasonDiv = document.getElementById(`reason-${tripId}`);
+            reasonDiv.style.display = reasonDiv.style.display === "none" ? "block" : "none";
+        }
+
+
+
+
+
+
+
+
+
+
+        // Optionally, use JavaScript to trigger form submission and refresh the page automatically
+        const acceptForms = document.querySelectorAll('form[id^="accept-form-"]');
+        acceptForms.forEach(form => {
+            form.addEventListener('submit', () => {
+                window.location.reload();  // Refresh page on submit
+            });
+        });
+
+        const rejectForms = document.querySelectorAll('form[id^="reject-form-"]');
+        rejectForms.forEach(form => {
+            form.addEventListener('submit', () => {
+                window.location.reload();  // Refresh page on submit
+            });
+        });
+
+
+        
+
+
+
+
+    </script>
 
 
 </body>

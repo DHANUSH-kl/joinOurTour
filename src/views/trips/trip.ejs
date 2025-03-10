@@ -316,7 +316,7 @@
                 <div class="duration ov-box">
                     <img src="../images/duration.png" alt="">
                     <div class="ov-details">
-                        <p>Duration</p>
+                        <p id="ov-bold">Duration</p>
                         <p>
                             <%= trip.totalDays %> days
                         </p>
@@ -325,7 +325,7 @@
                 <div class="group ov-box">
                     <img src="../images/group.png" alt="">
                     <div class="ov-details">
-                        <p>Group Size</p>
+                        <p id="ov-bold">Group Size</p>
                         <p>
                             <%= trip.groupSize %> people
                         </p>
@@ -333,8 +333,8 @@
                 </div>
                 <div class="age ov-box">
                     <img src="../images/age.png" alt="">
-                    <div class="ov-details">
-                        <p>Ages</p>
+                    <div id="ov-details">
+                        <p class="ov-bold">Ages</p>
                         <p>
                             <%= trip.minAge %> +
                         </p>
@@ -343,7 +343,7 @@
                 <div class="language ov-box">
                     <img src="../images/lang.png" alt="">
                     <div class="ov-details">
-                        <p>Languages</p>
+                        <p id="ov-bold">Languages</p>
                         <div class="ln-container">
                             <% if (trip.languages && trip.languages.length> 0) { %>
                                 <% for (let i=0; i < trip.languages.length; i++) { %>

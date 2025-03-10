@@ -96,7 +96,7 @@
     width: 100%;
 }
 
-.you-type-filter-body , .price-slider-header {
+.you-type-filter-body , .price-slider-header ,.rating-slider-header{
     color: #05073C;
     font-family: Poppins;
     font-size: 16px;
@@ -329,6 +329,72 @@ input[type="range"]::-moz-range-thumb {
 
 
 
+.range-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 5px;
+    margin-top: 10px;
+}
+
+/* Label Styling */
+#ratingValue {
+    font-family: 'Poppins', sans-serif;
+    font-size: 18px;
+    font-weight: 600;
+    color: #9A9A9A;
+}
+
+/* Custom Styling for #rating */
+#rating {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 80%;
+    height: 10px;
+    background: #D3D3D3; /* Initial light gray */
+    border-radius: 5px;
+    outline: none;
+    transition: background 0.3s;
+    cursor: pointer;
+    position: relative;
+}
+
+/* Dynamic background update */
+#rating::-webkit-slider-runnable-track {
+    height: 10px;
+    border-radius: 5px;
+    background: #D3D3D3;
+    transition: background 0.3s;
+}
+
+/* Thumb Styling */
+#rating::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 18px;
+    height: 18px;
+    background: #fff;
+    border: 3px solid #00cec9;
+    border-radius: 50%;
+    cursor: pointer;
+    transition: 0.3s ease-in-out;
+    box-shadow: 0 0 10px rgba(0, 206, 201, 0.5);
+    position: relative;
+    margin-top: -4px; /* Center thumb on track */
+}
+
+/* Apply gradient dynamically */
+#rating:focus::-webkit-slider-runnable-track {
+    background: linear-gradient(to right, #2ecc71, #00cec9);
+}
+
+
+
+
+
+
+
+
 
 
 .filter-hide {
@@ -487,6 +553,8 @@ input[type="date"]:hover {
     main {
         margin-top: 1rem;
         padding-top: 8rem;
+        margin-bottom: 0rem;
+
     }
     
     .open-filter-btn {
@@ -636,7 +704,7 @@ input[type="date"]:hover {
 }
 
 
-#filterToggle, #priceFilterToggle {
+#filterToggle, #priceFilterToggle ,#ratingToggle{
     transform: rotate(180deg);
     transition: transform 0.3s ease;
     cursor: pointer;
@@ -644,8 +712,27 @@ input[type="date"]:hover {
 
 
 #languageToggle,
-#daysToggle {
+#daysToggle,#ratingToggle {
     transition: transform 0.3s ease;
     cursor: pointer;
 }
+
+
+
+
+
+
+@media(max-width:650px) {
+    .open-filter-btn {
+        right: 0rem;
+        margin-right: 2rem;
+    }
+
+
+
+}
+
+
+
+
 

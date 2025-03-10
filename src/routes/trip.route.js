@@ -1,6 +1,6 @@
 import { Router } from "express";
 import express from 'express';
-import { createOrder , getpayment , reportTrip, showWishlist,searchTrips, deleteReview, discoverPage, mainSearch, getSecondarySearch, whislist, aboutus, addNewTrip, showAllTrips, newTripForm, showTrip, editTripForm, deleteTrip, mytrip, postEditTrip, catagariesTrips, priceFilter, reviews, fetchWhislist } from "../controllers/newTrip.controler.js";
+import { contactPage,tourbydestination,showgroupdestination ,contactUsPost , getpayment , reportTrip, showWishlist,searchTrips, deleteReview, discoverPage, mainSearch, getSecondarySearch, whislist, aboutus, addNewTrip, showAllTrips, newTripForm, showTrip, editTripForm, deleteTrip, mytrip, postEditTrip, catagariesTrips, priceFilter, reviews, fetchWhislist } from "../controllers/newTrip.controler.js";
 import { storage } from "../cloudinary.js";
 import bodyParser from 'body-parser';
 import { isLoggedIn, isAgent, isOwner } from "../middlewares.js";
@@ -16,6 +16,18 @@ const router = Router();
 router.use(express.urlencoded({ extended: true }));
 
 // Specific Routes
+
+router.route("/group/:fromLocation/:location")
+    .get(showgroupdestination)
+
+router.route("/tourbydestination")
+    .get(tourbydestination)
+
+router.route("/contactUs")
+    .get(contactPage)
+    .post(contactUsPost)
+
+
 router.route("/aboutus")
     .get(asyncWrap(aboutus));
 
@@ -54,7 +66,7 @@ router.route("/catagories")
     .post(asyncWrap(catagariesTrips));
 
 router.route("/mytrips")
-    .get(isLoggedIn, asyncWrap(mytrip));
+    .get(isLoggedIn,isAgent, asyncWrap(mytrip));
 
 // Generic Routes
 router.route("/")
@@ -65,7 +77,6 @@ router.route("/")
 
 router.route("/:id/payment")
     .get(getpayment)
-    .post(createOrder)
 
 router.route("/tour/:id")
     .get(asyncWrap(showTrip))
@@ -77,7 +88,7 @@ router.route("/:id/editTrip")
 
 // Create Trip Route
 router.route("/createtrip")
-    .get(asyncWrap(newTripForm))
+    .get(isLoggedIn,isAgent,asyncWrap(newTripForm))
     .post(upload.fields([{ name: 'tripImages', maxCount: 10 }, { name: 'stopImages', maxCount: 10 }]), (addNewTrip));
 
 // Add Route to Handle Favicon Requests

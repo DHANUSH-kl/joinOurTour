@@ -8,7 +8,7 @@ footer {
     padding: 0 5rem;
     position: relative;
 
-    margin-top: 10rem;
+    margin-top: 14rem;
 }
 
 svg {
@@ -25,6 +25,7 @@ svg {
     display: flex;
     justify-content: center;
     align-items: center;
+    width: 23%;
 }
 
 
@@ -97,3 +98,180 @@ svg {
     align-items: center;
 }
 
+
+.sec3 img {
+    height: 2.5rem;
+}
+
+
+
+@media(max-width:1200px) {
+    footer{
+        flex-direction: column;
+        position: relative;   
+        padding: 0 8rem;
+        padding-bottom: 8rem;
+    }
+
+    .sec1 {
+        width: 100%;
+        height: 24rem;
+        justify-content: flex-start;
+    }
+    .sec1 p {
+        width: 23%;
+    }
+    
+    .sec3 {
+        position: absolute;
+        top: 0;
+        right: 0;
+        margin-top: 5rem;
+        margin-right: 8rem;
+        height: 24rem;
+        display: flex;
+        align-items: flex-start;
+        gap: 0.2rem;
+    }
+
+    .sec2 {
+        width: 100%;
+        justify-content: space-between;
+        gap: 0;
+    }
+}
+
+
+
+
+@media(max-width:980px) {
+    footer{
+        flex-direction: column;
+        position: relative;   
+        padding: 0 8rem;
+        padding-bottom: 8rem;
+    }
+
+    .sec1 {
+        width: 100%;
+        height: 24rem;
+        justify-content: flex-start;
+    }
+    .sec1 p {
+        width: 33%;
+    }
+    
+    .sec3 {
+        position: absolute;
+        top: 0;
+        right: 0;
+        margin-top: 5rem;
+        margin-right: 8rem;
+        height: 24rem;
+        display: flex;
+        align-items: flex-start;
+
+    }
+
+    .sec2 {
+        width: 100%;
+        justify-content: space-between;
+        gap: 0;
+    }
+
+    footer h3 {
+        font-size: 16px;
+    }
+
+    footer .links a {
+        font-size: 11px;
+    }
+    .cc {
+        font-size: 11px;
+    }
+}
+
+
+
+
+@media(max-width:740px) {
+    footer{
+        flex-direction: column;
+        position: relative;   
+        padding: 0 4rem;
+        padding-bottom: 8rem;
+        height: 450px;
+    }
+
+    .sec1 {
+        width: 100%;
+        height: 24rem;
+        justify-content: flex-start;
+    }
+    .sec1 p {
+        width: 43%;
+        font-size: 10px;
+    }
+    
+    .sec3 {
+        position: absolute;
+        top: 0;
+        right: 0;
+        margin-top: 5rem;
+        margin-right: 4rem;
+        height: auto;
+        display: flex;
+        align-items: flex-start;
+
+    }
+
+    .sec2 {
+        width: 100%;
+        justify-content: space-between;
+        gap: 0;
+    }
+
+    footer h3 {
+        font-size: 16px;
+    }
+
+    footer .links a {
+        font-size: 11px;
+    }
+    .cc {
+        font-size: 11px;
+    }
+
+    .sec3 img {
+        height: 1.5rem;
+    }
+
+    footer .links {
+        display: flex;
+        flex-direction: column;
+        gap: 1.7rem;
+        margin-top: 1rem;
+      }
+}
+
+
+@media(max-width:450px) {
+    footer h3 {
+        font-size: 11px;
+      }
+
+      footer .links a {
+        font-size: 8px;
+      }
+
+      footer {
+        height: 350px;
+        padding-bottom: 2rem;
+      }
+
+      .sec1 {
+        width: 100%;
+        height: 6.8rem;
+        justify-content: flex-start;
+      }
+}

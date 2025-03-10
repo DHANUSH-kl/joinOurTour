@@ -81,7 +81,7 @@ const tripSchema = new Schema({
         default: 1           // You can set a default value if required
     },
     minAge: {                // New field for minimum age
-        type: Number,
+        type: String,
         default: 18          // Set a default value for minimum age
     },
     minTripmats: {

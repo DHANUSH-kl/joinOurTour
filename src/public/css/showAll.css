@@ -25,6 +25,7 @@ a {
 
 body {
     background: #F5F5F5;
+    overflow-x: hidden;
 }
 
 header {
@@ -51,6 +52,17 @@ nav {
     align-items: center;
     gap: 5rem;
     padding: 0 2rem;
+}
+
+#showall-nav {
+    width: 100vw;
+    height: 80px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 5rem;
+    padding: 0 2rem; 
+    flex-direction: row;
 }
 
 nav .right {
@@ -125,14 +137,14 @@ main {
     justify-content: flex-start;
     gap: 5rem;
     flex-wrap: wrap;
-    margin-bottom: 5rem;
+    /* margin-bottom: 5rem; */
     align-self: flex-start;
 }
 
 
 .card-container {
     width: 15rem;
-    height: 27rem;
+    height: 29rem;
     border-radius: 12px;
     border: 1px solid #E7E6E6;
     background: #FFF;}
@@ -220,7 +232,7 @@ main {
     padding: 10px;
     width: 100%;
     margin-top: 5px;
-    height: 35%;
+    margin: 1rem 0;
 }
 .title-container h4 {
     color: #05073C;
@@ -579,6 +591,10 @@ main {
         width: 1rem;
         cursor: pointer;
       }
+
+      .breadcrumb-nav {
+        margin-top: 4rem;
+    }
 }
 
 
@@ -589,11 +605,12 @@ main {
 }
 
 .breadcrumb-nav {
-    margin-left: 7rem;
+    margin-left: 4rem;
     font-size: 14px;
     margin-bottom: 10px;
     font-family: poppins;
     font-size: 1rem;
+    margin-top: 3rem;
 
   }
   
@@ -612,14 +629,21 @@ main {
   }
 
   .sortdiv {
+    width: 650%;
+    display: flex;
+    justify-content: flex-end;
+    align-items: flex-end;
+    margin-bottom: -1rem;
+    margin-right: 6rem;
+    gap: 5rem;
+    margin-top: 2.5rem;
+}
+
+.sort-outer-container {
     width: 100%;
     display: flex;
-    justify-content: space-between;
+    justify-content: flex-end;
     align-items: center;
-    padding-right: 13rem;
-    padding-left: 30rem;
-    margin-bottom: -1rem;
-    margin-top: 2.5rem;
 }
   
 .sortdiv label {
@@ -695,7 +719,6 @@ main {
 }
 
 
-@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap');
 
 #sortForm {
     display: flex;
@@ -756,4 +779,161 @@ main {
 
 .card-container {
     cursor: pointer;
+}
+
+
+
+#sort {
+    text-align: center;
+}
+
+.trip-type {
+    font-family: poppins;
+    font-size: 10px;
+    margin-bottom: 1rem;
+    padding-left: 0.5rem;
+}
+
+.trip-type strong {
+    color: #05A351;
+}
+
+#reset-filter-btn {
+    padding: 0.5rem 1.5rem;
+    background-color: red;
+    color: #ccc;
+    border: none;
+    border-radius: 10px;
+    margin-left: 1rem;
+}
+
+#reset-filter-btn a {
+    color: #FFF;
+    text-decoration: none;
+    font-family: poppins;
+    font-size: 1rem;
+}
+
+#reset-filter-btn:hover {
+    background-color: white;
+    border: 1px solid red;
+    transition: 0.2s ease;
+
+}
+
+#reset-filter-btn:hover a{
+    color: red;
+    transition: 0.2s ease;
+
+}
+.logo{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.logo svg {
+    height: auto;
+    width: 50px;
+}
+
+
+
+
+
+.dest-cont {
+    margin-top: 0;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+@media(max-width:650px) {
+    .breadcrumb-nav {
+        margin-top: 4rem;
+    }
+
+    #sort {
+        width: 4rem;
+        padding: 0;
+        font-size: 0.5rem;
+    }
+
+    #sort option {
+        font-size: 8px;
+    }
+    #sortForm label {
+        font-size: 10px;
+        font-weight: 400;
+    }
+
+    .sortdiv {
+        display: flex;
+        justify-content: space-between;
+        margin: 0rem 2rem;
+        margin-top: 4rem;
+        align-items: center;
+
+    }
+
+    .total-trips {
+        font-size: 10px;
+    }
+
+
+}
+
+
+
+
+
+@media(max-width:349px) {
+
+    #sortForm label {
+        font-size: 7px;
+        font-weight: 400;
+      }
+
+      main{
+      }
 }

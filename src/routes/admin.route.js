@@ -1,5 +1,5 @@
 import { Router } from "express";
-import {agentTrips ,revokedPage,revokedData,liftSuspension,suspendAgent,revokeAgent, fetchTripReports , reportedTrips , analytics , updateTripStatus , adminPerks , sendCoin , walletPage , editAdminForm ,editAdminPannel, posttripPackage , displayPackages,becomeOwnerForm, postOwner, agentAccessForm, postAgentAccess, tripLeaderForm, postTripLeader } from "../controllers/admin.controller.js";
+import {agentTrips ,agentInsight ,userRecord, userInsight , tripManagement, dashboard ,revokedPage,revokedData,liftSuspension,suspendAgent,revokeAgent, fetchTripReports , reportedTrips , analytics , updateTripStatus , adminPerks , sendCoin , walletPage , editAdminForm ,editAdminPannel, posttripPackage , displayPackages,becomeOwnerForm, postOwner, agentAccessForm, postAgentAccess, tripLeaderForm, postTripLeader } from "../controllers/admin.controller.js";
 import { asyncWrap } from "../constants.js";
 import { isAgent, isLoggedIn, isOwner } from "../middlewares.js";
 import multer from 'multer';
@@ -9,6 +9,24 @@ const upload = multer({ storage });
 const router = Router();
 
 
+
+router.route("/userRecord")
+    .get(userRecord)
+
+router.route("/userInsight")
+    .get(userInsight)
+
+router.route("/agentInsight")
+    .get(agentInsight)
+
+
+
+router.route("/dashboard")
+    .get(dashboard)
+
+
+router.route("/tripManagement")
+    .get(tripManagement)
 
 router.route("/trips/:type/:agentId")
     .get(agentTrips)

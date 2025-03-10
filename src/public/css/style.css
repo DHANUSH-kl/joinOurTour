@@ -484,3 +484,18 @@ form {
     border: 3px solid #588157;
 }
 
+.minAge-container {
+    display: flex;
+    justify-content: flex-start;
+    gap: 5rem;
+    align-items: center;
+    flex-direction: row;
+}
+
+.minAge-container .form-check {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 0.5rem;
+    color: #588157;
+}

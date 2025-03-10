@@ -51,8 +51,10 @@
         <div class="links">
             <a href="/admin/adminpannel">User mangement</a>
             <a href="">Revenue tracking</a>
-            <a href="">Trip management</a>
-            <a href="">Reported trips</a>
+            <a href="/admin/tripManagement">Trip management</a>
+            <a href="/admin/fetchReports">Reported trips</a>
+            <a href="/admin/sendCoins">Send coins</a>
+            <a href="/admin/dashboard">Dashboard</a>
 
         </div>
     </nav>
@@ -68,205 +70,87 @@
 
 
 
-        <!-- <div class="cards-container">
-            <% pendingTrips.forEach(trip=> { %>
-                <div class="card-container">
-                    <div class="card-img">
-                        <% if (trip.tripImages && trip.tripImages.length> 0 && trip.tripImages[0].path) { %>
-                            <div class="trip-image">
-                                <img src="<%= trip.tripImages[0].path %>" alt="Trip Image">
-                            </div>
-                            <% } else { %>
-                                <p>No images available for this trip</p>
-                                <% } %>
-                    </div>
-                    <div class="card-body">
-                        <div class="route">
-                            <img src="../images/route.svg" alt="">
-                            <h3 class="card-title">
-                                <a href="/tour/<%= trip._id %>">
-                                    <%= trip.location %>
-                                </a>
-                                <p>
-                                    <% if (trip.departure) { %>
-                                        <%= new Date(trip.departure).toLocaleDateString('en-US', { month: 'long' ,
-                                            day: '2-digit' }) %> ~
-                                            <% } else { %>
-                                                Date not available
-                                                <% } %>
-                                                    <% if (trip.endDate) { %>
-                                                        <%= new Date(trip.endDate).toLocaleDateString('en-US', {
-                                                            month: 'long' , day: '2-digit' }) %>
-                                                            <% } %>
-                                </p>
-                            </h3>
-                        </div>
-                        <div class="title-container">
-                            <h4 class="trip-title">
-                                <%= trip.title %>
-                            </h4>
-                        </div>
-
-                        <div class="ratio-container">
-                            <p class="maleRatio">Male: <%= trip.maleRatio %>%</p>
-                            <p class="femaleRatio">Female: <%= trip.femaleRatio %>%</p>
-                        </div>
-
-                        <div class="rating-container">
-                            <div class="rate rat1">
-                                <!-- 5 Stars -->
-                                <input type="radio" id="locStar5-<%= trip._id %>" name="locationRating-<%= trip._id %>"
-                                    value="5" <%=trip.averageRating>= 5 ? 'checked' : '' %> disabled />
-                                <label for="locStar5-<%= trip._id %>">5 stars</label>
-
-                                <!-- 4 Stars -->
-                                <input type="radio" id="locStar4-<%= trip._id %>" name="locationRating-<%= trip._id %>"
-                                    value="4" <%=trip.averageRating>= 4 && trip.averageRating < 5 ? 'checked' : '' %>
-                                    disabled />
-                                    <label for="locStar4-<%= trip._id %>">4 stars</label>
-
-                                    <!-- 3 Stars -->
-                                    <input type="radio" id="locStar3-<%= trip._id %>"
-                                        name="locationRating-<%= trip._id %>" value="3" <%=trip.averageRating>= 3 &&
-                                    trip.averageRating < 4 ? 'checked' : '' %> disabled />
-                                        <label for="locStar3-<%= trip._id %>">3 stars</label>
-
-                                        <!-- 2 Stars -->
-                                        <input type="radio" id="locStar2-<%= trip._id %>"
-                                            name="locationRating-<%= trip._id %>" value="2" <%=trip.averageRating>= 2 &&
-                                        trip.averageRating < 3 ? 'checked' : '' %> disabled />
-                                            <label for="locStar2-<%= trip._id %>">2 stars</label>
-
-                                            <!-- 1 Star -->
-                                            <input type="radio" id="locStar1-<%= trip._id %>"
-                                                name="locationRating-<%= trip._id %>" value="1" <%=trip.averageRating>=
-                                            1 && trip.averageRating < 2 ? 'checked' : '' %> disabled />
-                                                <label for="locStar1-<%= trip._id %>">1 star</label>
-                            </div>
-                            <p>
-                                <%= trip.averageRating %>
-                            </p>
-                        </div>
-
-                        <div class="card-bottom">
-                            <div class="days-container">
-                                <h4 class="days">
-                                    <%= trip.totalDays %> days
-                                </h4>
-                            </div>
-                            <div class="price-container">
-                                <% if (trip.totalCost) { %>
-                                    <span>FROM</span> &nbsp;<b>
-                                        <%= trip.totalCost.toLocaleString('en-IN', { style: 'currency' , currency: 'INR'
-                                            }) %>
-                                    </b>
-                                    <% } else { %>
-                                        Price Not Available
-                                        <% } %>
-                            </div>
-                        </div>
+        
 
 
-                    </div>
-                    <!-- Accept and Reject Buttons -->
-                    <div class="action-buttons">
-                        <form action="/admin/<%= trip._id %>/update-status" method="POST">
-                            <button type="submit" name="action" value="accept" class="acceptTrip">Accept</button>
-                        </form>
-                        <button type="button" class="rejectTrip"
-                            onclick="showRejectionReason('<%= trip._id %>')">Reject</button>
-
-                        <div id="reason-<%= trip._id %>" style="display:none;">
-                            <form action="/admin/<%= trip._id %>/update-status" method="POST">
-                                <textarea name="rejectionReason" placeholder="Enter rejection reason"></textarea>
-                                <button type="submit" name="action" value="reject">Submit</button>
-                            </form>
-                        </div>
-                    </div>
-                </div>
-                <% }) %>
-        </div> -->
-
-
-        <div class="container mt-4">
-            <table class="table table-striped table-bordered">
-                <thead class="table-dark">
-                    <tr>
-                        <th>ID</th>
-                        <th>Username</th>
-                        <th>Email</th>
-                        <th>Created Trips</th>
-                        <th>Completed Trips</th>
-                        <th>Ongoing Trips</th>
-                        <th>Revenue</th>
-                        <th>Actions</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <% let i = 1; %>  
-                    <% agents.forEach(agent => { %>
-                        <tr>
-                            <td><%= i++ %></td> <!-- This will display numbers 1, 2, 3, etc. -->
-                            <td><%= agent.username %></td>
-                            <td class="tdmail"><%= agent.email %></td>
-                             <!-- Clickable trip count -->
-                            <td><a href="/admin/trips/created/<%= agent.id %>" class="trip-link"><%= agent.createdTrips %></a></td>
-                            <td><a href="/admin/trips/completed/<%= agent.id %>" class="trip-link"><%= agent.completedTrips %></a></td>
-                            <td><a href="/admin/trips/ongoing/<%= agent.id %>" class="trip-link"><%= agent.ongoingTrips %></a></td>
-                            <td><%= agent.revenue %></td>
-                            <td class="btns-container">
-                                <button class="btn btn-yellow revoke" data-id="<%= agent.id %>">Revoke</button>
-                                <button class="btn btn-red suspend-btn" data-id="<%= agent.id %>">Suspend</button>
-                                <input type="number" class="suspend-input" placeholder="Days" data-id="<%= agent.id %>">
-                                <a href="mailto:<%= agent.email %>" class="btn btn-blue">Email</a>
-                            </td>
-                        </tr>
-                    <% }) %>
-                </tbody>
-            </table>
+        <div class="d-flex justify-content-between align-items-center mb-3">
+            <div>
+                <label for="fromDate">From:</label>
+                <input type="date" id="fromDate">
+                <label for="toDate">To:</label>
+                <input type="date" id="toDate">
+                <button id="filterBtn" class="btn btn-primary">Filter</button>
+            </div>
         </div>
+        
+
+            <div class="container mt-4">
+                <table class="table table-striped table-bordered">
+                    <thead class="table-dark">
+                        <tr>
+                            <th>#</th>
+                            <th>Username</th>
+                            <th>Email</th>
+                            <th>Created Trips</th>
+                            <th>Completed Trips</th>
+                            <th>Ongoing Trips</th>
+                            <th>Revenue</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <% if (agents && agents.length > 0) { %>
+                            <% agents.forEach((agent, index) => { %>
+                                <tr>
+                                    <td><%= index + 1 %></td> <!-- Display row numbers -->
+                                    <td><%= agent.username || "N/A" %></td>
+                                    <td class="tdmail"><%= agent.email || "N/A" %></td>
+                                    
+                                    <!-- Clickable trip count -->
+                                    <td>
+                                        <a href="/admin/trips/created/<%= agent.id %>" class="trip-link">
+                                            <%= agent.createdTrips || 0 %>
+                                        </a>
+                                    </td>
+                                    <td>
+                                        <a href="/admin/trips/completed/<%= agent.id %>" class="trip-link">
+                                            <%= agent.completedTrips || 0 %>
+                                        </a>
+                                    </td>
+                                    <td>
+                                        <a href="/admin/trips/ongoing/<%= agent.id %>" class="trip-link">
+                                            <%= agent.ongoingTrips || 0 %>
+                                        </a>
+                                    </td>
+                                    <td>₹<%= agent.revenue || 0 %></td>
+            
+                                    <!-- Action Buttons -->
+                                    <td class="btns-container">
+                                        <button class="btn btn-yellow revoke" data-id="<%= agent.id %>">Revoke</button>
+                                        <button class="btn btn-red suspend-btn" data-id="<%= agent.id %>">Suspend</button>
+                                        <input type="number" class="suspend-input" placeholder="Days" min="1" data-id="<%= agent.id %>">
+                                        <a href="mailto:<%= agent.email %>" class="btn btn-blue">Email</a>
+                                    </td>
+                                </tr>
+                            <% }) %>
+                        <% } else { %>
+                            <tr>
+                                <td colspan="8" class="text-center">No agents found.</td>
+                            </tr>
+                        <% } %>
+                    </tbody>
+                </table>
+            </div>
+        
 
 
         <a href="/admin/revoked-users" class="btn btn-danger">Show Revoked Accounts</a>
 
     </div>
 
-    <script>
-        // Function to toggle the visibility of the rejection reason textarea
-        function showRejectionReason(tripId) {
-            const reasonDiv = document.getElementById(`reason-${tripId}`);
-            reasonDiv.style.display = reasonDiv.style.display === "none" ? "block" : "none";
-        }
+    
 
 
-
-
-
-
-
-
-
-
-        // Optionally, use JavaScript to trigger form submission and refresh the page automatically
-        const acceptForms = document.querySelectorAll('form[id^="accept-form-"]');
-        acceptForms.forEach(form => {
-            form.addEventListener('submit', () => {
-                window.location.reload();  // Refresh page on submit
-            });
-        });
-
-        const rejectForms = document.querySelectorAll('form[id^="reject-form-"]');
-        rejectForms.forEach(form => {
-            form.addEventListener('submit', () => {
-                window.location.reload();  // Refresh page on submit
-            });
-        });
-
-
-
-
-
-    </script>
 
 
 

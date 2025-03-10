@@ -94,7 +94,8 @@
 
     <div class="bottom-container">
       <img src="../images/linkedin(3).png" alt="">
-      <a href="https://www.instagram.com/join.our.tours/profilecard/?igsh=MWQ1dXdkbzZ0d3ExcQ==hhwcccc "><img src="../images/instagram(4).png" alt=""></a>
+      <a href="https://www.instagram.com/join.our.tours/profilecard/?igsh=MWQ1dXdkbzZ0d3ExcQ==hhwcccc "><img
+          src="../images/instagram(4).png" alt=""></a>
       <img src="../images/facebook-app-symbol(1).png
             " alt="">
     </div>
@@ -110,7 +111,9 @@
   <button class="alltrips"><a href="/">all tours</a></button>
 
   <div class="hero-content-container">
-    <h1>Elevate your <br> nature <br> experience.</h1>
+    <h1>
+      Plan Less, <br> <br> Travel More.
+    </h1>
   </div>
 
 
@@ -187,8 +190,7 @@
         <h1>Destinations</h1>
 
         <p>
-          Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore
-          magna aliqua. Ut enim ad minim veniam
+          We take you beyond the ordinary, offering a mix of famous landmarks and hidden gems for a truly immersive experience.
         </p>
       </div>
       <div class="two boxes">
@@ -208,8 +210,7 @@
         <h1>Accomodation</h1>
 
         <p>
-          Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore
-          magna aliqua. Ut enim ad minim veniam
+          Stay at cozy, well-rated, and locally inspired accommodations that balance comfort and authenticity.
         </p>
       </div>
       <div class="three boxes">
@@ -236,8 +237,7 @@
         <h1>Team of Professionals</h1>
 
         <p>
-          Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore
-          magna aliqua. Ut enim ad minim veniam
+          Our experienced professionals and passionate local guides ensure you get the best insights, stories, and smooth logistics.
         </p>
       </div>
       <div class="four boxes">
@@ -254,22 +254,20 @@
           </defs>
         </svg>
 
-        <h1>Guides</h1>
+        <h1>Transparency</h1>
 
         <p>
-          Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore
-          magna aliqua. Ut enim ad minim veniam
+          No hidden costs—just clear, budget-friendly packages that give you the best value for your adventure.
         </p>
       </div>
     </div>
 
     <div class="rigth">
       <p>
-        GeorgiCa Travel has built it’s reputation by successfully producing specalised solutions for many years creating
-        unforgetable travel experiences for our customers.
-
-        We believe that our expertise and the vast experience of our staff and guides is the guarantee for smooth
-        delivery of the services at every stage.
+        Travel More, Spend Less, Live More!
+        At Join Our Tour, we believe that travel isn’t a luxury , it’s a way of life. Our goal is simple: to make travel
+        affordable, accessible, and unforgettable for everyone. Whether you're a solo explorer, a budget traveler, or
+        someone looking for unique adventures, we bring you the best experiences without breaking the bank.
       </p>
     </div>
   </div>
@@ -284,7 +282,7 @@
 
       <div class="swiffy-slider slider-item-show2 slider-nav-autoplay">
         <ul class="slider-container">
-          <% for (let i = 0; i < 4; i++) { %>
+          <% for (let i=0; i < 4; i++) { %>
             <li>
               <% if (exploreTrips[i]) { %>
                 <!-- Render actual explore trip details if available -->
@@ -292,15 +290,15 @@
                 <button class="explore-trip">
                   <a href="/tour/<%= exploreTrips[i]._id %>">Explore Tour</a>
                 </button>
-              <% } else { %>
-                <!-- Render a placeholder if no explore trip is available -->
-                <img src="placeholder-image.jpg" alt="No Explore Trip Available">
-                <button class="explore-trip">
-                  <a href="#">Explore Tour</a>
-                </button>
-              <% } %>
+                <% } else { %>
+                  <!-- Render a placeholder if no explore trip is available -->
+                  <img src="placeholder-image.jpg" alt="No Explore Trip Available">
+                  <button class="explore-trip">
+                    <a href="#">Explore Tour</a>
+                  </button>
+                  <% } %>
             </li>
-          <% } %>
+            <% } %>
 
         </ul>
 
@@ -322,7 +320,7 @@
 
     <div class="package-cards" data-scroll-container>
 
-      <% for (let i = 0; i < 4; i++) { %>
+      <% for (let i=0; i < 4; i++) { %>
         <div class="card card<%= i %>" data-scroll data-scroll-call="animate-card">
           <% if (tripPackages[i]) { %>
             <!-- Render actual trip details if available -->
@@ -334,16 +332,16 @@
               <input type="hidden" name="tripId" value="<%= tripPackages[i]._id %>">
               <button type="submit">Discover more</button>
             </form>
-          <% } else { %>
-            <!-- Render placeholder card if trip is not available -->
-            <img src="placeholder-image.jpg" alt="No Trip Available">
-            <p>Trip Not Available</p>
-            <form action="#" method="POST">
-              <button type="submit" disabled>Discover more</button>
-            </form>
-          <% } %>
+            <% } else { %>
+              <!-- Render placeholder card if trip is not available -->
+              <img src="placeholder-image.jpg" alt="No Trip Available">
+              <p>Trip Not Available</p>
+              <form action="#" method="POST">
+                <button type="submit" disabled>Discover more</button>
+              </form>
+              <% } %>
         </div>
-      <% } %>
+        <% } %>
     </div>
   </div>
 
@@ -351,7 +349,8 @@
 
 
 
-  <!-- <footer>
+
+  <footer>
 
     <div class="sec1">
       <div class="logo"></div>
@@ -389,94 +388,9 @@
     </div>
     <div class="sec3">
 
-      <svg width="78" height="78" viewBox="0 0 78 78" fill="none" xmlns="http://www.w3.org/2000/svg">
-        <g filter="url(#filter0_d_1_341)">
-          <path fill-rule="evenodd" clip-rule="evenodd"
-            d="M38.8189 65.6322C54.7336 65.6322 67.635 52.7308 67.635 36.8161C67.635 20.9014 54.7336 8 38.8189 8C22.9042 8 10.0027 20.9014 10.0027 36.8161C10.0027 52.7308 22.9042 65.6322 38.8189 65.6322Z"
-            fill="white" />
-        </g>
-        <path fill-rule="evenodd" clip-rule="evenodd"
-          d="M42.4854 33.6454C42.0355 33.5031 41.5181 33.4082 41.0457 33.4082C40.4608 33.4082 39.2011 33.8115 39.2011 34.5943V36.4683H42.1929V39.6232H39.2011V48.329H36.1868V39.6232H34.7021V36.4683H36.1868V34.8789C36.1868 32.4831 37.2215 30.4905 39.7185 30.4905C40.5733 30.4905 42.1029 30.5379 42.9353 30.8463L42.4854 33.6454Z"
-          fill="#080809" />
-        <defs>
-          <filter id="filter0_d_1_341" x="0.00274658" y="0" width="77.6322" height="77.6323"
-            filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
-            <feFlood flood-opacity="0" result="BackgroundImageFix" />
-            <feColorMatrix in="SourceAlpha" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0"
-              result="hardAlpha" />
-            <feOffset dy="2" />
-            <feGaussianBlur stdDeviation="5" />
-            <feColorMatrix type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.1 0" />
-            <feBlend mode="normal" in2="BackgroundImageFix" result="effect1_dropShadow_1_341" />
-            <feBlend mode="normal" in="SourceGraphic" in2="effect1_dropShadow_1_341" result="shape" />
-          </filter>
-        </defs>
-      </svg>
-
-
-
-      <svg class="insta" width="85" height="84" viewBox="0 0 85 84" fill="none" xmlns="http://www.w3.org/2000/svg">
-        <g filter="url(#filter0_d_1_345)">
-          <path fill-rule="evenodd" clip-rule="evenodd"
-            d="M42.404 71.2549C59.8713 71.2549 74.0314 57.0948 74.0314 39.6274C74.0314 22.1601 59.8713 8 42.404 8C24.9366 8 10.7766 22.1601 10.7766 39.6274C10.7766 57.0948 24.9366 71.2549 42.404 71.2549Z"
-            fill="url(#paint0_angular_1_345)" />
-        </g>
-        <defs>
-          <filter id="filter0_d_1_345" x="0.77655" y="0" width="83.2549" height="83.2549" filterUnits="userSpaceOnUse"
-            color-interpolation-filters="sRGB">
-            <feFlood flood-opacity="0" result="BackgroundImageFix" />
-            <feColorMatrix in="SourceAlpha" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0"
-              result="hardAlpha" />
-            <feOffset dy="2" />
-            <feGaussianBlur stdDeviation="5" />
-            <feColorMatrix type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.1 0" />
-            <feBlend mode="normal" in2="BackgroundImageFix" result="effect1_dropShadow_1_345" />
-            <feBlend mode="normal" in="SourceGraphic" in2="effect1_dropShadow_1_345" result="shape" />
-          </filter>
-          <radialGradient id="paint0_angular_1_345" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse"
-            gradientTransform="translate(42.404 39.6274) rotate(90) scale(0.702832)">
-            <stop stop-color="#B8D2F1" />
-            <stop offset="0.166667" stop-color="#F289AA" />
-            <stop offset="0.294697" stop-color="#C68BF0" />
-            <stop offset="0.427083" stop-color="#D164DA" />
-            <stop offset="0.614583" stop-color="#C963E8" />
-            <stop offset="0.71875" stop-color="#BFC2E8" />
-            <stop offset="0.802083" stop-color="#FFC999" />
-            <stop offset="0.875" stop-color="#D0D8C9" />
-            <stop offset="0.928149" stop-color="#BAD0F1" />
-            <stop offset="0.997133" stop-color="#CED8CB" />
-            <stop offset="1" stop-color="white" stop-opacity="0" />
-          </radialGradient>
-        </defs>
-      </svg>
-
-
-
-
-
-      <svg width="78" height="79" viewBox="0 0 78 79" fill="none" xmlns="http://www.w3.org/2000/svg">
-        <g filter="url(#filter0_d_1_338)">
-          <path fill-rule="evenodd" clip-rule="evenodd"
-            d="M38.816 66.1137C54.7307 66.1137 67.6322 53.2122 67.6322 37.2976C67.6322 21.3829 54.7307 8.48145 38.816 8.48145C22.9013 8.48145 9.99994 21.3829 9.99994 37.2976C9.99994 53.2122 22.9013 66.1137 38.816 66.1137Z"
-            fill="white" />
-        </g>
-        <path
-          d="M50.4906 32.2684C49.6542 32.5715 48.763 32.7723 47.8339 32.8699C48.7897 32.3985 49.5192 31.6577 49.8622 30.7648C48.971 31.2037 47.9871 31.5137 46.9384 31.6867C46.0922 30.9424 44.8862 30.4814 43.5705 30.4814C41.0178 30.4814 38.9627 32.1929 38.9627 34.2911C38.9627 34.593 38.9936 34.8833 39.0695 35.1596C35.2363 35.0052 31.8444 33.4876 29.5658 31.1758C29.168 31.7459 28.9347 32.3985 28.9347 33.1009C28.9347 34.42 29.757 35.5892 30.9828 36.2662C30.242 36.2546 29.5152 36.0769 28.8996 35.7971C28.8996 35.8087 28.8996 35.8238 28.8996 35.8389C28.8996 37.6897 30.4978 39.227 32.5936 39.5812C32.2183 39.6659 31.8093 39.7066 31.3848 39.7066C31.0896 39.7066 30.7916 39.6926 30.5119 39.6416C31.1093 41.1498 32.8045 42.2587 34.8202 42.2947C33.2515 43.3084 31.2597 43.9191 29.1034 43.9191C28.7253 43.9191 28.3626 43.9052 27.9999 43.8669C30.0424 44.9549 32.4629 45.5761 35.0732 45.5761C43.5578 45.5761 48.1965 39.7704 48.1965 34.7381C48.1965 34.5698 48.1895 34.4072 48.1796 34.2458C49.0947 33.7094 49.8636 33.0394 50.4906 32.2684Z"
-          fill="#080809" />
-        <defs>
-          <filter id="filter0_d_1_338" x="-6.10352e-05" y="0.481445" width="77.6322" height="77.6323"
-            filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
-            <feFlood flood-opacity="0" result="BackgroundImageFix" />
-            <feColorMatrix in="SourceAlpha" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0"
-              result="hardAlpha" />
-            <feOffset dy="2" />
-            <feGaussianBlur stdDeviation="5" />
-            <feColorMatrix type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.1 0" />
-            <feBlend mode="normal" in2="BackgroundImageFix" result="effect1_dropShadow_1_338" />
-            <feBlend mode="normal" in="SourceGraphic" in2="effect1_dropShadow_1_338" result="shape" />
-          </filter>
-        </defs>
-      </svg>
+      <img src="../images/f.svg" alt="">
+      <img src="../images/i.svg" alt="">
+      <img src="../images/t.svg" alt="">
 
 
     </div>
@@ -484,12 +398,12 @@
     <p class="cc">All rights reserved@travelgoo.co</p>
 
 
-  </footer> -->
+  </footer>
 
 
 
 
-  
+
 
   <script src="/js/whislist.js"></script>
   <script src="/js/dropdown.js"></script>

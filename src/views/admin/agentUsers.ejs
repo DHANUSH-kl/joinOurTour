@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+    <link rel="stylesheet" href="/css/allUser.css">
+
+    <title>Agent Users</title>
+</head>
+<body>
+    <h2>Agent Users</h2>
+    <table border="1">
+        <thead>
+            <tr>
+                <th>Username</th>
+                <th>First Name</th>
+                <th>Last Name</th>
+                <th>State</th>
+                <th>City</th>
+                <th>Phone</th>
+                <th>Email</th>
+                <th>Company Name</th>
+                <th>Company Contact</th>
+                <th>Company Email</th>
+            </tr>
+        </thead>
+        <tbody>
+            <% agents.forEach(agent => { %>
+                <tr>
+                    <td><%= agent.username %></td>
+                    <td><%= agent.firstName %></td>
+                    <td><%= agent.lastName %></td>
+                    <td><%= agent.state %></td>
+                    <td><%= agent.city %></td>
+                    <td><%= agent.phoneNumber %></td>
+                    <td class="email" data-email="<%= agent.email %>">
+                        <%= agent.email.substring(0, agent.email.indexOf("@") - 2) + '****@' + agent.email.split('@')[1] %>
+                    </td>
+                    
+                    <td><%= agent.tripLeader.companyName %></td>
+                    <td><%= agent.tripLeader.companyContactNumber %></td>
+                    <td><%= agent.tripLeader.companyEmail %></td>
+                </tr>
+            <% }) %>
+        </tbody>
+    </table>
+</body>
+</html>

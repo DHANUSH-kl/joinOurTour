@@ -28,6 +28,7 @@
 
 
 
+    <link rel="stylesheet" href="/css/flash.css">
     <link rel="stylesheet" href="/css/signin.css">
     <link rel="stylesheet" href="/css/nav.css">
     <link rel="stylesheet" href="/css/signup.css">
@@ -36,6 +37,10 @@
 </head>
 <body>
 
+    <% if (error && error.length > 0) { %>
+        <div class="flash-message error"><%= error %></div>
+    <% } %>
+    
 
     <nav>
         <div class="logo">
@@ -82,7 +87,8 @@
 
     </main>
 
-    
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="/js/flash.js"></script>
     <script src="/js/nav.js"></script>
 
 </body>

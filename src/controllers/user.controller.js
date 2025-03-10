@@ -6,6 +6,7 @@ import { Strategy as GoogleStrategy } from 'passport-google-oauth20';
 import crypto from 'crypto';
 import nodemailer from 'nodemailer';
 
+
 const app = express();
 
 app.use(bodyParser.urlencoded({ extended: true }));
@@ -113,7 +114,9 @@ const signinForm = async (req,res) => {
 }
 
 const signinUser = async(req,res) => {
-    res.redirect("/")
+    req.flash("success", "Signed in successfully!");
+    let redirectUrl = res.locals.redirectUrl || "/";
+    res.redirect(redirectUrl);
 }
 
 const logout = (req, res, next) => {

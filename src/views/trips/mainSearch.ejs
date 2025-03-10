@@ -157,30 +157,50 @@
     </div>
 
     <div class="breadcrumb-nav">
-        <a href="/aboutus">Home</a> <span>&gt;</span>
-        <span>All Trips</span>
+        <!-- <a href="/aboutus">Home</a> <span>&gt;</span>
+        <span>All Trips</span> -->
+        <% breadcrumbParts.forEach((part, index)=> { %>
+            <a href="<%= part.link %>">
+                <%= part.label %>
+            </a>
+            <% if (index < breadcrumbParts.length - 1) { %> <span>&gt;</span>
+                <% } %>
+                    <% }); %>>
+
+                        <!-- Reset Filters Button -->
+                        <button id="reset-filter-btn"><a href="/" id="reset-filters" class="reset-filters-btn">Reset Filters</a></button>
+    </div>
+
+    <div class="sort-outer-container">
+        <div class="sortdiv">
+
+
+            <% if (totalTrips) { %>
+                <p class="total-trips">Total Trips : <%= totalTrips %>
+                </p>
+                <% } else { %>
+                    <p class="total-trips">Total Trips : 0</p>
+                    <% } %>
+    
+    
+    
+                    <label for="sort-options">Sort By:</label>
+                    <select id="sort-options">
+                        <option value="default">Default</option>
+                        <option value="price-low-high">Price: Low to High</option>
+                        <option value="price-high-low">Price: High to Low</option>
+                        <option value="rating-high-low">Rating: High to Low</option>
+                        <option value="rating-low-high">Rating: Low to High</option>
+                    </select>
+            
+    
+    
+        </div>
+    
     </div>
 
 
-    <div class="sortdiv">
-        <p class="total-trips">Total Trips : <%= totalTrips %>
-        </p>
 
-        <label for="sort-options">Sort By:</label>
-        <select id="sort-options">
-            <option value="default">Default</option>
-            <option value="price-low-high">Price: Low to High</option>
-            <option value="price-high-low">Price: High to Low</option>
-            <option value="rating-high-low">Rating: High to Low</option>
-            <option value="rating-low-high">Rating: Low to High</option>
-        </select>
-
-
-
-
-
-
-    </div>
 
 
 
@@ -190,6 +210,7 @@
 
 
         <button class="open-filter-btn" onclick="openFilterPopup()">Open Filters</button>
+
 
 
         <div class="filter-popup-overlay" id="filterPopup">
@@ -326,7 +347,7 @@
                                     </label>
                                     <label for="gujarati">
                                         <input type="checkbox" class="languageCheckbox" name="languages"
-                                            value="Gujarati" id="gujarati">
+                                            value="gujarati" id="gujarati">
                                         Gujarati
                                     </label>
                                     <label for="marathi">
@@ -363,7 +384,27 @@
                             </div>
 
 
+
+                            <div class="rating-slider-header">
+                                <p>Ratings</p>
+                                <img src="../images/arrow.svg" alt="" id="ratingToggle" class="filter-controller">
+
+                            </div>
+
+                            <div class="range-container">
+                                <input type="range" id="rating" name="rating" min="0" max="5" step="1" value="0" oninput="updateRatingValue()">
+                                <span id="ratingValue">0</span>
+                                <button class="filter-submit" onclick="submitCombinedSearch()">submit</button>
+
+                            </div>
+
+
+                            
+
+
                         </div>
+
+                        
 
 
                     </div>
@@ -438,83 +479,87 @@
                             </h4>
 
                         </div>
+                        <p class="trip-type">
+                            <strong>Trip Type:</strong>
+                            <%= exactMatchTrips[i].categories.join(", ") %>
+                        </p>
 
-                        <div class="ratio-container">
-                            <p class="maleRatio">Male: <%= exactMatchTrips[i].maleRatio %>%</p>
-                            <p class="femaleRatio">Female: <%= exactMatchTrips[i].femaleRatio %>%</p>
+                        <div class=" ratio-container">
+                                <p class="maleRatio">Male: <%= exactMatchTrips[i].maleRatio %>%</p>
+                                <p class="femaleRatio">Female: <%= exactMatchTrips[i].femaleRatio %>%</p>
 
+                    </div>
+
+
+
+                    <div class="rating-container">
+
+                        <div class="rate rat1">
+                            <!-- 5 Stars -->
+                            <input type="radio" id="locStar5-<%= i %>" name="locationRating-<%= i %>" value="5" <% if
+                                (exactMatchTrips[i].averageRating>= 5) { %> checked <% } %> disabled />
+                                <label for="locStar5-<%= i %>">5 stars</label>
+
+                                <!-- 4 Stars -->
+                                <input type="radio" id="locStar4-<%= i %>" name="locationRating-<%= i %>" value="4" <%
+                                    if (exactMatchTrips[i].averageRating>= 4 && exactMatchTrips[i].averageRating
+                                < 5) { %>
+                                    checked <% } %> disabled />
+                                        <label for="locStar4-<%= i %>">4 stars</label>
+
+                                        <!-- 3 Stars -->
+                                        <input type="radio" id="locStar3-<%= i %>" name="locationRating-<%= i %>"
+                                            value="3" <% if (exactMatchTrips[i].averageRating>= 3 &&
+                                        exactMatchTrips[i].averageRating < 4) { %> checked <% } %> disabled />
+                                                <label for="locStar3-<%= i %>">3 stars</label>
+
+                                                <!-- 2 Stars -->
+                                                <input type="radio" id="locStar2-<%= i %>"
+                                                    name="locationRating-<%= i %>" value="2" <% if
+                                                    (exactMatchTrips[i].averageRating>= 2 &&
+                                                exactMatchTrips[i].averageRating < 3) { %> checked <% } %> disabled
+                                                        />
+                                                        <label for="locStar2-<%= i %>">2 stars</label>
+
+                                                        <!-- 1 Star -->
+                                                        <input type="radio" id="locStar1-<%= i %>"
+                                                            name="locationRating-<%= i %>" value="1" <% if
+                                                            (exactMatchTrips[i].averageRating>= 1 &&
+                                                        exactMatchTrips[i].averageRating < 2) { %> checked <% } %>
+                                                                disabled
+                                                                />
+                                                                <label for="locStar1-<%= i %>">1 star</label>
                         </div>
 
+                        <p>
+                            <%= exactMatchTrips[i].averageRating %>
+                        </p>
+
+                    </div>
 
 
-                        <div class="rating-container">
 
-                            <div class="rate rat1">
-                                <!-- 5 Stars -->
-                                <input type="radio" id="locStar5-<%= i %>" name="locationRating-<%= i %>" value="5" <%
-                                    if (exactMatchTrips[i].averageRating>= 5) { %> checked <% } %> disabled />
-                                    <label for="locStar5-<%= i %>">5 stars</label>
-
-                                    <!-- 4 Stars -->
-                                    <input type="radio" id="locStar4-<%= i %>" name="locationRating-<%= i %>" value="4"
-                                        <% if (exactMatchTrips[i].averageRating>= 4 && exactMatchTrips[i].averageRating
-                                    < 5) { %>
-                                        checked <% } %> disabled />
-                                            <label for="locStar4-<%= i %>">4 stars</label>
-
-                                            <!-- 3 Stars -->
-                                            <input type="radio" id="locStar3-<%= i %>" name="locationRating-<%= i %>"
-                                                value="3" <% if (exactMatchTrips[i].averageRating>= 3 &&
-                                            exactMatchTrips[i].averageRating < 4) { %> checked <% } %> disabled />
-                                                    <label for="locStar3-<%= i %>">3 stars</label>
-
-                                                    <!-- 2 Stars -->
-                                                    <input type="radio" id="locStar2-<%= i %>"
-                                                        name="locationRating-<%= i %>" value="2" <% if
-                                                        (exactMatchTrips[i].averageRating>= 2 &&
-                                                    exactMatchTrips[i].averageRating < 3) { %> checked <% } %> disabled
-                                                            />
-                                                            <label for="locStar2-<%= i %>">2 stars</label>
-
-                                                            <!-- 1 Star -->
-                                                            <input type="radio" id="locStar1-<%= i %>"
-                                                                name="locationRating-<%= i %>" value="1" <% if
-                                                                (exactMatchTrips[i].averageRating>= 1 &&
-                                                            exactMatchTrips[i].averageRating < 2) { %> checked <% } %>
-                                                                    disabled
-                                                                    />
-                                                                    <label for="locStar1-<%= i %>">1 star</label>
-                            </div>
-
-                            <p>
-                                <%= exactMatchTrips[i].averageRating %>
-                            </p>
-
+                    <div class="card-bottom">
+                        <div class="days-container">
+                            <h4 class="days">
+                                <%= exactMatchTrips[i].totalDays %> days
+                            </h4>
                         </div>
-
-
-
-                        <div class="card-bottom">
-                            <div class="days-container">
-                                <h4 class="days">
-                                    <%= exactMatchTrips[i].totalDays %> days
-                                </h4>
-                            </div>
-                            <div class="price-container">
-                                <% if (exactMatchTrips[i].totalCost) { %>
-                                    <span>FROM</span> &nbsp;<b>
-                                        <%= exactMatchTrips[i].totalCost.toLocaleString('en-IN', { style: 'currency' ,
-                                            currency: 'INR' }) %>
-                                    </b>
-                                    <% } else { %>
-                                        Price Not Available
-                                        <% } %>
-                            </div>
+                        <div class="price-container">
+                            <% if (exactMatchTrips[i].totalCost) { %>
+                                <span>FROM</span> &nbsp;<b>
+                                    <%= exactMatchTrips[i].totalCost.toLocaleString('en-IN', { style: 'currency' ,
+                                        currency: 'INR' }) %>
+                                </b>
+                                <% } else { %>
+                                    Price Not Available
+                                    <% } %>
                         </div>
                     </div>
                 </div>
-                <% } %>
         </div>
+        <% } %>
+            </div>
 
 
     </main>
@@ -783,65 +828,65 @@
 
 
         document.addEventListener("DOMContentLoaded", function () {
-    console.log("Script Loaded");
+            console.log("Script Loaded");
 
-    let tripsData = <%- JSON.stringify(exactMatchTrips) %>;
-    const userWishlist = <%- JSON.stringify(userWishlist) %>;
+            let tripsData = <% - JSON.stringify(exactMatchTrips) %>;
+            const userWishlist = <% - JSON.stringify(userWishlist) %>;
 
-    console.log("Initial Trips Data:", tripsData.map(trip => ({
-        id: trip._id,
-        rating: trip.averageRating
-    })));
+            console.log("Initial Trips Data:", tripsData.map(trip => ({
+                id: trip._id,
+                rating: trip.averageRating
+            })));
 
-    const sortOptions = document.getElementById('sort-options');
-    if (!sortOptions) {
-        console.error("Sort options dropdown not found!");
-        return;
-    }
+            const sortOptions = document.getElementById('sort-options');
+            if (!sortOptions) {
+                console.error("Sort options dropdown not found!");
+                return;
+            }
 
-    sortOptions.addEventListener('change', function () {
-        const selectedSort = this.value;
-        let sortedTrips = [...tripsData]; // Clone tripsData to avoid mutation
+            sortOptions.addEventListener('change', function () {
+                const selectedSort = this.value;
+                let sortedTrips = [...tripsData]; // Clone tripsData to avoid mutation
 
-        console.log("Before Sorting:", sortedTrips.map(trip => ({
-            id: trip._id,
-            rating: trip.averageRating
-        })));
+                console.log("Before Sorting:", sortedTrips.map(trip => ({
+                    id: trip._id,
+                    rating: trip.averageRating
+                })));
 
-        if (selectedSort === "price-low-high") {
-            sortedTrips.sort((a, b) => a.totalCost - b.totalCost);
-        } else if (selectedSort === "price-high-low") {
-            sortedTrips.sort((a, b) => b.totalCost - a.totalCost);
-        } else if (selectedSort === "rating-high-low") {
-            sortedTrips.sort((a, b) => (b.averageRating ?? 0) - (a.averageRating ?? 0)); // Handle undefined ratings
-        } else if (selectedSort === "rating-low-high") {
-            sortedTrips.sort((a, b) => (a.averageRating ?? 0) - (b.averageRating ?? 0));
-        }
+                if (selectedSort === "price-low-high") {
+                    sortedTrips.sort((a, b) => a.totalCost - b.totalCost);
+                } else if (selectedSort === "price-high-low") {
+                    sortedTrips.sort((a, b) => b.totalCost - a.totalCost);
+                } else if (selectedSort === "rating-high-low") {
+                    sortedTrips.sort((a, b) => (b.averageRating ?? 0) - (a.averageRating ?? 0)); // Handle undefined ratings
+                } else if (selectedSort === "rating-low-high") {
+                    sortedTrips.sort((a, b) => (a.averageRating ?? 0) - (b.averageRating ?? 0));
+                }
 
-        console.log("After Sorting:", sortedTrips.map(trip => ({
-            id: trip._id,
-            rating: trip.averageRating
-        })));
+                console.log("After Sorting:", sortedTrips.map(trip => ({
+                    id: trip._id,
+                    rating: trip.averageRating
+                })));
 
-        const container = document.querySelector('.cards-container');
-        if (!container) {
-            console.error("Cards container not found!");
-            return;
-        }
-        container.innerHTML = '';
+                const container = document.querySelector('.cards-container');
+                if (!container) {
+                    console.error("Cards container not found!");
+                    return;
+                }
+                container.innerHTML = '';
 
-        sortedTrips.forEach((trip, i) => {
-            const tripCard = document.createElement("div");
-            tripCard.classList.add("card-container");
+                sortedTrips.forEach((trip, i) => {
+                    const tripCard = document.createElement("div");
+                    tripCard.classList.add("card-container");
 
-            tripCard.innerHTML = `
+                    tripCard.innerHTML = `
                 <div class="card-img">
                     ${trip.tripImages?.length
-                        ? `<div class="trip-image">
+                            ? `<div class="trip-image">
                             <img src="${trip.tripImages[0].path}" alt="Trip Image">
                         </div>`
-                        : `<p>No images available</p>`
-                    }
+                            : `<p>No images available</p>`
+                        }
                     <div class="heart-container">
                         ${userWishlist.includes(trip._id.toString())
                             ? `<i class="fa-solid fa-heart wishlist-active wishlist-icon" data-id="${trip._id}" style="cursor: pointer;"></i>`
@@ -889,10 +934,10 @@
                 </div>
             `;
 
-            container.appendChild(tripCard);
+                    container.appendChild(tripCard);
+                });
+            });
         });
-    });
-});
 
 
 
@@ -903,44 +948,44 @@
 
 
 
-<script>
-    console.log("📊 Initial Trips Data:", tripsData.map(trip => ({
-    id: trip._id,
-    title: trip.title,
-    rating: trip.averageRating
-})));
+    <script>
+        console.log("📊 Initial Trips Data:", tripsData.map(trip => ({
+            id: trip._id,
+            title: trip.title,
+            rating: trip.averageRating
+        })));
 
-sortOptions.addEventListener('change', function () {
-    const selectedSort = this.value;
-    let sortedTrips = [...tripsData];
+        sortOptions.addEventListener('change', function () {
+            const selectedSort = this.value;
+            let sortedTrips = [...tripsData];
 
-    console.log("Before Sorting:", sortedTrips.map(trip => ({
-        id: trip._id,
-        title: trip.title,
-        rating: trip.averageRating
-    })));
+            console.log("Before Sorting:", sortedTrips.map(trip => ({
+                id: trip._id,
+                title: trip.title,
+                rating: trip.averageRating
+            })));
 
-    if (selectedSort === "price-low-high") {
-        sortedTrips.sort((a, b) => a.totalCost - b.totalCost);
-    } else if (selectedSort === "price-high-low") {
-        sortedTrips.sort((a, b) => b.totalCost - a.totalCost);
-    } else if (selectedSort === "rating-high-low") {
-        sortedTrips.sort((a, b) => (b.averageRating || 0) - (a.averageRating || 0));
-    } else if (selectedSort === "rating-low-high") {
-        sortedTrips.sort((a, b) => (a.averageRating || 0) - (b.averageRating || 0));
-    }
+            if (selectedSort === "price-low-high") {
+                sortedTrips.sort((a, b) => a.totalCost - b.totalCost);
+            } else if (selectedSort === "price-high-low") {
+                sortedTrips.sort((a, b) => b.totalCost - a.totalCost);
+            } else if (selectedSort === "rating-high-low") {
+                sortedTrips.sort((a, b) => (b.averageRating || 0) - (a.averageRating || 0));
+            } else if (selectedSort === "rating-low-high") {
+                sortedTrips.sort((a, b) => (a.averageRating || 0) - (b.averageRating || 0));
+            }
 
-    console.log("After Sorting:", sortedTrips.map(trip => ({
-        id: trip._id,
-        title: trip.title,
-        rating: trip.averageRating
-    })));
-});
-</script>
-  
-
+            console.log("After Sorting:", sortedTrips.map(trip => ({
+                id: trip._id,
+                title: trip.title,
+                rating: trip.averageRating
+            })));
+        });
+    </script>
 
 
+
+    <script src="/js/seemore.js"></script>
     <script src="/js/mainSearchSort.js"></script>
     <script src="/js/whislist.js"></script>
     <script src="/js/dropdown.js"></script>

@@ -2,23 +2,27 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Lato&display=swap" rel="stylesheet">
-    <link
-        href="https://fonts.googleapis.com/css2?family=Lato:wght@400;700;900&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900&display=swap"
-        rel="stylesheet">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Lato&display=swap" rel="stylesheet">
+  <link
+    href="https://fonts.googleapis.com/css2?family=Lato:wght@400;700;900&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900&display=swap"
+    rel="stylesheet">
 
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
-        integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA=="
-        crossorigin="anonymous" referrerpolicy="no-referrer" />
-    <link rel="stylesheet"
-        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0" />
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Anton&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
+    integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA=="
+    crossorigin="anonymous" referrerpolicy="no-referrer" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Anton&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
+  <script src="https://cdn.jsdelivr.net/npm/swiffy-slider@1.6.0/dist/js/swiffy-slider.min.js" crossorigin="anonymous"
+    defer></script>
+  <link href="https://cdn.jsdelivr.net/npm/swiffy-slider@1.6.0/dist/css/swiffy-slider.min.css" rel="stylesheet"
+    crossorigin="anonymous">
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+
 
 
 
@@ -39,6 +43,8 @@
     <link rel="stylesheet" href="/css/filterSearch.css">
     <link rel="stylesheet" href="/css/pagination.css">
     <link rel="stylesheet" href="/css/account.css">
+    <link rel="stylesheet" href="/css/aboutus.css">
+
 
 
 
@@ -49,15 +55,7 @@
 
 
 
-    <% if (wishlistTrips.length > 0) { %>
-        <ul>
-            <% for (let i = 0; i < wishlistTrips.length; i++) { %>
-                <li><%= wishlistTrips[i].title %></li>
-            <% } %>
-        </ul>
-    <% } else { %>
-        <p>No wishlist trips found.</p>
-    <% } %>
+   
 
     <div class="cards-container">
         <% for(let i=0; i < wishlistTrips.length; i++) { %>
@@ -185,7 +183,172 @@
             </div>
             <% } %>
     </div>
+
+
+
+    <div class="destination-container">
+        <div class="find">
+          <h1>Find your destination</h1>
+          <p>Browse some of our most popular tours in Georgia this month.</p>
+        </div>
+        <div class="destination-carousal">
+    
+    
+          <div class="swiffy-slider slider-item-show2 slider-nav-autoplay">
+            <ul class="slider-container">
+              <% for (let i=0; i < 4; i++) { %>
+                <li>
+                  <% if (exploreTrips[i]) { %>
+                    <!-- Render actual explore trip details if available -->
+                    <img src="<%= exploreTrips[i].tripImages[0]?.path %>" alt="Explore Trip">
+                    <button class="explore-trip">
+                      <a href="/tour/<%= exploreTrips[i]._id %>">Explore Tour</a>
+                    </button>
+                    <% } else { %>
+                      <!-- Render a placeholder if no explore trip is available -->
+                      <img src="placeholder-image.jpg" alt="No Explore Trip Available">
+                      <button class="explore-trip">
+                        <a href="#">Explore Tour</a>
+                      </button>
+                      <% } %>
+                </li>
+                <% } %>
+    
+            </ul>
+    
+            <button type="button" class="slider-nav"></button>
+            <button type="button" class="slider-nav slider-nav-next"></button>
+    
+    
+          </div>
+    
+        </div>
+    
+      </div>
+    
+      <div class="package">
+        <div class="ptext">
+          <h1>Explore packages</h1>
+          <p>Find, what suites you best</p>
+        </div>
+    
+        <div class="package-cards" data-scroll-container>
+    
+          <% for (let i=0; i < 4; i++) { %>
+            <div class="card card<%= i %>" data-scroll data-scroll-call="animate-card">
+              <% if (tripPackages[i]) { %>
+                <!-- Render actual trip details if available -->
+                <img src="<%= tripPackages[i].tripImages[0]?.path %>" alt="">
+                <p>
+                  <%= tripPackages[i].title %>
+                </p>
+                <form action="/discover" method="POST">
+                  <input type="hidden" name="tripId" value="<%= tripPackages[i]._id %>">
+                  <button type="submit">Discover more</button>
+                </form>
+                <% } else { %>
+                  <!-- Render placeholder card if trip is not available -->
+                  <img src="placeholder-image.jpg" alt="No Trip Available">
+                  <p>Trip Not Available</p>
+                  <form action="#" method="POST">
+                    <button type="submit" disabled>Discover more</button>
+                  </form>
+                  <% } %>
+            </div>
+            <% } %>
+        </div>
+      </div>
+    
         
+
+
+
+    <!-- Swiper JS -->
+  <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+
+
+  <!-- Initialize Swiper  first nav carousal-->
+  <script>
+    var swiper = new Swiper(".mySwiper", {
+      speed: 1000,
+      spaceBetween: 0,
+      centeredSlides: true,
+      autoplay: {
+        delay: 2500,
+        disableOnInteraction: false,
+      },
+      pagination: {
+        el: ".swiper-pagination",
+        clickable: true,
+      },
+      navigation: {
+        nextEl: ".swiper-button-next",
+        prevEl: ".swiper-button-prev",
+      },
+    });
+
+
+
+
+
+    // testimonail carousal 
+
+    //   all ------------------
+    function initParadoxWay() {
+      "use strict";
+
+      if ($(".testimonials-carousel").length > 0) {
+        var j2 = new Swiper(".testimonials-carousel .swiper-container", {
+          preloadImages: false,
+          slidesPerView: 1,
+          spaceBetween: 20,
+          loop: true,
+          grabCursor: true,
+          mousewheel: false,
+          centeredSlides: true,
+          pagination: {
+            el: '.tc-pagination',
+            clickable: true,
+            dynamicBullets: true,
+          },
+          navigation: {
+            nextEl: '.listing-carousel-button-next',
+            prevEl: '.listing-carousel-button-prev',
+          },
+          breakpoints: {
+            1024: {
+              slidesPerView: 3,
+            },
+
+          }
+        });
+      }
+
+      // bubbles -----------------
+
+
+      setInterval(function () {
+        var size = randomValue(sArray);
+        $('.bubbles').append('<div class="individual-bubble" style="left: ' + randomValue(bArray) + 'px; width: ' + size + 'px; height:' + size + 'px;"></div>');
+        $('.individual-bubble').animate({
+          'bottom': '100%',
+          'opacity': '-=0.7'
+        }, 4000, function () {
+          $(this).remove()
+        });
+      }, 350);
+
+    }
+
+    //   Init All ------------------
+    $(document).ready(function () {
+      initParadoxWay();
+    });
+
+
+
+
+  </script>
 
 
 

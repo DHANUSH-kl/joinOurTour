@@ -3,6 +3,8 @@ const router = Router();
 import {forgotUsername,usernamePage,verifyOtpAndSignup, verifyUserPage, forgotPasswordPage , resetPasswordPage , forgotPassword, resetPassword , signupForm , signupUser ,  signinForm , signinUser, logout  } from "../controllers/user.controller.js";
 import passport from "passport";
 import { asyncWrap } from "../constants.js";
+import { isAgent, isLoggedIn, isOwner ,saveRedirectUrl} from "../middlewares.js";
+
 
 
 
@@ -12,9 +14,11 @@ router.route("/signup")
 
 router.route("/signin")
     .get(signinForm)
-    .post( passport.authenticate("local" , {
-        failureRedirect : "/user/signup",
+    .post(saveRedirectUrl, passport.authenticate("local" , {
+        failureRedirect : "/user/signin",
+        failureFlash: "Invalid username or password!",
     }) , signinUser)
+
 
 
 router.route("/verify-user")

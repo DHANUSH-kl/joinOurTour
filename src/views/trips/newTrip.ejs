@@ -9,6 +9,14 @@
     <link
         href="https://fonts.googleapis.com/css2?family=Lato:wght@400;700;900&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"
         rel="stylesheet">
+        <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+
+<!-- jQuery UI (required for autocomplete) -->
+<link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+
+    <link rel="stylesheet" href="/css/autoSuggestions.css">
     <link rel="stylesheet" href="/css/style.css">
     <title>Document</title>
 </head>
@@ -79,7 +87,7 @@
                 </div>
 
                 <div class="conatiner">
-                    <label for="minTripmates" class="form-label mb-2">Min Number of People Required</label>
+                    <label for="minTripmates" class="form-label mb-2">Number of travellers already booked</label>
                     <input min="1" type="number" name="minTripmates" id="minTripmates" class="form-control " required>
                 </div>
 
@@ -128,9 +136,25 @@
             </div> -->
             
             <div class="minAge-container">
-                <label for="minAge" class="form-label mb-2">Minimum Age</label>
-                <input type="number" name="minAge" id="minAge" class="form-control" required>
+                <label class="form-label mb-2">Minimum Age</label>
+                <div class="form-check">
+                    <input type="radio" name="minAge" id="age_18_25" class="form-check-input" value="18-25" required>
+                    <label for="age_18_25" class="form-check-label">18-25</label>
+                </div>
+                <div class="form-check">
+                    <input type="radio" name="minAge" id="age_25_30" class="form-check-input" value="25-30">
+                    <label for="age_25_30" class="form-check-label">25-30</label>
+                </div>
+                <div class="form-check">
+                    <input type="radio" name="minAge" id="age_30_45" class="form-check-input" value="30-45">
+                    <label for="age_30_45" class="form-check-label">30-45</label>
+                </div>
+                <div class="form-check">
+                    <input type="radio" name="minAge" id="age_45_plus" class="form-check-input" value="45+">
+                    <label for="age_45_plus" class="form-check-label">45+</label>
+                </div>
             </div>
+            
 
 
             
@@ -414,7 +438,63 @@
 
             <button class="submit-btn">SUBMIT</button>
         </form>
+
     </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    
+<script>
+
+function calculateDurationAndAddStops() {
+    const departureInput = document.getElementById("departure");
+    const endDateInput = document.getElementById("endDate");
+    const totalDaysInput = document.getElementById("totalDays");
+
+    // Check if both dates are selected
+    if (departureInput.value && endDateInput.value) {
+        const departureDate = new Date(departureInput.value);
+        const endDate = new Date(endDateInput.value);
+
+        console.log("Departure Date:", departureDate);
+        console.log("End Date:", endDate);
+
+        if (!isNaN(departureDate) && !isNaN(endDate)) {
+            if (endDate >= departureDate) {
+                const timeDiff = endDate - departureDate;
+                const totalDays = Math.ceil(timeDiff / (1000 * 60 * 60 * 24)) + 1; // Include both start and end date
+                totalDaysInput.value = totalDays;
+                console.log("Total Days:", totalDays);
+            } else {
+                alert("End date must be after the start date!");
+                totalDaysInput.value = "";
+            }
+        } else {
+            console.error("Invalid date values.");
+        }
+    }
+}
+
+// Ensure the event listeners trigger correctly
+document.getElementById("departure").addEventListener("change", calculateDurationAndAddStops);
+document.getElementById("endDate").addEventListener("change", calculateDurationAndAddStops);
+
+    
+</script>
+
 
 
     <script>
@@ -603,6 +683,7 @@
     </script>
     
 
+<script src="/js/autoSuggestions.js"></script>
 <script src="/js/nav.js"></script>
 
 </body>

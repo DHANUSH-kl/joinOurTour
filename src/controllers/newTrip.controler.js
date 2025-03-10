@@ -8,6 +8,7 @@ import { Trip } from '../models/travel.model.js';
 import { Review } from '../models/review.model.js';
 import { Booking } from '../models/booking.model.js';
 import Admin from '../models/admin.model.js';
+import nodemailer from "nodemailer";
 const upload = multer({ storage });
 const app = express();
 
@@ -134,6 +135,8 @@ const addNewTrip = async (req, res) => {
 
         await newTrip.save();
 
+        console.log("minAge",minAge);
+
         // Deduct 100 tokens from the user's wallet after creating the trip
         // user.wallet -= 100;
         // await user.save();
@@ -193,6 +196,32 @@ const showAllTrips = async (req, res) => {
         trip.femaleRatio = femaleRatio;
     });
 
+
+    const allData = await Admin.find();
+
+
+    const adminData = allData[0];
+
+    const { d1, d2, d3, d4, p1, p2, p3, p4 } = adminData;
+
+
+   // Function to validate ObjectId
+   const isValidObjectId = (id) => mongoose.Types.ObjectId.isValid(id?.trim());
+
+   const tripPackage1 = isValidObjectId(p1) ? await Trip.findById(p1.trim()) : null;
+   const tripPackage2 = isValidObjectId(p2) ? await Trip.findById(p2.trim()) : null;
+   const tripPackage3 = isValidObjectId(p3) ? await Trip.findById(p3.trim()) : null;
+   const tripPackage4 = isValidObjectId(p4) ? await Trip.findById(p4.trim()) : null;
+
+   const exploreTrips1 = isValidObjectId(d1) ? await Trip.findById(d1.trim()) : null;
+   const exploreTrips2 = isValidObjectId(d2) ? await Trip.findById(d2.trim()) : null;
+   const exploreTrips3 = isValidObjectId(d3) ? await Trip.findById(d3.trim()) : null;
+   const exploreTrips4 = isValidObjectId(d4) ? await Trip.findById(d4.trim()) : null;
+
+    const exploreTrips = [exploreTrips1, exploreTrips2, exploreTrips3, exploreTrips4]
+
+    const tripPackages = [tripPackage1, tripPackage2, tripPackage3, tripPackage4]
+
     // Render the page with the correct pagination
     res.render("trips/showAll", {
         allTrips,
@@ -201,8 +230,11 @@ const showAllTrips = async (req, res) => {
         user: req.user,
         totalTrips,
         userWishlist,
-        sort: req.query.sort || '' // Pass the current sort query to EJS
+        sort: req.query.sort || '',
+        exploreTrips, 
+        tripPackages
     });
+
 };
 
 // showing particular trip 
@@ -532,7 +564,8 @@ const searchTrips = async (req, res) => {
 
 
 const mainSearch = async (req, res) => {
-    const { startingLocation, destinationLocation, fromDate, toDate, minPrice, maxPrice, minDays, maxDays } = req.body;
+    const { rating, startingLocation, destinationLocation, fromDate, toDate, minPrice, maxPrice, minDays, maxDays } = req.body;
+
 
     // Normalize inputs (trim, lowercase)
     const normalizeArray = (input) => 
@@ -642,6 +675,24 @@ const mainSearch = async (req, res) => {
                 }
             }
 
+            // **Rating Filter**
+            let tripAverageRating = 0;
+            if (trip.reviews.length > 0) {
+                tripAverageRating = trip.reviews.reduce((sum, review) => {
+                    return sum + (review.locationRating + review.amenitiesRating + 
+                                  review.foodRating + review.roomRating + 
+                                  review.priceRating + review.operatorRating) / 6;
+                }, 0) / trip.reviews.length;
+            }
+
+            if (rating) {
+                if (tripAverageRating < Number(rating)) matchesAll = false;
+                else {
+                    matchesPartial = true;
+                    priorityScore += 3;
+                }
+            }
+
             // **Categories Filtering (Case Insensitive)**
             if (categories.length > 0) {
                 const matchesCategory = categories.some(cat => tripCategories.includes(cat));
@@ -695,11 +746,31 @@ const mainSearch = async (req, res) => {
 
         const finalResults = [...rankedExactMatches, ...rankedPartialMatches];
 
-        const gujaratiTrips = allTrips.filter(trip =>
-            trip.languages.some(lang => lang.toLowerCase() === "Gujarati")
-        );
 
-        console.log(gujaratiTrips)
+        const breadcrumbParts = [
+            { label: "Home", link: "/aboutus" },
+            { label: "All Trips", link: "/" }
+        ];
+        
+        if (startingLocation?.trim()) {
+            breadcrumbParts.push({ label: startingLocation, link: "#" });
+        }
+        if (destinationLocation?.trim()) {
+            breadcrumbParts.push({ label: destinationLocation, link: "#" });
+        }
+        if (categories.length > 0) {
+            breadcrumbParts.push({ label: categories.join(", "), link: "#" });
+        }
+        
+
+        const categoryCounts = finalResults.reduce((acc, trip) => {
+            trip.categories.forEach(category => {
+                acc[category] = (acc[category] || 0) + 1;
+            });
+            return acc;
+        }, {});
+        
+        
 
         res.render('trips/mainSearch.ejs', {
             exactMatchTrips: finalResults,
@@ -711,7 +782,9 @@ const mainSearch = async (req, res) => {
             toDate,
             totalTrips: finalResults.length,
             uniqueCategories: Array.from(uniqueCategories),
-            uniqueLanguages: Array.from(uniqueLanguages)
+            uniqueLanguages: Array.from(uniqueLanguages),
+            breadcrumbParts, // Pass breadcrumb data to EJS
+            categoryCounts
         });
 
     } catch (error) {
@@ -719,6 +792,7 @@ const mainSearch = async (req, res) => {
         res.status(500).send('Server error');
     }
 };
+
 
 
 
@@ -826,15 +900,18 @@ const aboutus = async (req, res) => {
     const { d1, d2, d3, d4, p1, p2, p3, p4 } = adminData;
 
 
-    const tripPackage1 = await Trip.findById(p1);
-    const tripPackage2 = await Trip.findById(p2);
-    const tripPackage3 = await Trip.findById(p3);
-    const tripPackage4 = await Trip.findById(p4);
+   // Function to validate ObjectId
+   const isValidObjectId = (id) => mongoose.Types.ObjectId.isValid(id?.trim());
 
-    const exploreTrips1 = await Trip.findById(d1);
-    const exploreTrips2 = await Trip.findById(d2);
-    const exploreTrips3 = await Trip.findById(d3);
-    const exploreTrips4 = await Trip.findById(d4);
+   const tripPackage1 = isValidObjectId(p1) ? await Trip.findById(p1.trim()) : null;
+   const tripPackage2 = isValidObjectId(p2) ? await Trip.findById(p2.trim()) : null;
+   const tripPackage3 = isValidObjectId(p3) ? await Trip.findById(p3.trim()) : null;
+   const tripPackage4 = isValidObjectId(p4) ? await Trip.findById(p4.trim()) : null;
+
+   const exploreTrips1 = isValidObjectId(d1) ? await Trip.findById(d1.trim()) : null;
+   const exploreTrips2 = isValidObjectId(d2) ? await Trip.findById(d2.trim()) : null;
+   const exploreTrips3 = isValidObjectId(d3) ? await Trip.findById(d3.trim()) : null;
+   const exploreTrips4 = isValidObjectId(d4) ? await Trip.findById(d4.trim()) : null;
 
     const exploreTrips = [exploreTrips1, exploreTrips2, exploreTrips3, exploreTrips4]
 
@@ -843,15 +920,15 @@ const aboutus = async (req, res) => {
     res.render("trips/aboutus.ejs", { tripPackages, exploreTrips, user: req.user || null, })
 }
 
+
+
 const getSecondarySearch = async (req, res) => {
     const perPage = 6;
     const page = parseInt(req.query.page) || 1;
     const sortOption = req.query.sort || "";
     const userWishlist = req.user ? req.user.wishlist : [];
-
     const filter = { status: 'accepted', totalCost: { $ne: null } };
     let sortQuery = {};
-
     const today = new Date();
 
     switch (sortOption) {
@@ -886,12 +963,13 @@ const getSecondarySearch = async (req, res) => {
         .populate("reviews")
         .populate("owner")
         .sort(sortQuery)
-        .skip((perPage * (page - 1)))
+        .skip(perPage * (page - 1))
         .limit(perPage);
 
     allTrips.forEach(trip => {
         let totalRatings = 0;
         let count = 0;
+
         trip.reviews.forEach(review => {
             const { locationRating, amenitiesRating, foodRating, roomRating, priceRating, operatorRating } = review;
             const overallRating = (locationRating + amenitiesRating + foodRating + roomRating + priceRating + operatorRating) / 6;
@@ -900,7 +978,6 @@ const getSecondarySearch = async (req, res) => {
         });
 
         trip.averageRating = count > 0 ? (totalRatings / count).toFixed(1) : 0;
-
         const totalTravelers = trip.maleTravelers + trip.femaleTravelers;
         trip.maleRatio = totalTravelers > 0 ? ((trip.maleTravelers / totalTravelers) * 100).toFixed(1) : 0;
         trip.femaleRatio = totalTravelers > 0 ? ((trip.femaleTravelers / totalTravelers) * 100).toFixed(1) : 0;
@@ -956,10 +1033,38 @@ const showWishlist = async (req, res) => {
     // Fetch details of trips that are in the user's wishlist
     const wishlistTrips = await Trip.find({ _id: { $in: wishlistIds } }).exec();
 
+
+    const allData = await Admin.find();
+
+    const adminData = allData[0];
+
+    const { d1, d2, d3, d4, p1, p2, p3, p4 } = adminData;
+
+
+   // Function to validate ObjectId
+   const isValidObjectId = (id) => mongoose.Types.ObjectId.isValid(id?.trim());
+
+   const tripPackage1 = isValidObjectId(p1) ? await Trip.findById(p1.trim()) : null;
+   const tripPackage2 = isValidObjectId(p2) ? await Trip.findById(p2.trim()) : null;
+   const tripPackage3 = isValidObjectId(p3) ? await Trip.findById(p3.trim()) : null;
+   const tripPackage4 = isValidObjectId(p4) ? await Trip.findById(p4.trim()) : null;
+
+   const exploreTrips1 = isValidObjectId(d1) ? await Trip.findById(d1.trim()) : null;
+   const exploreTrips2 = isValidObjectId(d2) ? await Trip.findById(d2.trim()) : null;
+   const exploreTrips3 = isValidObjectId(d3) ? await Trip.findById(d3.trim()) : null;
+   const exploreTrips4 = isValidObjectId(d4) ? await Trip.findById(d4.trim()) : null;
+
+    const exploreTrips = [exploreTrips1, exploreTrips2, exploreTrips3, exploreTrips4]
+
+    const tripPackages = [tripPackage1, tripPackage2, tripPackage3, tripPackage4]
+
     res.render("trips/wishlist.ejs", {
         wishlistTrips,  // Pass the wishlistTrips to the view
         user,           // Pass user for rendering user-specific information
-        userWishlist: wishlistIds // Pass user for rendering user-specific information
+        userWishlist: wishlistIds, // Pass user for rendering user-specific information
+        exploreTrips,
+        tripPackages
+
     });
 }
 
@@ -1052,33 +1157,125 @@ const getpayment = async(req,res) => {
     
 }
 
-const createOrder = async(req,res) => {
+
+
+const contactPage = async(req,res) => {
+    res.render("trips/contactUs.ejs");
+}
+
+const contactUsPost = async(req,res) => {
+    const { firstName, lastName, email, company, phone, issue } = req.body;
+
+    // Create transporter using environment variables
+    let transporter = nodemailer.createTransport({
+        service: "gmail",
+        auth: {
+            user: process.env.EMAIL_USER, // Load from .env
+            pass: process.env.EMAIL_PASS  // Load from .env
+        }
+    });
+
+    // Email content
+    let mailOptions = {
+        from: `"Contact Form" <${email}>`,
+        to: process.env.EMAIL_USER, // Send to your email
+        subject: "New Contact Form Submission",
+        text: `
+            Name: ${firstName} ${lastName}
+            Email: ${email}
+            Company: ${company}
+            Phone: ${phone}
+            Issue Details: ${issue}
+        `
+    };
+
     try {
-        const {tripId } = req.body;
-        const userId = req.user._id;
-
-        // Fetch Trip Details
-        const trip = await Trip.findById(tripId);
-        if (!trip) return res.status(404).json({ success: false, message: "Trip not found" });
-
-        const { totalCost, deposit } = trip;
-
-        // Create Razorpay Order
-        const options = {
-            amount: totalCost * 100, // Amount in paise
-            currency: "INR",
-            receipt: `trip_${tripId}_${Date.now()}`
-        };
-        const order = await razorpay.orders.create(options);
-
-        // Save Booking to Database
-        const booking = new Booking({ userId, tripId, totalCost, deposit, orderId: order.id });
-        await booking.save();
-
+        await transporter.sendMail(mailOptions);
+        res.redirect("/contactUs")
     } catch (error) {
-        res.status(500).json({ success: false, error: error.message });
+        console.error(error);
+        res.send("<script>alert('Error sending message. Try again later.'); window.location='/contact';</script>");
     }
 }
 
-export { createOrder , getpayment , reportTrip ,  showWishlist, fetchWhislist, deleteReview, discoverPage, mainSearch, getSecondarySearch, aboutus, reviews, whislist, searchTrips, newTripForm, showAllTrips, addNewTrip, editTripForm, showTrip, deleteTrip, mytrip, postEditTrip, catagariesTrips, priceFilter };
+
+const tourbydestination = async(req,res) => {
+    try {
+        const allTripsData = await Trip.find({ status: "accepted" });
+
+        const groupedTrips = {};
+        allTripsData.forEach(trip => {
+            const key = `${trip.fromLocation} → ${trip.location}`;
+            if (!groupedTrips[key]) {
+                groupedTrips[key] = true; // Only store unique keys
+            }
+        });
+
+        res.render("trips/tourbydestination.ejs", { groupedTrips });
+    } catch (err) {
+        console.error(err);
+        req.flash("error", "Error fetching trip data");
+        res.redirect("/");
+    }
+}
+
+
+const showgroupdestination = async (req, res) => {
+    const { fromLocation, location } = req.params;
+    const perPage = 6;
+    const page = parseInt(req.query.page) || 1;
+
+    try {
+        const userWishlist = req.user ? req.user.wishlist : [];
+
+        const totalTrips = await Trip.countDocuments({ fromLocation, location, status: "accepted" });
+
+        const allTrips = await Trip.find({ fromLocation, location, status: "accepted" })
+            .populate("reviews")
+            .populate("owner")
+            .skip((perPage * page) - perPage)
+            .limit(perPage);
+
+        allTrips.forEach(trip => {
+            // Calculate average rating
+            let totalRatings = 0, count = 0;
+            trip.reviews.forEach(review => {
+                const overallRating = (
+                    (review.locationRating || 0) + 
+                    (review.amenitiesRating || 0) + 
+                    (review.foodRating || 0) + 
+                    (review.roomRating || 0) + 
+                    (review.priceRating || 0) + 
+                    (review.operatorRating || 0)
+                ) / 6;
+                totalRatings += overallRating;
+                count++;
+            });
+            trip.averageRating = count > 0 ? (totalRatings / count).toFixed(1) : 0;
+
+            // Calculate male-to-female ratio
+            const totalTravelers = trip.maleTravelers + trip.femaleTravelers;
+            trip.maleRatio = totalTravelers > 0 ? ((trip.maleTravelers / totalTravelers) * 100).toFixed(1) : 0;
+            trip.femaleRatio = totalTravelers > 0 ? ((trip.femaleTravelers / totalTravelers) * 100).toFixed(1) : 0;
+        });
+
+        res.render("trips/showgroupdestination.ejs", {
+            allTrips,
+            currentPage: page,
+            totalPages: Math.ceil(totalTrips / perPage),
+            user: req.user,
+            totalTrips,
+            userWishlist,
+            sort: req.query.sort || '',
+        });
+
+    } catch (err) {
+        console.error(err);
+        req.flash("error", "Error fetching filtered trips");
+        res.redirect("/");
+    }
+};
+
+
+export {contactUsPost,showgroupdestination, tourbydestination ,contactPage, getpayment , reportTrip ,  showWishlist, fetchWhislist, deleteReview, discoverPage, mainSearch, getSecondarySearch, aboutus, reviews, whislist, searchTrips, newTripForm, showAllTrips, addNewTrip, editTripForm, showTrip, deleteTrip, mytrip, postEditTrip, catagariesTrips, priceFilter };
 

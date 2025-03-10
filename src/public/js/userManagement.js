@@ -1,3 +1,7 @@
+
+
+
+
 document.addEventListener("DOMContentLoaded", () => {
     console.log("Admin script loaded!");
 
@@ -86,4 +90,27 @@ document.addEventListener("DOMContentLoaded", () => {
             }
         }
     });
+});
+
+
+
+
+
+
+
+
+
+
+
+document.getElementById("filterBtn").addEventListener("click", () => {
+    const fromDate = document.getElementById("fromDate").value;
+    const toDate = document.getElementById("toDate").value;
+
+    if (!fromDate || !toDate) {
+        alert("Please select both From and To dates!");
+        return;
+    }
+
+    const url = `/admin/adminpannel?fromDate=${fromDate}&toDate=${toDate}`;
+    window.location.href = url; // Reload page with query params
 });

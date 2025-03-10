@@ -50,3 +50,24 @@ rangeMax.value = 0;
 updateSlider();
 
 
+
+
+
+function updateRatingValue() {
+    let range = document.getElementById("rating");
+    let valueDisplay = document.getElementById("ratingValue");
+    let min = range.min;
+    let max = range.max;
+    let value = range.value;
+
+    valueDisplay.innerText = value;
+
+    // Calculate percentage for the gradient
+    let percentage = ((value - min) / (max - min)) * 100;
+    range.style.background = `linear-gradient(to right, #2ecc71 ${percentage}%, #D3D3D3 ${percentage}%)`;
+}
+
+// Apply gradient on page load
+document.addEventListener("DOMContentLoaded", () => {
+    updateRatingValue(); // Ensure gradient is applied when the page loads
+});

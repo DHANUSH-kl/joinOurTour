@@ -87,3 +87,40 @@ document.addEventListener("DOMContentLoaded", function () {
         });
     });
 });
+
+
+
+
+
+
+
+
+
+
+
+
+
+// Ratings Filter Toggle
+const ratingToggle = document.getElementById('ratingToggle'); // Update to correct ID if needed
+const ratingFilterContainer = document.querySelector('.range-container');
+
+// Initially hide ratings filter and set toggle arrow to 0deg
+ratingFilterContainer.classList.add('filter-hide');
+ratingToggle.style.transform = 'rotate(0deg)';
+
+ratingToggle.addEventListener('click', () => {
+    ratingFilterContainer.classList.toggle('filter-hide');
+
+    const currentRotation = getComputedStyle(ratingToggle).transform;
+
+    if (currentRotation === 'none' || currentRotation === 'matrix(1, 0, 0, 1, 0, 0)') {
+        ratingToggle.style.transform = 'rotate(180deg)';
+    } else {
+        ratingToggle.style.transform = 'rotate(0deg)';
+    }
+});
+
+// Function to update rating value display
+function updateRatingValue() {
+    document.getElementById('ratingValue').textContent = document.getElementById('rating').value;
+}

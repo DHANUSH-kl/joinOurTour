@@ -17,6 +17,7 @@ import tripRoutes from './routes/trip.route.js';
 import userRoutes from './routes/user.route.js';
 import adminRoutes from './routes/admin.route.js';
 import Razorpay from "razorpay";
+import flash from "connect-flash";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -66,6 +67,24 @@ passport.use(new LocalStrategy(User.authenticate()));
 passport.serializeUser(User.serializeUser());
 passport.deserializeUser(User.deserializeUser());
 
+
+
+// Flash Middleware
+app.use(flash());
+
+app.use((req,res,next) =>{
+  res.locals.success = req.flash("success") || null;
+  res.locals.error = req.flash("error") || null;
+  next();
+});
+
+// Middleware to pass flash messages to views
+app.use((req, res, next) => {
+  res.locals.success_msg = req.flash("success");
+  res.locals.error_msg = req.flash("error");
+  next();
+});
+
 // Razorpay Instance
 // const razorpay = new Razorpay({
 //   key_id: process.env.RAZORPAY_KEY_ID,
@@ -82,6 +101,8 @@ app.use((req, res, next) => {
   res.locals.currUser = req.user;
   next();
 });
+
+
 
 // Route declarations
 app.use('/', tripRoutes);

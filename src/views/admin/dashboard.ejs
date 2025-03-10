@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard - User Insights</title>
+    <link rel="stylesheet" href="/css/dashboard.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+    <div class="container">
+        <h1>User Sign-ups Overview - <%= selectedYear %></h1>
+        <select id="year-selector">
+            <% for (let year = 2020; year <= 2030; year++) { %>
+                <option value="<%= year %>" <%= year == selectedYear ? "selected" : "" %>><%= year %></option>
+            <% } %>
+        </select>
+
+        <div class="stats">
+            <button class="user-btn"><a href="/admin/userInsight">Total Users:</a> <%= totalUsers %></button>
+            <button class="agent-btn"><a href="/admin/agentInsight">Total Agents: </a> <%= totalAgents %></button>
+            <button class="agent-btn"><a href="/admin/userRecord">User records </a></button>
+        </div>
+
+        <canvas id="signupChart"></canvas>
+        <canvas id="categoryChart"></canvas>
+        <canvas id="durationChart"></canvas>
+
+    </div>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+    const categoryData = <%- JSON.stringify(categoryData || []) %>;
+    const durationData = <%- JSON.stringify(durationData || []) %>;
+    const userSignups = <%- JSON.stringify(userSignups || []) %>;
+
+    console.log("User Signups Data:", userSignups);
+
+    // Extracting User Signup Data (Month-wise)
+    const signupLabels = userSignups.map(item => `Month ${item.month}`);
+    const signupCounts = userSignups.map(item => item.count);
+
+    // Extracting Category Data
+    const categoryLabels = categoryData.map(item => item._id);
+    const categoryCounts = categoryData.map(item => item.count);
+
+    // Extracting Duration Data
+    const durationLabels = durationData.map(item => item._id);
+    const durationCounts = durationData.map(item => item.count);
+
+    // Bar Chart - User Signups (Move this chart to be the first one)
+    const ctx1 = document.getElementById('signupChart')?.getContext('2d');
+    if (ctx1 && userSignups.length > 0) {
+        new Chart(ctx1, {
+            type: 'bar',
+            data: {
+                labels: signupLabels,
+                datasets: [{
+                    label: 'User Signups',
+                    data: signupCounts,
+                    backgroundColor: '#FF6384',
+                }]
+            },
+            options: {
+                scales: {
+                    x: { title: { display: true, text: 'Months' } },
+                    y: { title: { display: true, text: 'No. of Users' }, beginAtZero: true }
+                }
+            }
+        });
+    }
+
+    // Pie Chart - Categories
+    const ctx2 = document.getElementById('categoryChart')?.getContext('2d');
+    if (ctx2 && categoryData.length > 0) {
+        new Chart(ctx2, {
+            type: 'pie',
+            data: {
+                labels: categoryLabels,
+                datasets: [{
+                    data: categoryCounts,
+                    backgroundColor: ['#FF6384', '#36A2EB', '#FFCE56', '#4CAF50', '#FF9800'],
+                }]
+            }
+        });
+    }
+
+    // Bar Chart - Trip Duration
+    const ctx3 = document.getElementById('durationChart')?.getContext('2d');
+    if (ctx3 && durationData.length > 0) {
+        new Chart(ctx3, {
+            type: 'bar',
+            data: {
+                labels: durationLabels,
+                datasets: [{
+                    label: 'No. of Trips',
+                    data: durationCounts,
+                    backgroundColor: '#36A2EB',
+                }]
+            },
+            options: {
+                scales: {
+                    x: { title: { display: true, text: 'Days' } },
+                    y: { title: { display: true, text: 'No. of Trips' }, beginAtZero: true }
+                }
+            }
+        });
+    }
+
+    // Year Selector Event
+    document.getElementById("year-selector").addEventListener("change", function () {
+        const selectedYear = this.value;
+        window.location.href = `/admin/dashboard?year=${selectedYear}`;
+    });
+});
+
+    </script>
+
+</body>
+</html>

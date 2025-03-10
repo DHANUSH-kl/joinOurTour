@@ -89,13 +89,7 @@
         </div>
     </form> -->
 
-    <% if (success && success.length > 0) { %>
-        <div class="flash-message success"><%= success %></div>
-    <% } %>
-    
-    <% if (error && error.length > 0) { %>
-        <div class="flash-message error"><%= error %></div>
-    <% } %>
+   
     
 
     <header>
@@ -121,7 +115,7 @@
                 <a href="/aboutus">HOME</a>
             </div>
             <div class="right">
-                <img src="../images/account_circle.png" alt="" class="account-icon">
+                <img src="/images/account_circle.png" alt="" class="account-icon">
                 <!-- <img src="../images/search.png" alt=""> -->
 
                 <div class="account-container acc-hide">
@@ -174,10 +168,10 @@
 
 
         <div class="bottom-container">
-            <img src="../images/linkedin(3).png" alt="">
+            <img src="/images/linkedin(3).png" alt="">
             <a href="https://www.instagram.com/join.our.tours/profilecard/?igsh=MWQ1dXdkbzZ0d3ExcQ==hhwcccc "> <img
-                    src="../images/instagram(4).png" alt=""></a>
-            <img src="../images/facebook-app-symbol(1).png
+                    src="/images/instagram(4).png" alt=""></a>
+            <img src="/images/facebook-app-symbol(1).png
             " alt="">
         </div>
     </header>
@@ -186,7 +180,7 @@
     <div class="search-container">
         <div class="search-bar">
             <div class="search-locations">
-                <img src="../images/searchloc.png" alt="">
+                <img src="/images/searchloc.png" alt="">
                 <div class="startingLocation-container search-locations-container">
                     <label for="startingLocation">Starting from</label>
                     <input type="text" name="startingLocation" id="startingLocation" placeholder="---"
@@ -202,7 +196,7 @@
 
 
             <div class="search-dates">
-                <img src="../images/searchDates.png" alt="">
+                <img src="/images/searchDates.png" alt="">
                 <div class="search-dates-container">
                     <div class="trip-dates trip-from-date">
                         <label for="fromDate">from </label>
@@ -317,33 +311,33 @@
                         <div class="your-trip">
                             <div class="you-type-filter-body">
                                 <p>Tour Type</p>
-                                <img src="../images/arrow.svg" alt="" id="filterToggle" class="filter-controller">
+                                <img src="/images/arrow.svg" alt="" id="filterToggle" class="filter-controller">
                             </div>
 
 
                             <div class="you-type-filter-content">
                                 <form id="categoryFilterForm" method="POST" action="/searchtrips">
                                     <div id="categoryInputs">
-                                        <label for="nature"><img src="../images/nature-style.png" alt=""
+                                        <label for="nature"><img src="/images/nature-style.png" alt=""
                                                 class="style-img"><input type="checkbox" class="categoryCheckbox"
                                                 name="category" value="nature" id="nature"
                                                 onclick="toggleCategory('nature')"> Nature</label>
-                                        <label for="party"><img src="../images/party.png" alt=""
+                                        <label for="party"><img src="/images/party.png" alt=""
                                                 class="style-img"><input type="checkbox" class="categoryCheckbox"
                                                 name="category" value="party" id="party"
                                                 onclick="toggleCategory('party')"> Party</label>
-                                        <label for="foods"><img src="../images/food.png" alt="" class="style-img"><input
+                                        <label for="foods"><img src="/images/food.png" alt="" class="style-img"><input
                                                 type="checkbox" class="categoryCheckbox" name="category" value="foods"
                                                 id="foods" onclick="toggleCategory('foods')"> Food</label>
-                                        <label for="beach"><img src="../images/beach.png" alt=""
+                                        <label for="beach"><img src="/images/beach.png" alt=""
                                                 class="style-img"><input type="checkbox" class="categoryCheckbox"
                                                 name="category" value="beach" id="beach"
                                                 onclick="toggleCategory('beach')"> Beach</label>
-                                        <label for="culture"><img src="../images/culture.png" alt=""
+                                        <label for="culture"><img src="/images/culture.png" alt=""
                                                 class="style-img"><input type="checkbox" class="categoryCheckbox"
                                                 name="category" value="culture" id="culture"
                                                 onclick="toggleCategory('culture')"> Culture</label>
-                                        <label for="sports"><img src="../images/sports.png" alt=""
+                                        <label for="sports"><img src="/images/sports.png" alt=""
                                                 class="style-img"><input type="checkbox" class="categoryCheckbox"
                                                 name="category" value="sports" id="sports"
                                                 onclick="toggleCategory('sports')"> Sports</label>
@@ -361,7 +355,7 @@
 
                             <div class="price-slider-header">
                                 <p>Price filter</p>
-                                <img src="../images/arrow.svg" alt="" id="priceFilterToggle" class="filter-controller">
+                                <img src="/images/arrow.svg" alt="" id="priceFilterToggle" class="filter-controller">
 
                             </div>
                             <div class="price-filter-container">
@@ -400,7 +394,7 @@
 
                             <div class="price-slider-header">
                                 <p>languages filter</p>
-                                <img src="../images/arrow.svg" alt="" id="languageToggle" class="filter-controller">
+                                <img src="/images/arrow.svg" alt="" id="languageToggle" class="filter-controller">
 
                             </div>
 
@@ -439,7 +433,7 @@
 
                             <div class="price-slider-header">
                                 <p>No of days</p>
-                                <img src="../images/arrow.svg" alt="" id="daysToggle" class="filter-controller">
+                                <img src="/images/arrow.svg" alt="" id="daysToggle" class="filter-controller">
 
                             </div>
 
@@ -463,7 +457,7 @@
 
                             <div class="rating-slider-header">
                                 <p>Ratings</p>
-                                <img src="../images/arrow.svg" alt="" id="ratingToggle" class="filter-controller">
+                                <img src="/images/arrow.svg" alt="" id="ratingToggle" class="filter-controller">
 
                             </div>
 
@@ -531,7 +525,7 @@
                     </div>
                     <div class="card-body">
                         <div class="route">
-                            <img src="../images/route.svg" alt="">
+                            <img src="/images/route.svg" alt="">
                             <h3 class="card-title">
                                 <a href="/tour/<%= allTrips[i]._id %>">
                                     <%= allTrips[i].fromLocation %> ->
@@ -670,78 +664,6 @@
 
 
 
-    <div class="destination-container dest-cont">
-        <div class="find">
-            <h1>Find your destination</h1>
-            <p>Browse some of our most popular tours in Georgia this month.</p>
-        </div>
-        <div class="destination-carousal">
-
-
-            <div class="swiffy-slider slider-item-show2 slider-nav-autoplay">
-                <ul class="slider-container">
-                    <% for (let i=0; i < 4; i++) { %>
-                        <li>
-                            <% if (exploreTrips[i]) { %>
-                                <!-- Render actual explore trip details if available -->
-                                <img src="<%= exploreTrips[i].tripImages[0]?.path %>" alt="Explore Trip">
-                                <button class="explore-trip">
-                                    <a href="/tour/<%= exploreTrips[i]._id %>">Explore Tour</a>
-                                </button>
-                                <% } else { %>
-                                    <!-- Render a placeholder if no explore trip is available -->
-                                    <img src="placeholder-image.jpg" alt="No Explore Trip Available">
-                                    <button class="explore-trip">
-                                        <a href="#">Explore Tour</a>
-                                    </button>
-                                    <% } %>
-                        </li>
-                        <% } %>
-
-                </ul>
-
-                <button type="button" class="slider-nav"></button>
-                <button type="button" class="slider-nav slider-nav-next"></button>
-
-
-            </div>
-
-        </div>
-
-    </div>
-
-    <div class="package">
-        <div class="ptext">
-            <h1>Explore packages</h1>
-            <p>Find, what suites you best</p>
-        </div>
-
-        <div class="package-cards" data-scroll-container>
-
-            <% for (let i=0; i < 4; i++) { %>
-                <div class="card card<%= i %>" data-scroll data-scroll-call="animate-card">
-                    <% if (tripPackages[i]) { %>
-                        <!-- Render actual trip details if available -->
-                        <img src="<%= tripPackages[i].tripImages[0]?.path %>" alt="">
-                        <p>
-                            <%= tripPackages[i].title %>
-                        </p>
-                        <form action="/discover" method="POST">
-                            <input type="hidden" name="tripId" value="<%= tripPackages[i]._id %>">
-                            <button type="submit">Discover more</button>
-                        </form>
-                        <% } else { %>
-                            <!-- Render placeholder card if trip is not available -->
-                            <img src="placeholder-image.jpg" alt="No Trip Available">
-                            <p>Trip Not Available</p>
-                            <form action="#" method="POST">
-                                <button type="submit" disabled>Discover more</button>
-                            </form>
-                            <% } %>
-                </div>
-                <% } %>
-        </div>
-    </div>
 
 
 
@@ -785,9 +707,9 @@
         </div>
         <div class="sec3">
 
-            <img src="../images/f.svg" alt="">
-            <img src="../images/i.svg" alt="">
-            <img src="../images/t.svg" alt="">
+            <img src="/images/f.svg" alt="no image">
+            <img src="/images/i.svg" alt="">
+            <img src="/images/t.svg" alt="">
 
 
         </div>

@@ -102,7 +102,7 @@ nav img:hover{
     color: rgba(255, 255, 255, 0.75);
     font-family: Poppins;
     font-size: 3rem;
-    line-height: 170%; /* 126.576px */
+    line-height: 120%; /* 126.576px */
 }
 
 .why-container {
@@ -206,7 +206,7 @@ nav img:hover{
 }
 
 .why-container .rigth {
-    width: 353px;
+    width: 400px;
     height: 468px;
     position: absolute;
     top: 13rem;

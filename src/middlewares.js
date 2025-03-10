@@ -6,8 +6,18 @@ import {User} from './models/user.model.js'
 
 const isLoggedIn = (req,res,next) => {
     if(!req.isAuthenticated()){
+
+        req.session.redirectUrl = req.originalUrl;
+
         return res.redirect("/user/signin")
     } 
+    next();
+}
+
+const saveRedirectUrl = (req,res,next) => {
+    if(req.session.redirectUrl){
+        res.locals.redirectUrl = req.session.redirectUrl;
+    }
     next();
 }
 
@@ -42,4 +52,4 @@ const hasAgentInfo = async (req,res,next) => {
     next();
 }
 
-export { isLoggedIn , isAgent , isOwner , hasAgentInfo };
+export { isLoggedIn , isAgent , isOwner , hasAgentInfo , saveRedirectUrl};

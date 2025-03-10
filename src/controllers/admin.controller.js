@@ -241,29 +241,55 @@ const sendCoin = async(req,res) => {
 
 const adminPerks = async (req, res) => {
     try {
-        // Fetch trips where status is 'pending' and exclude those with 'rejected' or 'accepted' status
-        const pendingTrips = await Trip.find({ status: 'pending' });  // Fetch only 'pending' trips
+        const { fromDate, toDate } = req.query;
+        let filter = {};
+        let completedFilter = {};
+        let ongoingFilter = {};
 
+        console.log("Received Dates:", fromDate, toDate); // Debugging
 
+        if (fromDate && toDate) {
+            const startDate = new Date(fromDate);
+            const endDate = new Date(toDate);
+            endDate.setHours(23, 59, 59, 999); // Ensure full-day inclusion
 
-        const today = new Date(); // Get today's date
-        const users = await User.find({ isAgent: true }).populate("createdTrips");
+            // Filter for created trips in the date range
+            filter = { createdAt: { $gte: startDate, $lte: endDate } };
 
+            // Filter for completed trips (trips that ended within the date range)
+            completedFilter = { endDate: { $gte: startDate, $lte: endDate } };
 
-        const formattedUsers = users.map((user, index) => {
-            const createdTrips = user.createdTrips.length;
+            // Filter for ongoing trips (trips that started before `toDate` but are still ongoing)
+            ongoingFilter = { endDate: { $gt: endDate } };
+        }
 
-            // Count completed and ongoing trips
-            let completedTrips = 0;
-            let ongoingTrips = 0;
+        console.log("Filter Query:", JSON.stringify(filter, null, 2)); // Debugging
+        console.log("Completed Trips Filter:", JSON.stringify(completedFilter, null, 2)); // Debugging
+        console.log("Ongoing Trips Filter:", JSON.stringify(ongoingFilter, null, 2)); // Debugging
 
-            user.createdTrips.forEach(trip => {
-                if (trip.endDate && new Date(trip.endDate) < today) {
-                    completedTrips++;
-                } else {
-                    ongoingTrips++;
-                }
-            });
+        // Fetch pending trips with filter (created within date range)
+        const pendingTrips = await Trip.find({ status: 'pending', ...filter }) || [];
+        console.log("Filtered Pending Trips:", pendingTrips.length);
+
+        const today = new Date();
+        const users = await User.find({ isAgent: true }).populate({
+            path: "createdTrips",
+        });
+
+        console.log("Filtered Users:", users.length);
+
+        const formattedUsers = users.map(user => {
+            const createdTrips = user.createdTrips.filter(trip =>
+                fromDate && toDate ? trip.createdAt >= filter.createdAt.$gte && trip.createdAt <= filter.createdAt.$lte : true
+            ).length;
+
+            const completedTrips = user.createdTrips.filter(trip =>
+                fromDate && toDate ? trip.endDate >= completedFilter.endDate.$gte && trip.endDate <= completedFilter.endDate.$lte : trip.endDate < today
+            ).length;
+
+            const ongoingTrips = user.createdTrips.filter(trip =>
+                fromDate && toDate ? trip.endDate > ongoingFilter.endDate.$gt : trip.endDate >= today
+            ).length;
 
             return {
                 id: user._id,
@@ -273,26 +299,32 @@ const adminPerks = async (req, res) => {
                 completedTrips,
                 ongoingTrips,
                 revenue: `$${user.wallet ? user.wallet.toLocaleString() : "0"}`,
-                
             };
         });
 
-        const agents = formattedUsers;
-
-
-        console.log("AGENTS DATA BEFORE RENDER:", agents);
-console.log("Type of agents:", typeof agents);
-console.log("Is agents an array?", Array.isArray(agents));
-
-
-
-        
-        res.render('admin/adminPerks.ejs', { pendingTrips , agents: agents || [] } );
+        res.render('admin/adminPerks.ejs', { pendingTrips, agents: formattedUsers });
     } catch (error) {
         console.error('Error fetching trips:', error);
         res.status(500).send('Internal Server Error');
     }
 };
+
+
+
+const tripManagement = async (req, res) => {
+    try {
+        const pendingTrips = await Trip.find({ status: 'pending' });
+
+        console.log("Pending Trips Count:", pendingTrips.length);
+
+        res.render("admin/tripManagement.ejs" , {pendingTrips});
+    } catch (error) {
+        console.error("Error fetching pending trips:", error);
+        res.status(500).json({ success: false, message: "Internal Server Error" });
+    }
+};
+
+
 
 
 
@@ -574,4 +606,96 @@ const agentTrips = async(req,res) => {
 }
 
 
-export {agentTrips ,revokedData, revokedPage ,  liftSuspension ,suspendAgent , revokeAgent , fetchTripReports , reportedTrips , analytics , updateTripStatus , adminPerks , walletPage , sendCoin , editAdminForm , editAdminPannel, posttripPackage, becomeOwnerForm, postOwner, agentAccessForm, postAgentAccess, tripLeaderForm, postTripLeader, displayPackages }
+const dashboard = async (req, res) => {
+    try {
+        const selectedYear = req.query.year ? parseInt(req.query.year) : new Date().getFullYear();
+        const monthlySignups = [];
+
+        for (let month = 0; month < 12; month++) {
+            const startOfMonth = new Date(Date.UTC(selectedYear, month, 1)); // Use UTC
+            const endOfMonth = new Date(Date.UTC(selectedYear, month + 1, 0, 23, 59, 59)); // End of month
+
+            const count = await User.countDocuments({
+                createdAt: { $gte: startOfMonth, $lte: endOfMonth }
+            });
+
+            monthlySignups.push({ month: month + 1, count }); // Store month numbers for labels
+        }
+
+        // Total Users & Agents
+        const totalUsers = await User.countDocuments({});
+        const totalAgents = await User.countDocuments({ isAgent: true });
+
+        // Most Popular Trip Categories
+        const categoryData = await Trip.aggregate([
+            { $unwind: "$categories" },
+            { $group: { _id: "$categories", count: { $sum: 1 } } },
+            { $sort: { count: -1 } }
+        ]);
+
+        // Trips Per Duration
+        const durationData = await Trip.aggregate([
+            { $group: { _id: "$totalDays", count: { $sum: 1 } } },
+            { $sort: { _id: 1 } }
+        ]);
+
+        console.log("Monthly Signups", monthlySignups);
+        console.log("Total Users", totalUsers);
+        console.log("Total Agents", totalAgents);
+        console.log("Category Data", categoryData);
+        console.log("monthlySignups", monthlySignups);
+
+        res.render('admin/dashboard', {
+            userSignups: monthlySignups, // Fixed structure
+            selectedYear,
+            totalUsers,
+            totalAgents,
+            categoryData,
+            durationData,
+        });
+
+    } catch (error) {
+        console.error("Error fetching dashboard data:", error);
+        res.status(500).send("Internal Server Error");
+    }
+};
+
+
+
+
+const userInsight = async(req,res) => {
+    try {
+        const users = await User.find({}, 'username firstName lastName state city phoneNumber email'); // Fetch only required fields
+        res.render('admin/allUsers', { users });
+    } catch (err) {
+        console.error(err);
+        res.status(500).send('Server Error');
+    }
+}
+
+const agentInsight = async(req,res) => {
+    try {
+        const agents = await User.find({ isAgent: true }, 'username firstName lastName state city phoneNumber email tripLeader');
+        res.render('admin/agentUsers', { agents });
+    } catch (err) {
+        console.error(err);
+        res.status(500).send('Server Error');
+    }
+}
+
+
+const userRecord = async(req,res) => {
+    try {
+        const users = await User.find({}, 'username firstName lastName state city phoneNumber email createdAt')
+            .sort({ createdAt: -1 }); // Sort by most recent signups
+
+        res.render('admin/userRecord.ejs', { users });
+    } catch (err) {
+        console.error(err);
+        res.status(500).send('Server Error');
+    }
+}
+
+
+
+export {userInsight,userRecord, agentInsight ,agentTrips, dashboard , tripManagement ,revokedData, revokedPage ,  liftSuspension ,suspendAgent , revokeAgent , fetchTripReports , reportedTrips , analytics , updateTripStatus , adminPerks , walletPage , sendCoin , editAdminForm , editAdminPannel, posttripPackage, becomeOwnerForm, postOwner, agentAccessForm, postAgentAccess, tripLeaderForm, postTripLeader, displayPackages }
