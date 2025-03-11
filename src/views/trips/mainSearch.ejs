@@ -116,14 +116,15 @@
                 <img src="../images/searchloc.png" alt="">
                 <div class="startingLocation-container search-locations-container">
                     <label for="startingLocation">Starting from</label>
-                    <input type="text" name="startingLocation" id="startingLocation" placeholder="Delhi"
-                        value="<%= user && user.city ? user.city : '' %>">
+                    <input type="text" name="startingLocation" id="startingLocation" placeholder="---"
+                    value="<%= startingLocation || (user && user.city ? user.city : '') %>">
 
 
                 </div>
                 <div class="destinationLocation-container search-locations-container">
                     <label for="destinationLocation">Going to</label>
-                    <input type="text" name="destinationLocation" id="destinationLocation" placeholder="Goa">
+                    <input type="text" name="destinationLocation" id="destinationLocation" placeholder="---"
+                    value="<%= destinationLocation || '' %>">
                 </div>
             </div>
 
@@ -248,38 +249,48 @@
                             <div class="you-type-filter-content">
                                 <form id="categoryFilterForm" method="POST" action="/searchtrips">
                                     <div id="categoryInputs">
-                                        <label for="nature"><img src="../images/nature-style.png" alt=""
-                                                class="style-img"><input type="checkbox" class="categoryCheckbox"
-                                                name="category" value="nature" id="nature"
-                                                onclick="toggleCategory('nature')"> Nature</label>
-                                        <label for="party"><img src="../images/party.png" alt=""
-                                                class="style-img"><input type="checkbox" class="categoryCheckbox"
-                                                name="category" value="party" id="party"
-                                                onclick="toggleCategory('party')"> Party</label>
-                                        <label for="foods"><img src="../images/food.png" alt="" class="style-img"><input
-                                                type="checkbox" class="categoryCheckbox" name="category" value="foods"
-                                                id="foods" onclick="toggleCategory('foods')"> Food</label>
-                                        <label for="beach"><img src="../images/beach.png" alt=""
-                                                class="style-img"><input type="checkbox" class="categoryCheckbox"
-                                                name="category" value="beach" id="beach"
-                                                onclick="toggleCategory('beach')"> Beach</label>
-                                        <label for="culture"><img src="../images/culture.png" alt=""
-                                                class="style-img"><input type="checkbox" class="categoryCheckbox"
-                                                name="category" value="culture" id="culture"
-                                                onclick="toggleCategory('culture')"> Culture</label>
-                                        <label for="sports"><img src="../images/sports.png" alt=""
-                                                class="style-img"><input type="checkbox" class="categoryCheckbox"
-                                                name="category" value="sports" id="sports"
-                                                onclick="toggleCategory('sports')"> Sports</label>
+                                        <label for="nature">
+                                            <img src="../images/nature-style.png" alt="" class="style-img">
+                                            <input type="checkbox" class="categoryCheckbox" name="category" value="nature" id="nature">
+                                            Nature (<%= categoryCounts.nature || 0 %>)
+                                        </label>
+                                        
+                                        <label for="party">
+                                            <img src="../images/party.png" alt="" class="style-img">
+                                            <input type="checkbox" class="categoryCheckbox" name="category" value="party" id="party">
+                                            Party (<%= categoryCounts.party || 0 %>)
+                                        </label>
+                                        
+                                        <label for="foods">
+                                            <img src="../images/food.png" alt="" class="style-img">
+                                            <input type="checkbox" class="categoryCheckbox" name="category" value="foods" id="foods">
+                                            Food (<%= categoryCounts.foods || 0 %>)
+                                        </label>
+                                        
+                                        <label for="beach">
+                                            <img src="../images/beach.png" alt="" class="style-img">
+                                            <input type="checkbox" class="categoryCheckbox" name="category" value="beach" id="beach">
+                                            Beach (<%= categoryCounts.beach || 0 %>)
+                                        </label>
+                                        
+                                        <label for="culture">
+                                            <img src="../images/culture.png" alt="" class="style-img">
+                                            <input type="checkbox" class="categoryCheckbox" name="category" value="culture" id="culture">
+                                            Culture (<%= categoryCounts.culture || 0 %>)
+                                        </label>
+                                        
+                                        <label for="sports">
+                                            <img src="../images/sports.png" alt="" class="style-img">
+                                            <input type="checkbox" class="categoryCheckbox" name="category" value="sports" id="sports">
+                                            Sports (<%= categoryCounts.sports || 0 %>)
+                                        </label>
+                            
                                         <p id="seeMoreText" class="see-more-text" onclick="toggleSeeMore()">See More</p>
-
                                     </div>
-
                                     <input type="hidden" name="selectedCategories" id="selectedCategories">
                                 </form>
-
-                                <button class="filter-submit" onclick="submitCombinedSearch()">Submit</button>
                             </div>
+                            
 
 
 
