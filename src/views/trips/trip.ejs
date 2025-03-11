@@ -92,6 +92,15 @@
     <main>
         <div class="main-container">
 
+            <form action="/admin/<%= trip._id %>/toggle-featured" method="POST">
+                <% if (trip.featured) { %>
+                    <button type="submit" name="featured" value="false">Remove from Featured</button>
+                <% } else { %>
+                    <button type="submit" name="featured" value="true">Add to Featured</button>
+                <% } %>
+            </form>
+            
+
             <p class="tripID">
                 Tour-ID: <%= trip._id %>
             </p>

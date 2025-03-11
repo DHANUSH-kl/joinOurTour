@@ -697,5 +697,37 @@ const userRecord = async(req,res) => {
 }
 
 
+const togglefeaturedtours = async(req,res) => {
+    try {
+        const { id } = req.params;
+        const { featured } = req.body; // Get the value from the form
 
-export {userInsight,userRecord, agentInsight ,agentTrips, dashboard , tripManagement ,revokedData, revokedPage ,  liftSuspension ,suspendAgent , revokeAgent , fetchTripReports , reportedTrips , analytics , updateTripStatus , adminPerks , walletPage , sendCoin , editAdminForm , editAdminPannel, posttripPackage, becomeOwnerForm, postOwner, agentAccessForm, postAgentAccess, tripLeaderForm, postTripLeader, displayPackages }
+        // Update the trip
+        const updatedTrip = await Trip.findByIdAndUpdate(id, { featured: featured === "true" }, { new: true });
+
+        if (!updatedTrip) {
+            return res.status(404).send("Trip not found.");
+        }
+
+        res.redirect(`/tour/${id}`); // Redirect back to the trip details page
+    } catch (error) {
+        console.error("Error updating featured status:", error);
+        res.status(500).send("Server error.");
+    }
+}
+
+
+const managefeatured = async (req, res) => {
+        try {
+            // Fetch all featured trips and populate owner details
+            const featuredTrips = await Trip.find({ featured: true }).populate("owner");
+    
+            res.render("admin/managefeatured.ejs", { featuredTrips });
+        } catch (error) {
+            console.error("Error fetching featured trips:", error);
+            res.status(500).send("Server error.");
+        }
+};
+
+
+export {userInsight,managefeatured,togglefeaturedtours,userRecord, agentInsight ,agentTrips, dashboard , tripManagement ,revokedData, revokedPage ,  liftSuspension ,suspendAgent , revokeAgent , fetchTripReports , reportedTrips , analytics , updateTripStatus , adminPerks , walletPage , sendCoin , editAdminForm , editAdminPannel, posttripPackage, becomeOwnerForm, postOwner, agentAccessForm, postAgentAccess, tripLeaderForm, postTripLeader, displayPackages }

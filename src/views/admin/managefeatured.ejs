@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Manage Featured Trips</title>
+    <style>
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 10px;
+            text-align: left;
+        }
+        th {
+            background-color: #f4f4f4;
+        }
+    </style>
+</head>
+<body>
+    <h1>Manage Featured Trips</h1>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Serial No</th>
+                <th>Trip Title</th>
+                <th>Owner Name</th>
+                <th>Phone Number</th>
+                <th>Email</th>
+            </tr>
+        </thead>
+        <tbody>
+            <% featuredTrips.forEach((trip, index) => { %>
+                <tr>
+                    <td><%= index + 1 %></td>
+                    <td><a href="/tour/<%= trip._id %>"><%= trip.title %></a></td>
+                    <td><%= trip.owner ? trip.owner.username : "N/A" %></td>
+                    <td><%= trip.owner ? trip.owner.phoneNumber : "N/A" %></td>
+                    <td><%= trip.owner ? trip.owner.email : "N/A" %></td>
+                </tr>
+            <% }) %>
+        </tbody>
+    </table>
+
+</body>
+</html>

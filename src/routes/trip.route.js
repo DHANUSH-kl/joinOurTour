@@ -1,6 +1,6 @@
 import { Router } from "express";
 import express from 'express';
-import { contactPage,showtoursbymonth,tourbymonths,tourbydestination,showgroupdestination ,contactUsPost , getpayment , reportTrip, showWishlist,searchTrips, deleteReview, discoverPage, mainSearch, getSecondarySearch, whislist, aboutus, addNewTrip, showAllTrips, newTripForm, showTrip, editTripForm, deleteTrip, mytrip, postEditTrip, catagariesTrips, priceFilter, reviews, fetchWhislist } from "../controllers/newTrip.controler.js";
+import { contactPage,showFeaturedTrips,showtoursbymonth,tourbymonths,tourbydestination,showgroupdestination ,contactUsPost , getpayment , reportTrip, showWishlist,searchTrips, deleteReview, discoverPage, mainSearch, getSecondarySearch, whislist, aboutus, addNewTrip, showAllTrips, newTripForm, showTrip, editTripForm, deleteTrip, mytrip, postEditTrip, catagariesTrips, priceFilter, reviews, fetchWhislist } from "../controllers/newTrip.controler.js";
 import { storage } from "../cloudinary.js";
 import bodyParser from 'body-parser';
 import { isLoggedIn, isAgent, isOwner } from "../middlewares.js";
@@ -17,6 +17,11 @@ router.use(express.urlencoded({ extended: true }));
 
 // Specific Routes
 
+
+
+
+router.route("/featuredtrips")
+    .get(showFeaturedTrips)
 
 router.route("/showtourbymonths/:month")
     .get(showtoursbymonth)

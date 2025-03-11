@@ -31,3 +31,31 @@ document.addEventListener("DOMContentLoaded", function () {
         }
     };
 });
+
+
+
+
+
+
+
+//remove inuts after refresh 
+
+
+
+
+document.addEventListener("DOMContentLoaded", function () {
+    // Clear all text inputs
+    document.querySelectorAll("input[type='text']").forEach(input => input.value = "");
+
+    // Clear all date inputs
+    document.querySelectorAll("input[type='date']").forEach(input => input.value = "");
+
+    // Reset all checkboxes
+    document.querySelectorAll("input[type='checkbox']").forEach(checkbox => checkbox.checked = false);
+
+    // Reset all range inputs
+    document.querySelectorAll("input[type='range']").forEach(range => range.value = range.min);
+
+    // Reset all number inputs
+    document.querySelectorAll("input[type='number']").forEach(number => number.value = "");
+});

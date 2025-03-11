@@ -1,5 +1,5 @@
 import { Router } from "express";
-import {agentTrips ,agentInsight ,userRecord, userInsight , tripManagement, dashboard ,revokedPage,revokedData,liftSuspension,suspendAgent,revokeAgent, fetchTripReports , reportedTrips , analytics , updateTripStatus , adminPerks , sendCoin , walletPage , editAdminForm ,editAdminPannel, posttripPackage , displayPackages,becomeOwnerForm, postOwner, agentAccessForm, postAgentAccess, tripLeaderForm, postTripLeader } from "../controllers/admin.controller.js";
+import {agentTrips,managefeatured ,agentInsight ,togglefeaturedtours,userRecord, userInsight , tripManagement, dashboard ,revokedPage,revokedData,liftSuspension,suspendAgent,revokeAgent, fetchTripReports , reportedTrips , analytics , updateTripStatus , adminPerks , sendCoin , walletPage , editAdminForm ,editAdminPannel, posttripPackage , displayPackages,becomeOwnerForm, postOwner, agentAccessForm, postAgentAccess, tripLeaderForm, postTripLeader } from "../controllers/admin.controller.js";
 import { asyncWrap } from "../constants.js";
 import { isAgent, isLoggedIn, isOwner } from "../middlewares.js";
 import multer from 'multer';
@@ -9,6 +9,11 @@ const upload = multer({ storage });
 const router = Router();
 
 
+router.route("/managefeatured")
+    .get(managefeatured)
+
+router.route("/:id/toggle-featured")
+    .post(togglefeaturedtours)
 
 router.route("/userRecord")
     .get(userRecord)

@@ -1374,9 +1374,74 @@ const showtoursbymonth = async (req, res) => {
 };
 
 
+const showFeaturedTrips = async (req, res) => {
+    try {
+        const perPage = 6;
+        const page = parseInt(req.query.page) || 1;
+        const userWishlist = req.user ? req.user.wishlist : [];
+
+        // Fetch total featured trips count for pagination
+        const totalTrips = await Trip.countDocuments({
+            featured: true,
+            status: "accepted"
+        });
+
+        // Fetch featured trips with pagination
+        const allTrips = await Trip.find({
+            featured: true,
+            status: "accepted"
+        })
+            .populate("reviews")
+            .populate("owner")
+            .skip((perPage * page) - perPage)
+            .limit(perPage)
+            .lean();
+
+        // Calculate ratings & ratios
+        allTrips.forEach(trip => {
+            let totalRatings = 0, count = 0;
+            if (trip.reviews) {
+                trip.reviews.forEach(review => {
+                    const overallRating = (
+                        (review.locationRating || 0) + 
+                        (review.amenitiesRating || 0) + 
+                        (review.foodRating || 0) + 
+                        (review.roomRating || 0) + 
+                        (review.priceRating || 0) + 
+                        (review.operatorRating || 0)
+                    ) / 6;
+                    totalRatings += overallRating;
+                    count++;
+                });
+            }
+            trip.averageRating = count > 0 ? (totalRatings / count).toFixed(1) : 0;
+
+            const totalTravelers = (trip.maleTravelers || 0) + (trip.femaleTravelers || 0);
+            trip.maleRatio = totalTravelers > 0 ? ((trip.maleTravelers / totalTravelers) * 100).toFixed(1) : 0;
+            trip.femaleRatio = totalTravelers > 0 ? ((trip.femaleTravelers / totalTravelers) * 100).toFixed(1) : 0;
+        });
+
+        res.render("trips/featuredtrips.ejs", {
+            allTrips,
+            currentPage: page,
+            totalPages: Math.ceil(totalTrips / perPage),
+            user: req.user,
+            totalTrips,
+            userWishlist,
+            sort: req.query.sort || '',
+        });
+
+    } catch (error) {
+        console.error("Error in showFeaturedTrips:", error);
+        res.status(500).send("Server error.");
+    }
+};
 
 
 
 
-export {contactUsPost,showtoursbymonth,tourbymonths,showgroupdestination, tourbydestination ,contactPage, getpayment , reportTrip ,  showWishlist, fetchWhislist, deleteReview, discoverPage, mainSearch, getSecondarySearch, aboutus, reviews, whislist, searchTrips, newTripForm, showAllTrips, addNewTrip, editTripForm, showTrip, deleteTrip, mytrip, postEditTrip, catagariesTrips, priceFilter };
+
+
+
+export {contactUsPost,showFeaturedTrips,showtoursbymonth,tourbymonths,showgroupdestination, tourbydestination ,contactPage, getpayment , reportTrip ,  showWishlist, fetchWhislist, deleteReview, discoverPage, mainSearch, getSecondarySearch, aboutus, reviews, whislist, searchTrips, newTripForm, showAllTrips, addNewTrip, editTripForm, showTrip, deleteTrip, mytrip, postEditTrip, catagariesTrips, priceFilter };
 
