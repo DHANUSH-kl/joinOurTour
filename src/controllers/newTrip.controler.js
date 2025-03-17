@@ -1,6 +1,6 @@
 import express from 'express';
 import bodyParser from 'body-parser';
-import mongoose from 'mongoose';  
+import mongoose from 'mongoose';
 import { User } from '../models/user.model.js';
 import { storage } from '../cloudinary.js';
 import multer from 'multer';
@@ -73,14 +73,14 @@ const addNewTrip = async (req, res) => {
         // Extract the trip and stop images from req.files
         const tripImages = req.files.tripImages
             ? req.files.tripImages.map((file) => ({
-                  path: file.path,
-              }))
+                path: file.path,
+            }))
             : [];
 
         const stopImages = req.files.stopImages
             ? req.files.stopImages.map((file) => ({
-                  path: file.path,
-              }))
+                path: file.path,
+            }))
             : [];
 
         let userId = req.user._id;
@@ -135,7 +135,7 @@ const addNewTrip = async (req, res) => {
 
         await newTrip.save();
 
-        console.log("minAge",minAge);
+        console.log("minAge", minAge);
 
         // Deduct 100 tokens from the user's wallet after creating the trip
         // user.wallet -= 100;
@@ -205,18 +205,18 @@ const showAllTrips = async (req, res) => {
     const { d1, d2, d3, d4, p1, p2, p3, p4 } = adminData;
 
 
-   // Function to validate ObjectId
-   const isValidObjectId = (id) => mongoose.Types.ObjectId.isValid(id?.trim());
+    // Function to validate ObjectId
+    const isValidObjectId = (id) => mongoose.Types.ObjectId.isValid(id?.trim());
 
-   const tripPackage1 = isValidObjectId(p1) ? await Trip.findById(p1.trim()) : null;
-   const tripPackage2 = isValidObjectId(p2) ? await Trip.findById(p2.trim()) : null;
-   const tripPackage3 = isValidObjectId(p3) ? await Trip.findById(p3.trim()) : null;
-   const tripPackage4 = isValidObjectId(p4) ? await Trip.findById(p4.trim()) : null;
+    const tripPackage1 = isValidObjectId(p1) ? await Trip.findById(p1.trim()) : null;
+    const tripPackage2 = isValidObjectId(p2) ? await Trip.findById(p2.trim()) : null;
+    const tripPackage3 = isValidObjectId(p3) ? await Trip.findById(p3.trim()) : null;
+    const tripPackage4 = isValidObjectId(p4) ? await Trip.findById(p4.trim()) : null;
 
-   const exploreTrips1 = isValidObjectId(d1) ? await Trip.findById(d1.trim()) : null;
-   const exploreTrips2 = isValidObjectId(d2) ? await Trip.findById(d2.trim()) : null;
-   const exploreTrips3 = isValidObjectId(d3) ? await Trip.findById(d3.trim()) : null;
-   const exploreTrips4 = isValidObjectId(d4) ? await Trip.findById(d4.trim()) : null;
+    const exploreTrips1 = isValidObjectId(d1) ? await Trip.findById(d1.trim()) : null;
+    const exploreTrips2 = isValidObjectId(d2) ? await Trip.findById(d2.trim()) : null;
+    const exploreTrips3 = isValidObjectId(d3) ? await Trip.findById(d3.trim()) : null;
+    const exploreTrips4 = isValidObjectId(d4) ? await Trip.findById(d4.trim()) : null;
 
     const exploreTrips = [exploreTrips1, exploreTrips2, exploreTrips3, exploreTrips4]
 
@@ -231,7 +231,7 @@ const showAllTrips = async (req, res) => {
         totalTrips,
         userWishlist,
         sort: req.query.sort || '',
-        exploreTrips, 
+        exploreTrips,
         tripPackages
     });
 
@@ -428,7 +428,7 @@ const postEditTrip = async (req, res) => {
             flightTicket,
             totalCost,
             buffer,
-            maleTravelers, 
+            maleTravelers,
             femaleTravelers,
             groupSize,  // Add group size to the merged data
             minAge,
@@ -468,19 +468,75 @@ const deleteTrip = async (req, res) => {
 }
 
 const mytrip = async (req, res) => {
-
     try {
         const user = await User.findById(req.user._id)
-            .populate("createdTrips")
+            .populate({
+                path: "createdTrips",
+                populate: { path: "reviews owner" }
+            })
             .populate("wishlist"); // Assuming wishlist is an array of Trip ObjectIds
+
         const userWishlist = user.wishlist.map((trip) => trip._id.toString());
-        res.render("trips/mytrip.ejs", { trips: user.createdTrips, user, userWishlist });
+
+        // Calculate ratings and traveler ratios for each trip
+        user.createdTrips.forEach(trip => {
+            let totalRatings = 0;
+            let count = 0;
+
+            trip.reviews.forEach(review => {
+                const locationRating = review.locationRating || 0;
+                const amenitiesRating = review.amenitiesRating || 0;
+                const foodRating = review.foodRating || 0;
+                const roomRating = review.roomRating || 0;
+                const priceRating = review.priceRating || 0;
+                const operatorRating = review.operatorRating || 0;
+
+                const overallRating = (locationRating + amenitiesRating + foodRating + roomRating + priceRating + operatorRating) / 6;
+
+                totalRatings += overallRating;
+                count++;
+            });
+
+            trip.averageRating = count > 0 ? (totalRatings / count).toFixed(1) : 0;
+
+            // Calculate male-to-female ratio
+            const totalTravelers = trip.maleTravelers + trip.femaleTravelers;
+            trip.maleRatio = totalTravelers > 0 ? ((trip.maleTravelers / totalTravelers) * 100).toFixed(1) : 0;
+            trip.femaleRatio = totalTravelers > 0 ? ((trip.femaleTravelers / totalTravelers) * 100).toFixed(1) : 0;
+        });
+
+        const allData = await Admin.find();
+        const adminData = allData[0] || {};
+
+        const { d1, d2, d3, d4, p1, p2, p3, p4 } = adminData;
+
+        const isValidObjectId = (id) => mongoose.Types.ObjectId.isValid(id?.trim());
+
+        const tripPackage1 = isValidObjectId(p1) ? await Trip.findById(p1.trim()) : null;
+        const tripPackage2 = isValidObjectId(p2) ? await Trip.findById(p2.trim()) : null;
+        const tripPackage3 = isValidObjectId(p3) ? await Trip.findById(p3.trim()) : null;
+        const tripPackage4 = isValidObjectId(p4) ? await Trip.findById(p4.trim()) : null;
+
+        const exploreTrips1 = isValidObjectId(d1) ? await Trip.findById(d1.trim()) : null;
+        const exploreTrips2 = isValidObjectId(d2) ? await Trip.findById(d2.trim()) : null;
+        const exploreTrips3 = isValidObjectId(d3) ? await Trip.findById(d3.trim()) : null;
+        const exploreTrips4 = isValidObjectId(d4) ? await Trip.findById(d4.trim()) : null;
+
+        const exploreTrips = [exploreTrips1, exploreTrips2, exploreTrips3, exploreTrips4];
+        const tripPackages = [tripPackage1, tripPackage2, tripPackage3, tripPackage4];
+
+        res.render("trips/mytrip.ejs", {
+            trips: user.createdTrips,
+            user,
+            userWishlist,
+            exploreTrips,
+            tripPackages
+        });
     } catch (error) {
         console.error("Error fetching trips:", error);
         res.status(500).send("Internal Server Error");
     }
-
-}
+};
 
 const catagariesTrips = async (req, res) => {
     const { categories } = req.body;
@@ -568,9 +624,9 @@ const mainSearch = async (req, res) => {
 
 
     // Normalize inputs (trim, lowercase)
-    const normalizeArray = (input) => 
-        Array.isArray(input) 
-            ? input.map(item => item.trim().toLowerCase()) 
+    const normalizeArray = (input) =>
+        Array.isArray(input)
+            ? input.map(item => item.trim().toLowerCase())
             : input ? [input.trim().toLowerCase()] : [];
 
     const categories = normalizeArray(req.body.categories);
@@ -591,7 +647,7 @@ const mainSearch = async (req, res) => {
                 trip.reviews.forEach(review => {
                     const overallRating = (
                         review.locationRating + review.amenitiesRating +
-                        review.foodRating + review.roomRating + 
+                        review.foodRating + review.roomRating +
                         review.priceRating + review.operatorRating
                     ) / 6;
                     totalRatings += overallRating;
@@ -617,6 +673,16 @@ const mainSearch = async (req, res) => {
             const tripDestination = trip.location.trim().toLowerCase();
             const tripCategories = trip.categories.map(cat => cat.trim().toLowerCase());
             const tripLanguages = trip.languages.map(lang => lang.trim().toLowerCase());
+
+            trip.maleRatio = 0;
+            trip.femaleRatio = 0;
+
+            if (trip.maleTravelers !== undefined && trip.femaleTravelers !== undefined) {
+                const totalTravelers = trip.maleTravelers + trip.femaleTravelers;
+                trip.maleRatio = totalTravelers > 0 ? ((trip.maleTravelers / totalTravelers) * 100).toFixed(1) : 0;
+                trip.femaleRatio = totalTravelers > 0 ? ((trip.femaleTravelers / totalTravelers) * 100).toFixed(1) : 0;
+            }
+
 
             // Check filters
             if (startingLocation?.trim()) {
@@ -679,9 +745,9 @@ const mainSearch = async (req, res) => {
             let tripAverageRating = 0;
             if (trip.reviews.length > 0) {
                 tripAverageRating = trip.reviews.reduce((sum, review) => {
-                    return sum + (review.locationRating + review.amenitiesRating + 
-                                  review.foodRating + review.roomRating + 
-                                  review.priceRating + review.operatorRating) / 6;
+                    return sum + (review.locationRating + review.amenitiesRating +
+                        review.foodRating + review.roomRating +
+                        review.priceRating + review.operatorRating) / 6;
                 }, 0) / trip.reviews.length;
             }
 
@@ -751,7 +817,7 @@ const mainSearch = async (req, res) => {
             { label: "Home", link: "/aboutus" },
             { label: "All Trips", link: "/" }
         ];
-        
+
         if (startingLocation?.trim()) {
             breadcrumbParts.push({ label: startingLocation, link: "#" });
         }
@@ -761,7 +827,7 @@ const mainSearch = async (req, res) => {
         if (categories.length > 0) {
             breadcrumbParts.push({ label: categories.join(", "), link: "#" });
         }
-        
+
 
         const categoryCounts = finalResults.reduce((acc, trip) => {
             trip.categories.forEach(category => {
@@ -769,8 +835,14 @@ const mainSearch = async (req, res) => {
             });
             return acc;
         }, {});
-        
-        
+
+        console.log(finalResults.map(trip => ({
+            title: trip.title,
+            maleRatio: trip.maleRatio,
+            femaleRatio: trip.femaleRatio
+        })));
+
+
 
         res.render('trips/mainSearch.ejs', {
             exactMatchTrips: finalResults,
@@ -900,18 +972,18 @@ const aboutus = async (req, res) => {
     const { d1, d2, d3, d4, p1, p2, p3, p4 } = adminData;
 
 
-   // Function to validate ObjectId
-   const isValidObjectId = (id) => mongoose.Types.ObjectId.isValid(id?.trim());
+    // Function to validate ObjectId
+    const isValidObjectId = (id) => mongoose.Types.ObjectId.isValid(id?.trim());
 
-   const tripPackage1 = isValidObjectId(p1) ? await Trip.findById(p1.trim()) : null;
-   const tripPackage2 = isValidObjectId(p2) ? await Trip.findById(p2.trim()) : null;
-   const tripPackage3 = isValidObjectId(p3) ? await Trip.findById(p3.trim()) : null;
-   const tripPackage4 = isValidObjectId(p4) ? await Trip.findById(p4.trim()) : null;
+    const tripPackage1 = isValidObjectId(p1) ? await Trip.findById(p1.trim()) : null;
+    const tripPackage2 = isValidObjectId(p2) ? await Trip.findById(p2.trim()) : null;
+    const tripPackage3 = isValidObjectId(p3) ? await Trip.findById(p3.trim()) : null;
+    const tripPackage4 = isValidObjectId(p4) ? await Trip.findById(p4.trim()) : null;
 
-   const exploreTrips1 = isValidObjectId(d1) ? await Trip.findById(d1.trim()) : null;
-   const exploreTrips2 = isValidObjectId(d2) ? await Trip.findById(d2.trim()) : null;
-   const exploreTrips3 = isValidObjectId(d3) ? await Trip.findById(d3.trim()) : null;
-   const exploreTrips4 = isValidObjectId(d4) ? await Trip.findById(d4.trim()) : null;
+    const exploreTrips1 = isValidObjectId(d1) ? await Trip.findById(d1.trim()) : null;
+    const exploreTrips2 = isValidObjectId(d2) ? await Trip.findById(d2.trim()) : null;
+    const exploreTrips3 = isValidObjectId(d3) ? await Trip.findById(d3.trim()) : null;
+    const exploreTrips4 = isValidObjectId(d4) ? await Trip.findById(d4.trim()) : null;
 
     const exploreTrips = [exploreTrips1, exploreTrips2, exploreTrips3, exploreTrips4]
 
@@ -1027,36 +1099,54 @@ const showWishlist = async (req, res) => {
     // Find the user by their ID
     const user = await User.findById(id);
     // Access the user's wishlist
-    const wishlistIds = user.wishlist; 
-
+    const wishlistIds = user.wishlist;
 
     // Fetch details of trips that are in the user's wishlist
-    const wishlistTrips = await Trip.find({ _id: { $in: wishlistIds } }).exec();
+    const wishlistTrips = await Trip.find({ _id: { $in: wishlistIds } })
+        .populate("reviews")
+        .populate("owner")
+        .exec();
 
+    // Calculate average ratings for each wishlist trip
+    wishlistTrips.forEach(trip => {
+        let totalRatings = 0;
+        let count = 0;
+        trip.reviews.forEach(review => {
+            const locationRating = review.locationRating || 0;
+            const amenitiesRating = review.amenitiesRating || 0;
+            const foodRating = review.foodRating || 0;
+            const roomRating = review.roomRating || 0;
+            const priceRating = review.priceRating || 0;
+            const operatorRating = review.operatorRating || 0;
+
+            const overallRating = (locationRating + amenitiesRating + foodRating + roomRating + priceRating + operatorRating) / 6;
+
+            totalRatings += overallRating;
+            count++;
+        });
+        trip.averageRating = count > 0 ? (totalRatings / count).toFixed(1) : 0; // Add average rating to trip object
+    });
 
     const allData = await Admin.find();
-
     const adminData = allData[0];
 
     const { d1, d2, d3, d4, p1, p2, p3, p4 } = adminData;
 
+    // Function to validate ObjectId
+    const isValidObjectId = (id) => mongoose.Types.ObjectId.isValid(id?.trim());
 
-   // Function to validate ObjectId
-   const isValidObjectId = (id) => mongoose.Types.ObjectId.isValid(id?.trim());
+    const tripPackage1 = isValidObjectId(p1) ? await Trip.findById(p1.trim()) : null;
+    const tripPackage2 = isValidObjectId(p2) ? await Trip.findById(p2.trim()) : null;
+    const tripPackage3 = isValidObjectId(p3) ? await Trip.findById(p3.trim()) : null;
+    const tripPackage4 = isValidObjectId(p4) ? await Trip.findById(p4.trim()) : null;
 
-   const tripPackage1 = isValidObjectId(p1) ? await Trip.findById(p1.trim()) : null;
-   const tripPackage2 = isValidObjectId(p2) ? await Trip.findById(p2.trim()) : null;
-   const tripPackage3 = isValidObjectId(p3) ? await Trip.findById(p3.trim()) : null;
-   const tripPackage4 = isValidObjectId(p4) ? await Trip.findById(p4.trim()) : null;
+    const exploreTrips1 = isValidObjectId(d1) ? await Trip.findById(d1.trim()) : null;
+    const exploreTrips2 = isValidObjectId(d2) ? await Trip.findById(d2.trim()) : null;
+    const exploreTrips3 = isValidObjectId(d3) ? await Trip.findById(d3.trim()) : null;
+    const exploreTrips4 = isValidObjectId(d4) ? await Trip.findById(d4.trim()) : null;
 
-   const exploreTrips1 = isValidObjectId(d1) ? await Trip.findById(d1.trim()) : null;
-   const exploreTrips2 = isValidObjectId(d2) ? await Trip.findById(d2.trim()) : null;
-   const exploreTrips3 = isValidObjectId(d3) ? await Trip.findById(d3.trim()) : null;
-   const exploreTrips4 = isValidObjectId(d4) ? await Trip.findById(d4.trim()) : null;
-
-    const exploreTrips = [exploreTrips1, exploreTrips2, exploreTrips3, exploreTrips4]
-
-    const tripPackages = [tripPackage1, tripPackage2, tripPackage3, tripPackage4]
+    const exploreTrips = [exploreTrips1, exploreTrips2, exploreTrips3, exploreTrips4];
+    const tripPackages = [tripPackage1, tripPackage2, tripPackage3, tripPackage4];
 
     res.render("trips/wishlist.ejs", {
         wishlistTrips,  // Pass the wishlistTrips to the view
@@ -1064,9 +1154,9 @@ const showWishlist = async (req, res) => {
         userWishlist: wishlistIds, // Pass user for rendering user-specific information
         exploreTrips,
         tripPackages
-
     });
-}
+};
+
 
 const fetchWhislist = async (req, res) => {
     const userId = req.user._id;
@@ -1102,7 +1192,7 @@ const discoverPage = async (req, res) => {
 
 
 
-const reportTrip = async(req,res) => {
+const reportTrip = async (req, res) => {
     const { id } = req.params;
     const { reason } = req.body;
 
@@ -1126,7 +1216,7 @@ const reportTrip = async(req,res) => {
     }
 }
 
-const getpayment = async(req,res) => {
+const getpayment = async (req, res) => {
 
     try {
         const tripId = req.params.id; // Get trip ID from URL
@@ -1154,16 +1244,17 @@ const getpayment = async(req,res) => {
         console.error("Error in getPayment:", error);
         res.status(500).send("Server Error");
     }
-    
+
 }
 
 
 
-const contactPage = async(req,res) => {
-    res.render("trips/contactUs.ejs");
+const contactPage = async (req, res) => {
+    const user = req.user;
+    res.render("trips/contactUs.ejs",{user});
 }
 
-const contactUsPost = async(req,res) => {
+const contactUsPost = async (req, res) => {
     const { firstName, lastName, email, company, phone, issue } = req.body;
 
     // Create transporter using environment variables
@@ -1199,10 +1290,10 @@ const contactUsPost = async(req,res) => {
 }
 
 
-const tourbydestination = async(req,res) => {
+const tourbydestination = async (req, res) => {
     try {
         const allTripsData = await Trip.find({ status: "accepted" });
-
+        const user = req.user;
         const groupedTrips = {};
         allTripsData.forEach(trip => {
             const key = `${trip.fromLocation} → ${trip.location}`;
@@ -1211,7 +1302,7 @@ const tourbydestination = async(req,res) => {
             }
         });
 
-        res.render("trips/tourbydestination.ejs", { groupedTrips });
+        res.render("trips/tourbydestination.ejs", { groupedTrips ,user});
     } catch (err) {
         console.error(err);
         req.flash("error", "Error fetching trip data");
@@ -1241,11 +1332,11 @@ const showgroupdestination = async (req, res) => {
             let totalRatings = 0, count = 0;
             trip.reviews.forEach(review => {
                 const overallRating = (
-                    (review.locationRating || 0) + 
-                    (review.amenitiesRating || 0) + 
-                    (review.foodRating || 0) + 
-                    (review.roomRating || 0) + 
-                    (review.priceRating || 0) + 
+                    (review.locationRating || 0) +
+                    (review.amenitiesRating || 0) +
+                    (review.foodRating || 0) +
+                    (review.roomRating || 0) +
+                    (review.priceRating || 0) +
                     (review.operatorRating || 0)
                 ) / 6;
                 totalRatings += overallRating;
@@ -1276,8 +1367,9 @@ const showgroupdestination = async (req, res) => {
     }
 };
 
-const tourbymonths = async(req,res) => {
-    res.render("trips/tourbymonths.ejs");
+const tourbymonths = async (req, res) => {
+    const user = req.user;
+    res.render("trips/tourbymonths.ejs",{user});
 }
 
 const showtoursbymonth = async (req, res) => {
@@ -1311,18 +1403,18 @@ const showtoursbymonth = async (req, res) => {
 
         // Fetch total trips count for pagination
         const totalTrips = await Trip.countDocuments({
-            departure: { 
-                $gte: startDate,  
-                $lte: endDate     
+            departure: {
+                $gte: startDate,
+                $lte: endDate
             },
             status: "accepted"
         });
 
         // Fetch trips with pagination
         const allTrips = await Trip.find({
-            departure: { 
-                $gte: startDate,  
-                $lte: endDate     
+            departure: {
+                $gte: startDate,
+                $lte: endDate
             },
             status: "accepted"
         })
@@ -1338,11 +1430,11 @@ const showtoursbymonth = async (req, res) => {
             if (trip.reviews) {
                 trip.reviews.forEach(review => {
                     const overallRating = (
-                        (review.locationRating || 0) + 
-                        (review.amenitiesRating || 0) + 
-                        (review.foodRating || 0) + 
-                        (review.roomRating || 0) + 
-                        (review.priceRating || 0) + 
+                        (review.locationRating || 0) +
+                        (review.amenitiesRating || 0) +
+                        (review.foodRating || 0) +
+                        (review.roomRating || 0) +
+                        (review.priceRating || 0) +
                         (review.operatorRating || 0)
                     ) / 6;
                     totalRatings += overallRating;
@@ -1403,11 +1495,11 @@ const showFeaturedTrips = async (req, res) => {
             if (trip.reviews) {
                 trip.reviews.forEach(review => {
                     const overallRating = (
-                        (review.locationRating || 0) + 
-                        (review.amenitiesRating || 0) + 
-                        (review.foodRating || 0) + 
-                        (review.roomRating || 0) + 
-                        (review.priceRating || 0) + 
+                        (review.locationRating || 0) +
+                        (review.amenitiesRating || 0) +
+                        (review.foodRating || 0) +
+                        (review.roomRating || 0) +
+                        (review.priceRating || 0) +
                         (review.operatorRating || 0)
                     ) / 6;
                     totalRatings += overallRating;
@@ -1443,5 +1535,5 @@ const showFeaturedTrips = async (req, res) => {
 
 
 
-export {contactUsPost,showFeaturedTrips,showtoursbymonth,tourbymonths,showgroupdestination, tourbydestination ,contactPage, getpayment , reportTrip ,  showWishlist, fetchWhislist, deleteReview, discoverPage, mainSearch, getSecondarySearch, aboutus, reviews, whislist, searchTrips, newTripForm, showAllTrips, addNewTrip, editTripForm, showTrip, deleteTrip, mytrip, postEditTrip, catagariesTrips, priceFilter };
+export { contactUsPost, showFeaturedTrips, showtoursbymonth, tourbymonths, showgroupdestination, tourbydestination, contactPage, getpayment, reportTrip, showWishlist, fetchWhislist, deleteReview, discoverPage, mainSearch, getSecondarySearch, aboutus, reviews, whislist, searchTrips, newTripForm, showAllTrips, addNewTrip, editTripForm, showTrip, deleteTrip, mytrip, postEditTrip, catagariesTrips, priceFilter };
 

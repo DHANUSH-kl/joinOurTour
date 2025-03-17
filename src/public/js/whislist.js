@@ -111,3 +111,56 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     });
 });
+
+
+
+
+
+
+
+
+
+
+
+document.addEventListener("DOMContentLoaded", function () {
+    const detailsButtons = document.querySelectorAll(".details-btn");
+
+    detailsButtons.forEach(button => {
+        button.addEventListener("click", function () {
+            const li = this.closest(".rb-item");
+            const stopDetails = li.querySelector(".stop-details");
+
+            // Toggle visibility of details
+            if (li.classList.contains("active")) {
+                li.classList.remove("active");
+                stopDetails.style.display = "none";
+                this.classList.remove("active");
+            } else {
+                document.querySelectorAll(".rb-item").forEach(item => {
+                    item.classList.remove("active");
+                    item.querySelector(".stop-details").style.display = "none";
+                    item.querySelector(".details-btn").classList.remove("active");
+                });
+
+                li.classList.add("active");
+                stopDetails.style.display = "block";
+                this.classList.add("active");
+            }
+        });
+    });
+
+    // Show More / Show Less functionality
+    document.querySelectorAll(".show-more-btn").forEach(button => {
+        button.addEventListener("click", function () {
+            const descriptionText = this.previousElementSibling;
+
+            if (descriptionText.classList.contains("expanded")) {
+                descriptionText.classList.remove("expanded");
+                this.textContent = "Show More";
+            } else {
+                descriptionText.classList.add("expanded");
+                this.textContent = "Show Less";
+            }
+        });
+    });
+});

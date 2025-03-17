@@ -12,7 +12,7 @@ footer {
 }
 
 svg {
-    width: 50px;
+    width: 30px;
     height: 50px;
 }
 
@@ -249,11 +249,22 @@ svg {
     footer .links {
         display: flex;
         flex-direction: column;
-        gap: 1.7rem;
+        gap: 1rem;
         margin-top: 1rem;
       }
 }
 
+
+@media(max-width:500px){
+    footer{
+        padding: 0 2rem;
+      }
+
+      .sec2{
+          margin-bottom: 6rem;
+
+      }
+}
 
 @media(max-width:450px) {
     footer h3 {
@@ -274,4 +285,12 @@ svg {
         height: 6.8rem;
         justify-content: flex-start;
       }
+
+      .sec2{
+        margin-bottom: 2rem;
+
+    }
+
+      
 }
+

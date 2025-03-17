@@ -110,7 +110,9 @@ const verifyUserPage = async (req, res) => {
 }
 
 const signinForm = async (req,res) => {
-    res.render("user/signinForm.ejs");
+
+    const user=req.user;
+    res.render("user/signinForm.ejs", {user});
 }
 
 const signinUser = async(req,res) => {

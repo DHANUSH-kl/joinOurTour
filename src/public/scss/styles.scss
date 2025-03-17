@@ -1,0 +1,48 @@
+svg {
+    display: block;
+    width: 500px;
+    max-width: 100%;
+    margin: calc(50vh - 167px) auto 0;
+}
+
+// Correct Mixin Syntax
+@mixin path-width($width) {
+    stroke-dasharray: $width;
+    stroke-dashoffset: $width;
+}
+
+.letter {
+    fill: none;
+    stroke: #23C0F1;
+    stroke-width: 13px;
+    animation: draw 6s infinite ease-in-out;
+
+    @keyframes draw {
+        20%, 90% {
+            opacity: 1;
+            stroke-dashoffset: 0;
+            stroke: #111;
+        }
+        100% {
+            opacity: 0;
+        }
+    }
+
+    // Correct Animation Delay
+    @for $i from 3 through 11 {
+        &:nth-child(#{$i}) {
+            animation-delay: #{$i / 5}s;
+        }
+    }
+
+    &--s { @include path-width(103); }
+    &--u { @include path-width(110); }
+    &--p1-1 { @include path-width(42); }
+    &--p1-2 { @include path-width(68); }
+    &--p2-1 { @include path-width(42); }
+    &--p2-2 { @include path-width(68); }
+    &--l { @include path-width(80); }
+    &--e-1 { @include path-width(37); }
+    &--e-2 { @include path-width(64); }
+    &--e-3 { @include path-width(16); }
+}

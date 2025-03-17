@@ -22,6 +22,7 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
 
 
+    <link rel="stylesheet" href="/css/logo.css">
     <link rel="stylesheet" href="/css/footer.css">
     <link rel="stylesheet" href="/css/nav.css">
     <link rel="stylesheet" href="/css/showAll.css">
@@ -79,7 +80,12 @@
     <header>
         <nav>
             <div class="logo">
-                <h4><b>TRAVELER</b></h4>
+
+                <p class="shine">joinOurTour</p>
+                <!-- From Uiverse.io by devkatyall -->
+                <!-- <div class="shine">joinOurTour</div> -->
+        
+        
             </div>
             <div class="home">
                 <a href="/aboutus">HOME</a>
@@ -142,13 +148,14 @@
                 <img src="../images/searchloc.png" alt="">
                 <div class="startingLocation-container search-locations-container">
                     <label for="startingLocation">Starting from</label>
-                    <input type="text" name="startingLocation" id="startingLocation" placeholder="Delhi">
+                    <input type="text" name="startingLocation" id="startingLocation" placeholder="---"
+                        value="<%= user && user.city ? user.city : '' %>">
+
 
                 </div>
-                <hr class="location-break">
                 <div class="destinationLocation-container search-locations-container">
                     <label for="destinationLocation">Going to</label>
-                    <input type="text" name="destinationLocation" id="destinationLocation" placeholder="Goa">
+                    <input type="text" name="destinationLocation" id="destinationLocation" placeholder="---">
                 </div>
             </div>
 
@@ -171,7 +178,7 @@
             </div>
 
             <div class="mainSearchBtn-container">
-                <button class="mainSearchBtn" onclick="submitSearch()">
+                <button class="mainSearchBtn" onclick="submitCombinedSearch()">
                     <span class="material-symbols-outlined">
                         east
                     </span>
@@ -182,117 +189,250 @@
     </div>
 
 
+    <div class="breadcrumb-nav">
+        <a href="/aboutus">Home</a> <span>&gt;</span>
+        <span><a href="/">All Trips <span></span> </a>&gt;
+        <span><a >Sorted Tours</a></span>
+    </div>
+
+
+    <div class="filters-ms-container">
+        <div class="filters-mb filters-ms">
+    
+            <i class="fa-solid fa-filter" onclick="openFilterPopup()"></i>
+        </div>
+    </div>
 
     <main>
-        <div class="filter-container">
-            <div class="secondary-search">
-                <i class="fa-solid fa-location-dot loc"></i>
-                <form action="">
-                    <input type="text" placeholder="Search destinations" class="secondary-location"
-                        id="secondaryDestination">
-                </form>
+        <div class="filter-popup-overlay" id="filterPopup">
+            <div class="filter-container">
+                <button class="close-filter-btn" onclick="closeFilterPopup()">×</button>
+                <div class="secondary-search">
+                    <i class="fa-solid fa-location-dot loc"></i>
+                    <form action="">
+                        <input type="text" placeholder="Search destinations" class="secondary-location"
+                            id="secondaryDestination" name="destination">
+                    </form>
 
-                <button class="secondary-search-button" onclick="submitSecondarySearch()">
-                    <i class="fa-solid fa-arrow-right"></i>
-                </button>
-            </div>
-            <div class="filters">
-                <div class="top">
-                    <h1>When are you traveling?</h1>
-
-                    <div class="filters-dates">
-                        <input type="date" id="fromdte" name="fromdte" placeholder="july 4" />
-                        <input type="date" id="todte" name="todte" />
-
-                    </div>
+                    <button class="secondary-search-button" onclick="submitCombinedSearch()">
+                        <i class="fa-solid fa-arrow-right"></i>
+                    </button>
                 </div>
-                <div class="bottom">
-                    <div class="your-trip">
-                        <div class="you-type-filter-body">
-                            <p>Tour Type</p>
-                            <img src="../images/arrow.svg" alt="" id="filterToggle" class="filter-controller">
-                        </div>
-                        <div class="you-type-filter-content">
-                            <form id="categoryFilterForm" method="POST" action="/searchtrips">
-                                <label for="nature"><img src="../images/nature-style.png" alt=""
-                                        class="style-img"><input type="checkbox" class="categoryCheckbox"
-                                        name="category" value="nature" id="nature" onclick="toggleCategory('nature')">
-                                    Nature</label>
-                                <label for="party"><img src="../images/party.png" alt="" class="style-img"><input
-                                        type="checkbox" class="categoryCheckbox" name="category" value="party"
-                                        id="party" onclick="toggleCategory('party')"> Party</label>
-                                <label for="food"><img src="../images/food.png" alt="" class="style-img"><input
-                                        type="checkbox" class="categoryCheckbox" name="category" value="food" id="food"
-                                        onclick="toggleCategory('food')"> Food</label>
-                                <label for="beach"><img src="../images/beach.png" alt="" class="style-img"><input
-                                        type="checkbox" class="categoryCheckbox" name="category" value="beach"
-                                        id="beach" onclick="toggleCategory('beach')"> Beach</label>
-                                <label for="culture"><img src="../images/culture.png" alt="" class="style-img"><input
-                                        type="checkbox" class="categoryCheckbox" name="category" value="culture"
-                                        id="culture" onclick="toggleCategory('culture')"> Culture</label>
-                                <label for="sports"><img src="../images/sports.png" alt="" class="style-img"><input
-                                        type="checkbox" class="categoryCheckbox" name="category" value="sports"
-                                        id="sports" onclick="toggleCategory('sports')">
-                                    Sports</label>
-                                <input type="hidden" name="selectedCategories" id="selectedCategories">
-                                <!-- <button type="button" onclick="searchCategory()">Apply Categories</button> -->
-                            </form>
-                        </div>
+                <div class="filters">
+                    <div class="top">
+                        <h1>When are you traveling?</h1>
 
-                        <div class="price-slider-header">
-                            <p>Price filter</p>
-                            <img src="../images/arrow.svg" alt="" id="priceFilterToggle" class="filter-controller">
+                        <div class="filters-dates">
+                            <input type="date" id="fromdte" name="fromdte" placeholder="july 4" />
+                            <input type="date" id="todte" name="todte" />
 
                         </div>
-                        <div class="price-filter-container">
-                            <div class="wrapper">
+                    </div>
+                    <div class="bottom">
+                        <div class="your-trip">
+                            <div class="you-type-filter-body">
+                                <p>Tour Type</p>
+                                <img src="../images/arrow.svg" alt="" id="filterToggle" class="filter-controller">
+                            </div>
 
 
-                                <div class="slider">
-                                    <div class="progress"></div>
-                                </div>
-                                <div class="range-input">
-                                    <form action="">
-                                        <input type="range" id="minPrice" class="range-min" min="0" max="70000"
-                                            step="100">
-                                        <input type="range" id="maxPrice" class="range-max" min="0" max="70000"
-                                            step="100">
+                            <div class="you-type-filter-content">
+                                <form id="categoryFilterForm" method="POST" action="/searchtrips">
+                                    <div id="categoryInputs">
+                                        <label for="nature"><img src="../images/nature-style.png" alt=""
+                                                class="style-img"><input type="checkbox" class="categoryCheckbox"
+                                                name="category" value="nature" id="nature"
+                                                onclick="toggleCategory('nature')"> Nature</label>
+                                        <label for="party"><img src="../images/party.png" alt=""
+                                                class="style-img"><input type="checkbox" class="categoryCheckbox"
+                                                name="category" value="party" id="party"
+                                                onclick="toggleCategory('party')"> Party</label>
+                                        <label for="foods"><img src="../images/food.png" alt="" class="style-img"><input
+                                                type="checkbox" class="categoryCheckbox" name="category" value="foods"
+                                                id="foods" onclick="toggleCategory('foods')"> Food</label>
+                                        <label for="beach"><img src="../images/beach.png" alt=""
+                                                class="style-img"><input type="checkbox" class="categoryCheckbox"
+                                                name="category" value="beach" id="beach"
+                                                onclick="toggleCategory('beach')"> Beach</label>
+                                        <label for="culture"><img src="../images/culture.png" alt=""
+                                                class="style-img"><input type="checkbox" class="categoryCheckbox"
+                                                name="category" value="culture" id="culture"
+                                                onclick="toggleCategory('culture')"> Culture</label>
+                                        <label for="sports"><img src="../images/sports.png" alt=""
+                                                class="style-img"><input type="checkbox" class="categoryCheckbox"
+                                                name="category" value="sports" id="sports"
+                                                onclick="toggleCategory('sports')"> Sports</label>
+                                        <p id="seeMoreText" class="see-more-text" onclick="toggleSeeMore()">See More</p>
 
-                                    </form>
-                                </div>
-
-                                <div class="price-input">
-                                    <div class="field">
-                                        <input type="number" class="input-min" value="0">
                                     </div>
-                                    <div class="field">
-                                        <input type="number" class="input-max" value="100000">
-                                    </div>
-                                </div>
 
+                                    <input type="hidden" name="selectedCategories" id="selectedCategories">
+                                </form>
+
+                                <button class="filter-submit" onclick="submitCombinedSearch()">Submit</button>
+                            </div>
+
+
+
+                            <div class="price-slider-header">
+                                <p>Price filter</p>
+                                <img src="../images/arrow.svg" alt="" id="priceFilterToggle" class="filter-controller">
 
                             </div>
+                            <div class="price-filter-container">
+                                <div class="wrapper">
+
+
+                                    <div class="slider">
+                                        <div class="progress"></div>
+                                    </div>
+                                    <div class="range-input">
+                                        <form action="">
+                                            <input type="range" id="minPrice" class="range-min" min="0" max="70000"
+                                                step="100">
+                                            <input type="range" id="maxPrice" class="range-max" min="0" max="70000"
+                                                step="100">
+
+                                        </form>
+                                    </div>
+
+                                    <div class="price-input">
+                                        <div class="field">
+                                            <input type="number" class="input-min" value="0">
+                                        </div>
+                                        <div class="field">
+                                            <input type="number" class="input-max" value="100000">
+                                        </div>
+                                    </div>
+
+
+                                </div>
+
+                                <button class="filter-submit" onclick="submitCombinedSearch()">submit</button>
+
+                            </div>
+
+
+                            <div class="price-slider-header">
+                                <p>languages filter</p>
+                                <img src="../images/arrow.svg" alt="" id="languageToggle" class="filter-controller">
+
+                            </div>
+
+                            <div class="languages-filter-container">
+                                <form id="languagesFilterForm" method="POST" action="/searchtrips">
+                                    <label for="kannada">
+                                        <input type="checkbox" class="languageCheckbox" name="languages" value="Kannada"
+                                            id="kannada">
+                                        Kannada
+                                    </label>
+                                    <label for="english">
+                                        <input type="checkbox" class="languageCheckbox" name="languages" value="English"
+                                            id="english">
+                                        English
+                                    </label>
+                                    <label for="hindi">
+                                        <input type="checkbox" class="languageCheckbox" name="languages" value="Hindi"
+                                            id="hindi">
+                                        Hindi
+                                    </label>
+                                    <label for="gujarati">
+                                        <input type="checkbox" class="languageCheckbox" name="languages"
+                                            value="gujarati" id="gujarati">
+                                        Gujarati
+                                    </label>
+                                    <label for="marathi">
+                                        <input type="checkbox" class="languageCheckbox" name="languages" value="Marathi"
+                                            id="marathi">
+                                        Marathi
+                                    </label>
+                                    <input type="hidden" name="selectedLanguages" id="selectedLanguages">
+                                </form>
+                                <button class="filter-submit" onclick="submitCombinedSearch()">submit</button>
+
+                            </div>
+
+                            <div class="price-slider-header">
+                                <p>No of days</p>
+                                <img src="../images/arrow.svg" alt="" id="daysToggle" class="filter-controller">
+
+                            </div>
+
+                            <div class="days-filter-container">
+                                <div class="days">
+                                    <label for="minDays">Min Days:</label>
+                                    <input type="number" id="minDays" name="minDays" min="1" placeholder="Minimum days">
+                                </div>
+
+
+                                <div class="days">
+                                    <label for="maxDays">Max Days:</label>
+                                    <input type="number" id="maxDays" name="maxDays" min="1" placeholder="Maximum days">
+
+                                </div>
+                                <button class="filter-submit" onclick="submitCombinedSearch()">submit</button>
+
+                            </div>
+
+
+
+                            <div class="rating-slider-header">
+                                <p>Ratings</p>
+                                <img src="../images/arrow.svg" alt="" id="ratingToggle" class="filter-controller">
+
+                            </div>
+
+                            <div class="range-container">
+                                <input type="range" id="rating" name="rating" min="0" max="5" step="1" value="0"
+                                    oninput="updateRatingValue()">
+                                <span id="ratingValue">0</span>
+                                <button class="filter-submit" onclick="submitCombinedSearch()">submit</button>
+
+                            </div>
+
+
+
+
+
                         </div>
+
+
+
+
                     </div>
                 </div>
+
+
+                <div class="suborclose">
+                    <button class="filter-submit" onclick="submitCombinedSearch()">submit</button>
+                    <button class="filter-close" onclick="closeFilterPopup()">close</button>
+
+                </div>
+
+
             </div>
         </div>
 
 
         <div class="cards-container">
             <% for(let i=0; i < allTrips.length; i++) { %>
-                <div class="card-container">
+
+                <div class="card-container" data-id="<%= allTrips[i]._id %>">
                     <div class="card-img">
                         <% if (allTrips[i].tripImages && allTrips[i].tripImages.length> 0 &&
                             allTrips[i].tripImages[0].path) { %>
                             <div class="trip-image">
                                 <img src="<%= allTrips[i].tripImages[0].path %>" alt="Trip Image">
                             </div>
+
                             <div class="heart-container">
                                 <% if (user) { %>
-                                    <% const isInWishlist=userWishlist.includes(allTrips[i]._id.toString()); %>
+                                    <% const
+                                        isInWishlist=userWishlist.includes(allTrips[i]._id.toString());
+                                        %>
                                         <i class="<%= isInWishlist ? 'fa-solid fa-heart wishlist-active' : 'fa-regular fa-heart' %> wishlist-icon"
-                                            data-id="<%= allTrips[i]._id %>" style="cursor: pointer;"></i>
+                                            data-id="<%= allTrips[i]._id %>"
+                                            style="cursor: pointer;"></i>
                                         <% } else { %>
                                             <i class="fa-regular fa-heart wishlist-icon redirect-i"
                                                 data-id="<%= allTrips[i]._id %>"></i>
@@ -311,21 +451,30 @@
                             <img src="../images/route.svg" alt="">
                             <h3 class="card-title">
                                 <a href="/tour/<%= allTrips[i]._id %>">
-                                    <%= allTrips[i].location %>
+                                    <%= allTrips[i].fromLocation %> ->
+                                        <br>
+                                        <%= allTrips[i].location %>
                                 </a>
-                                <p>
-                                    <% if (allTrips[i].departure) { %>
-                                        <%= new Date(allTrips[i].departure).toLocaleDateString('en-US', { month: 'long' ,
-                                            day: '2-digit' }) %> ~
-                                            <% } else { %>
-                                                date not available
-                                                <% } %>
-                                                    <% if (allTrips[i].endDate) { %>
-                                                        <%= new Date(allTrips[i].endDate).toLocaleDateString('en-US', {
-                                                            month: 'long' , day: '2-digit' }) %>
-                                                            <% } %>
-                                </p>
+
+
                             </h3>
+                        </div>
+
+                        <div class="tour-dates">
+                            <p>
+                                <% if (allTrips[i].departure) { %>
+                                    <%= new Date(allTrips[i].departure).toLocaleDateString('en-US', {
+                                        month: 'short' , day: '2-digit' }) %> ~
+                                        <% } else { %>
+                                            date not available
+                                            <% } %>
+
+                                                <% if (allTrips[i].endDate) { %>
+                                                    <%= new
+                                                        Date(allTrips[i].endDate).toLocaleDateString('en-US',
+                                                        { month: 'short' , day: '2-digit' }) %>
+                                                        <% } %>
+                            </p>
                         </div>
                         <div class="title-container">
                             <h4 class="trip-title">
@@ -334,50 +483,27 @@
 
                         </div>
 
-                        <div class="ratio-container">
-                            <p class="maleRatio">Male: <%= allTrips[i].maleRatio %>%</p>
-                            <p class="femaleRatio">Female: <%= allTrips[i].femaleRatio %>%</p>
+
+
+                        <div class=" ratio-container">
+                            <p class="maleRatio"> <span class="material-symbols-outlined">
+                                    male
+                                </span>
+                                <%= allTrips[i].maleRatio %>%
+                            </p>
+                            <p class="femaleRatio">
+                                <span class="material-symbols-outlined">
+                                    female
+                                </span>
+                                <%= allTrips[i].femaleRatio %>%
+                            </p>
 
                         </div>
 
 
 
                         <div class="rating-container">
-
-                            <div class="rate rat1">
-                                <!-- 5 Stars -->
-                                <input type="radio" id="locStar5-<%= i %>" name="locationRating-<%= i %>" value="5" <%
-                                    if (allTrips[i].averageRating>= 5) { %> checked <% } %> disabled />
-                                    <label for="locStar5-<%= i %>">5 stars</label>
-
-                                    <!-- 4 Stars -->
-                                    <input type="radio" id="locStar4-<%= i %>" name="locationRating-<%= i %>" value="4"
-                                        <% if (allTrips[i].averageRating>= 4 && allTrips[i].averageRating < 5) { %>
-                                        checked <% } %> disabled />
-                                            <label for="locStar4-<%= i %>">4 stars</label>
-
-                                            <!-- 3 Stars -->
-                                            <input type="radio" id="locStar3-<%= i %>" name="locationRating-<%= i %>"
-                                                value="3" <% if (allTrips[i].averageRating>= 3 &&
-                                                allTrips[i].averageRating < 4) { %> checked <% } %> disabled />
-                                                    <label for="locStar3-<%= i %>">3 stars</label>
-
-                                                    <!-- 2 Stars -->
-                                                    <input type="radio" id="locStar2-<%= i %>"
-                                                        name="locationRating-<%= i %>" value="2" <% if
-                                                        (allTrips[i].averageRating>= 2 && allTrips[i].averageRating < 3) { %>
-                                                        checked <% } %> disabled />
-                                                            <label for="locStar2-<%= i %>">2 stars</label>
-
-                                                            <!-- 1 Star -->
-                                                            <input type="radio" id="locStar1-<%= i %>"
-                                                                name="locationRating-<%= i %>" value="1" <% if
-                                                                (allTrips[i].averageRating>= 1 &&
-                                                                allTrips[i].averageRating < 2) { %> checked <% } %> disabled
-                                                                    />
-                                                                    <label for="locStar1-<%= i %>">1 star</label>
-                            </div>
-
+                            <i class="fa-solid fa-star"></i>
                             <p>
                                 <%= allTrips[i].averageRating %>
                             </p>
@@ -395,8 +521,8 @@
                             <div class="price-container">
                                 <% if (allTrips[i].totalCost) { %>
                                     <span>FROM</span> &nbsp;<b>
-                                        <%= allTrips[i].totalCost.toLocaleString('en-IN', { style: 'currency' ,
-                                            currency: 'INR' }) %>
+                                        <%= allTrips[i].totalCost.toLocaleString('en-IN', {
+                                            style: 'currency' , currency: 'INR' }) %>
                                     </b>
                                     <% } else { %>
                                         Price Not Available
@@ -407,6 +533,7 @@
                 </div>
                 <% } %>
         </div>
+
 
     </main>
 
@@ -427,143 +554,55 @@
     <% } %>
 </div>
 
+<footer>
 
-    <footer>
-
-        <div class="sec1">
-            <div class="logo"></div>
-            <p>Book your trip in minute, get full Control for much longer.</p>
-        </div>
-        <div class="sec2">
-            <div class="col1">
-                <h3>Company</h3>
-                <div class="links">
-                    <a href="">About</a>
-                    <a href="">Careers</a>
-                    <a href="">Mobile</a>
-                </div>
-
-
-            </div>
-            <div class="col2">
-                <h3>Contact</h3>
-                <div class="links">
-                    <a href="">Help/FAQ</a>
-                    <a href="">Press</a>
-                    <a href="">Affilates</a>
-                </div>
-            </div>
-            <div class="col3">
-                <h3>More</h3>
-                <div class="links">
-                    <a href="">Airlinefees</a>
-                    <a href="">Airline</a>
-                    <a href="">Low fare tips</a>
-                </div>
-            </div>
-
-
-        </div>
-        <div class="sec3">
-
-            <svg width="78" height="78" viewBox="0 0 78 78" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <g filter="url(#filter0_d_1_341)">
-                    <path fill-rule="evenodd" clip-rule="evenodd"
-                        d="M38.8189 65.6322C54.7336 65.6322 67.635 52.7308 67.635 36.8161C67.635 20.9014 54.7336 8 38.8189 8C22.9042 8 10.0027 20.9014 10.0027 36.8161C10.0027 52.7308 22.9042 65.6322 38.8189 65.6322Z"
-                        fill="white" />
-                </g>
-                <path fill-rule="evenodd" clip-rule="evenodd"
-                    d="M42.4854 33.6454C42.0355 33.5031 41.5181 33.4082 41.0457 33.4082C40.4608 33.4082 39.2011 33.8115 39.2011 34.5943V36.4683H42.1929V39.6232H39.2011V48.329H36.1868V39.6232H34.7021V36.4683H36.1868V34.8789C36.1868 32.4831 37.2215 30.4905 39.7185 30.4905C40.5733 30.4905 42.1029 30.5379 42.9353 30.8463L42.4854 33.6454Z"
-                    fill="#080809" />
-                <defs>
-                    <filter id="filter0_d_1_341" x="0.00274658" y="0" width="77.6322" height="77.6323"
-                        filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
-                        <feFlood flood-opacity="0" result="BackgroundImageFix" />
-                        <feColorMatrix in="SourceAlpha" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0"
-                            result="hardAlpha" />
-                        <feOffset dy="2" />
-                        <feGaussianBlur stdDeviation="5" />
-                        <feColorMatrix type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.1 0" />
-                        <feBlend mode="normal" in2="BackgroundImageFix" result="effect1_dropShadow_1_341" />
-                        <feBlend mode="normal" in="SourceGraphic" in2="effect1_dropShadow_1_341" result="shape" />
-                    </filter>
-                </defs>
-            </svg>
-
-
-
-            <svg class="insta" width="85" height="84" viewBox="0 0 85 84" fill="none"
-                xmlns="http://www.w3.org/2000/svg">
-                <g filter="url(#filter0_d_1_345)">
-                    <path fill-rule="evenodd" clip-rule="evenodd"
-                        d="M42.404 71.2549C59.8713 71.2549 74.0314 57.0948 74.0314 39.6274C74.0314 22.1601 59.8713 8 42.404 8C24.9366 8 10.7766 22.1601 10.7766 39.6274C10.7766 57.0948 24.9366 71.2549 42.404 71.2549Z"
-                        fill="url(#paint0_angular_1_345)" />
-                </g>
-                <defs>
-                    <filter id="filter0_d_1_345" x="0.77655" y="0" width="83.2549" height="83.2549"
-                        filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
-                        <feFlood flood-opacity="0" result="BackgroundImageFix" />
-                        <feColorMatrix in="SourceAlpha" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0"
-                            result="hardAlpha" />
-                        <feOffset dy="2" />
-                        <feGaussianBlur stdDeviation="5" />
-                        <feColorMatrix type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.1 0" />
-                        <feBlend mode="normal" in2="BackgroundImageFix" result="effect1_dropShadow_1_345" />
-                        <feBlend mode="normal" in="SourceGraphic" in2="effect1_dropShadow_1_345" result="shape" />
-                    </filter>
-                    <radialGradient id="paint0_angular_1_345" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse"
-                        gradientTransform="translate(42.404 39.6274) rotate(90) scale(0.702832)">
-                        <stop stop-color="#B8D2F1" />
-                        <stop offset="0.166667" stop-color="#F289AA" />
-                        <stop offset="0.294697" stop-color="#C68BF0" />
-                        <stop offset="0.427083" stop-color="#D164DA" />
-                        <stop offset="0.614583" stop-color="#C963E8" />
-                        <stop offset="0.71875" stop-color="#BFC2E8" />
-                        <stop offset="0.802083" stop-color="#FFC999" />
-                        <stop offset="0.875" stop-color="#D0D8C9" />
-                        <stop offset="0.928149" stop-color="#BAD0F1" />
-                        <stop offset="0.997133" stop-color="#CED8CB" />
-                        <stop offset="1" stop-color="white" stop-opacity="0" />
-                    </radialGradient>
-                </defs>
-            </svg>
-
-
-
-
-
-            <svg width="78" height="79" viewBox="0 0 78 79" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <g filter="url(#filter0_d_1_338)">
-                    <path fill-rule="evenodd" clip-rule="evenodd"
-                        d="M38.816 66.1137C54.7307 66.1137 67.6322 53.2122 67.6322 37.2976C67.6322 21.3829 54.7307 8.48145 38.816 8.48145C22.9013 8.48145 9.99994 21.3829 9.99994 37.2976C9.99994 53.2122 22.9013 66.1137 38.816 66.1137Z"
-                        fill="white" />
-                </g>
-                <path
-                    d="M50.4906 32.2684C49.6542 32.5715 48.763 32.7723 47.8339 32.8699C48.7897 32.3985 49.5192 31.6577 49.8622 30.7648C48.971 31.2037 47.9871 31.5137 46.9384 31.6867C46.0922 30.9424 44.8862 30.4814 43.5705 30.4814C41.0178 30.4814 38.9627 32.1929 38.9627 34.2911C38.9627 34.593 38.9936 34.8833 39.0695 35.1596C35.2363 35.0052 31.8444 33.4876 29.5658 31.1758C29.168 31.7459 28.9347 32.3985 28.9347 33.1009C28.9347 34.42 29.757 35.5892 30.9828 36.2662C30.242 36.2546 29.5152 36.0769 28.8996 35.7971C28.8996 35.8087 28.8996 35.8238 28.8996 35.8389C28.8996 37.6897 30.4978 39.227 32.5936 39.5812C32.2183 39.6659 31.8093 39.7066 31.3848 39.7066C31.0896 39.7066 30.7916 39.6926 30.5119 39.6416C31.1093 41.1498 32.8045 42.2587 34.8202 42.2947C33.2515 43.3084 31.2597 43.9191 29.1034 43.9191C28.7253 43.9191 28.3626 43.9052 27.9999 43.8669C30.0424 44.9549 32.4629 45.5761 35.0732 45.5761C43.5578 45.5761 48.1965 39.7704 48.1965 34.7381C48.1965 34.5698 48.1895 34.4072 48.1796 34.2458C49.0947 33.7094 49.8636 33.0394 50.4906 32.2684Z"
-                    fill="#080809" />
-                <defs>
-                    <filter id="filter0_d_1_338" x="-6.10352e-05" y="0.481445" width="77.6322" height="77.6323"
-                        filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
-                        <feFlood flood-opacity="0" result="BackgroundImageFix" />
-                        <feColorMatrix in="SourceAlpha" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0"
-                            result="hardAlpha" />
-                        <feOffset dy="2" />
-                        <feGaussianBlur stdDeviation="5" />
-                        <feColorMatrix type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.1 0" />
-                        <feBlend mode="normal" in2="BackgroundImageFix" result="effect1_dropShadow_1_338" />
-                        <feBlend mode="normal" in="SourceGraphic" in2="effect1_dropShadow_1_338" result="shape" />
-                    </filter>
-                </defs>
-            </svg>
-
-
+<div class="sec1">
+    <div class="logo"></div>
+    <p>Book your trip in minute, get full Control for much longer.</p>
+</div>
+<div class="sec2">
+    <div class="col1">
+        <h3>Company</h3>
+        <div class="links">
+            <a href="">How it works</a>
+            <a href="/">Find a trip</a>
+            <a href="/createtrip">Create a trip</a>
         </div>
 
-        <p class="cc">All rights reserved@travelgoo.co</p>
+
+    </div>
+    <div class="col2">
+        <h3>EXPLORE</h3>
+        <div class="links">
+            <a href="/tourbydestination">Group trips by destination </a>
+            <a href="/tourbymonths">Group trips by Month </a>
+            <a href="/featuredtrips">Featured trips</a>
+        </div>
+    </div>
+    <div class="col3">
+        <h3>Join Our Tour</h3>
+        <div class="links">
+            <a href="">Blog </a>
+            <a href="">About us</a>
+            <a href="/contactUs">Contact us</a>
+        </div>
+    </div>
 
 
-    </footer>
+</div>
+<div class="sec3">
 
+    <img src="../images/f.svg" alt="">
+    <img src="../images/i.svg" alt="">
+    <img src="../images/t.svg" alt="">
+
+
+</div>
+
+<p class="cc">All rights reserved@travelgoo.co</p>
+
+
+</footer>
 
 
 
@@ -615,7 +654,7 @@
     </script>
 
     <script src="/js/whislist.js"></script>
-
+    <script src="/js/seemore.js"></script>
     <script src="/js/dropdown.js"></script>
     <script src="/js/autoSuggestions.js"></script>
     <script src="/js/secondarySearch.js"></script>

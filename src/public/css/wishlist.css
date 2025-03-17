@@ -1,0 +1,31 @@
+.wcontainer{
+    width: 80%;
+    margin: 1rem 3rem
+}
+
+#showall-nav{
+    position: relative;
+    background: none;
+    background-color: #D3D3D3;
+}
+
+#showall-nav a {
+    color: white;
+}
+
+.h1{
+    text-align: start;
+    margin-left: 3rem;
+    font-family: poppins;
+    font-size: 2rem;
+    color: #00A651;
+}
+
+@media(max-width:950px){
+    .h1{
+        font-size: 1.3rem;
+    }
+    .wcontainer{
+        margin: 1.5rem 1rem;
+    }
+}

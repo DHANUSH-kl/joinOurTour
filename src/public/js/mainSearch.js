@@ -48,3 +48,20 @@ function submitCombinedSearch() {
     document.body.appendChild(form);
     form.submit();
 }
+
+
+
+document.addEventListener("DOMContentLoaded", function () {
+    let fromDateInput = document.getElementById("fromDate");
+    let today = new Date().toISOString().split("T")[0]; // Get today's date in YYYY-MM-DD format
+
+    fromDateInput.setAttribute("data-placeholder", today);
+    fromDateInput.addEventListener("focus", function () {
+        this.setAttribute("data-placeholder", "");
+    });
+    fromDateInput.addEventListener("blur", function () {
+        if (!this.value) {
+            this.setAttribute("data-placeholder", today);
+        }
+    });
+});

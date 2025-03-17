@@ -42,7 +42,7 @@ main {
 }
 
 .row {
-    width: 30vw;
+    width: 30rem;
     height: auto;
     background-color: #A7C957;
     border-radius: 20% 0 20% 0;
@@ -215,4 +215,42 @@ input[type="number"] {
     justify-content: space-between;
     align-items: center;
     gap: 1rem;
+}
+
+
+
+
+@media(max-width:520px){
+    .row{
+        width: 22rem;
+    }
+
+    nav .home a{
+        font-size: 14px;
+    }
+
+    form a{
+        font-size: 10px;
+    }
+}
+
+
+.singUPa{
+    text-decoration: underline;
+    color: #fff;
+    font-family: poppins;
+    font-size: 0.7rem;
+}
+
+.singinUP{
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+
+}
+
+.singinUP{
+    font-size: 1rem;
 }

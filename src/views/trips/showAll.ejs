@@ -34,6 +34,7 @@
 
 
 
+    <link rel="stylesheet" href="/css/logo.css">
     <link rel="stylesheet" href="/css/flash.css">
     <link rel="stylesheet" href="/css/aboutus.css">
     <link rel="stylesheet" href="/css/footer.css">
@@ -89,193 +90,204 @@
         </div>
     </form> -->
 
-    <% if (success && success.length > 0) { %>
-        <div class="flash-message success"><%= success %></div>
-    <% } %>
-    
-    <% if (error && error.length > 0) { %>
-        <div class="flash-message error"><%= error %></div>
-    <% } %>
-    
+    <% if (success && success.length> 0) { %>
+        <div class="flash-message success">
+            <%= success %>
+        </div>
+        <% } %>
 
-    <header>
-        <nav id="showall-nav">
-            <div class="logo">
-                <svg width="200" height="200" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg" fill="none"
-                    stroke-linecap="round" stroke-linejoin="round">
-                    <defs>
-                        <linearGradient id="grad" x1="0%" y1="0%" x2="0%" y2="100%">
-                            <stop offset="0%" style="stop-color:#42B3A4; stop-opacity:1" />
-                            <stop offset="100%" style="stop-color:#1F5C94; stop-opacity:1" />
-                        </linearGradient>
-                    </defs>
-                    <path
-                        d="M100 160 C 120 140, 140 110, 140 80 C 140 50, 130 20, 100 10 C 70 20, 60 50, 60 80 C 60 110, 80 140, 100 160 Z"
-                        fill="url(#grad)" stroke="none" />
-                    <polygon points="90,100 110,100 100,80" fill="#1F5C94" stroke="none" />
-                    <line x1="100" y1="80" x2="100" y2="50" stroke="#1F5C94" stroke-width="5" />
-                    <line x1="85" y1="90" x2="115" y2="90" stroke="#1F5C94" stroke-width="5" />
-                </svg>
-            </div>
-            <div class="home">
-                <a href="/aboutus">HOME</a>
-            </div>
-            <div class="right">
-                <img src="../images/account_circle.png" alt="" class="account-icon">
-                <!-- <img src="../images/search.png" alt=""> -->
+            <% if (error && error.length> 0) { %>
+                <div class="flash-message error">
+                    <%= error %>
+                </div>
+                <% } %>
 
-                <div class="account-container acc-hide">
-                    <div class="close">
-                        <i class="fa-solid fa-xmark" id="close"></i>
+
+                    <header>
+                        <nav id="showall-nav">
+                            <div class="logo">
+
+                                <p class="shine">joinOurTour</p>
+                                <!-- From Uiverse.io by devkatyall -->
+                                <!-- <div class="shine">joinOurTour</div> -->
+
+
+                            </div>
+                            <div class="home">
+                                <a href="/aboutus">HOME</a>
+                            </div>
+                            <div class="right">
+                                <img src="../images/account_circle.png" alt="" class="account-icon">
+                                <!-- <img src="../images/search.png" alt=""> -->
+
+                                <div class="account-container acc-hide">
+                                    <div class="close">
+                                        <i class="fa-solid fa-xmark" id="close"></i>
+                                    </div>
+                                    <div class="user-info-container">
+                                        <% if(!currUser) { %>
+
+                                            <% } else { %>
+                                                <div class="profile"></div>
+                                                <p>
+                                                    <%= currUser.username %>
+                                                </p>
+
+                                                <p>
+                                                    Wallet Balance: <%= currUser.wallet %> tokens
+                                                </p>
+
+
+                                                <% } %>
+                                    </div>
+                                    <div class="nav-links">
+                                        <% if (user && user.isAgent) { %>
+                                            <a href="/mytrips">MY TRIP</a>
+                                            <a href="/createtrip">CREATE TRIP</a>
+                                            <% } %>
+                                                <a href="/">PAYMENTS AND PAYOUTS</a>
+                                                <% if (!user) { %>
+                                                    <a href="/user/signin">SIGN IN</a>
+                                                    <a href="/user/signup">SIGN UP</a>
+                                                    <% } else { %>
+                                                        <a href="/user/logout">SIGN OUT</a>
+                                                        <% } %>
+                                                            <a href="/showWishlist">WISHLIST &nbsp; <i
+                                                                    class="fa-solid fa-heart"
+                                                                    style="cursor: pointer;"></i></a>
+                                                            <% if (user && user.isOwner) { %>
+                                                                <a href="/admin/adminpannel">ADMIN PANNEL</a>
+
+                                                                <% } %>
+                                                                    <p></p>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </nav>
+                        <hr>
+
+
+
+
+
+
+
+
+
+                        <div class="bottom-container">
+                            <img src="../images/linkedin(3).png" alt="">
+                            <a
+                                href="https://www.instagram.com/join.our.tours/profilecard/?igsh=MWQ1dXdkbzZ0d3ExcQ==hhwcccc ">
+                                <img src="../images/instagram(4).png" alt=""></a>
+                            <img src="../images/facebook-app-symbol(1).png
+                                 " alt="">
+                        </div>
+                    </header>
+
+
+                    <div class="search-container">
+                        <div class="search-bar">
+                            <div class="search-locations">
+                                <img src="../images/searchloc.png" alt="">
+                                <div class="startingLocation-container search-locations-container">
+                                    <label for="startingLocation">Starting from</label>
+                                    <input type="text" name="startingLocation" id="startingLocation" placeholder="---"
+                                        value="<%= user && user.city ? user.city : '' %>">
+
+
+                                </div>
+                                <div class="destinationLocation-container search-locations-container">
+                                    <label for="destinationLocation">Going to</label>
+                                    <input type="text" name="destinationLocation" id="destinationLocation"
+                                        placeholder="---">
+                                </div>
+                            </div>
+
+
+                            <div class="search-dates">
+                                <img src="../images/searchDates.png" alt="">
+                                <div class="search-dates-container">
+                                    <div class="trip-dates trip-from-date">
+                                        <label for="fromDate">From </label>
+                                        <input type="date" class="fromDate" id="fromDate">
+                                    </div>
+
+                                    <div class="trip-dates trip-to-date">
+                                        <label for="toDate">To</label>
+                                        <input type="date" class="toDate" id="toDate">
+                                    </div>
+
+
+                                </div>
+                            </div>
+
+                            <div class="mainSearchBtn-container">
+                                <button class="mainSearchBtn" onclick="submitCombinedSearch()">
+                                    <span class="material-symbols-outlined">
+                                        east
+                                    </span>
+                                </button>
+
+                            </div>
+                        </div>
                     </div>
-                    <div class="user-info-container">
-                        <% if(!currUser) { %>
 
-                            <% } else { %>
-                                <div class="profile"></div>
-                                <p>
-                                    <%= currUser.username %>
+                    <div class="breadcrumb-nav">
+                        <a href="/aboutus">Home</a> <span>&gt;</span>
+                        <span><a href="/">All Trips</a></span>
+                    </div>
+
+
+                    <div class="sort-outer-container">
+                        <div class="sortdiv">
+
+
+                            <% if (totalTrips) { %>
+                                <p class="total-trips">Total Trips : <%= totalTrips %>
                                 </p>
-
-                                <p>
-                                    Wallet Balance: <%= currUser.wallet %> tokens
-                                </p>
-
-
-                                <% } %>
-                    </div>
-                    <div class="nav-links">
-                        <a href="/mytrips">MY TRIP</a>
-                        <a href="/createtrip">CREATE TRIP</a>
-                        <a href="/">PAYMENTS AND PAYOUTS</a>
-                        <% if (!user) { %>
-                            <a href="/user/signin">SIGN IN</a>
-                            <a href="/user/signup">SIGN UP</a>
-                            <% } else { %>
-                                <a href="/user/logout">SIGN OUT</a>
-                                <% } %>
-                                    <a href="/showWishlist">WISHLIST &nbsp; <i class="fa-solid fa-heart"
-                                            style="cursor: pointer;"></i></a>
-                                    <a href="/admin/adminpannel">ADMIN PANNEL</a>
-                                    <p></p>
-                    </div>
-                </div>
-
-            </div>
-        </nav>
-        <hr>
+                                <% } else { %>
+                                    <p class="total-trips">Total Trips : 0</p>
+                                    <% } %>
 
 
 
+                                        <form method="GET" action="/secondarysearch" id="sortForm">
+                                            <input type="hidden" name="page" value="<%= currentPage %>">
+                                            <label for="sort">Sort by:</label>
+                                            <select name="sort" id="sort"
+                                                onchange="document.getElementById('sortForm').submit()">
+                                                <option value="">-- Select --</option>
+                                                <option value="priceLowHigh" <%=sort==='priceLowHigh' ? 'selected' : ''
+                                                    %>>Price: Low to
+                                                    High</option>
+                                                <option value="priceHighLow" <%=sort==='priceHighLow' ? 'selected' : ''
+                                                    %>>Price: High
+                                                    to
+                                                    Low</option>
+                                                <option class="op4" value="recentlyListed" <%=sort==='recentlyListed'
+                                                    ? 'selected' : '' %>
+                                                    >Recently Listed (Last 10 Days)</option>
+                                                <option value="leavingSoon" <%=sort==='leavingSoon' ? 'selected' : '' %>
+                                                    >Leaving Soon
+                                                    (Next
+                                                    15 Days)</option>
+                                            </select>
+                                        </form>
 
+                                        <div class="filters-mb">
 
+                                            <i class="fa-solid fa-filter" onclick="openFilterPopup()"></i>
+                                        </div>
 
+                        </div>
 
-
-
-        <div class="bottom-container">
-            <img src="../images/linkedin(3).png" alt="">
-            <a href="https://www.instagram.com/join.our.tours/profilecard/?igsh=MWQ1dXdkbzZ0d3ExcQ==hhwcccc "> <img
-                    src="../images/instagram(4).png" alt=""></a>
-            <img src="../images/facebook-app-symbol(1).png
-            " alt="">
-        </div>
-    </header>
-
-
-    <div class="search-container">
-        <div class="search-bar">
-            <div class="search-locations">
-                <img src="../images/searchloc.png" alt="">
-                <div class="startingLocation-container search-locations-container">
-                    <label for="startingLocation">Starting from</label>
-                    <input type="text" name="startingLocation" id="startingLocation" placeholder="---"
-                        value="<%= user && user.city ? user.city : '' %>">
-
-
-                </div>
-                <div class="destinationLocation-container search-locations-container">
-                    <label for="destinationLocation">Going to</label>
-                    <input type="text" name="destinationLocation" id="destinationLocation" placeholder="---">
-                </div>
-            </div>
-
-
-            <div class="search-dates">
-                <img src="../images/searchDates.png" alt="">
-                <div class="search-dates-container">
-                    <div class="trip-dates trip-from-date">
-                        <label for="fromDate">from </label>
-                        <input type="date" class="fromDate" id="fromDate">
-                    </div>
-
-                    <div class="trip-dates trip-to-date">
-                        <label for="toDate">to</label>
-                        <input type="date" class="toDate" id="toDate">
                     </div>
 
 
-                </div>
-            </div>
-
-            <div class="mainSearchBtn-container">
-                <button class="mainSearchBtn" onclick="submitCombinedSearch()">
-                    <span class="material-symbols-outlined">
-                        east
-                    </span>
-                </button>
-
-            </div>
-        </div>
-    </div>
-
-    <div class="breadcrumb-nav">
-        <a href="/aboutus">Home</a> <span>&gt;</span>
-        <span><a href="/">All Trips</a></span>
-    </div>
 
 
-    <div class="sort-outer-container">
-        <div class="sortdiv">
-
-
-            <% if (totalTrips) { %>
-                <p class="total-trips">Total Trips : <%= totalTrips %>
-                </p>
-                <% } else { %>
-                    <p class="total-trips">Total Trips : 0</p>
-                    <% } %>
-
-
-
-                        <form method="GET" action="/secondarysearch" id="sortForm">
-                            <input type="hidden" name="page" value="<%= currentPage %>">
-                            <label for="sort">Sort by:</label>
-                            <select name="sort" id="sort" onchange="document.getElementById('sortForm').submit()">
-                                <option value="">-- Select --</option>
-                                <option value="priceLowHigh" <%=sort==='priceLowHigh' ? 'selected' : '' %>>Price: Low to
-                                    High</option>
-                                <option value="priceHighLow" <%=sort==='priceHighLow' ? 'selected' : '' %>>Price: High
-                                    to
-                                    Low</option>
-                                <option class="op4" value="recentlyListed" <%=sort==='recentlyListed' ? 'selected' : ''
-                                    %>
-                                    >Recently Listed (Last 10 Days)</option>
-                                <option value="leavingSoon" <%=sort==='leavingSoon' ? 'selected' : '' %>>Leaving Soon
-                                    (Next
-                                    15 Days)</option>
-                            </select>
-                        </form>
-
-
-        </div>
-
-    </div>
-
-
-
-
-    <!-- <div class="open-filter-btn mb-container">
+                    <!-- <div class="open-filter-btn mb-container">
         <div class="mb-filters">
             <h3>edit filters</h3>
         </div>
@@ -284,758 +296,779 @@
 
 
 
-    <main>
-
-        <button class="open-filter-btn" onclick="openFilterPopup()">Open Filters</button>
-
-
-        <div class="filter-popup-overlay" id="filterPopup">
-            <div class="filter-container">
-                <button class="close-filter-btn" onclick="closeFilterPopup()">×</button>
-                <div class="secondary-search">
-                    <i class="fa-solid fa-location-dot loc"></i>
-                    <form action="">
-                        <input type="text" placeholder="Search destinations" class="secondary-location"
-                            id="secondaryDestination" name="destination">
-                    </form>
-
-                    <button class="secondary-search-button" onclick="submitCombinedSearch()">
-                        <i class="fa-solid fa-arrow-right"></i>
-                    </button>
-                </div>
-                <div class="filters">
-                    <div class="top">
-                        <h1>When are you traveling?</h1>
-
-                        <div class="filters-dates">
-                            <input type="date" id="fromdte" name="fromdte" placeholder="july 4" />
-                            <input type="date" id="todte" name="todte" />
-
-                        </div>
-                    </div>
-                    <div class="bottom">
-                        <div class="your-trip">
-                            <div class="you-type-filter-body">
-                                <p>Tour Type</p>
-                                <img src="../images/arrow.svg" alt="" id="filterToggle" class="filter-controller">
-                            </div>
-
-
-                            <div class="you-type-filter-content">
-                                <form id="categoryFilterForm" method="POST" action="/searchtrips">
-                                    <div id="categoryInputs">
-                                        <label for="nature"><img src="../images/nature-style.png" alt=""
-                                                class="style-img"><input type="checkbox" class="categoryCheckbox"
-                                                name="category" value="nature" id="nature"
-                                                onclick="toggleCategory('nature')"> Nature</label>
-                                        <label for="party"><img src="../images/party.png" alt=""
-                                                class="style-img"><input type="checkbox" class="categoryCheckbox"
-                                                name="category" value="party" id="party"
-                                                onclick="toggleCategory('party')"> Party</label>
-                                        <label for="foods"><img src="../images/food.png" alt="" class="style-img"><input
-                                                type="checkbox" class="categoryCheckbox" name="category" value="foods"
-                                                id="foods" onclick="toggleCategory('foods')"> Food</label>
-                                        <label for="beach"><img src="../images/beach.png" alt=""
-                                                class="style-img"><input type="checkbox" class="categoryCheckbox"
-                                                name="category" value="beach" id="beach"
-                                                onclick="toggleCategory('beach')"> Beach</label>
-                                        <label for="culture"><img src="../images/culture.png" alt=""
-                                                class="style-img"><input type="checkbox" class="categoryCheckbox"
-                                                name="category" value="culture" id="culture"
-                                                onclick="toggleCategory('culture')"> Culture</label>
-                                        <label for="sports"><img src="../images/sports.png" alt=""
-                                                class="style-img"><input type="checkbox" class="categoryCheckbox"
-                                                name="category" value="sports" id="sports"
-                                                onclick="toggleCategory('sports')"> Sports</label>
-                                        <p id="seeMoreText" class="see-more-text" onclick="toggleSeeMore()">See More</p>
-
-                                    </div>
-
-                                    <input type="hidden" name="selectedCategories" id="selectedCategories">
-                                </form>
-
-                                <button class="filter-submit" onclick="submitCombinedSearch()">Submit</button>
-                            </div>
-
-
-
-                            <div class="price-slider-header">
-                                <p>Price filter</p>
-                                <img src="../images/arrow.svg" alt="" id="priceFilterToggle" class="filter-controller">
-
-                            </div>
-                            <div class="price-filter-container">
-                                <div class="wrapper">
-
-
-                                    <div class="slider">
-                                        <div class="progress"></div>
-                                    </div>
-                                    <div class="range-input">
-                                        <form action="">
-                                            <input type="range" id="minPrice" class="range-min" min="0" max="70000"
-                                                step="100">
-                                            <input type="range" id="maxPrice" class="range-max" min="0" max="70000"
-                                                step="100">
-
-                                        </form>
-                                    </div>
-
-                                    <div class="price-input">
-                                        <div class="field">
-                                            <input type="number" class="input-min" value="0">
-                                        </div>
-                                        <div class="field">
-                                            <input type="number" class="input-max" value="100000">
-                                        </div>
-                                    </div>
-
-
-                                </div>
-
-                                <button class="filter-submit" onclick="submitCombinedSearch()">submit</button>
-
-                            </div>
-
-
-                            <div class="price-slider-header">
-                                <p>languages filter</p>
-                                <img src="../images/arrow.svg" alt="" id="languageToggle" class="filter-controller">
-
-                            </div>
-
-                            <div class="languages-filter-container">
-                                <form id="languagesFilterForm" method="POST" action="/searchtrips">
-                                    <label for="kannada">
-                                        <input type="checkbox" class="languageCheckbox" name="languages" value="Kannada"
-                                            id="kannada">
-                                        Kannada
-                                    </label>
-                                    <label for="english">
-                                        <input type="checkbox" class="languageCheckbox" name="languages" value="English"
-                                            id="english">
-                                        English
-                                    </label>
-                                    <label for="hindi">
-                                        <input type="checkbox" class="languageCheckbox" name="languages" value="Hindi"
-                                            id="hindi">
-                                        Hindi
-                                    </label>
-                                    <label for="gujarati">
-                                        <input type="checkbox" class="languageCheckbox" name="languages"
-                                            value="gujarati" id="gujarati">
-                                        Gujarati
-                                    </label>
-                                    <label for="marathi">
-                                        <input type="checkbox" class="languageCheckbox" name="languages" value="Marathi"
-                                            id="marathi">
-                                        Marathi
-                                    </label>
-                                    <input type="hidden" name="selectedLanguages" id="selectedLanguages">
-                                </form>
-                                <button class="filter-submit" onclick="submitCombinedSearch()">submit</button>
-
-                            </div>
-
-                            <div class="price-slider-header">
-                                <p>No of days</p>
-                                <img src="../images/arrow.svg" alt="" id="daysToggle" class="filter-controller">
-
-                            </div>
-
-                            <div class="days-filter-container">
-                                <div class="days">
-                                    <label for="minDays">Min Days:</label>
-                                    <input type="number" id="minDays" name="minDays" min="1" placeholder="Minimum days">
-                                </div>
-
-
-                                <div class="days">
-                                    <label for="maxDays">Max Days:</label>
-                                    <input type="number" id="maxDays" name="maxDays" min="1" placeholder="Maximum days">
-
-                                </div>
-                                <button class="filter-submit" onclick="submitCombinedSearch()">submit</button>
-
-                            </div>
-
-
-
-                            <div class="rating-slider-header">
-                                <p>Ratings</p>
-                                <img src="../images/arrow.svg" alt="" id="ratingToggle" class="filter-controller">
-
-                            </div>
-
-                            <div class="range-container">
-                                <input type="range" id="rating" name="rating" min="0" max="5" step="1" value="0"
-                                    oninput="updateRatingValue()">
-                                <span id="ratingValue">0</span>
-                                <button class="filter-submit" onclick="submitCombinedSearch()">submit</button>
-
-                            </div>
-
-
-
-
-
-                        </div>
-
-
-
-
-                    </div>
-                </div>
-
-
-                <div class="suborclose">
-                    <button class="filter-submit" onclick="submitCombinedSearch()">submit</button>
-                    <button class="filter-close" onclick="closeFilterPopup()">close</button>
-
-                </div>
-
-
-            </div>
-        </div>
-
-
-
-        <div class="cards-container">
-            <% for(let i=0; i < allTrips.length; i++) { %>
-
-                <div class="card-container" data-id="<%= allTrips[i]._id %>">
-                    <div class="card-img">
-                        <% if (allTrips[i].tripImages && allTrips[i].tripImages.length> 0 &&
-                            allTrips[i].tripImages[0].path) { %>
-                            <div class="trip-image">
-                                <img src="<%= allTrips[i].tripImages[0].path %>" alt="Trip Image">
-                            </div>
-
-                            <div class="heart-container">
-                                <% if (user) { %>
-                                    <% const isInWishlist=userWishlist.includes(allTrips[i]._id.toString()); %>
-                                        <i class="<%= isInWishlist ? 'fa-solid fa-heart wishlist-active' : 'fa-regular fa-heart' %> wishlist-icon"
-                                            data-id="<%= allTrips[i]._id %>" style="cursor: pointer;"></i>
-                                        <% } else { %>
-                                            <i class="fa-regular fa-heart wishlist-icon redirect-i"
-                                                data-id="<%= allTrips[i]._id %>"></i>
-                                            <% } %>
-                            </div>
-
-
-
-
-                            <% } else { %>
-                                <p>No images available for this trip</p>
-                                <% } %>
-                    </div>
-                    <div class="card-body">
-                        <div class="route">
-                            <img src="../images/route.svg" alt="">
-                            <h3 class="card-title">
-                                <a href="/tour/<%= allTrips[i]._id %>">
-                                    <%= allTrips[i].fromLocation %> ->
-                                        <%= allTrips[i].location %>
-                                </a>
-                                <p>
-                                    <% if (allTrips[i].departure) { %>
-                                        <%= new Date(allTrips[i].departure).toLocaleDateString('en-US', { month: 'long'
-                                            , day: '2-digit' }) %> ~
-                                            <% } else { %>
-                                                date not available
-                                                <% } %>
-                                                    <% if (allTrips[i].endDate) { %>
-                                                        <%= new Date(allTrips[i].endDate).toLocaleDateString('en-US', {
-                                                            month: 'long' , day: '2-digit' }) %>
-                                                            <% } %>
-                                </p>
-                            </h3>
-                        </div>
-                        <div class="title-container">
-                            <h4 class="trip-title">
-                                <%= allTrips[i].title %>
-                            </h4>
-
-                        </div>
-
-                        <p class="trip-type">
-                            <strong>Trip Type:</strong>
-                            <%= allTrips[i].categories.join(", ") %>
-                        </p>
-
-                        <div class=" ratio-container">
-                                <p class="maleRatio"> <span class="material-symbols-outlined">
-                                        male
-                                    </span>
-                                    <%= allTrips[i].maleRatio %>%
-                                </p>
-                                <p class="femaleRatio">
-                                    <span class="material-symbols-outlined">
-                                        female
-                                    </span>
-                                    <%= allTrips[i].femaleRatio %>%
-                                </p>
-
-                    </div>
-
-
-
-                    <div class="rating-container">
-
-                        <div class="rate rat1">
-                            <!-- 5 Stars -->
-                            <input type="radio" id="locStar5-<%= i %>" name="locationRating-<%= i %>" value="5" <% if
-                                (allTrips[i].averageRating>= 5) { %> checked <% } %> disabled />
-                                <label for="locStar5-<%= i %>">5 stars</label>
-
-                                <!-- 4 Stars -->
-                                <input type="radio" id="locStar4-<%= i %>" name="locationRating-<%= i %>" value="4" <%
-                                    if (allTrips[i].averageRating>= 4 && allTrips[i].averageRating < 5) { %>
-                                    checked <% } %> disabled />
-                                        <label for="locStar4-<%= i %>">4 stars</label>
-
-                                        <!-- 3 Stars -->
-                                        <input type="radio" id="locStar3-<%= i %>" name="locationRating-<%= i %>"
-                                            value="3" <% if (allTrips[i].averageRating>= 3 &&
-                                        allTrips[i].averageRating < 4) { %> checked <% } %> disabled />
-                                                <label for="locStar3-<%= i %>">3 stars</label>
-
-                                                <!-- 2 Stars -->
-                                                <input type="radio" id="locStar2-<%= i %>"
-                                                    name="locationRating-<%= i %>" value="2" <% if
-                                                    (allTrips[i].averageRating>= 2 && allTrips[i].averageRating < 3) {
-                                                    %> checked <% } %> disabled />
-                                                        <label for="locStar2-<%= i %>">2 stars</label>
-
-                                                        <!-- 1 Star -->
-                                                        <input type="radio" id="locStar1-<%= i %>"
-                                                            name="locationRating-<%= i %>" value="1" <% if
-                                                            (allTrips[i].averageRating>= 1 &&
-                                                        allTrips[i].averageRating < 2) { %> checked <% } %> disabled
-                                                                />
-                                                                <label for="locStar1-<%= i %>">1 star</label>
-                        </div>
-
-                        <p>
-                            <%= allTrips[i].averageRating %>
-                        </p>
-
-                    </div>
-
-
-
-                    <div class="card-bottom">
-                        <div class="days-container">
-                            <h4 class="days">
-                                <%= allTrips[i].totalDays %> days
-                            </h4>
-                        </div>
-                        <div class="price-container">
-                            <% if (allTrips[i].totalCost) { %>
-                                <span>FROM</span> &nbsp;<b>
-                                    <%= allTrips[i].totalCost.toLocaleString('en-IN', { style: 'currency' ,
-                                        currency: 'INR' }) %>
-                                </b>
-                                <% } else { %>
-                                    Price Not Available
-                                    <% } %>
-                        </div>
-                    </div>
-                </div>
-        </div>
-        <% } %>
-            </div>
-
-
-    </main>
-
-    <div class="pagination">
-        <% if (currentPage> 1) { %>
-            <a href="?page=<%= currentPage - 1 %>" class="prev">Previous</a>
-            <% } %>
-
-                <% for (let i=1; i <=totalPages; i++) { %>
-                    <a href="?page=<%= i %>" class="<%= i === currentPage ? 'active' : '' %>">
-                        <%= i %>
-                    </a>
-                    <% } %>
-
-                        <% if (currentPage < totalPages) { %>
-                            <a href="?page=<%= currentPage + 1 %>" class="next">Next</a>
-                            <% } %>
-    </div>
-
-
-
-
-
-
-    <div class="destination-container dest-cont">
-        <div class="find">
-            <h1>Find your destination</h1>
-            <p>Browse some of our most popular tours in Georgia this month.</p>
-        </div>
-        <div class="destination-carousal">
-
-
-            <div class="swiffy-slider slider-item-show2 slider-nav-autoplay">
-                <ul class="slider-container">
-                    <% for (let i=0; i < 4; i++) { %>
-                        <li>
-                            <% if (exploreTrips[i]) { %>
-                                <!-- Render actual explore trip details if available -->
-                                <img src="<%= exploreTrips[i].tripImages[0]?.path %>" alt="Explore Trip">
-                                <button class="explore-trip">
-                                    <a href="/tour/<%= exploreTrips[i]._id %>">Explore Tour</a>
-                                </button>
-                                <% } else { %>
-                                    <!-- Render a placeholder if no explore trip is available -->
-                                    <img src="placeholder-image.jpg" alt="No Explore Trip Available">
-                                    <button class="explore-trip">
-                                        <a href="#">Explore Tour</a>
+                    <main>
+
+                        <!-- <button class="open-filter-btn" onclick="openFilterPopup()">Apply Filters</button> -->
+
+
+                        <div class="filter-popup-overlay" id="filterPopup">
+                            <div class="filter-container">
+                                <button class="close-filter-btn" onclick="closeFilterPopup()">×</button>
+                                <div class="secondary-search">
+                                    <i class="fa-solid fa-location-dot loc"></i>
+                                    <form action="">
+                                        <input type="text" placeholder="Search destinations" class="secondary-location"
+                                            id="secondaryDestination" name="destination">
+                                    </form>
+
+                                    <button class="secondary-search-button" onclick="submitCombinedSearch()">
+                                        <i class="fa-solid fa-arrow-right"></i>
                                     </button>
-                                    <% } %>
-                        </li>
-                        <% } %>
+                                </div>
+                                <div class="filters">
+                                    <div class="top">
+                                        <h1>When are you traveling?</h1>
 
-                </ul>
+                                        <div class="filters-dates">
+                                            <input type="date" id="fromdte" name="fromdte" placeholder="july 4" />
+                                            <input type="date" id="todte" name="todte" />
 
-                <button type="button" class="slider-nav"></button>
-                <button type="button" class="slider-nav slider-nav-next"></button>
+                                        </div>
+                                    </div>
+                                    <div class="bottom">
+                                        <div class="your-trip">
+                                            <div class="you-type-filter-body">
+                                                <p>Tour Type</p>
+                                                <img src="../images/arrow.svg" alt="" id="filterToggle"
+                                                    class="filter-controller">
+                                            </div>
 
 
-            </div>
+                                            <div class="you-type-filter-content">
+                                                <form id="categoryFilterForm" method="POST" action="/searchtrips">
+                                                    <div id="categoryInputs">
+                                                        <label for="nature"><img src="../images/nature-style.png" alt=""
+                                                                class="style-img"><input type="checkbox"
+                                                                class="categoryCheckbox" name="category" value="nature"
+                                                                id="nature" onclick="toggleCategory('nature')">
+                                                            Nature</label>
+                                                        <label for="party"><img src="../images/party.png" alt=""
+                                                                class="style-img"><input type="checkbox"
+                                                                class="categoryCheckbox" name="category" value="party"
+                                                                id="party" onclick="toggleCategory('party')">
+                                                            Party</label>
+                                                        <label for="foods"><img src="../images/food.png" alt=""
+                                                                class="style-img"><input type="checkbox"
+                                                                class="categoryCheckbox" name="category" value="foods"
+                                                                id="foods" onclick="toggleCategory('foods')">
+                                                            Food</label>
+                                                        <label for="beach"><img src="../images/beach.png" alt=""
+                                                                class="style-img"><input type="checkbox"
+                                                                class="categoryCheckbox" name="category" value="beach"
+                                                                id="beach" onclick="toggleCategory('beach')">
+                                                            Beach</label>
+                                                        <label for="culture"><img src="../images/culture.png" alt=""
+                                                                class="style-img"><input type="checkbox"
+                                                                class="categoryCheckbox" name="category" value="culture"
+                                                                id="culture" onclick="toggleCategory('culture')">
+                                                            Culture</label>
+                                                        <label for="sports"><img src="../images/sports.png" alt=""
+                                                                class="style-img"><input type="checkbox"
+                                                                class="categoryCheckbox" name="category" value="sports"
+                                                                id="sports" onclick="toggleCategory('sports')">
+                                                            Sports</label>
+                                                        <p id="seeMoreText" class="see-more-text"
+                                                            onclick="toggleSeeMore()">See More</p>
 
-        </div>
+                                                    </div>
 
-    </div>
+                                                    <input type="hidden" name="selectedCategories"
+                                                        id="selectedCategories">
+                                                </form>
 
-    <div class="package">
-        <div class="ptext">
-            <h1>Explore packages</h1>
-            <p>Find, what suites you best</p>
-        </div>
+                                                <button class="filter-submit"
+                                                    onclick="submitCombinedSearch()">Submit</button>
+                                            </div>
 
-        <div class="package-cards" data-scroll-container>
 
-            <% for (let i=0; i < 4; i++) { %>
-                <div class="card card<%= i %>" data-scroll data-scroll-call="animate-card">
-                    <% if (tripPackages[i]) { %>
-                        <!-- Render actual trip details if available -->
-                        <img src="<%= tripPackages[i].tripImages[0]?.path %>" alt="">
-                        <p>
-                            <%= tripPackages[i].title %>
-                        </p>
-                        <form action="/discover" method="POST">
-                            <input type="hidden" name="tripId" value="<%= tripPackages[i]._id %>">
-                            <button type="submit">Discover more</button>
-                        </form>
-                        <% } else { %>
-                            <!-- Render placeholder card if trip is not available -->
-                            <img src="placeholder-image.jpg" alt="No Trip Available">
-                            <p>Trip Not Available</p>
-                            <form action="#" method="POST">
-                                <button type="submit" disabled>Discover more</button>
-                            </form>
+
+                                            <div class="price-slider-header">
+                                                <p>Price filter</p>
+                                                <img src="../images/arrow.svg" alt="" id="priceFilterToggle"
+                                                    class="filter-controller">
+
+                                            </div>
+                                            <div class="price-filter-container">
+                                                <div class="wrapper">
+
+
+                                                    <div class="slider">
+                                                        <div class="progress"></div>
+                                                    </div>
+                                                    <div class="range-input">
+                                                        <form action="">
+                                                            <input type="range" id="minPrice" class="range-min" min="0"
+                                                                max="70000" step="100">
+                                                            <input type="range" id="maxPrice" class="range-max" min="0"
+                                                                max="70000" step="100">
+
+                                                        </form>
+                                                    </div>
+
+                                                    <div class="price-input">
+                                                        <div class="field">
+                                                            <input type="number" class="input-min" value="0">
+                                                        </div>
+                                                        <div class="field">
+                                                            <input type="number" class="input-max" value="100000">
+                                                        </div>
+                                                    </div>
+
+
+                                                </div>
+
+                                                <button class="filter-submit"
+                                                    onclick="submitCombinedSearch()">submit</button>
+
+                                            </div>
+
+
+                                            <div class="price-slider-header">
+                                                <p>languages filter</p>
+                                                <img src="../images/arrow.svg" alt="" id="languageToggle"
+                                                    class="filter-controller">
+
+                                            </div>
+
+                                            <div class="languages-filter-container">
+                                                <form id="languagesFilterForm" method="POST" action="/searchtrips">
+                                                    <label for="kannada">
+                                                        <input type="checkbox" class="languageCheckbox" name="languages"
+                                                            value="Kannada" id="kannada">
+                                                        Kannada
+                                                    </label>
+                                                    <label for="english">
+                                                        <input type="checkbox" class="languageCheckbox" name="languages"
+                                                            value="English" id="english">
+                                                        English
+                                                    </label>
+                                                    <label for="hindi">
+                                                        <input type="checkbox" class="languageCheckbox" name="languages"
+                                                            value="Hindi" id="hindi">
+                                                        Hindi
+                                                    </label>
+                                                    <label for="gujarati">
+                                                        <input type="checkbox" class="languageCheckbox" name="languages"
+                                                            value="gujarati" id="gujarati">
+                                                        Gujarati
+                                                    </label>
+                                                    <label for="marathi">
+                                                        <input type="checkbox" class="languageCheckbox" name="languages"
+                                                            value="Marathi" id="marathi">
+                                                        Marathi
+                                                    </label>
+                                                    <input type="hidden" name="selectedLanguages"
+                                                        id="selectedLanguages">
+                                                </form>
+                                                <button class="filter-submit"
+                                                    onclick="submitCombinedSearch()">submit</button>
+
+                                            </div>
+
+                                            <div class="price-slider-header">
+                                                <p>No of days</p>
+                                                <img src="../images/arrow.svg" alt="" id="daysToggle"
+                                                    class="filter-controller">
+
+                                            </div>
+
+                                            <div class="days-filter-container">
+                                                <div class="days">
+                                                    <label for="minDays">Min Days:</label>
+                                                    <input type="number" id="minDays" name="minDays" min="1"
+                                                        placeholder="Minimum days">
+                                                </div>
+
+
+                                                <div class="days">
+                                                    <label for="maxDays">Max Days:</label>
+                                                    <input type="number" id="maxDays" name="maxDays" min="1"
+                                                        placeholder="Maximum days">
+
+                                                </div>
+                                                <button class="filter-submit"
+                                                    onclick="submitCombinedSearch()">submit</button>
+
+                                            </div>
+
+
+
+                                            <div class="rating-slider-header">
+                                                <p>Ratings</p>
+                                                <img src="../images/arrow.svg" alt="" id="ratingToggle"
+                                                    class="filter-controller">
+
+                                            </div>
+
+                                            <div class="range-container">
+                                                <input type="range" id="rating" name="rating" min="0" max="5" step="1"
+                                                    value="0" oninput="updateRatingValue()">
+                                                <span id="ratingValue">0</span>
+                                                <button class="filter-submit"
+                                                    onclick="submitCombinedSearch()">submit</button>
+
+                                            </div>
+
+
+
+
+
+                                        </div>
+
+
+
+
+                                    </div>
+                                </div>
+
+
+                                <div class="suborclose">
+                                    <button class="filter-submit" onclick="submitCombinedSearch()">submit</button>
+                                    <button class="filter-close" onclick="closeFilterPopup()">close</button>
+
+                                </div>
+
+
+                            </div>
+                        </div>
+
+
+
+
+                        <div class="cards-container">
+                            <% for(let i=0; i < allTrips.length; i++) { %>
+
+                                <div class="card-container" data-id="<%= allTrips[i]._id %>">
+                                    <div class="card-img">
+                                        <% if (allTrips[i].tripImages && allTrips[i].tripImages.length> 0 &&
+                                            allTrips[i].tripImages[0].path) { %>
+                                            <div class="trip-image">
+                                                <img src="<%= allTrips[i].tripImages[0].path %>" alt="Trip Image">
+                                            </div>
+
+                                            <div class="heart-container">
+                                                <% if (user) { %>
+                                                    <% const
+                                                        isInWishlist=userWishlist.includes(allTrips[i]._id.toString());
+                                                        %>
+                                                        <i class="<%= isInWishlist ? 'fa-solid fa-heart wishlist-active' : 'fa-regular fa-heart' %> wishlist-icon"
+                                                            data-id="<%= allTrips[i]._id %>"
+                                                            style="cursor: pointer;"></i>
+                                                        <% } else { %>
+                                                            <i class="fa-regular fa-heart wishlist-icon redirect-i"
+                                                                data-id="<%= allTrips[i]._id %>"></i>
+                                                            <% } %>
+                                            </div>
+
+
+
+
+                                            <% } else { %>
+                                                <p>No images available for this trip</p>
+                                                <% } %>
+                                    </div>
+                                    <div class="card-body">
+                                        <div class="route">
+                                            <img src="../images/route.svg" alt="">
+                                            <h3 class="card-title">
+                                                <a href="/tour/<%= allTrips[i]._id %>">
+                                                    <%= allTrips[i].fromLocation %> ->
+                                                        <br>
+                                                        <%= allTrips[i].location %>
+                                                </a>
+
+
+                                            </h3>
+                                        </div>
+
+                                        <div class="tour-dates">
+                                            <p>
+                                                <% if (allTrips[i].departure) { %>
+                                                    <%= new Date(allTrips[i].departure).toLocaleDateString('en-US', {
+                                                        month: 'short' , day: '2-digit' }) %> ~
+                                                        <% } else { %>
+                                                            date not available
+                                                            <% } %>
+
+                                                                <% if (allTrips[i].endDate) { %>
+                                                                    <%= new
+                                                                        Date(allTrips[i].endDate).toLocaleDateString('en-US',
+                                                                        { month: 'short' , day: '2-digit' }) %>
+                                                                        <% } %>
+                                            </p>
+                                        </div>
+                                        <div class="title-container">
+                                            <h4 class="trip-title">
+                                                <%= allTrips[i].title %>
+                                            </h4>
+
+                                        </div>
+
+
+
+                                        <div class=" ratio-container">
+                                            <p class="maleRatio"> <span class="material-symbols-outlined">
+                                                    male
+                                                </span>
+                                                <%= allTrips[i].maleRatio %>%
+                                            </p>
+                                            <p class="femaleRatio">
+                                                <span class="material-symbols-outlined">
+                                                    female
+                                                </span>
+                                                <%= allTrips[i].femaleRatio %>%
+                                            </p>
+
+                                        </div>
+
+
+
+                                        <div class="rating-container">
+                                            <i class="fa-solid fa-star"></i>
+                                            <p>
+                                                <%= allTrips[i].averageRating %>
+                                            </p>
+
+                                        </div>
+
+
+
+                                        <div class="card-bottom">
+                                            <div class="days-container">
+                                                <h4 class="days">
+                                                    <%= allTrips[i].totalDays %> days
+                                                </h4>
+                                            </div>
+                                            <div class="price-container">
+                                                <% if (allTrips[i].totalCost) { %>
+                                                    <span>FROM</span> &nbsp;<b>
+                                                        <%= allTrips[i].totalCost.toLocaleString('en-IN', {
+                                                            style: 'currency' , currency: 'INR' }) %>
+                                                    </b>
+                                                    <% } else { %>
+                                                        Price Not Available
+                                                        <% } %>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <% } %>
+                        </div>
+
+
+                    </main>
+
+                    <div class="pagination">
+                        <% if (currentPage> 1) { %>
+                            <a href="?page=<%= currentPage - 1 %>" class="prev">Previous</a>
                             <% } %>
-                </div>
-                <% } %>
-        </div>
-    </div>
 
+                                <% for (let i=1; i <=totalPages; i++) { %>
+                                    <a href="?page=<%= i %>" class="<%= i === currentPage ? 'active' : '' %>">
+                                        <%= i %>
+                                    </a>
+                                    <% } %>
+
+                                        <% if (currentPage < totalPages) { %>
+                                            <a href="?page=<%= currentPage + 1 %>" class="next">Next</a>
+                                            <% } %>
+                    </div>
+
+
+
+
+
+
+                    <div class="destination-container dest-cont">
+                        <div class="find">
+                            <h1>Find your destination</h1>
+                            <p>Browse some of our most popular tours of the month.</p>
+                        </div>
+                        <div class="destination-carousal">
+
+
+                            <div class="swiffy-slider slider-item-show2 slider-nav-autoplay">
+                                <ul class="slider-container">
+                                    <% for (let i=0; i < 4; i++) { %>
+                                        <li>
+                                            <% if (exploreTrips[i]) { %>
+                                                <!-- Render actual explore trip details if available -->
+                                                <img src="<%= exploreTrips[i].tripImages[0]?.path %>"
+                                                    alt="Explore Trip">
+                                                <button class="explore-trip">
+                                                    <a href="/tour/<%= exploreTrips[i]._id %>">Explore Tour</a>
+                                                </button>
+                                                <% } else { %>
+                                                    <!-- Render a placeholder if no explore trip is available -->
+                                                    <img src="placeholder-image.jpg" alt="No Explore Trip Available">
+                                                    <button class="explore-trip">
+                                                        <a href="#">Explore Tour</a>
+                                                    </button>
+                                                    <% } %>
+                                        </li>
+                                        <% } %>
+
+                                </ul>
 
+                                <button type="button" class="slider-nav"></button>
+                                <button type="button" class="slider-nav slider-nav-next"></button>
 
 
+                            </div>
 
-    <footer>
+                        </div>
 
-        <div class="sec1">
-            <div class="logo"></div>
-            <p>Book your trip in minute, get full Control for much longer.</p>
-        </div>
-        <div class="sec2">
-            <div class="col1">
-                <h3>Company</h3>
-                <div class="links">
-                    <a href="">How it works</a>
-                    <a href="/">Find a trip</a>
-                    <a href="/createtrip">Create a trip</a>
-                </div>
+                    </div>
 
+                    <div class="package">
+                        <div class="ptext">
+                            <h1>Explore packages</h1>
+                            <p>Find, what suites you best</p>
+                        </div>
 
-            </div>
-            <div class="col2">
-                <h3>EXPLORE</h3>
-                <div class="links">
-                    <a href="/tourbydestination">Group trips by destination </a>
-                    <a href="/tourbymonths">Group trips by Month </a>
-                    <a href="/featuredtrips">Featured trips</a>
-                </div>
-            </div>
-            <div class="col3">
-                <h3>Join Our Tour</h3>
-                <div class="links">
-                    <a href="">Blog </a>
-                    <a href="">About us</a>
-                    <a href="/contactUs">Contact us</a>
-                </div>
-            </div>
+                        <div class="package-cards" data-scroll-container>
 
+                            <% for (let i=0; i < 4; i++) { %>
+                                <div class="card card<%= i %>" data-scroll data-scroll-call="animate-card">
+                                    <% if (tripPackages[i]) { %>
+                                        <!-- Render actual trip details if available -->
+                                        <img src="<%= tripPackages[i].tripImages[0]?.path %>" alt="">
+                                        <p>
+                                            <%= tripPackages[i].title %>
+                                        </p>
+                                        <form action="/discover" method="POST">
+                                            <input type="hidden" name="tripId" value="<%= tripPackages[i]._id %>">
+                                            <button type="submit">Discover more</button>
+                                        </form>
+                                        <% } else { %>
+                                            <!-- Render placeholder card if trip is not available -->
+                                            <img src="placeholder-image.jpg" alt="No Trip Available">
+                                            <p>Trip Not Available</p>
+                                            <form action="#" method="POST">
+                                                <button type="submit" disabled>Discover more</button>
+                                            </form>
+                                            <% } %>
+                                </div>
+                                <% } %>
+                        </div>
+                    </div>
 
-        </div>
-        <div class="sec3">
 
-            <img src="../images/f.svg" alt="">
-            <img src="../images/i.svg" alt="">
-            <img src="../images/t.svg" alt="">
 
 
-        </div>
 
-        <p class="cc">All rights reserved@travelgoo.co</p>
+                    <footer id="safooter">
 
+                        <div class="sec1">
+                            <div class="logo"></div>
+                            <p>Book your trip in minute, get full Control for much longer.</p>
+                        </div>
+                        <div class="sec2">
+                            <div class="col1">
+                                <h3>Company</h3>
+                                <div class="links">
+                                    <a href="">How it works</a>
+                                    <a href="/">Find a trip</a>
+                                    <a href="/createtrip">Create a trip</a>
+                                </div>
 
-    </footer>
 
+                            </div>
+                            <div class="col2">
+                                <h3>Explore</h3>
+                                <div class="links">
+                                    <a href="/tourbydestination">Group trips by destination </a>
+                                    <a href="/tourbymonths">Group trips by Month </a>
+                                    <a href="/featuredtrips">Featured trips</a>
+                                </div>
+                            </div>
+                            <div class="col3">
+                                <h3>Join Our Tour</h3>
+                                <div class="links">
+                                    <a href="">Blog </a>
+                                    <a href="">About us</a>
+                                    <a href="/contactUs">Contact us</a>
+                                </div>
+                            </div>
 
+
+                        </div>
+                        <div class="sec3">
+
+                            <img src="../images/f.svg" alt="">
+                            <img src="../images/i.svg" alt="">
+                            <img src="../images/t.svg" alt="">
+
+
+                        </div>
+
+                        <p class="cc">All rights reserved@travelgoo.co</p>
+
+
+                    </footer>
+
+
+
+
+
+
+
+
+                    <script>
+                        function fetchPage(pageNumber) {
+                            fetch('/mainSearch', {
+                                method: 'POST',
+                                headers: {
+                                    'Content-Type': 'application/json'
+                                },
+                                body: JSON.stringify({ page: pageNumber })
+                            })
+                                .then(response => response.json())
+                                .then(data => {
+                                    // Update the search results dynamically
+                                    const searchResults = document.getElementById('searchResults');
+                                    searchResults.innerHTML = '';
+
+                                    data.trips.forEach(trip => {
+                                        const tripDiv = document.createElement('div');
+                                        tripDiv.classList.add('trip-card');
+                                        tripDiv.innerHTML = `<h3>${trip.title}</h3><p>${trip.location}</p>`;
+                                        searchResults.appendChild(tripDiv);
+                                    });
 
+                                    // Update pagination buttons (optional, if needed)
+                                })
+                                .catch(error => console.error('Error:', error));
+                        }
+                    </script>
 
 
 
+                    <!-- Swiper JS -->
+                    <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
 
 
-    <script>
-        function fetchPage(pageNumber) {
-            fetch('/mainSearch', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({ page: pageNumber })
-            })
-                .then(response => response.json())
-                .then(data => {
-                    // Update the search results dynamically
-                    const searchResults = document.getElementById('searchResults');
-                    searchResults.innerHTML = '';
+                    <!-- Initialize Swiper  first nav carousal-->
+                    <script>
+                        var swiper = new Swiper(".mySwiper", {
+                            speed: 1000,
+                            spaceBetween: 0,
+                            centeredSlides: true,
+                            autoplay: {
+                                delay: 2500,
+                                disableOnInteraction: false,
+                            },
+                            pagination: {
+                                el: ".swiper-pagination",
+                                clickable: true,
+                            },
+                            navigation: {
+                                nextEl: ".swiper-button-next",
+                                prevEl: ".swiper-button-prev",
+                            },
+                        });
 
-                    data.trips.forEach(trip => {
-                        const tripDiv = document.createElement('div');
-                        tripDiv.classList.add('trip-card');
-                        tripDiv.innerHTML = `<h3>${trip.title}</h3><p>${trip.location}</p>`;
-                        searchResults.appendChild(tripDiv);
-                    });
 
-                    // Update pagination buttons (optional, if needed)
-                })
-                .catch(error => console.error('Error:', error));
-        }
-    </script>
 
 
 
-    <!-- Swiper JS -->
-    <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+                        // testimonail carousal 
 
+                        //   all ------------------
+                        function initParadoxWay() {
+                            "use strict";
 
-    <!-- Initialize Swiper  first nav carousal-->
-    <script>
-        var swiper = new Swiper(".mySwiper", {
-            speed: 1000,
-            spaceBetween: 0,
-            centeredSlides: true,
-            autoplay: {
-                delay: 2500,
-                disableOnInteraction: false,
-            },
-            pagination: {
-                el: ".swiper-pagination",
-                clickable: true,
-            },
-            navigation: {
-                nextEl: ".swiper-button-next",
-                prevEl: ".swiper-button-prev",
-            },
-        });
-
-
-
-
-
-        // testimonail carousal 
-
-        //   all ------------------
-        function initParadoxWay() {
-            "use strict";
-
-            if ($(".testimonials-carousel").length > 0) {
-                var j2 = new Swiper(".testimonials-carousel .swiper-container", {
-                    preloadImages: false,
-                    slidesPerView: 1,
-                    spaceBetween: 20,
-                    loop: true,
-                    grabCursor: true,
-                    mousewheel: false,
-                    centeredSlides: true,
-                    pagination: {
-                        el: '.tc-pagination',
-                        clickable: true,
-                        dynamicBullets: true,
-                    },
-                    navigation: {
-                        nextEl: '.listing-carousel-button-next',
-                        prevEl: '.listing-carousel-button-prev',
-                    },
-                    breakpoints: {
-                        1024: {
-                            slidesPerView: 3,
-                        },
+                            if ($(".testimonials-carousel").length > 0) {
+                                var j2 = new Swiper(".testimonials-carousel .swiper-container", {
+                                    preloadImages: false,
+                                    slidesPerView: 1,
+                                    spaceBetween: 20,
+                                    loop: true,
+                                    grabCursor: true,
+                                    mousewheel: false,
+                                    centeredSlides: true,
+                                    pagination: {
+                                        el: '.tc-pagination',
+                                        clickable: true,
+                                        dynamicBullets: true,
+                                    },
+                                    navigation: {
+                                        nextEl: '.listing-carousel-button-next',
+                                        prevEl: '.listing-carousel-button-prev',
+                                    },
+                                    breakpoints: {
+                                        1024: {
+                                            slidesPerView: 3,
+                                        },
 
-                    }
-                });
-            }
+                                    }
+                                });
+                            }
 
-            // bubbles -----------------
+                            // bubbles -----------------
 
 
-            setInterval(function () {
-                var size = randomValue(sArray);
-                $('.bubbles').append('<div class="individual-bubble" style="left: ' + randomValue(bArray) + 'px; width: ' + size + 'px; height:' + size + 'px;"></div>');
-                $('.individual-bubble').animate({
-                    'bottom': '100%',
-                    'opacity': '-=0.7'
-                }, 4000, function () {
-                    $(this).remove()
-                });
-            }, 350);
+                            setInterval(function () {
+                                var size = randomValue(sArray);
+                                $('.bubbles').append('<div class="individual-bubble" style="left: ' + randomValue(bArray) + 'px; width: ' + size + 'px; height:' + size + 'px;"></div>');
+                                $('.individual-bubble').animate({
+                                    'bottom': '100%',
+                                    'opacity': '-=0.7'
+                                }, 4000, function () {
+                                    $(this).remove()
+                                });
+                            }, 350);
 
-        }
+                        }
 
-        //   Init All ------------------
-        $(document).ready(function () {
-            initParadoxWay();
-        });
+                        //   Init All ------------------
+                        $(document).ready(function () {
+                            initParadoxWay();
+                        });
 
 
 
 
-    </script>
+                    </script>
 
 
 
 
 
 
-    <!-- Swiper JS -->
-    <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+                    <!-- Swiper JS -->
+                    <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
 
-    <!-- Initialize Swiper -->
-    <script>
-        var swiper = new Swiper(".mySwiper", {
-            speed: 1000,
-            spaceBetween: 0,
-            centeredSlides: true,
-            autoplay: {
-                delay: 2500,
-                disableOnInteraction: false,
-            },
-            pagination: {
-                el: ".swiper-pagination",
-                clickable: true,
-            },
-            navigation: {
-                nextEl: ".swiper-button-next",
-                prevEl: ".swiper-button-prev",
-            },
-        });
-    </script>
+                    <!-- Initialize Swiper -->
+                    <script>
+                        var swiper = new Swiper(".mySwiper", {
+                            speed: 1000,
+                            spaceBetween: 0,
+                            centeredSlides: true,
+                            autoplay: {
+                                delay: 2500,
+                                disableOnInteraction: false,
+                            },
+                            pagination: {
+                                el: ".swiper-pagination",
+                                clickable: true,
+                            },
+                            navigation: {
+                                nextEl: ".swiper-button-next",
+                                prevEl: ".swiper-button-prev",
+                            },
+                        });
+                    </script>
 
-    <script>
+                    <script>
 
 
-        document.addEventListener('DOMContentLoaded', () => {
-            const dateInputs = document.querySelectorAll('input[type="date"]');
+                        document.addEventListener('DOMContentLoaded', () => {
+                            const dateInputs = document.querySelectorAll('input[type="date"]');
 
 
-            //this is for date picker 
-            dateInputs.forEach(input => {
-                input.addEventListener('focus', (event) => {
-                    event.target.showPicker();
-                });
-            });
-        });
+                            //this is for date picker 
+                            dateInputs.forEach(input => {
+                                input.addEventListener('focus', (event) => {
+                                    event.target.showPicker();
+                                });
+                            });
+                        });
 
 
 
 
 
 
-        // dates correction
+                        // dates correction
 
 
 
 
 
-        // Get today's date in the format 'YYYY-MM-DD'
-        const today = new Date().toISOString().split('T')[0];
+                        // Get today's date in the format 'YYYY-MM-DD'
+                        const today = new Date().toISOString().split('T')[0];
 
-        // Get input elements
-        const fromDateInput = document.getElementById('fromDate');
-        const toDateInput = document.getElementById('toDate');
+                        // Get input elements
+                        const fromDateInput = document.getElementById('fromDate');
+                        const toDateInput = document.getElementById('toDate');
 
-        // Set the min date for the "from" input
-        fromDateInput.setAttribute('min', today);
+                        // Set the min date for the "from" input
+                        fromDateInput.setAttribute('min', today);
 
-        // Add an event listener to update the "to" input based on "from" input selection
-        fromDateInput.addEventListener('change', () => {
-            const selectedFromDate = fromDateInput.value;
+                        // Add an event listener to update the "to" input based on "from" input selection
+                        fromDateInput.addEventListener('change', () => {
+                            const selectedFromDate = fromDateInput.value;
 
-            // Update the min date for the "to" input
-            toDateInput.setAttribute('min', selectedFromDate);
+                            // Update the min date for the "to" input
+                            toDateInput.setAttribute('min', selectedFromDate);
 
-            // Ensure the "to" date is greater than or equal to the "from" date
-            if (toDateInput.value && toDateInput.value < selectedFromDate) {
-                toDateInput.value = ""; // Clear the "to" input if it violates the rule
-                alert("The 'To' date must be greater than or equal to the 'From' date.");
-            }
-        });
+                            // Ensure the "to" date is greater than or equal to the "from" date
+                            if (toDateInput.value && toDateInput.value < selectedFromDate) {
+                                toDateInput.value = ""; // Clear the "to" input if it violates the rule
+                                alert("The 'To' date must be greater than or equal to the 'From' date.");
+                            }
+                        });
 
-        // Add an event listener to validate "to" date when changed
-        toDateInput.addEventListener('change', () => {
-            const selectedFromDate = fromDateInput.value;
-            const selectedToDate = toDateInput.value;
+                        // Add an event listener to validate "to" date when changed
+                        toDateInput.addEventListener('change', () => {
+                            const selectedFromDate = fromDateInput.value;
+                            const selectedToDate = toDateInput.value;
 
-            // Ensure the "to" date is greater than or equal to the "from" date
-            if (selectedFromDate && selectedToDate < selectedFromDate) {
-                toDateInput.value = ""; // Clear the "to" input if it violates the rule
-                alert("The 'To' date must be greater than or equal to the 'From' date.");
-            }
-        });
+                            // Ensure the "to" date is greater than or equal to the "from" date
+                            if (selectedFromDate && selectedToDate < selectedFromDate) {
+                                toDateInput.value = ""; // Clear the "to" input if it violates the rule
+                                alert("The 'To' date must be greater than or equal to the 'From' date.");
+                            }
+                        });
 
 
 
 
 
 
+                    </script>
 
 
 
+                    <script>
+                        document.addEventListener("DOMContentLoaded", function () {
+                            const header = document.querySelector("header"); // Change selector if needed
+                            const containers = document.querySelectorAll(".search-locations-container, .destinationLocation-container");
 
+                            containers.forEach(container => {
+                                const input = container.querySelector("input"); // Get the input inside each container
 
+                                input.addEventListener("focus", function () {
+                                    header.style.height = "18vh"; // Reduce header height
+                                    container.style.border = "1px solid black"; // Add border to container
+                                });
 
+                                input.addEventListener("blur", function () {
+                                    header.style.height = ""; // Reset height
+                                    container.style.border = ""; // Remove border from container
+                                });
+                            });
+                        });
 
 
-    </script>
-    <script src="/js/flash.js"></script>
-    <script src="/js/seemore.js"></script>
-    <script src="/js/whislist.js"></script>
-    <script src="/js/dropdown.js"></script>
-    <script src="/js/autoSuggestions.js"></script>
-    <script src="/js/secondarySearch.js"></script>
-    <script src="/js/mainSearch.js"></script>
-    <script src="/js/filter.js"></script>
-    <script src="/js/nav.js"></script>
-    <script src="/js/pricefilter.js"></script>
+
+                    </script>
+
+                  
+             
+
+
+                    <script src="/js/flash.js"></script>
+                    <script src="/js/seemore.js"></script>
+                    <script src="/js/whislist.js"></script>
+                    <script src="/js/dropdown.js"></script>
+                    <script src="/js/autoSuggestions.js"></script>
+                    <script src="/js/secondarySearch.js"></script>
+                    <script src="/js/mainSearch.js"></script>
+                    <script src="/js/filter.js"></script>
+                    <script src="/js/nav.js"></script>
+                    <script src="/js/pricefilter.js"></script>
 </body>
 
 </html>

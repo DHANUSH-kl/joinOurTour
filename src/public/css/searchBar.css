@@ -276,10 +276,10 @@ input[type="date"]:focus {
         flex-direction: column;
         align-items: center;
         justify-content: center;
-        gap: 1rem;
+        gap: 0rem;
         position: relative;
-        width: 80%;
-        padding: 1.5rem;
+        width: 95%;
+        
         border-radius: 15px;
     }
     .mainSearchBtn-container {
@@ -289,21 +289,50 @@ input[type="date"]:focus {
     .search-locations {
         margin: 0;
         width: 80%;
-        border-bottom: 1px solid black;
+        border-bottom: 0px solid black;
         border-radius: 0;
         padding-bottom: 1rem;
+        margin-left: -4rem;
+        gap: 3px;
 
     }
     .search-dates {
         margin: 0;
         width: 80%;
+        margin-left: -4rem;
+        gap: 8px;
+    }
+
+    .search-locations-container , .trip-dates{
+        background-color: #F5F5F5;
+        border-radius: 10px;
+    }
+
+    .trip-dates{
+        gap: 0;
+        padding: 3px 10px;
+        width: 50%;
+    }
+    .trip-dates label{
+        font-weight: 500;
+    }
+    input[type="date"]{
+        background: none;
+        color: black;
     }
     .search-dates-container {
         width: 100%;
-        justify-content: space-around;
-    }
+        justify-content: flex-start;
+        gap: 3px;
+        margin-left: -2.5px;
+      }
     .search-locations img {
         margin: 0;
+    }
+
+    .mainSearchBtn{
+        width: 2rem;
+        height: 2rem;
     }
   }
 
@@ -318,13 +347,40 @@ input[type="date"]:focus {
     }
 
     .mainSearchBtn-container {
-        width: 1.8rem;
-        height: 1.8rem;
+        width: 3.8rem;
+        height: 3rem;
+        background-color: #F5F5F5;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        border-radius: 10px;
         right: 10px;
+        top: 5rem;
       }
 
       input[type="date"] {
         font-size: 0.45rem;
-        width: 71px;
+        
+      }
+
+      .bottom-container{
+        display: none;
+      }
+
+      .search-locations-container input:focus header{
+        height: 18vh;
       }
   }
+
+
+  @media(max-width:385px){
+    .search-locations-container label, .trip-dates label {
+        font-size: 9px;
+      }
+
+      input[type="date"] {
+        font-size: 6px;
+      }
+  }
+
+

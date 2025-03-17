@@ -20,6 +20,8 @@ h2 {
     margin-top: 20px;
     font-size: 28px;
     color: #219ebc;
+    text-align: start;
+    margin-left: 5rem;
 }
 
 .months-container {

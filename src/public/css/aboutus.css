@@ -690,8 +690,12 @@ nav img:hover{
 
 nav .right {
     margin-right: 0;
-    margin-top: 2rem;
     z-index: 999;
+}
+
+nav .abt-right {
+    margin-top: 2rem;
+
 }
 
 .account-container {
@@ -1018,7 +1022,7 @@ nav .bottom-container {
         text-align: center;
         top: 0;
         right: 0;
-        margin-top: 5rem;
+        margin-top: 0rem;
     }
 
     .package-cards {
@@ -1329,12 +1333,38 @@ nav .bottom-container {
       }
 
       .card {
-        margin-bottom: 10rem;
+        margin-bottom: 8rem;
       }
 
       .why-images .two {
         left: -1rem;
       }
+
+      .destination-container{
+        height: 55vh;
+      }
+
+      .destination-carousal {
+        width: 17rem;
+        height: 100%;
+      }
+
+      .ptext{
+        margin-bottom: 2rem;
+        height: auto;
+
+      }
+
+      .package-cards .card {
+        width: 9rem;
+        height: 13rem;
+      }
+
+      .package-cards .card button{
+        margin-left: 0;
+        margin-top: 1rem;
+      }
+      
 
       
 }
@@ -1344,15 +1374,13 @@ nav .bottom-container {
         font-size: 33px;
     }
     .find p , .ptext p{
-        font-size: 7px;
+        font-size: 11px;
       }
       .slider-container li {
         height: 45.4%;
         width: 97.4%;
       }
-      .ptext {
-        margin: 0;
-      }
+      
     
       .package-cards {
         margin-top: -1.5rem;
@@ -1410,3 +1438,6 @@ nav .bottom-container {
         left: 7.5rem;
       }
 }
+
+
+

@@ -18,13 +18,101 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Anton&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
 
+
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>
+    <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+
+
+
+    <link rel="stylesheet" href="/css/mytrip.css">
+
+
+
+
+  <link rel="stylesheet" href="/css/logo.css">
+  <link rel="stylesheet" href="/css/nav.css">
+    <link rel="stylesheet" href="/css/showAll.css">
+    <link rel="stylesheet" href="/css/searchBar.css">
+    <link rel="stylesheet" href="/css/mainSearch.css">
+    <link rel="stylesheet" href="/css/filterSearch.css">
+    <link rel="stylesheet" href="/css/pagination.css">
+    <link rel="stylesheet" href="/css/account.css">
+    <link rel="stylesheet" href="/css/wishlist.css">
     <link rel="stylesheet" href="/css/footer.css">
+    <link rel="stylesheet" href="/css/contactUs.css">
+
     <link rel="stylesheet" href="/css/tourbymonths.css">
     <title>Document</title>
 </head>
 <body>
-    <h2>Group Tours By Months</h2>
+
+    <nav id="showall-nav" >
+        <div class="logo">
+    
+            <p class="shine">joinOurTour</p>
+            <!-- From Uiverse.io by devkatyall -->
+            <!-- <div class="shine">joinOurTour</div> -->
+    
+    
+        </div>
+        <div class="home">
+            <a href="/aboutus">HOME</a>
+        </div>
+        <div class="right">
+            <img src="../images/account_circle.png" alt="" class="account-icon">
+            <!-- <img src="../images/search.png" alt=""> -->
+    
+            <div class="account-container acc-hide">
+                <div class="close">
+                    <i class="fa-solid fa-xmark" id="close"></i>
+                </div>
+                <div class="user-info-container">
+                    <% if(!currUser) { %>
+    
+                        <% } else { %>
+                            <div class="profile"></div>
+                            <p>
+                                <%= currUser.username %>
+                            </p>
+    
+                            <p>
+                                Wallet Balance: <%= currUser.wallet %> tokens
+                            </p>
+    
+    
+                            <% } %>
+                </div>
+                <div class="nav-links">
+                    <% if (user && user.isAgent) { %>
+                        <a href="/mytrips">MY TRIP</a>
+                        <a href="/createtrip">CREATE TRIP</a>
+                        <% } %>
+                            <a href="/">PAYMENTS AND PAYOUTS</a>
+                            <% if (!user) { %>
+                                <a href="/user/signin">SIGN IN</a>
+                                <a href="/user/signup">SIGN UP</a>
+                                <% } else { %>
+                                    <a href="/user/logout">SIGN OUT</a>
+                                    <% } %>
+                                        <a href="/showWishlist">WISHLIST &nbsp; <i
+                                                class="fa-solid fa-heart"
+                                                style="cursor: pointer;"></i></a>
+                                        <% if (user && user.isOwner) { %>
+                                            <a href="/admin/adminpannel">ADMIN PANNEL</a>
+    
+                                            <% } %>
+                                                <p></p>
+                </div>
+            </div>
+    
+        </div>
+    </nav>
+    <hr>
+    <h2 class="h1">Group Tours By Months</h2>
 
     <div class="months-container">
         <% let today = new Date(); %>
@@ -81,8 +169,8 @@
                 <h3>EXPLORE</h3>
                 <div class="links">
                     <a href="/tourbydestination">Group trips by destination </a>
-                    <a href="tourbymonths">Group trips by Month </a>
-                    <a href="">Affilates</a>
+                    <a href="/tourbymonths">Group trips by Month </a>
+                    <a href="/featuredtrips">Featured trips</a>
                 </div>
             </div>
             <div class="col3">
@@ -98,9 +186,9 @@
         </div>
         <div class="sec3">
 
-            <img src="/images/f.svg" alt="no image">
-            <img src="/images/i.svg" alt="">
-            <img src="/images/t.svg" alt="">
+            <img src="../images/f.svg" alt="">
+            <img src="../images/i.svg" alt="">
+            <img src="../images/t.svg" alt="">
 
 
         </div>
@@ -109,6 +197,9 @@
 
 
     </footer>
+
+
+    <script src="/js/dropdown.js"></script>
 
 </body>
 </html>

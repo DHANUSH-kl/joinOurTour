@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -18,52 +19,121 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Anton&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
 
-    <title>Contact Us</title>
+
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>
+    <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+
+
+
+    <link rel="stylesheet" href="/css/mytrip.css">
+
+
+
+
+  <link rel="stylesheet" href="/css/logo.css">
+  <link rel="stylesheet" href="/css/nav.css">
+    <link rel="stylesheet" href="/css/showAll.css">
+    <link rel="stylesheet" href="/css/searchBar.css">
+    <link rel="stylesheet" href="/css/mainSearch.css">
+    <link rel="stylesheet" href="/css/filterSearch.css">
+    <link rel="stylesheet" href="/css/pagination.css">
+    <link rel="stylesheet" href="/css/account.css">
+    <link rel="stylesheet" href="/css/wishlist.css">
     <link rel="stylesheet" href="/css/footer.css">
     <link rel="stylesheet" href="/css/contactUs.css">
+    <title>Contact Us</title>
 </head>
-<body>
 
-    <div class="contact-container">
-        <h2>Contact Us</h2>
-        <p>Have any questions? Fill out the form and we’ll get back to you.</p>
-        
-        <form action="/contactUs" method="POST">
-            <div class="form-group">
-                <label for="firstName">First Name</label>
-                <input type="text" id="firstName" name="firstName" required>
+<body class="bgpatern">
+
+    <nav id="showall-nav" >
+        <div class="logo">
+    
+            <p class="shine">joinOurTour</p>
+            <!-- From Uiverse.io by devkatyall -->
+            <!-- <div class="shine">joinOurTour</div> -->
+    
+    
+        </div>
+        <div class="home">
+            <a href="/aboutus">HOME</a>
+        </div>
+        <div class="right">
+            <img src="../images/account_circle.png" alt="" class="account-icon">
+            <!-- <img src="../images/search.png" alt=""> -->
+    
+            <div class="account-container acc-hide">
+                <div class="close">
+                    <i class="fa-solid fa-xmark" id="close"></i>
+                </div>
+                <div class="user-info-container">
+                    <% if(!currUser) { %>
+    
+                        <% } else { %>
+                            <div class="profile"></div>
+                            <p>
+                                <%= currUser.username %>
+                            </p>
+    
+                            <p>
+                                Wallet Balance: <%= currUser.wallet %> tokens
+                            </p>
+    
+    
+                            <% } %>
+                </div>
+                <div class="nav-links">
+                    <% if (user && user.isAgent) { %>
+                        <a href="/mytrips">MY TRIP</a>
+                        <a href="/createtrip">CREATE TRIP</a>
+                        <% } %>
+                            <a href="/">PAYMENTS AND PAYOUTS</a>
+                            <% if (!user) { %>
+                                <a href="/user/signin">SIGN IN</a>
+                                <a href="/user/signup">SIGN UP</a>
+                                <% } else { %>
+                                    <a href="/user/logout">SIGN OUT</a>
+                                    <% } %>
+                                        <a href="/showWishlist">WISHLIST &nbsp; <i
+                                                class="fa-solid fa-heart"
+                                                style="cursor: pointer;"></i></a>
+                                        <% if (user && user.isOwner) { %>
+                                            <a href="/admin/adminpannel">ADMIN PANNEL</a>
+    
+                                            <% } %>
+                                                <p></p>
+                </div>
             </div>
+    
+        </div>
+    </nav>
+    <hr>
 
-            <div class="form-group">
-                <label for="lastName">Last Name</label>
-                <input type="text" id="lastName" name="lastName" required>
+    <main >
+        <div class="form-container">
+            <div class="form">
+                <form action="/contactUs" method="POST">
+                <span class="heading">Get in touch</span>
+                <input placeholder="Name" type="text" class="input" id="firstName" name="firstName" required>
+                <input placeholder="Email" id="mail" type="email" class="input" id="email" name="email" required>
+                <input placeholder="Phone" id="mail" class="input" id="phone" name="phone" required>
+                <textarea placeholder="Type something..." rows="10" cols="30" 
+                    class="textarea" id="issue" name="issue"></textarea>
+                <div class="button-container">
+                    <div class="send-button"><button class="submit-btn">send</button></div>
+                    
+                    
+                </div>
+                </form>
             </div>
+        </div>
+    </main>
 
-            <div class="form-group">
-                <label for="email">Email</label>
-                <input type="email" id="email" name="email" required>
-            </div>
-
-            <div class="form-group">
-                <label for="company">Company Name</label>
-                <input type="text" id="company" name="company">
-            </div>
-
-            <div class="form-group">
-                <label for="phone">Phone Number</label>
-                <input type="tel" id="phone" name="phone" required>
-            </div>
-
-            <div class="form-group">
-                <label for="issue">Issue Details</label>
-                <textarea id="issue" name="issue" rows="5" required></textarea>
-            </div>
-
-            <button type="submit" class="submit-btn">Submit</button>
-        </form>
-    </div>
-
+   
 
 
     <footer>
@@ -116,5 +186,10 @@
 
     </footer>
 
+
+
+    <script src="/js/dropdown.js"></script>
+
 </body>
+
 </html>

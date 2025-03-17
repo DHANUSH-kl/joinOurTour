@@ -1,0 +1,93 @@
+.shine {
+    cursor: pointer;
+
+    font-size: 0.8rem;
+    font-weight: 900;
+    color: rgba(255, 255, 255, 0.1);
+    background: #05A351 -webkit-gradient(
+        linear,
+        left top,
+        right top,
+        from(#222),
+        to(#222),
+        color-stop(0.5, #fff)
+      ) 0 0 no-repeat;
+    background-image: -webkit-linear-gradient(
+      -40deg,
+      transparent 0%,
+      transparent 40%,
+      #fff 50%,
+      transparent 60%,
+      transparent 100%
+    );
+    -webkit-background-clip: text;
+    -webkit-background-size: 50px;
+    -webkit-animation: zezzz;
+    -webkit-animation-duration: 5s;
+    -webkit-animation-iteration-count: infinite;
+  }
+  @-webkit-keyframes zezzz {
+    0%,
+    10% {
+      background-position: -200px;
+    }
+    20% {
+      background-position: top left;
+    }
+    100% {
+      background-position: 200px;
+    }
+  }
+
+  .nav .logo{
+    width: auto;
+  }
+
+  @media(max-width:750px){
+    .shine{
+        font-size: 0.6rem;
+    }
+  }
+
+
+  @media(max-width:500px){
+    .shine{
+        font-size: 0.5rem;
+    }
+
+    #showall-nav{
+        padding: 0 10px;
+    }
+  }
+
+
+
+
+
+
+
+
+
+
+  nav .logo {
+    color: #FFF;
+    font-family: Poppins;
+    font-size: 20px;
+    font-style: normal;
+    font-weight: 500;
+    line-height: normal;
+    cursor: pointer;
+    background: linear-gradient(135deg, #ffffff, #f0f0f0);
+    border-radius: 15px;
+    box-shadow: 5px 5px 15px rgba(0, 0, 0, 0.1);
+    text-align: center;
+    padding: 0.2rem 1rem;
+    cursor: pointer;
+  }
+
+
+  .logo {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }

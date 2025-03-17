@@ -43,19 +43,20 @@ document.addEventListener("DOMContentLoaded", function () {
 
 
 
-document.addEventListener("DOMContentLoaded", function () {
-    // Clear all text inputs
-    document.querySelectorAll("input[type='text']").forEach(input => input.value = "");
+// document.addEventListener("DOMContentLoaded", function () {
+//     document.querySelectorAll("input[type='text']").forEach(input => {
+//         if (!input.value.trim()) input.value = "";
+//     });
 
-    // Clear all date inputs
-    document.querySelectorAll("input[type='date']").forEach(input => input.value = "");
+//     document.querySelectorAll("input[type='date']").forEach(input => {
+//         if (!input.value.trim()) input.value = "";
+//     });
 
-    // Reset all checkboxes
-    document.querySelectorAll("input[type='checkbox']").forEach(checkbox => checkbox.checked = false);
+//     document.querySelectorAll("input[type='number']").forEach(input => {
+//         if (!input.value.trim()) input.value = "";
+//     });
 
-    // Reset all range inputs
-    document.querySelectorAll("input[type='range']").forEach(range => range.value = range.min);
-
-    // Reset all number inputs
-    document.querySelectorAll("input[type='number']").forEach(number => number.value = "");
-});
+//     document.querySelectorAll("input[type='range']").forEach(range => {
+//         if (!range.value) range.value = range.min;
+//     });
+// });

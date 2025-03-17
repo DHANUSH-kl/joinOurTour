@@ -28,6 +28,7 @@
 
 
 
+    <link rel="stylesheet" href="/css/logo.css">
     <link rel="stylesheet" href="/css/flash.css">
     <link rel="stylesheet" href="/css/signin.css">
     <link rel="stylesheet" href="/css/nav.css">
@@ -44,7 +45,7 @@
 
     <nav>
         <div class="logo">
-            <h4><b>TRAVELER</b></h4>
+            <p class="shine">joinOurTour</p>
         </div>
         <div class="home">
             <a href="/aboutus">HOME</a>
@@ -75,6 +76,13 @@
 
                     </div>
 
+                    <div class="singinUP">
+
+                        <p class="dont">dont have an account?</p>
+                        <a href="/user/signup" class="singUPa">signUP</a>
+
+                    </div>
+
 
                     <div class="btns">
                         <button class="btn btn-success mt-3">signIN</button>
@@ -86,6 +94,14 @@
 
 
     </main>
+
+
+    <script>
+        document.querySelector(".logo").addEventListener("click", function() {
+window.location.href = "/";
+});
+
+        </script>
 
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script src="/js/flash.js"></script>

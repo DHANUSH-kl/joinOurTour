@@ -469,13 +469,13 @@ input[type="date"]:hover {
 
 .filters .top [type="date"] {
     border: none;
-    color: white;
+    color: #05A351;
     height: auto;
     padding: 0.5rem;
     font-family: Poppins;
     font-size: 0.6rem;
     border-radius: 200px;
-    background-color: #05A351;
+    background-color: #fff;
 }
 
 .filters .top [type="date"] {
@@ -546,13 +546,19 @@ input[type="date"]:hover {
       justify-content: center;
     }
 
+    .filters-mb{
+        display: inline-block;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
     .close-filter-btn , .open-filter-btn {
         display: inline-block;
     }
 
     main {
         margin-top: 1rem;
-        padding-top: 8rem;
+        padding-top: 4rem;
         margin-bottom: 0rem;
 
     }
@@ -573,12 +579,13 @@ input[type="date"]:hover {
         cursor: pointer;
     }
     .secondary-search input {
-        background-color: #05A351;
-        color: #fff;
+        background-color: #fff;
+        color: #05A351;
+        border: 2px solid #05A351;
 
     }
     .secondary-search .loc {
-        color: #fff;
+        color: #05A351;
     }
     .secondary-search {
         width: 80%;
@@ -629,7 +636,16 @@ input[type="date"]:hover {
       box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
       position: relative;
     }
-  
+    .sortdiv {
+        width: 650%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        margin-bottom: -1rem;
+        margin-right: 0rem;
+        gap: 5rem;
+        margin-top: 0.5rem;
+    }
     /* Close button */
     .close-filter-btn {
       position: absolute;
@@ -653,6 +669,10 @@ input[type="date"]:hover {
         height: auto;
       }
 
+      .card-img{
+        height: 45%;
+      }
+
       .route img {
         width: 1rem;
       }
@@ -661,8 +681,8 @@ input[type="date"]:hover {
         margin-bottom: 0;
       }
       .card-title a {
-        font-size: 9px;
-        line-height: 8px;
+        font-size: 11px;
+        line-height: 17px;
 
       }
       .title-container {
@@ -701,6 +721,14 @@ input[type="date"]:hover {
       .cards-container {
         gap: 1rem;
       }
+
+      .sortdiv{
+        gap: 2.5rem;
+      }
+}
+
+.sortdiv i {
+    cursor: pointer;
 }
 
 

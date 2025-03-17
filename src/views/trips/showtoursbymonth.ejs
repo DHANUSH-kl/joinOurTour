@@ -34,6 +34,7 @@
 
 
 
+    <link rel="stylesheet" href="/css/logo.css">
     <link rel="stylesheet" href="/css/flash.css">
     <link rel="stylesheet" href="/css/aboutus.css">
     <link rel="stylesheet" href="/css/footer.css">
@@ -95,21 +96,7 @@
     <header>
         <nav id="showall-nav">
             <div class="logo">
-                <svg width="200" height="200" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg" fill="none"
-                    stroke-linecap="round" stroke-linejoin="round">
-                    <defs>
-                        <linearGradient id="grad" x1="0%" y1="0%" x2="0%" y2="100%">
-                            <stop offset="0%" style="stop-color:#42B3A4; stop-opacity:1" />
-                            <stop offset="100%" style="stop-color:#1F5C94; stop-opacity:1" />
-                        </linearGradient>
-                    </defs>
-                    <path
-                        d="M100 160 C 120 140, 140 110, 140 80 C 140 50, 130 20, 100 10 C 70 20, 60 50, 60 80 C 60 110, 80 140, 100 160 Z"
-                        fill="url(#grad)" stroke="none" />
-                    <polygon points="90,100 110,100 100,80" fill="#1F5C94" stroke="none" />
-                    <line x1="100" y1="80" x2="100" y2="50" stroke="#1F5C94" stroke-width="5" />
-                    <line x1="85" y1="90" x2="115" y2="90" stroke="#1F5C94" stroke-width="5" />
-                </svg>
+                <p class="shine">joinOurTour</p>
             </div>
             <div class="home">
                 <a href="/aboutus">HOME</a>
@@ -229,42 +216,7 @@
     </div>
 
 
-    <div class="sort-outer-container">
-        <div class="sortdiv">
 
-
-            <% if (totalTrips) { %>
-                <p class="total-trips">Total Trips : <%= totalTrips %>
-                </p>
-                <% } else { %>
-                    <p class="total-trips">Total Trips : 0</p>
-                    <% } %>
-
-
-
-                        <form method="GET" action="/secondarysearch" id="sortForm">
-                            <input type="hidden" name="page" value="<%= currentPage %>">
-                            <label for="sort">Sort by:</label>
-                            <select name="sort" id="sort" onchange="document.getElementById('sortForm').submit()">
-                                <option value="">-- Select --</option>
-                                <option value="priceLowHigh" <%=sort==='priceLowHigh' ? 'selected' : '' %>>Price: Low to
-                                    High</option>
-                                <option value="priceHighLow" <%=sort==='priceHighLow' ? 'selected' : '' %>>Price: High
-                                    to
-                                    Low</option>
-                                <option class="op4" value="recentlyListed" <%=sort==='recentlyListed' ? 'selected' : ''
-                                    %>
-                                    >Recently Listed (Last 10 Days)</option>
-                                <option value="leavingSoon" <%=sort==='leavingSoon' ? 'selected' : '' %>>Leaving Soon
-                                    (Next
-                                    15 Days)</option>
-                            </select>
-                        </form>
-
-
-        </div>
-
-    </div>
 
 
 
@@ -276,11 +228,19 @@
     </div> -->
 
 
+    
+    <div class="filters-ms-container">
+        <div class="filters-mb filters-ms">
+    
+            <i class="fa-solid fa-filter" onclick="openFilterPopup()"></i>
+        </div>
+    </div>
+       
+
 
 
     <main>
 
-        <button class="open-filter-btn" onclick="openFilterPopup()">Open Filters</button>
 
 
         <div class="filter-popup-overlay" id="filterPopup">
@@ -507,9 +467,12 @@
 
                             <div class="heart-container">
                                 <% if (user) { %>
-                                    <% const isInWishlist=userWishlist.includes(allTrips[i]._id.toString()); %>
+                                    <% const
+                                        isInWishlist=userWishlist.includes(allTrips[i]._id.toString());
+                                        %>
                                         <i class="<%= isInWishlist ? 'fa-solid fa-heart wishlist-active' : 'fa-regular fa-heart' %> wishlist-icon"
-                                            data-id="<%= allTrips[i]._id %>" style="cursor: pointer;"></i>
+                                            data-id="<%= allTrips[i]._id %>"
+                                            style="cursor: pointer;"></i>
                                         <% } else { %>
                                             <i class="fa-regular fa-heart wishlist-icon redirect-i"
                                                 data-id="<%= allTrips[i]._id %>"></i>
@@ -529,21 +492,29 @@
                             <h3 class="card-title">
                                 <a href="/tour/<%= allTrips[i]._id %>">
                                     <%= allTrips[i].fromLocation %> ->
+                                        <br>
                                         <%= allTrips[i].location %>
                                 </a>
-                                <p>
-                                    <% if (allTrips[i].departure) { %>
-                                        <%= new Date(allTrips[i].departure).toLocaleDateString('en-US', { month: 'long'
-                                            , day: '2-digit' }) %> ~
-                                            <% } else { %>
-                                                date not available
-                                                <% } %>
-                                                    <% if (allTrips[i].endDate) { %>
-                                                        <%= new Date(allTrips[i].endDate).toLocaleDateString('en-US', {
-                                                            month: 'long' , day: '2-digit' }) %>
-                                                            <% } %>
-                                </p>
+
+
                             </h3>
+                        </div>
+
+                        <div class="tour-dates">
+                            <p>
+                                <% if (allTrips[i].departure) { %>
+                                    <%= new Date(allTrips[i].departure).toLocaleDateString('en-US', {
+                                        month: 'short' , day: '2-digit' }) %> ~
+                                        <% } else { %>
+                                            date not available
+                                            <% } %>
+
+                                                <% if (allTrips[i].endDate) { %>
+                                                    <%= new
+                                                        Date(allTrips[i].endDate).toLocaleDateString('en-US',
+                                                        { month: 'short' , day: '2-digit' }) %>
+                                                        <% } %>
+                            </p>
                         </div>
                         <div class="title-container">
                             <h4 class="trip-title">
@@ -552,93 +523,56 @@
 
                         </div>
 
-                        <p class="trip-type">
-                            <strong>Trip Type:</strong>
-                            <%= allTrips[i].categories.join(", ") %>
-                        </p>
+
 
                         <div class=" ratio-container">
-                                <p class="maleRatio"> <span class="material-symbols-outlined">
-                                        male
-                                    </span>
-                                    <%= allTrips[i].maleRatio %>%
-                                </p>
-                                <p class="femaleRatio">
-                                    <span class="material-symbols-outlined">
-                                        female
-                                    </span>
-                                    <%= allTrips[i].femaleRatio %>%
-                                </p>
+                            <p class="maleRatio"> <span class="material-symbols-outlined">
+                                    male
+                                </span>
+                                <%= allTrips[i].maleRatio %>%
+                            </p>
+                            <p class="femaleRatio">
+                                <span class="material-symbols-outlined">
+                                    female
+                                </span>
+                                <%= allTrips[i].femaleRatio %>%
+                            </p>
 
-                    </div>
-
-
-
-                    <div class="rating-container">
-
-                        <div class="rate rat1">
-                            <!-- 5 Stars -->
-                            <input type="radio" id="locStar5-<%= i %>" name="locationRating-<%= i %>" value="5" <% if
-                                (allTrips[i].averageRating>= 5) { %> checked <% } %> disabled />
-                                <label for="locStar5-<%= i %>">5 stars</label>
-
-                                <!-- 4 Stars -->
-                                <input type="radio" id="locStar4-<%= i %>" name="locationRating-<%= i %>" value="4" <%
-                                    if (allTrips[i].averageRating>= 4 && allTrips[i].averageRating < 5) { %>
-                                    checked <% } %> disabled />
-                                        <label for="locStar4-<%= i %>">4 stars</label>
-
-                                        <!-- 3 Stars -->
-                                        <input type="radio" id="locStar3-<%= i %>" name="locationRating-<%= i %>"
-                                            value="3" <% if (allTrips[i].averageRating>= 3 &&
-                                        allTrips[i].averageRating < 4) { %> checked <% } %> disabled />
-                                                <label for="locStar3-<%= i %>">3 stars</label>
-
-                                                <!-- 2 Stars -->
-                                                <input type="radio" id="locStar2-<%= i %>"
-                                                    name="locationRating-<%= i %>" value="2" <% if
-                                                    (allTrips[i].averageRating>= 2 && allTrips[i].averageRating < 3) {
-                                                    %> checked <% } %> disabled />
-                                                        <label for="locStar2-<%= i %>">2 stars</label>
-
-                                                        <!-- 1 Star -->
-                                                        <input type="radio" id="locStar1-<%= i %>"
-                                                            name="locationRating-<%= i %>" value="1" <% if
-                                                            (allTrips[i].averageRating>= 1 &&
-                                                        allTrips[i].averageRating < 2) { %> checked <% } %> disabled
-                                                                />
-                                                                <label for="locStar1-<%= i %>">1 star</label>
                         </div>
 
-                        <p>
-                            <%= allTrips[i].averageRating %>
-                        </p>
-
-                    </div>
 
 
+                        <div class="rating-container">
+                            <i class="fa-solid fa-star"></i>
+                            <p>
+                                <%= allTrips[i].averageRating %>
+                            </p>
 
-                    <div class="card-bottom">
-                        <div class="days-container">
-                            <h4 class="days">
-                                <%= allTrips[i].totalDays %> days
-                            </h4>
                         </div>
-                        <div class="price-container">
-                            <% if (allTrips[i].totalCost) { %>
-                                <span>FROM</span> &nbsp;<b>
-                                    <%= allTrips[i].totalCost.toLocaleString('en-IN', { style: 'currency' ,
-                                        currency: 'INR' }) %>
-                                </b>
-                                <% } else { %>
-                                    Price Not Available
-                                    <% } %>
+
+
+
+                        <div class="card-bottom">
+                            <div class="days-container">
+                                <h4 class="days">
+                                    <%= allTrips[i].totalDays %> days
+                                </h4>
+                            </div>
+                            <div class="price-container">
+                                <% if (allTrips[i].totalCost) { %>
+                                    <span>FROM</span> &nbsp;<b>
+                                        <%= allTrips[i].totalCost.toLocaleString('en-IN', {
+                                            style: 'currency' , currency: 'INR' }) %>
+                                    </b>
+                                    <% } else { %>
+                                        Price Not Available
+                                        <% } %>
+                            </div>
                         </div>
                     </div>
                 </div>
+                <% } %>
         </div>
-        <% } %>
-            </div>
 
 
     </main>
@@ -668,58 +602,55 @@
 
 
 
-
     <footer>
 
-        <div class="sec1">
-            <div class="logo"></div>
-            <p>Book your trip in minute, get full Control for much longer.</p>
-        </div>
-        <div class="sec2">
-            <div class="col1">
-                <h3>Company</h3>
-                <div class="links">
-                    <a href="">How it works</a>
-                    <a href="/">Find a trip</a>
-                    <a href="/createtrip">Create a trip</a>
-                </div>
-
-
-            </div>
-            <div class="col2">
-                <h3>EXPLORE</h3>
-                <div class="links">
-                    <a href="/tourbydestination">Group trips by destination </a>
-                    <a href="">Group trips by Month </a>
-                    <a href="">Affilates</a>
-                </div>
-            </div>
-            <div class="col3">
-                <h3>Join Our Tour</h3>
-                <div class="links">
-                    <a href="">Blog </a>
-                    <a href="">About us</a>
-                    <a href="/contactUs">Contact us</a>
-                </div>
-            </div>
-
-
-        </div>
-        <div class="sec3">
-
-            <img src="/images/f.svg" alt="no image">
-            <img src="/images/i.svg" alt="">
-            <img src="/images/t.svg" alt="">
-
-
+<div class="sec1">
+    <div class="logo"></div>
+    <p>Book your trip in minute, get full Control for much longer.</p>
+</div>
+<div class="sec2">
+    <div class="col1">
+        <h3>Company</h3>
+        <div class="links">
+            <a href="">How it works</a>
+            <a href="/">Find a trip</a>
+            <a href="/createtrip">Create a trip</a>
         </div>
 
-        <p class="cc">All rights reserved@travelgoo.co</p>
+
+    </div>
+    <div class="col2">
+        <h3>EXPLORE</h3>
+        <div class="links">
+            <a href="/tourbydestination">Group trips by destination </a>
+            <a href="/tourbymonths">Group trips by Month </a>
+            <a href="/featuredtrips">Featured trips</a>
+        </div>
+    </div>
+    <div class="col3">
+        <h3>Join Our Tour</h3>
+        <div class="links">
+            <a href="">Blog </a>
+            <a href="">About us</a>
+            <a href="/contactUs">Contact us</a>
+        </div>
+    </div>
 
 
-    </footer>
+</div>
+<div class="sec3">
+
+    <img src="../images/f.svg" alt="">
+    <img src="../images/i.svg" alt="">
+    <img src="../images/t.svg" alt="">
 
 
+</div>
+
+<p class="cc">All rights reserved@travelgoo.co</p>
+
+
+</footer>
 
 
 

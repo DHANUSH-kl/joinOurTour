@@ -10,6 +10,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
         integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA=="
         crossorigin="anonymous" referrerpolicy="no-referrer" />
+        
     <!-- Link Swiper's CSS -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
     <!-- star  -->
@@ -38,6 +39,7 @@
 
 
 
+    <link rel="stylesheet" href="/css/footer.css">
     <link rel="stylesheet" href="/css/nav.css">
     <link rel="stylesheet" href="/css/account.css">
     <link rel="stylesheet" href="/css/trip.css">
@@ -54,7 +56,6 @@
             <h4><b>TRAVELER</b></h4>
         </div>
         <div class="home">
-            <a href="/aboutus">HOME</a>
             <a href="/">ALL TRIPS</a>
         </div>
         <div class="right">
@@ -67,7 +68,7 @@
                 </div>
                 <div class="user-info-container">
                     <% if(!currUser) { %>
-                        <p>USERNAME</p>
+
                         <% } else { %>
                             <div class="profile"></div>
                             <p>
@@ -76,11 +77,19 @@
                             <% } %>
                 </div>
                 <div class="nav-links">
-                    <a href="/mytrips">MY TRIP</a>
-                    <a href="/createtrip">CREATE TRIP</a>
-                    <a href="/">PAYMENTS AND PAYOUTS</a>
-                    <a href="/user/signin">SIGN IN</a>
-                    <a href="/user/signup">SIGN UP</a>
+                    <% if (user && user.isAgent) { %>
+                        <a href="/mytrips">MY TRIP</a>
+                        <a href="/createtrip">CREATE TRIP</a>
+                        <% } %>
+                            <a href="/user/signin">SIGN IN</a>
+                            <a href="/user/signup">SIGN UP</a>
+                            <a href="/showWishlist">WISHLIST &nbsp; <i class="fa-solid fa-heart"
+                                    style="cursor: pointer;"></i></a>
+                            <% if (user && user.isOwner) { %>
+                                <a href="/admin/adminpannel">ADMIN PANNEL</a>
+
+                                <% } %>
+                                    <a href="/">PAYMENTS AND PAYOUTS</a>
                 </div>
             </div>
 
@@ -92,135 +101,46 @@
     <main>
         <div class="main-container">
 
-            <form action="/admin/<%= trip._id %>/toggle-featured" method="POST">
-                <% if (trip.featured) { %>
-                    <button type="submit" name="featured" value="false">Remove from Featured</button>
-                <% } else { %>
-                    <button type="submit" name="featured" value="true">Add to Featured</button>
+            <% if (user && user.isOwner) { %>
+                <form action="/admin/<%= trip._id %>/toggle-featured" method="POST">
+                    <% if (trip.featured) { %>
+                        <button type="submit" class="rem-feature-trip-btn" name="featured" value="false">Remove from
+                            Featured</button>
+                        <% } else { %>
+                            <button type="submit" class="add-feature-trip-btn" name="featured" value="true">Add to
+                                Featured</button>
+                            <% } %>
+                </form>
                 <% } %>
-            </form>
-            
-
-            <p class="tripID">
-                Tour-ID: <%= trip._id %>
-            </p>
-
-            <div class="breadcrumb-nav">
-                <a class="crumbSAME" href="/aboutus">Home</a> <span>&gt;</span>
-                <a class="crumbSAME" href="/">All Trips</a> <span>&gt;</span>
-                <a href="/tour/<%= trip._id %>">
-                    <%= trip.title || trip._id %>
-                </a>
-            </div>
 
 
-
-            <div class="title-container">
-                <h1>
-                    <%= trip.title %>
-                </h1>
-            </div>
+                    <div class="tripID-cont">
+                        <p class="tripID">
+                            Tour-ID: <%= trip._id %>
+                        </p>
 
 
-            <div class="trip-overall-rating">
-                <fieldset class="rating">
-                    <input type="radio" id="star5" name="rating" value="5" <% if (averageRating>= 4.75) { %> checked <%
-                        } %> disabled />
-                        <label class="full" for="star5" title="Awesome - 5 stars"></label>
+                        <div class="shareAndWhishlist">
+                            <!-- Store Trip URL as a Data Attribute -->
+                            <div id="shareBtn" class="shareTrip"
+                                data-trip-url="http://localhost:8080/tour/<%= trip._id %>">
+                                <span class="material-symbols-outlined">ios_share</span>
+                            </div>
 
-                        <input type="radio" id="star4half" name="rating" value="4.5" <% if (averageRating>= 4.25 &&
-                        averageRating < 4.75) { %> checked <% } %> disabled />
-                                <label class="half" for="star4half" title="Pretty good - 4.5 stars"></label>
-
-                                <input type="radio" id="star4" name="rating" value="4" <% if (averageRating>= 3.75 &&
-                                averageRating < 4.25) { %> checked <% } %> disabled />
-                                        <label class="full" for="star4" title="Pretty good - 4 stars"></label>
-
-                                        <input type="radio" id="star3half" name="rating" value="3.5" <% if
-                                            (averageRating>= 3.25 && averageRating < 3.75) { %> checked <% } %> disabled
-                                                />
-                                                <label class="half" for="star3half" title="Meh - 3.5 stars"></label>
-
-                                                <input type="radio" id="star3" name="rating" value="3" <% if
-                                                    (averageRating>= 2.75 && averageRating < 3.25) { %> checked <% } %>
-                                                        disabled />
-                                                        <label class="full" for="star3" title="Meh - 3 stars"></label>
-
-                                                        <input type="radio" id="star2half" name="rating" value="2.5" <%
-                                                            if (averageRating>= 2.25 && averageRating < 2.75) { %>
-                                                            checked <% } %> disabled />
-                                                                <label class="half" for="star2half"
-                                                                    title="Kinda bad - 2.5 stars"></label>
-
-                                                                <input type="radio" id="star2" name="rating" value="2"
-                                                                    <% if (averageRating>= 1.75 && averageRating < 2.25)
-                                                                    { %> checked <% } %> disabled />
-                                                                        <label class="full" for="star2"
-                                                                            title="Kinda bad - 2 stars"></label>
-
-                                                                        <input type="radio" id="star1half" name="rating"
-                                                                            value="1.5" <% if (averageRating>= 1.25 &&
-                                                                        averageRating < 1.75) { %> checked <% } %>
-                                                                                disabled />
-                                                                                <label class="half" for="star1half"
-                                                                                    title="Meh - 1.5 stars"></label>
-
-                                                                                <input type="radio" id="star1"
-                                                                                    name="rating" value="1" <% if
-                                                                                    (averageRating>= 0.75 &&
-                                                                                averageRating < 1.25) { %> checked <% }
-                                                                                        %> disabled />
-                                                                                        <label class="full" for="star1"
-                                                                                            title="Sucks big time - 1 star"></label>
-
-                                                                                        <input type="radio"
-                                                                                            id="starhalf" name="rating"
-                                                                                            value="0.5" <% if
-                                                                                            (averageRating> 0 &&
-                                                                                        averageRating < 0.75) { %>
-                                                                                            checked <% } %> disabled />
-                                                                                                <label class="half"
-                                                                                                    for="starhalf"
-                                                                                                    title="Sucks big time - 0.5 stars"></label>
-
-
-                </fieldset>
-
-                <% let avgRating=Number(averageRating) || 0; %>
-                    <p>
-                        <%= avgRating.toFixed(1) %> - <%= getRatingDescription(avgRating) %>
-                    </p>
-
-
-                    <div class="fromAndToLocation">
-                        <img src="../images/route.svg" alt="">
-                        <%= trip.location %> , <%= trip.fromLocation %>
-                    </div>
-
-            </div>
-
-
-            <div class="shareAndWhishlist">
-                <!-- Store Trip URL as a Data Attribute -->
-                <div id="shareBtn" class="shareTrip" data-trip-url="http://localhost:8080/tour/<%= trip._id %>">
-                    <span class="material-symbols-outlined">ios_share</span>
-                    <p>Share</p>
-                </div>
-
-                <!-- Custom Share Modal -->
-                <div id="customShareModal" class="hidden">
-                    <div class="share-options">
-                        <a id="whatsappShare" target="_blank">Share on WhatsApp</a>
-                        <a id="facebookShare" target="_blank">Share on Facebook</a>
-                        <a id="twitterShare" target="_blank">Share on Twitter</a>
-                        <button id="copyLink">Copy Link</button>
-                        <button id="closeShare">Close</button>
-                    </div>
-                </div>
+                            <!-- Custom Share Modal -->
+                            <div id="customShareModal" class="hidden">
+                                <div class="share-options">
+                                    <a id="whatsappShare" target="_blank">Share on WhatsApp</a>
+                                    <a id="facebookShare" target="_blank">Share on Facebook</a>
+                                    <a id="twitterShare" target="_blank">Share on Twitter</a>
+                                    <button id="copyLink">Copy Link</button>
+                                    <button id="closeShare">Close</button>
+                                </div>
+                            </div>
 
 
 
-                <div class="heart-container">
+                            <div class="heart-container">
                                 <% if (user) { %>
                                     <% const isInWishlist=userWishlist.includes(trip._id.toString()); %>
                                         <i class="<%= isInWishlist ? 'fa-solid fa-heart wishlist-active' : 'fa-regular fa-heart' %> wishlist-icon"
@@ -230,530 +150,593 @@
                                                 data-id="<%= trip._id %>"></i>
                                             <% } %>
 
-                                            <p>wishlist</p>
+
                             </div>
 
-                            
-
-
-            </div>
-
-
-
-
-            <div class="image-gallery">
-
-                <div class="swiper mySwiper">
-                    <div class="swiper-wrapper">
-                        <% trip.tripImages.forEach(function(image) { %>
-                            <div class="swiper-slide">
-                                <img src="<%= image.path %>" alt="Trip Image" />
-                            </div>
-                            <% }); %>
-                    </div>
-                    <div class="swiper-pagination"></div>
-                </div>
-            </div>
-
-
-            <div class="payment-ov-container">
-                <div class="booking-container">
-                    <div class="tickets">
-
-
-                        <div class="top-ticket">
-                            <h3>From &nbsp; <span>&#8377;<%= trip.totalCost.toLocaleString('en-IN') %></span></h3>
-                            <div class="calendar">
-                                <img src="../images/duration.png" alt="">
-                                <div class="ticket-calendar">
-                                    <h3>From</h3>
-
-                                    <h2>
-                                        <%= new Date(trip.departure).toLocaleDateString('en-US', { month: 'long' ,
-                                            day: 'numeric' }) %>
-                                            ~
-                                            <%= new Date(trip.endDate).toLocaleDateString('en-US', { month: 'long' ,
-                                                day: 'numeric' }) %>
-                                    </h2>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="mid-ticket">
-
-                            <div class="child-mid-ticket">
-                                <h3>no of tickets</h3>
-
-                                <div class="arrows">
-                                    <button id="decrement">
-                                        <
-                                        </button>
-                                            <h1 id="counter">0</h1>
-                                            <button id="increment">></button>
-                                </div>
-                            </div>
-
-                            <div class="grand-total">
-                                <!-- Store trip cost as a data attribute -->
-                                <div id="tripData" data-cost="<%= trip.totalCost %>"></div>
-                                <h1>Total:</h1>
-                                <h3 id="totalAmount">&#8377;0</h3>
-                            </div>
 
 
 
                         </div>
 
-                        <!-- <button class="booking-btn"><a href="/<%= trip._id %>/payment">Reserve Spot</a></button> -->
-
-
-                        <!-- Form for submitting the total amount -->
-                        <form id="paymentForm" action="/<%= trip._id %>/payment" method="GET">
-                            <!-- Hidden input to store total amount -->
-                            <input type="hidden" id="totalAmountInput" name="totalAmount" value="0">
-                            <button type="submit" class="booking-btn">Reserve Spot</button>
-                        </form>
-
-
                     </div>
-                </div>
-            </div>
 
 
 
-            <div class="overview-container">
-                <div class="duration ov-box">
-                    <img src="../images/duration.png" alt="">
-                    <div class="ov-details">
-                        <p id="ov-bold">Duration</p>
-                        <p>
-                            <%= trip.totalDays %> days
-                        </p>
+
+                    <div class="breadcrumb-nav">
+                        <a class="crumbSAME" href="/aboutus">Home</a> <span>&gt;</span>
+                        <a class="crumbSAME" href="/">All Trips</a> <span>&gt;</span>
+                        <a href="/tour/<%= trip._id %>">
+                            <%= trip.title || trip._id %>
+                        </a>
                     </div>
-                </div>
-                <div class="group ov-box">
-                    <img src="../images/group.png" alt="">
-                    <div class="ov-details">
-                        <p id="ov-bold">Group Size</p>
-                        <p>
-                            <%= trip.groupSize %> people
-                        </p>
+
+
+
+                    <div class="title-container">
+                        <h1>
+                            <%= trip.title %>
+                        </h1>
                     </div>
-                </div>
-                <div class="age ov-box">
-                    <img src="../images/age.png" alt="">
-                    <div id="ov-details">
-                        <p class="ov-bold">Ages</p>
-                        <p>
-                            <%= trip.minAge %> +
-                        </p>
-                    </div>
-                </div>
-                <div class="language ov-box">
-                    <img src="../images/lang.png" alt="">
-                    <div class="ov-details">
-                        <p id="ov-bold">Languages</p>
-                        <div class="ln-container">
-                            <% if (trip.languages && trip.languages.length> 0) { %>
-                                <% for (let i=0; i < trip.languages.length; i++) { %>
-                                    <p>
-                                        <%= trip.languages[i], %>
-                                    </p>
-                                    <% } %>
-                                        <% } else { %>
-                                            <li>No languages specified.</li>
-                                            <% } %>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="trip-details">
-
-                <div class="report-section">
-                    <button id="show-report-form" class="report-btn">Report Trip</button>
-                    <form id="report-form" action="/report-trip/<%= trip._id %>" method="POST" style="display: none;">
-                        <textarea name="reason" id="report-reason" rows="4"
-                            placeholder="Enter the reason for reporting this trip" required></textarea>
-                        <button type="submit" class="submit-btn">Submit Report</button>
-                    </form>
-                </div>
-            </div>
 
 
+                    <div class="trip-overall-rating">
 
-            <div class="description">
-                <h1>Tour Overview</h1>
-
-                <p>
-                    <%= trip.tripDescription %>
-                </p>
-            </div>
-
-
-            <div class="includes-container">
-
-                <h1>What's included</h1>
+                        <i class="fa-solid fa-star"></i>
+                        <% let avgRating=Number(averageRating) || 0; %>
+                            <p>
+                                <%= avgRating.toFixed(1) %>
+                            </p>
 
 
-                <div class="iecontainer">
-
-                    <div class="includes">
-
-                        <% trip.includes.forEach(function(include) { %>
-                            <div class="include">
-                                <img src="../images/check.png" alt="1">
-                                <p>
-                                    <%= include %>
-                                </p>
-
+                            <div class="fromAndToLocation">
+                                <img src="../images/route.svg" alt="">
+                                <%= trip.fromLocation %> , <%= trip.location %>
                             </div>
 
-                            <% }) %>
-
                     </div>
 
-                    <div class="excludes">
-
-                        <% trip.excludes.forEach(function(include) { %>
-                            <div class="include">
-                                <img src="../images/cross.png" alt="1">
-                                <p>
-                                    <%= include %>
-                                </p>
-
-
-                            </div>
-
-                            <% }) %>
-
-                    </div>
-                </div>
-
-            </div>
 
 
 
-            <div class="container">
 
 
-                <div class="rightbox">
-                    <div class="rb-container">
-                        <ul class="rb">
-                            <% trip.stopLocation.forEach(function(location, index) { %>
-                                <li class="rb-item">
-                                    <div class="stop-title">Day <%= index + 1 %> : <%= location
-                                                || 'Location not available' %>
+
+                    <div class="image-gallery">
+
+                        <div class="swiper mySwiper">
+                            <div class="swiper-wrapper">
+                                <% trip.tripImages.forEach(function(image) { %>
+                                    <div class="swiper-slide">
+                                        <img src="<%= image.path %>" alt="Trip Image" />
                                     </div>
-                                    <div class="stop-image">
-                                        <% if (trip.stopImages[index] && trip.stopImages[index].path) { %>
-                                            <img src="<%= trip.stopImages[index].path %>" alt="">
+                                    <% }); %>
+                            </div>
+                            <!-- <div class="swiper-pagination"></div> -->
+                        </div>
+                    </div>
+
+
+
+
+                    <div class="overview-container">
+                        <div class="ov-row1 ov-rows">
+                            <div class="duration ov-box">
+                                <img src="../images/duration.png" alt="">
+                                <div class="ov-details">
+                                    <p id="ov-bold">Duration</p>
+                                    <p>
+                                        <%= trip.totalDays %> days
+                                    </p>
+                                </div>
+                            </div>
+                            <div class="group ov-box">
+                                <img src="../images/group.png" alt="">
+                                <div class="ov-details">
+                                    <p id="ov-bold">Group Size</p>
+                                    <p>
+                                        <%= trip.groupSize %> people
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="ov-row2 ov-rows">
+                            <div class="age ov-box">
+                                <img src="../images/age.png" alt="">
+                                <div class="ov-details">
+                                    <p class="ov-bold" id="ov-bold">Ages</p>
+                                    <p>
+                                        <%= trip.minAge %> +
+                                    </p>
+                                </div>
+                            </div>
+                            <div class="language ov-box">
+                                <img src="../images/lang.png" alt="">
+                                <div class="ov-details">
+                                    <p id="ov-bold">Languages</p>
+                                    <div class="ln-container">
+                                        <% if (trip.languages && trip.languages.length> 0) { %>
+                                            <% for (let i=0; i < trip.languages.length; i++) { %>
+                                                <p>
+                                                    <%= trip.languages[i], %>
+                                                </p>
+                                                <% } %>
+                                                    <% } else { %>
+                                                        <li>No languages specified.</li>
+                                                        <% } %>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+
+                    </div>
+
+                    <div class="trip-details">
+
+                        <div class="report-section">
+                            <button id="show-report-form" class="report-btn">Report Trip</button>
+                            <form id="report-form" action="/report-trip/<%= trip._id %>" method="POST"
+                                style="display: none;">
+                                <textarea name="reason" id="report-reason" rows="4"
+                                    placeholder="Enter the reason for reporting this trip" required></textarea>
+                                <button type="submit" class="submit-btn">Submit Report</button>
+                            </form>
+                        </div>
+                    </div>
+
+
+
+                    <div class="description">
+                        <h1>Tour Overview</h1>
+
+                        <p>
+                            <%= trip.tripDescription %>
+                        </p>
+                    </div>
+
+
+
+                    <div class="payment-ov-container">
+                        <div class="booking-container">
+                            <div class="tickets">
+
+
+                                <div class="top-ticket">
+                                    <h3>From &nbsp; <span>&#8377;<%= trip.totalCost.toLocaleString('en-IN') %></span>
+                                    </h3>
+                                    <div class="calendar">
+                                        <img src="../images/duration.png" alt="">
+                                        <div class="ticket-calendar">
+                                            <h3>From</h3>
+
+                                            <h2>
+                                                <%= new Date(trip.departure).toLocaleDateString('en-US', { month: 'long'
+                                                    , day: 'numeric' }) %>
+                                                    ~
+                                                    <%= new Date(trip.endDate).toLocaleDateString('en-US', {
+                                                        month: 'long' , day: 'numeric' }) %>
+                                            </h2>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="mid-ticket">
+
+                                    <div class="child-mid-ticket">
+                                        <h3>no of tickets</h3>
+
+                                        <div class="arrows">
+                                            <button id="decrement">
+                                                < </button>
+                                                    <h1 id="counter">0</h1>
+                                                    <button id="increment">></button>
+                                        </div>
+                                    </div>
+
+                                    <div class="grand-total">
+                                        <!-- Store trip cost as a data attribute -->
+                                        <div id="tripData" data-cost="<%= trip.totalCost %>"></div>
+                                        <h1>Total:</h1>
+                                        <h3 id="totalAmount">&#8377;0</h3>
+                                    </div>
+
+
+
+                                </div>
+
+                                <!-- <button class="booking-btn"><a href="/<%= trip._id %>/payment">Reserve Spot</a></button> -->
+
+
+                                <!-- Form for submitting the total amount -->
+                                <form id="paymentForm" action="/<%= trip._id %>/payment" method="GET">
+                                    <!-- Hidden input to store total amount -->
+                                    <input type="hidden" id="totalAmountInput" name="totalAmount" value="0">
+                                    <button type="submit" class="booking-btn">Reserve Spot</button>
+                                </form>
+
+
+                            </div>
+                        </div>
+                    </div>
+
+
+
+                    <div class="includes-container">
+
+                        <h1>What's included</h1>
+
+
+                        <div class="iecontainer">
+
+                            <div class="includes">
+
+                                <% trip.includes.forEach(function(include) { %>
+                                    <div class="include">
+                                        <img src="../images/check.png" alt="1">
+                                        <p>
+                                            <%= include %>
+                                        </p>
+
+                                    </div>
+
+                                    <% }) %>
+
+                            </div>
+
+                            <div class="excludes">
+
+                                <% trip.excludes.forEach(function(include) { %>
+                                    <div class="include">
+                                        <img src="../images/cross.png" alt="1">
+                                        <p>
+                                            <%= include %>
+                                        </p>
+
+
+                                    </div>
+
+                                    <% }) %>
+
+                            </div>
+                        </div>
+
+                    </div>
+
+
+
+                    <div class="container">
+
+
+                        <div class="rightbox">
+                            <div class="rb-container">
+                                <ul class="rb">
+                                    <% trip.stopLocation.forEach(function(location, index) { %>
+                                        <li class="rb-item <%= index === 0 ? 'active' : '' %>">
+                                            <div class="stop-title">Day <%= index + 1 %> : <%= location
+                                                        || 'Location not available' %>
+                                            </div>
+
+                                            <!-- Details Button -->
+                                            <button class="details-btn <%= index === 0 ? 'active' : '' %>">
+                                                Details <span class="material-symbols-outlined arrow">
+                                                    keyboard_arrow_down
+                                                    </span>
+                                            </button>
+
+                                            <div class="stop-details">
+                                            <div class="stop-image">
+                                                <% if (trip.stopImages[index] && trip.stopImages[index].path) { %>
+                                                    <img src="<%= trip.stopImages[index].path %>" alt="">
+                                                    <% } else { %>
+                                                        <p>Image not available</p>
+                                                        <% } %>
+                                            </div>
+                                            <div class="stop-description">
+                                                <span class="description-text">
+                                                    <%= trip.stopDescription[index] || 'Description not available' %>
+                                                </span>
+                                                <button class="show-more-btn">Show More</button>
+                                            </div>
+                                        </div
+                                        </li>
+                                        <% }); %>
+                                </ul>
+                            </div>
+                        </div>
+
+                    </div>
+
+
+                    <div class="customer-rev">
+                        <h1>Customer Reviews</h1>
+
+                        <div class="overall-rating-container">
+                            <div class="ov-rating">
+
+                                <div class="ov-left">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="35" height="32" viewBox="0 0 35 32"
+                                        fill="none">
+                                        <path
+                                            d="M17.0245 0.463525C17.1741 0.00286996 17.8259 0.00287008 17.9755 0.463525L21.5413 11.4377C21.6082 11.6437 21.8002 11.7832 22.0168 11.7832H33.5557C34.0401 11.7832 34.2415 12.403 33.8496 12.6877L24.5144 19.4701C24.3392 19.5974 24.2658 19.8231 24.3328 20.0291L27.8985 31.0033C28.0482 31.4639 27.5209 31.847 27.1291 31.5623L17.7939 24.7799C17.6186 24.6526 17.3814 24.6526 17.2061 24.7799L7.87092 31.5623C7.47906 31.847 6.95183 31.4639 7.1015 31.0033L10.6672 20.0291C10.7342 19.8231 10.6608 19.5974 10.4856 19.4701L1.1504 12.6877C0.758547 12.403 0.959935 11.7832 1.4443 11.7832H12.9832C13.1998 11.7832 13.3918 11.6437 13.4587 11.4377L17.0245 0.463525Z"
+                                            fill="#EFE05E" />
+                                    </svg>
+                                    <div class="ov-txt">
+                                        <h3>Overall Rating</h3>
+                                        <% if (hasReviews) { %>
+                                            <p>
+                                                <%= getRatingDescription(averageRating) %>
+                                            </p>
                                             <% } else { %>
-                                                <p>Image not available</p>
+                                                <p>No reviews yet</p>
                                                 <% } %>
                                     </div>
-                                    <div class="stop-description">
-                                        <%= trip.stopDescription[index] || 'Description not available' %>
-                                    </div>
-                                </li>
-                                <% }); %>
-                        </ul>
-                    </div>
-                </div>
+                                </div>
 
-            </div>
+                                <div class="ov-right">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="19" viewBox="0 0 20 19"
+                                        fill="none">
+                                        <path
+                                            d="M9.52447 0.463524C9.67415 0.00286901 10.3259 0.00287008 10.4755 0.463525L12.3574 6.25532C12.4243 6.46133 12.6163 6.60081 12.8329 6.60081H18.9228C19.4071 6.60081 19.6085 7.22062 19.2167 7.50532L14.2899 11.0848C14.1146 11.2122 14.0413 11.4379 14.1082 11.6439L15.9901 17.4357C16.1398 17.8963 15.6125 18.2794 15.2207 17.9947L10.2939 14.4152C10.1186 14.2878 9.88135 14.2878 9.70611 14.4152L4.77931 17.9947C4.38745 18.2794 3.86021 17.8963 4.00989 17.4357L5.89176 11.6439C5.9587 11.4379 5.88537 11.2122 5.71012 11.0848L0.783326 7.50532C0.39147 7.22062 0.592859 6.60081 1.07722 6.60081H7.16708C7.38369 6.60081 7.57567 6.46133 7.6426 6.25532L9.52447 0.463524Z"
+                                            fill="#EFE05E" />
+                                    </svg>
 
+                                    <% if (hasReviews) { %>
+                                        <p>
+                                            <%= averageRating %>
+                                        </p>
+                                        <% } else { %>
+                                            <p>No reviews yet</p>
+                                            <% } %>
 
-            <div class="customer-rev">
-                <h1>Customer Reviews</h1>
-
-                <div class="overall-rating-container">
-                    <div class="ov-rating">
-
-                        <div class="ov-left">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="35" height="32" viewBox="0 0 35 32"
-                                fill="none">
-                                <path
-                                    d="M17.0245 0.463525C17.1741 0.00286996 17.8259 0.00287008 17.9755 0.463525L21.5413 11.4377C21.6082 11.6437 21.8002 11.7832 22.0168 11.7832H33.5557C34.0401 11.7832 34.2415 12.403 33.8496 12.6877L24.5144 19.4701C24.3392 19.5974 24.2658 19.8231 24.3328 20.0291L27.8985 31.0033C28.0482 31.4639 27.5209 31.847 27.1291 31.5623L17.7939 24.7799C17.6186 24.6526 17.3814 24.6526 17.2061 24.7799L7.87092 31.5623C7.47906 31.847 6.95183 31.4639 7.1015 31.0033L10.6672 20.0291C10.7342 19.8231 10.6608 19.5974 10.4856 19.4701L1.1504 12.6877C0.758547 12.403 0.959935 11.7832 1.4443 11.7832H12.9832C13.1998 11.7832 13.3918 11.6437 13.4587 11.4377L17.0245 0.463525Z"
-                                    fill="#EFE05E" />
-                            </svg>
-                            <div class="ov-txt">
-                                <h3>Overall Rating</h3>
-                                <% if (hasReviews) { %>
-                                    <p>
-                                        <%= getRatingDescription(averageRating) %>
-                                    </p>
-                                    <% } else { %>
-                                        <p>No reviews yet</p>
-                                        <% } %>
+                                </div>
                             </div>
                         </div>
 
-                        <div class="ov-right">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="19" viewBox="0 0 20 19"
-                                fill="none">
-                                <path
-                                    d="M9.52447 0.463524C9.67415 0.00286901 10.3259 0.00287008 10.4755 0.463525L12.3574 6.25532C12.4243 6.46133 12.6163 6.60081 12.8329 6.60081H18.9228C19.4071 6.60081 19.6085 7.22062 19.2167 7.50532L14.2899 11.0848C14.1146 11.2122 14.0413 11.4379 14.1082 11.6439L15.9901 17.4357C16.1398 17.8963 15.6125 18.2794 15.2207 17.9947L10.2939 14.4152C10.1186 14.2878 9.88135 14.2878 9.70611 14.4152L4.77931 17.9947C4.38745 18.2794 3.86021 17.8963 4.00989 17.4357L5.89176 11.6439C5.9587 11.4379 5.88537 11.2122 5.71012 11.0848L0.783326 7.50532C0.39147 7.22062 0.592859 6.60081 1.07722 6.60081H7.16708C7.38369 6.60081 7.57567 6.46133 7.6426 6.25532L9.52447 0.463524Z"
-                                    fill="#EFE05E" />
-                            </svg>
+                        <% trip.reviews.forEach(review=> { %>
+                            <div class="review">
+                                <div class="rev-name">
+                                    <div class="pfp">
+                                        <span class="material-symbols-outlined">
+                                            account_circle
+                                        </span>
+                                    </div>
+                                    <p>
+                                        <%= review.name %>
+                                    </p>
+                                </div>
+                                <div class="rev-title">
+                                    <p>
+                                        <%= review.title %>
+                                    </p>
+                                </div>
+                                <div class="rev-description">
+                                    <p>
+                                        <%= review.comment %>
+                                    </p>
+                                </div>
 
-                            <% if (hasReviews) { %>
-                                <p>
-                                    <%= averageRating %>
-                                </p>
-                                <% } else { %>
-                                    <p>No reviews yet</p>
+
+                                <% if (user && user._id.toString()===review.author.toString()) { %>
+                                    <form action="/reviews/<%= review._id %>/delete" method="POST"
+                                        style="display:inline;">
+                                        <button type="submit" class="delete-button">Delete</button>
+                                    </form>
                                     <% } %>
 
-                        </div>
-                    </div>
-                </div>
 
-                <% trip.reviews.forEach(review=> { %>
-                    <div class="review">
-                        <div class="rev-name">
-                            <div class="pfp">
-                                <span class="material-symbols-outlined">
-                                    account_circle
-                                </span>
+
                             </div>
-                            <p>
-                                <%= review.name %>
-                            </p>
-                        </div>
-                        <div class="rev-title">
-                            <p>
-                                <%= review.title %>
-                            </p>
-                        </div>
-                        <div class="rev-description">
-                            <p>
-                                <%= review.comment %>
-                            </p>
-                        </div>
-
-
-                        <% if (user && user._id.toString()===review.author.toString()) { %>
-                            <form action="/reviews/<%= review._id %>/delete" method="POST" style="display:inline;">
-                                <button type="submit" class="delete-button">Delete</button>
-                            </form>
-                            <% } %>
-
-
-
-                    </div>
-                    <% }) %>
-            </div>
-
-
-            <div class="review-container">
-                <h1>Leave a Reply</h1>
-                <p class="revp">Your email address will not be published. Required fields are marked *</p>
-                <form action="/tour/<%= id %>/reviews" method="POST" id="reviewForm" class="reviews">
-
-
-
-                    <div class="tstar">
-                        <div class="locstar stars-cont">
-                            <p>Location</p>
-                            <div class="rate rat1">
-                                <input type="radio" id="locStar5" name="locationRating" value="5" />
-                                <label for="locStar5">5 stars</label>
-                                <input type="radio" id="locStar4" name="locationRating" value="4" />
-                                <label for="locStar4">4 stars</label>
-                                <input type="radio" id="locStar3" name="locationRating" value="3" />
-                                <label for="locStar3">3 stars</label>
-                                <input type="radio" id="locStar2" name="locationRating" value="2" />
-                                <label for="locStar2">2 stars</label>
-                                <input type="radio" id="locStar1" name="locationRating" value="1" />
-                                <label for="locStar1">1 star</label>
-                            </div>
-                        </div>
-
-                        <!-- Amenities Rating -->
-                        <div class="locstar stars-cont">
-                            <p>Amenities</p>
-                            <div class="rate rat1">
-                                <input type="radio" id="amenitiesStar5" name="amenitiesRating" value="5" />
-                                <label for="amenitiesStar5">5 stars</label>
-                                <input type="radio" id="amenitiesStar4" name="amenitiesRating" value="4" />
-                                <label for="amenitiesStar4">4 stars</label>
-                                <input type="radio" id="amenitiesStar3" name="amenitiesRating" value="3" />
-                                <label for="amenitiesStar3">3 stars</label>
-                                <input type="radio" id="amenitiesStar2" name="amenitiesRating" value="2" />
-                                <label for="amenitiesStar2">2 stars</label>
-                                <input type="radio" id="amenitiesStar1" name="amenitiesRating" value="1" />
-                                <label for="amenitiesStar1">1 star</label>
-                            </div>
-                        </div>
-
-                        <!-- Food Rating -->
-                        <div class="locstar stars-cont">
-                            <p>Food</p>
-                            <div class="rate rat1">
-                                <input type="radio" id="foodStar5" name="foodRating" value="5" />
-                                <label for="foodStar5">5 stars</label>
-                                <input type="radio" id="foodStar4" name="foodRating" value="4" />
-                                <label for="foodStar4">4 stars</label>
-                                <input type="radio" id="foodStar3" name="foodRating" value="3" />
-                                <label for="foodStar3">3 stars</label>
-                                <input type="radio" id="foodStar2" name="foodRating" value="2" />
-                                <label for="foodStar2">2 stars</label>
-                                <input type="radio" id="foodStar1" name="foodRating" value="1" />
-                                <label for="foodStar1">1 star</label>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="bstar">
-                        <!-- Room Rating -->
-                        <div class="locstar stars-cont">
-                            <p>Room</p>
-                            <div class="rate rat1">
-                                <input type="radio" id="roomStar5" name="roomRating" value="5" />
-                                <label for="roomStar5">5 stars</label>
-                                <input type="radio" id="roomStar4" name="roomRating" value="4" />
-                                <label for="roomStar4">4 stars</label>
-                                <input type="radio" id="roomStar3" name="roomRating" value="3" />
-                                <label for="roomStar3">3 stars</label>
-                                <input type="radio" id="roomStar2" name="roomRating" value="2" />
-                                <label for="roomStar2">2 stars</label>
-                                <input type="radio" id="roomStar1" name="roomRating" value="1" />
-                                <label for="roomStar1">1 star</label>
-                            </div>
-                        </div>
-
-                        <!-- Price Rating -->
-                        <div class="locstar stars-cont">
-                            <p>Price</p>
-                            <div class="rate rat1">
-                                <input type="radio" id="priceStar5" name="priceRating" value="5" />
-                                <label for="priceStar5">5 stars</label>
-                                <input type="radio" id="priceStar4" name="priceRating" value="4" />
-                                <label for="priceStar4">4 stars</label>
-                                <input type="radio" id="priceStar3" name="priceRating" value="3" />
-                                <label for="priceStar3">3 stars</label>
-                                <input type="radio" id="priceStar2" name="priceRating" value="2" />
-                                <label for="priceStar2">2 stars</label>
-                                <input type="radio" id="priceStar1" name="priceRating" value="1" />
-                                <label for="priceStar1">1 star</label>
-                            </div>
-                        </div>
-
-                        <!-- Tour Operator Rating -->
-                        <div class="locstar stars-cont">
-                            <p>Tour Operator</p>
-                            <div class="rate rat1">
-                                <input type="radio" id="operatorStar5" name="operatorRating" value="5" />
-                                <label for="operatorStar5">5 stars</label>
-                                <input type="radio" id="operatorStar4" name="operatorRating" value="4" />
-                                <label for="operatorStar4">4 stars</label>
-                                <input type="radio" id="operatorStar3" name="operatorRating" value="3" />
-                                <label for="operatorStar3">3 stars</label>
-                                <input type="radio" id="operatorStar2" name="operatorRating" value="2" />
-                                <label for="operatorStar2">2 stars</label>
-                                <input type="radio" id="operatorStar1" name="operatorRating" value="1" />
-                                <label for="operatorStar1">1 star</label>
-                            </div>
-                        </div>
+                            <% }) %>
                     </div>
 
 
+                    <div class="review-container">
+                        <h1>Leave a Review</h1>
+                        <p class="revp">Your email address will not be published. Required fields are marked *</p>
+                        <form action="/tour/<%= id %>/reviews" method="POST" id="reviewForm" class="reviews">
 
-                    <!-- Additional Fields -->
-                    <div class="orow">
-                        <input type="text" name="name" id="reviewerName" placeholder="Name" required>
-                        <input type="email" name="email" id="reviewerEmail" placeholder="Email" required>
+
+
+                            <div class="tstar">
+                                <div class="locstar stars-cont">
+                                    <p>Location</p>
+                                    <div class="rate rat1">
+                                        <input type="radio" id="locStar5" name="locationRating" value="5" />
+                                        <label for="locStar5">5 stars</label>
+                                        <input type="radio" id="locStar4" name="locationRating" value="4" />
+                                        <label for="locStar4">4 stars</label>
+                                        <input type="radio" id="locStar3" name="locationRating" value="3" />
+                                        <label for="locStar3">3 stars</label>
+                                        <input type="radio" id="locStar2" name="locationRating" value="2" />
+                                        <label for="locStar2">2 stars</label>
+                                        <input type="radio" id="locStar1" name="locationRating" value="1" />
+                                        <label for="locStar1">1 star</label>
+                                    </div>
+                                </div>
+
+                                <!-- Amenities Rating -->
+                                <div class="locstar stars-cont">
+                                    <p>Amenities</p>
+                                    <div class="rate rat1">
+                                        <input type="radio" id="amenitiesStar5" name="amenitiesRating" value="5" />
+                                        <label for="amenitiesStar5">5 stars</label>
+                                        <input type="radio" id="amenitiesStar4" name="amenitiesRating" value="4" />
+                                        <label for="amenitiesStar4">4 stars</label>
+                                        <input type="radio" id="amenitiesStar3" name="amenitiesRating" value="3" />
+                                        <label for="amenitiesStar3">3 stars</label>
+                                        <input type="radio" id="amenitiesStar2" name="amenitiesRating" value="2" />
+                                        <label for="amenitiesStar2">2 stars</label>
+                                        <input type="radio" id="amenitiesStar1" name="amenitiesRating" value="1" />
+                                        <label for="amenitiesStar1">1 star</label>
+                                    </div>
+                                </div>
+
+                                <!-- Food Rating -->
+                                <div class="locstar stars-cont">
+                                    <p>Food</p>
+                                    <div class="rate rat1">
+                                        <input type="radio" id="foodStar5" name="foodRating" value="5" />
+                                        <label for="foodStar5">5 stars</label>
+                                        <input type="radio" id="foodStar4" name="foodRating" value="4" />
+                                        <label for="foodStar4">4 stars</label>
+                                        <input type="radio" id="foodStar3" name="foodRating" value="3" />
+                                        <label for="foodStar3">3 stars</label>
+                                        <input type="radio" id="foodStar2" name="foodRating" value="2" />
+                                        <label for="foodStar2">2 stars</label>
+                                        <input type="radio" id="foodStar1" name="foodRating" value="1" />
+                                        <label for="foodStar1">1 star</label>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="bstar">
+                                <!-- Room Rating -->
+                                <div class="locstar stars-cont">
+                                    <p>Room</p>
+                                    <div class="rate rat1">
+                                        <input type="radio" id="roomStar5" name="roomRating" value="5" />
+                                        <label for="roomStar5">5 stars</label>
+                                        <input type="radio" id="roomStar4" name="roomRating" value="4" />
+                                        <label for="roomStar4">4 stars</label>
+                                        <input type="radio" id="roomStar3" name="roomRating" value="3" />
+                                        <label for="roomStar3">3 stars</label>
+                                        <input type="radio" id="roomStar2" name="roomRating" value="2" />
+                                        <label for="roomStar2">2 stars</label>
+                                        <input type="radio" id="roomStar1" name="roomRating" value="1" />
+                                        <label for="roomStar1">1 star</label>
+                                    </div>
+                                </div>
+
+                                <!-- Price Rating -->
+                                <div class="locstar stars-cont">
+                                    <p>Price</p>
+                                    <div class="rate rat1">
+                                        <input type="radio" id="priceStar5" name="priceRating" value="5" />
+                                        <label for="priceStar5">5 stars</label>
+                                        <input type="radio" id="priceStar4" name="priceRating" value="4" />
+                                        <label for="priceStar4">4 stars</label>
+                                        <input type="radio" id="priceStar3" name="priceRating" value="3" />
+                                        <label for="priceStar3">3 stars</label>
+                                        <input type="radio" id="priceStar2" name="priceRating" value="2" />
+                                        <label for="priceStar2">2 stars</label>
+                                        <input type="radio" id="priceStar1" name="priceRating" value="1" />
+                                        <label for="priceStar1">1 star</label>
+                                    </div>
+                                </div>
+
+                                <!-- Tour Operator Rating -->
+                                <div class="locstar stars-cont">
+                                    <p>Tour Operator</p>
+                                    <div class="rate rat1">
+                                        <input type="radio" id="operatorStar5" name="operatorRating" value="5" />
+                                        <label for="operatorStar5">5 stars</label>
+                                        <input type="radio" id="operatorStar4" name="operatorRating" value="4" />
+                                        <label for="operatorStar4">4 stars</label>
+                                        <input type="radio" id="operatorStar3" name="operatorRating" value="3" />
+                                        <label for="operatorStar3">3 stars</label>
+                                        <input type="radio" id="operatorStar2" name="operatorRating" value="2" />
+                                        <label for="operatorStar2">2 stars</label>
+                                        <input type="radio" id="operatorStar1" name="operatorRating" value="1" />
+                                        <label for="operatorStar1">1 star</label>
+                                    </div>
+                                </div>
+                            </div>
+
+
+
+
+                            <!-- Additional Fields -->
+                            <div class="orow">
+                                <input type="text" name="name" id="reviewerName" placeholder="Name" required>
+                                <input type="email" name="email" id="reviewerEmail" placeholder="Email" required>
+                            </div>
+                            <div class="trow">
+                                <input type="text" name="title" id="reviewTitle" placeholder="Title" required>
+                            </div>
+                            <textarea name="comment" placeholder="Comment" class="rcomment" required></textarea>
+
+                            <button type="submit">Post Comment</button>
+
+
+                        </form>
                     </div>
-                    <div class="trow">
-                        <input type="text" name="title" id="reviewTitle" placeholder="Title" required>
-                    </div>
-                    <textarea name="comment" placeholder="Comment" class="rcomment" required></textarea>
-
-                    <button type="submit">Post Comment</button>
-
-
-                </form>
-            </div>
 
 
         </div>
     </main>
 
 
+    <div class="trip-set-cont">
+
+        <% if ( currUser && currUser._id.toString()==trip.owner._id.toString() ) { %>
+            <form action="/tour/<%= trip._id %>/?_method=DELETE" method="POST">
+                <button class="dlt-trip">Delete trip</button>
+            </form>
+            <% } %>
 
 
+                <% if ( currUser && currUser._id.toString()==trip.owner._id.toString() ) { %>
+                    <form action="/<%= trip._id %>/editTrip" method="GET">
+                        <button class="edt-trip">Edit trip</button>
+                    </form>
+                    <% } %>
 
-    <% if ( currUser && currUser._id.toString()==trip.owner._id.toString() ) { %>
-        <form action="/tour/<%= trip._id %>/?_method=DELETE" method="POST">
-            <button>Delete</button>
-        </form>
-        <% } %>
-
-
-            <% if ( currUser && currUser._id.toString()==trip.owner._id.toString() ) { %>
-                <form action="/<%= trip._id %>/editTrip" method="GET">
-                    <button>Edit</button>
-                </form>
-                <% } %>
-
-
-
-
-
-                    <!-- Swiper JS -->
-                    <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
-
-                    <!-- Initialize Swiper -->
-                    <script>
-                        var swiper = new Swiper(".mySwiper", {
-                            slidesPerView: 2,
-                            spaceBetween: 30,
-                            freeMode: true,
-                            pagination: {
-                                el: ".swiper-pagination",
-                                clickable: true,
-                            },
-                            autoplay: {
-                                delay: 2000, // Delay between slides in milliseconds (3000ms = 3 seconds)
-                                disableOnInteraction: false, // Keeps autoplay running even after user interactions
-                            },
-                        });
-                    </script>
+    </div>
 
 
 
 
 
+    <footer id="tfooter">
+
+        <div class="sec1">
+            <div class="logo"></div>
+            <p>Book your trip in minute, get full Control for much longer.</p>
+        </div>
+        <div class="sec2">
+            <div class="col1">
+                <h3>Company</h3>
+                <div class="links">
+                    <a href="">How it works</a>
+                    <a href="/">Find a trip</a>
+                    <a href="/createtrip">Create a trip</a>
+                </div>
 
 
-                    <!-- to resolve stars porblem  -->
-
-                    <script>
-
-
-                        document.addEventListener('DOMContentLoaded', function () {
-                            document.querySelectorAll('.rate').forEach(rateGroup => {
-                                rateGroup.addEventListener('click', function (e) {
-                                    if (e.target.tagName === 'LABEL') {
-                                        const radio = e.target.previousElementSibling;
-                                        if (radio && radio.tagName === 'INPUT' && radio.type === 'radio') {
-                                            radio.checked = true;
-
-
-                                        }
-                                    }
-                                });
-                            });
-                        });
+            </div>
+            <div class="col2">
+                <h3>EXPLORE</h3>
+                <div class="links">
+                    <a href="/tourbydestination">Group trips by destination </a>
+                    <a href="/tourbymonths">Group trips by Month </a>
+                    <a href="/featuredtrips">Featured trips</a>
+                </div>
+            </div>
+            <div class="col3">
+                <h3>Join Our Tour</h3>
+                <div class="links">
+                    <a href="">Blog </a>
+                    <a href="">About us</a>
+                    <a href="/contactUs">Contact us</a>
+                </div>
+            </div>
 
 
+        </div>
+        <div class="sec3">
+
+            <img src="../images/f.svg" alt="">
+            <img src="../images/i.svg" alt="">
+            <img src="../images/t.svg" alt="">
 
 
+        </div>
+
+        <p class="cc">All rights reserved@travelgoo.co</p>
 
 
-
-
+    </footer>
 
 
 
@@ -762,27 +745,90 @@
 
 
 
-                    </script>
+
+    <!-- Swiper JS -->
+    <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+
+    <!-- Initialize Swiper -->
+    <script>
+        var swiper = new Swiper(".mySwiper", {
+            slidesPerView: 2,
+            spaceBetween: 30,
+            freeMode: true,
+            pagination: {
+                el: ".swiper-pagination",
+                clickable: true,
+            },
+            autoplay: {
+                delay: 2000, // Delay between slides in milliseconds (3000ms = 3 seconds)
+                disableOnInteraction: false, // Keeps autoplay running even after user interactions
+            },
+        });
+    </script>
 
 
 
-                    <script>
-                        document.getElementById('show-report-form').addEventListener('click', function () {
-                            const reportForm = document.getElementById('report-form');
-                            reportForm.style.display = reportForm.style.display === 'none' ? 'block' : 'none';
-                        });
-                    </script>
 
 
 
 
-                    <script src="/js/whislist.js"></script>
-                    <script src="/js/share.js"></script>
-                    <script src="/js/ticketcounter.js"></script>
-                    <script src="/js/dropdown.js"></script>
+    <!-- to resolve stars porblem  -->
+
+    <script>
 
 
-                    <script src="/js/nav.js"></script>
+        document.addEventListener('DOMContentLoaded', function () {
+            document.querySelectorAll('.rate').forEach(rateGroup => {
+                rateGroup.addEventListener('click', function (e) {
+                    if (e.target.tagName === 'LABEL') {
+                        const radio = e.target.previousElementSibling;
+                        if (radio && radio.tagName === 'INPUT' && radio.type === 'radio') {
+                            radio.checked = true;
+
+
+                        }
+                    }
+                });
+            });
+        });
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    </script>
+
+
+
+
+    <script>
+        document.getElementById('show-report-form').addEventListener('click', function () {
+            const reportForm = document.getElementById('report-form');
+            reportForm.style.display = reportForm.style.display === 'none' ? 'block' : 'none';
+        });
+    </script>
+
+
+
+
+    <script src="/js/whislist.js"></script>
+    <script src="/js/share.js"></script>
+    <script src="/js/ticketcounter.js"></script>
+    <script src="/js/dropdown.js"></script>
+
+
+    <script src="/js/nav.js"></script>
 
 
 

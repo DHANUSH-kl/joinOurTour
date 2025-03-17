@@ -193,7 +193,7 @@ main {
   flex-direction: column;
   justify-content: center;
   align-items: flex-start;
-  gap: 1.5rem;
+  gap: 0.5rem;
 }
 
 .description h1 {
@@ -242,7 +242,7 @@ main {
   justify-content: flex-start;
   gap: 4rem;
 
-  margin-bottom: 3rem;
+  margin-bottom: 2rem;
 }
 
 .includes,
@@ -251,8 +251,8 @@ main {
   flex-direction: column;
   justify-content: flex-start;
   align-items: flex-start;
-  gap: 1rem;
-  margin-top: 1.5rem;
+  gap: 0rem;
+  margin-top: 0.5rem;
 }
 
 .include {
@@ -388,9 +388,9 @@ ul.rb li .timestamp {
 }
 
 .stop-image {
-  width: 40vw;
-  height: 45vh;
-  background-color: #262626;
+  width: 85%;
+  /* height: 45vh; */
+  /* background-color: #262626; */
   margin-top: 2.5rem;
 }
 
@@ -399,6 +399,7 @@ ul.rb li .timestamp {
   height: 100%;
   object-fit: cover;
   z-index: 99;
+  border-radius: 10px;
 }
 
 .stop-description {
@@ -409,6 +410,9 @@ ul.rb li .timestamp {
   line-height: 28.13px;
   width: 35vw;
   margin-top: 2rem;
+  word-wrap: break-word;  /* Ensures long words break and wrap */
+    overflow-wrap: break-word; /* Alternative for better support */
+    white-space: normal; /* Ensures text wraps normally */
 }
 
 
@@ -696,7 +700,6 @@ ul.rb li .timestamp {
 
 .rev-name {
   width: 100%;
-  height: 5rem;
   display: flex;
   justify-content: flex-start;
   align-items: center;
@@ -725,20 +728,82 @@ ul.rb li .timestamp {
 .rev-title {
   width: 70%;
   height: auto;
-  margin-top: 0.5rem;
+  margin-top: 0rem;
 }
 .rev-description {
   width: 70%;
   height: auto;
-  margin-top: 0.5rem;
+  margin-top: 0rem;
+}
+
+.review .delete-button {
+  background-color: #05A351;
+  border: none;
+  color: #fff;
+  border-radius: 10px;
+  padding: 0.5rem 1rem ;
+  font-family: poppins;
+  font-size: 0.8rem;
+  cursor: pointer;
+}
+
+.dlt-trip,.edt-trip {
+  border: none;
+  padding: 0.5rem 1rem ;
+  font-family: poppins;
+  font-size: 1rem;
+  border-radius: 10px;
+  text-align: center;
+  cursor: pointer;
+}
+
+.dlt-trip {
+  background-color: rgb(161, 41, 41);
+  color: #ddd;
+
+}
+
+.edt-trip {
+  background-color: #128f4f;
+  color: #ddd;
+
+}
+
+.trip-set-cont{
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 1.5rem;
+
+}
+
+.add-feature-trip-btn,.rem-feature-trip-btn{
+  font-family: poppins;
+  font-size: 1rem;
+  padding: 0.5rem 1rem;
+  border: none;
+  cursor: pointer;
+  border-radius: 10px;
+  margin-top: 10px;
+}
+
+.add-feature-trip-btn{
+  background-color: #05A351;
+  color: #FFF;
+}
+.rem-feature-trip-btn{
+  background-color: rgb(187, 22, 22);
+  color: #FFF;
 }
 
 
 
 
 
-
-
+html{
+  overflow-x: hidden;
+}
 
 
 
@@ -911,10 +976,10 @@ ul.rb li .timestamp {
   padding: 0.2rem 1.2rem;
   border: none;
   color: #FFF;
-  background-color: red;
+  background-color: #e83f3f;
   border-radius: 10px;
   font-family: Poppins;
-  font-size: 14px;
+  font-size: 11px;
   font-style: normal;
   font-weight: 700;
   line-height: 30px; 
@@ -963,7 +1028,7 @@ ul.rb li .timestamp {
   font-family: poppins;
   color: #4f5b66;
   opacity: 0.6;
-  padding-top: 1.5rem;
+  /* padding-top: 1.5rem; */
 }
 
 .breadcrumb-nav {
@@ -971,7 +1036,7 @@ ul.rb li .timestamp {
   gap: 0.3rem;
   font-family: poppins;
   font-size: 1rem;
-  margin-top: 1.5rem;
+  margin-top: 0.5rem;
 }
 
 .crumbSAME {
@@ -1146,8 +1211,8 @@ fieldset, label { margin: 0; padding: 0; }
   display: flex;
   justify-content: flex-end;
   align-items: center;
-  gap: 2rem;
-
+  gap: 1rem;
+  margin-top: 2.5rem;
 }
 
 .heart-container {
@@ -1164,15 +1229,29 @@ fieldset, label { margin: 0; padding: 0; }
 }
 #ov-bold {
   font-weight: 600;
-  font
+  
 }
 
+.customer-rev {
+  width: 100%;
+}
+
+.review-container {
+  width: 100%;
+}
 
 @media(max-width:1000px) {
+
   .title-container {
-    margin-top: 3.5rem;
+    margin-top: 0.8rem;
     width: 100%;
     height: auto;
+  }
+  .breadcrumb-nav,.tripID{
+    font-size: 0.65rem;
+  }
+  .overall-rating-container{
+    width: 100%;
   }
 
   .rating > label::before {
@@ -1197,4 +1276,323 @@ fieldset, label { margin: 0; padding: 0; }
   .ov-details p {
     font-size: 13px;
   }
+
+  .booking-container {
+    width: 100%;
+
+  }
+
+  .includes-container {
+    width: 100%
+  }
+  .container {
+    width: 100%
+  }
+  .description {
+    width: 100%;
+  }
+  .stars-cont {
+    width: 24vw;
+  }
+  .overview-container{
+    justify-content: center;
+    gap: 1.5rem;
+  }
+  .iecontainer {
+    margin-top: 0rem;
+  }
+  .rate:not(:checked) > label{
+    font-size: 12px;
+    
+  }
+  .stars-cont p{
+    font-size: 10px ;
+  }
+  .stars-cont{
+    align-items: flex-start;
+  }
+  .stars-cont{
+    align-items: flex-start;
+  }
+
+}
+
+nav .logo{
+  margin-left: 0;
+}
+nav .right{
+  margin-right: 0;
+}
+
+nav{
+  padding: 0 3rem;
+}
+
+.trip-overall-rating i{
+  font-size: 1rem;
+  color: #05A351;
+
+}
+
+.tripID-cont{
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+@media(max-width:660px) {
+  .image-gallery{
+    height: 26vh;
+  }
+  .overview-container{
+    margin-top: 0.8rem;
+  }
+  .description p,.include p,.ov-left .ov-txt p,.revp{
+    font-size: 13px;
+  }
+  .include img{
+    width: 1rem;
+  }
+  .ov-left svg{
+    width: 1.5rem;
+  }
+  .ov-left .ov-txt h3,.ov-right p{
+    font-size: 15px;
+  }
+  .pfp{
+    width: 1.5rem;
+    height: 1.5rem;
+  }
+  .trip-overall-rating{
+    margin-top: 0;
+  }
+  .tripID-cont{
+    margin-top: 0.5rem;
+  }
+  .stop-description{
+    width: 59vw;
+  }
+  .description p, .include p, .ov-left .ov-txt p, .revp, .stop-description {
+    font-size: 9px;
+  }
+  .iecontainer{
+    gap: 1rem ;
+  }
+
+  .rev-title p {
+    font-size: 14px;
+  }
+
+  .rev-description p {
+    font-size: 13px;
+  }
+
+  svg{
+    width: 20px;
+  }
+}
+
+
+@media(max-width:560px) {
+  .title-container h1{
+    font-size: 25px;
+  }
+  .breadcrumb-nav, .tripID{
+    font-size: 0.45rem;
+  }
+  .trip-overall-rating p{
+    font-size: 0.6rem;
+  }
+  .shareTrip span{
+    font-size: 0.8rem;
+  }
+  .heart-container,.shareTrip {
+    font-size: 0.7rem;
+  }
+  .heart-container i{
+    font-size: 0.8rem;
+  }
+  .ov-details p {
+    font-size: 8px;
+    margin-bottom: -0.5rem;
+  }
+  .ov-box img {
+    width: 20px;
+    height: 20px;
+  }
+  .image-gallery {
+    width: 156%;
+    height: 20vh;
+  }
+  .shareAndWhishlist{
+    margin-top: 0rem;
+  }
+  .report-btn{
+    font-size: 10px;
+  }
+  .description{
+    margin-top: 1rem;
+  }
+
+
+  .stop-title{
+    font-size: 14px;
+  }
+  .ov-left svg {
+    width: 1rem;
+  }
+  .ov-rating{
+    padding: 1rem 1rem;
+  }
+
+  .ov-left .ov-txt h3, .ov-right p {
+    font-size: 12px;
+  }
+  .stars-cont {
+    align-items: flex-start;
+    width: 59.2%;
+  }
+  .tstar, .bstar{
+    flex-direction: column;
+    gap: 0;
+  }
+
+  .stars-cont p {
+    font-size: 12px;
+  }
+
+  .rate:not(:checked) > label {
+    font-size: 18px;
+  }
+
+  nav {
+    padding: 0 1rem;
+  }
+}
+
+
+
+#tfooter{
+  margin-top: 0;
+}
+
+
+.overview-container{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.ov-rows{
+  width: 50%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 0.2rem;
+}
+
+.ov-box{
+  width: 100%;
+  background-color: rgba(5, 163, 81, 0.10);
+  border-radius: 10px;
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  height: 100%;
+  padding: 0.5rem ;
+}
+
+
+
+
+
+
+
+
+
+
+
+/* Initially hide the details */
+.stop-details {
+  display: none;
+}
+
+/* Show first .stop-details by default */
+.rb-item.active .stop-details {
+  display: block;
+}
+
+/* Style for the button */
+.details-btn {
+  cursor: pointer;
+  background: none;
+  border: none;
+  font-size: 16px;
+  color: #05A351;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  position: absolute;
+  top: 0;
+  right: 0;
+}
+
+
+/* Rotate arrow when active */
+.details-btn .arrow {
+  transition: transform 0.3s ease;
+}
+
+.details-btn.active .arrow {
+  transform: rotate(180deg);
+}
+
+.rb-item{
+  position: relative;
+}
+
+
+
+.stop-description {
+  color: #05073C;
+  font-family: Poppins;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 28.13px;
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+  white-space: normal;
+}
+
+/* Initially show only 3 lines */
+.description-text {
+  display: -webkit-box;
+  -webkit-line-clamp: 3; /* Show only 3 lines */
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  transition: all 0.3s ease-in-out;
+}
+
+/* When expanded, remove text clamping */
+.description-text.expanded {
+  -webkit-line-clamp: unset;
+  overflow: visible;
+}
+
+/* Show More/Less button */
+.show-more-btn {
+  background: none;
+  color: #128f4f;
+  cursor: pointer;
+  font-size: 1rem;
+  font-family: poppins;
+  padding: 0.2rem 0.7rem;
+  border: 2px dotted #05A351;
+  margin-top: 5px;
+  display: block;
+  border-radius: 5px;
 }
