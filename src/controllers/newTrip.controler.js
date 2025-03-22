@@ -1378,6 +1378,7 @@ const showtoursbymonth = async (req, res) => {
         let today = new Date();
         let currentYear = today.getFullYear();
 
+
         // Ensure month is a valid number between 01 and 12
         if (!/^(0?[1-9]|1[0-2])$/.test(month)) {
             return res.status(400).send("Invalid month parameter.");

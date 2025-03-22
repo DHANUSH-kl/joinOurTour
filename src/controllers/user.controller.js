@@ -2,7 +2,7 @@ import express from 'express';
 import bodyParser from 'body-parser';
 import passport from 'passport';
 import {User} from '../models/user.model.js';
-import { Strategy as GoogleStrategy } from 'passport-google-oauth20';
+import { Strategy as GoogleStrategy } from "passport-google-oauth20";
 import crypto from 'crypto';
 import nodemailer from 'nodemailer';
 
@@ -19,55 +19,69 @@ const generateOTP = () => Math.floor(100000 + Math.random() * 900000).toString()
 
 // Render the signup page
 const signupForm = async (req, res) => {
+    console.log(req.user);
     res.render("user/signupForm.ejs");
 }
 
 const signupUser = async (req, res) => {
-    const { username, email, password, phoneNumber, firstName, lastName, state, city } = req.body;
+  
 
+    const { firstName, lastName, state, city, phoneNumber } = req.body;
+    req.session.signupData = { firstName, lastName, state, city, phoneNumber };
+
+    console.log(firstName);
+    res.redirect('/user/auth'); // Redirect to next step
+
+
+
+
+};
+
+const auth = async (req,res) => {
+    if (!req.session.signupData) return res.redirect('/user/signup');
+    res.render('user/auth.ejs');
+}
+
+const authdata = async(req,res) => {
+    const { username, email, password } = req.body;
+    const emailLower = email.toLowerCase();
+    
     try {
         // Check if email already exists
-        const existingUser = await User.findOne({ email: email.toLowerCase() });
-        if (existingUser) {
-            return res.status(400).send('Email is already registered.');
-        }
+        const existingUser = await User.findOne({ email: emailLower });
+        if (existingUser) return res.status(400).send('Email is already registered.');
 
         // Generate OTP
         const otp = generateOTP();
 
         // Store user data and OTP temporarily
-        otpStorage[email.toLowerCase()] = { otp, userData: { username, email, password, phoneNumber, firstName, lastName, state,city} };
+        otpStorage[emailLower] = { otp, userData: { ...req.session.signupData, username, email: emailLower, password } };
+        req.session.email = emailLower;
 
-        // Store email in session for later use
-        req.session.email = email.toLowerCase();
-
-        // Send OTP via email (same as before)
+        // Send OTP via email
         const transporter = nodemailer.createTransport({
             service: 'gmail',
-            auth: {
-                user: process.env.EMAIL_USER,
-                pass: process.env.EMAIL_PASS,
-            },
+            auth: { user: process.env.EMAIL_USER, pass: process.env.EMAIL_PASS }
         });
-
-        const mailOptions = {
+        
+        await transporter.sendMail({
             from: process.env.EMAIL_USER,
             to: email,
             subject: 'Your OTP for Signup',
             text: `Your OTP is: ${otp}`,
-        };
-
-        await transporter.sendMail(mailOptions);
-
+        });
+        
         console.log(`OTP sent to ${email}: ${otp}`);
-
-        // Redirect to OTP verification page
         res.redirect('/user/verify-user');
     } catch (error) {
-        console.error('Signup Error:', error);
+        console.error('Auth Error:', error);
         res.status(500).send('An error occurred. Please try again.');
     }
-};
+}
+
+const savesignupdata = async(req,res) => {
+    req.session.signupData = req.body;
+}
 
 const verifyOtpAndSignup = async (req, res) => {
     const { otp } = req.body;
@@ -263,4 +277,4 @@ const usernamePage = async(req,res) => {
 
 
 
-export {forgotUsername, usernamePage, verifyUserPage, verifyOtpAndSignup , resetPasswordPage ,forgotPasswordPage , forgotPassword, resetPassword , signupForm , signupUser , signinForm , signinUser , logout };
+export {forgotUsername,auth, savesignupdata,usernamePage,authdata, verifyUserPage, verifyOtpAndSignup , resetPasswordPage ,forgotPasswordPage , forgotPassword, resetPassword , signupForm , signupUser , signinForm , signinUser , logout };

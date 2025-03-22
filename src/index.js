@@ -11,11 +11,13 @@ import session from 'express-session';
 import cors from 'cors';
 import passport from 'passport';
 import { Strategy as LocalStrategy } from 'passport-local';
+import { Strategy as GoogleStrategy } from "passport-google-oauth20";
 import { User } from './models/user.model.js';
 import { expressError } from './expressError.js';
 import tripRoutes from './routes/trip.route.js';
 import userRoutes from './routes/user.route.js';
 import adminRoutes from './routes/admin.route.js';
+import authRoutes from './routes/auth.route.js';
 import Razorpay from "razorpay";
 import flash from "connect-flash";
 
@@ -23,6 +25,8 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 
 dotenv.config();
+
+
 
 const app = express();
 
@@ -36,7 +40,6 @@ connectDB()
   .catch((error) => {
     console.log("MongoDB connection error", error);
   });
-
 // Middleware setup
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
@@ -66,6 +69,40 @@ app.use(passport.session());
 passport.use(new LocalStrategy(User.authenticate()));
 passport.serializeUser(User.serializeUser());
 passport.deserializeUser(User.deserializeUser());
+
+
+
+// Google OAuth Strategy
+passport.use(
+  new GoogleStrategy(
+      {
+          clientID: process.env.GOOGLE_CLIENT_ID,
+          clientSecret: process.env.GOOGLE_CLIENT_SECRET,
+          callbackURL: process.env.GOOGLE_CALLBACK_URL,
+          passReqToCallback: true,
+      },
+      async (req, accessToken, refreshToken, profile, done) => {
+          try {
+              // Find or create user in database
+              let user = await User.findOne({ email: profile.emails[0].value });
+
+              if (!user) {
+                  user = new User({
+                      firstName: profile.name.givenName,
+                      lastName: profile.name.familyName,
+                      email: profile.emails[0].value,
+                      googleId: profile.id,
+                  });
+                  await user.save();
+              }
+
+              return done(null, user);
+          } catch (error) {
+              return done(error, null);
+          }
+      }
+  )
+);
 
 
 
@@ -104,6 +141,7 @@ app.use((req, res, next) => {
 app.use('/', tripRoutes);
 app.use('/user', userRoutes);
 app.use('/admin', adminRoutes);
+app.use('/', authRoutes);
 
 app.get("/favicon.ico", (req, res) => res.status(204));
 
