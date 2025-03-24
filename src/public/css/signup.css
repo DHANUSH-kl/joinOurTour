@@ -2,8 +2,17 @@
     margin: 0;
     padding: 0;
     box-sizing: border-box;
+    font-family: poppins;
 }
 
+body{
+    width: 100%;
+  height: 100%;
+  --color: #E1E1E1;
+  background-color: #F3F3F3;
+  background-image: linear-gradient(0deg, transparent 24%, var(--color) 25%, var(--color) 26%, transparent 27%,transparent 74%, var(--color) 75%, var(--color) 76%, transparent 77%,transparent), linear-gradient(90deg, transparent 24%, var(--color) 25%, var(--color) 26%, transparent 27%,transparent 74%, var(--color) 75%, var(--color) 76%, transparent 77%,transparent);
+  background-size: 55px 55px;
+}
 a {
     text-decoration: none;
     color: #A7C957;
@@ -29,228 +38,165 @@ nav .home a {
     font-weight: 500;
     line-height: normal;
     cursor: pointer;
-    color: #fff;
+    color: #05A351;
 }
 
-main {
-    width: 100vw;
-    height: 90vh;
-    background-color: transparent;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-}
 
-.row {
-    width: 30rem;
-    height: auto;
-    background-color: #A7C957;
-    border-radius: 20% 0 20% 0;
-    padding: 2rem 3rem;
-    
-
-
-    background: rgba(167, 201, 87, 0.2); /* Semi-transparent version of #A7C957 */
-    border-radius: 15px;
-    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.37); /* Subtle shadow */
-    backdrop-filter: blur(10px); /* Frosted glass effect */
-    -webkit-backdrop-filter: blur(10px); /* Frosted glass effect for Safari */
-    border: 1px solid rgba(255, 255, 255, 0.18); /* Border for more depth */
-
-
-
-        display: flex;
-        justify-content: center;
-        align-items: center;
-
-}
-
-.row form {
-    width: 100%;
-    height: 100%;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    gap: 1.3rem;
-    flex-direction: column;
-}
-
-.mt-3 {
-    width: 100%;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-
-}
-
-input {
-    width: 100%;
-    height: 3rem;
-    text-align: center;
-    border: none;
-    border-radius: 10px;
-
-
-    border: none;
-  border-radius: 5px;
-  outline: none;
-  background: rgba(255, 255, 255, 0.2); /* Light background for inputs */
-  color: #fff;
-
-
-    font-family: Poppins;
-    font-size: 15px;
-    font-style: normal;
-    font-weight: 500;
-    line-height: normal;
-}
-
-form a {
-    color: black;
-    text-decoration: underline;
-}
-
-.btns {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    gap: 2rem;
-}
-
-.btns button {
-    width: auto;
-    padding: 1rem 2.7rem;
-
-
-
-    border-radius: 5px;
-    background: #4caf50;
-    color: #fff;
-
-
-    font-family: Poppins;
-    font-size: 12px;
-    cursor: pointer;
-    border: none;
-    border-radius: 10px;
-    font-style: normal;
-    font-weight: 500;
-    line-height: normal;
-
-}
-.btns button:hover{
-    background: #fff;
-    color: #4caf50;
-    transition: 0.2s ease-in;
-}
-.signin {
-
-
-    width: 3.5rem;
-    padding: 0.5rem 2.7rem;
-
-
-
-
-    border-radius: 5px;
-    background: #4caf50;
-    color: #fff;
-
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    font-family: Poppins;
-    font-size: 12px;
-    cursor: pointer;
-    border: none;
-    border-radius: 10px;
-    font-style: normal;
-    font-weight: 500;
-    line-height: normal;
-
-
-}
 
 .signin a {
     text-decoration: none;
     color: #fff;
 }
 
-body {
-    width: 100vw;
-    height: 100vh;
-    background-image: url("../images/image1.png");
-    background-repeat: no-repeat;
-    background-position: center;
-    background-size: cover;
+
+
+
+
+
+body{
+    background-color: #e8e8e8;
+   
 }
 
-/* For Chrome, Safari, Edge, and other WebKit browsers */
-input[type="number"]::-webkit-inner-spin-button,
-input[type="number"]::-webkit-outer-spin-button {
-  -webkit-appearance: none;
-  margin: 0;
-}
-
-/* For Firefox */
-input[type="number"] {
-  -moz-appearance: textfield;
-}
-
-.fp {
-    color: white;
-}
-
-.names {
-    width: 100%;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    gap: 1rem;
-}
-
-.location {
-    width: 100%;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    gap: 1rem;
-}
-
-
-
-
-@media(max-width:520px){
-    .row{
-        width: 22rem;
-    }
-
-    nav .home a{
-        font-size: 14px;
-    }
-
-    form a{
-        font-size: 10px;
-    }
-}
-
-
-.singUPa{
-    text-decoration: underline;
-    color: #fff;
-    font-family: poppins;
-    font-size: 0.7rem;
-}
-
-.singinUP{
-    width: 100%;
+main {
     display: flex;
     justify-content: center;
     align-items: center;
+    margin-top: 5rem;
+}
+
+/* From Uiverse.io by Yaya12085 */ 
+.form {
+    display: flex;
+    flex-direction: column;
     gap: 10px;
-
-}
-
-.singinUP{
-    font-size: 1rem;
-}
+    max-width: 350px;
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 20px;
+    position: relative;
+  }
+  
+  .title {
+    font-size: 28px;
+    color: #05A351;
+    font-weight: 600;
+    letter-spacing: -1px;
+    position: relative;
+    display: flex;
+    align-items: center;
+    padding-left: 30px;
+  }
+  
+  .title::before,.title::after {
+    position: absolute;
+    content: "";
+    height: 16px;
+    width: 16px;
+    border-radius: 50%;
+    left: 0px;
+    background-color: #05A351;
+  }
+  
+  .title::before {
+    width: 18px;
+    height: 18px;
+    background-color: #05A351;
+  }
+  
+  .title::after {
+    width: 18px;
+    height: 18px;
+    animation: pulse 1s linear infinite;
+  }
+  
+  .message, .signin {
+    color: rgba(88, 87, 87, 0.822);
+    font-size: 14px;
+  }
+  
+  .signin {
+    text-align: center;
+  }
+  
+  .signin a {
+    color: #05A351;
+  }
+  
+  .signin a:hover {
+    text-decoration: underline #05A351;
+  }
+  
+  .flex {
+    display: flex;
+    width: 100%;
+    gap: 6px;
+  }
+  
+  .form label {
+    position: relative;
+  }
+  
+  .form label .input {
+    width: 100%;
+    padding: 10px 10px 20px 10px;
+    outline: 0;
+    border: 1px solid rgba(105, 105, 105, 0.397);
+    border-radius: 10px;
+  }
+  
+  .form label .input + span {
+    position: absolute;
+    left: 10px;
+    top: 15px;
+    color: grey;
+    font-size: 0.9em;
+    cursor: text;
+    transition: 0.3s ease;
+  }
+  
+  .form label .input:placeholder-shown + span {
+    top: 15px;
+    font-size: 0.9em;
+  }
+  
+  .form label .input:focus + span,.form label .input:valid + span {
+    top: 30px;
+    font-size: 0.7em;
+    font-weight: 600;
+  }
+  
+  .form label .input:valid + span {
+    color: green;
+  }
+  
+  .submit {
+    border: none;
+    outline: none;
+    background-color: #05A351;
+    padding: 10px;
+    border-radius: 10px;
+    color: #fff;
+    font-size: 16px;
+    transform: .3s ease;
+    cursor: pointer;
+  }
+  
+  .submit:hover {
+    background-color: white;
+    border: 1px solid #05A351;
+    cursor: pointer;
+    color: #05A351;
+  }
+  
+  @keyframes pulse {
+    from {
+      transform: scale(0.9);
+      opacity: 1;
+    }
+  
+    to {
+      transform: scale(1.8);
+      opacity: 0;
+    }
+  }

@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -7,20 +8,20 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Lato&display=swap" rel="stylesheet">
     <link
-      href="https://fonts.googleapis.com/css2?family=Lato:wght@400;700;900&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900&display=swap"
-      rel="stylesheet">
-  
+        href="https://fonts.googleapis.com/css2?family=Lato:wght@400;700;900&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900&display=swap"
+        rel="stylesheet">
+
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
-      integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA=="
-      crossorigin="anonymous" referrerpolicy="no-referrer" />
+        integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA=="
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Anton&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
     <script src="https://cdn.jsdelivr.net/npm/swiffy-slider@1.6.0/dist/js/swiffy-slider.min.js" crossorigin="anonymous"
-      defer></script>
+        defer></script>
     <link href="https://cdn.jsdelivr.net/npm/swiffy-slider@1.6.0/dist/css/swiffy-slider.min.css" rel="stylesheet"
-      crossorigin="anonymous">
+        crossorigin="anonymous">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
 
 
@@ -29,6 +30,7 @@
     <link rel="stylesheet" href="/css/payment.css">
     <title>Document</title>
 </head>
+
 <body>
     <nav>
         <h3>logo</h3>
@@ -45,26 +47,32 @@
 
             <div class="totalAmount">
                 <p>total amount</p>
-                <h3> ₹<%= totalAmount %> </h3>
+                <h3> ₹<%= totalAmount %>
+                </h3>
             </div>
 
-            
+
             <form id="paymentForm">
                 <button id="payButton">Pay Now</button>
             </form>
 
             <div class="tripcover">
-                <h3>Your Booking includes free protection from Trip cancellations. <span id="learnMore">Learn More</span></h3>
+                <h3>Your Booking includes free protection from Trip cancellations. <span id="learnMore">Learn
+                        More</span></h3>
             </div>
-            
+
             <!-- Popup -->
             <div class="popup-overlay" id="popup">
                 <div class="popup-content">
                     <span class="close-btn" id="closePopup">&times;</span>
                     <h2>Cancellation & Protection Policy</h2>
-                    <p><strong>30 or 7 Days Free Cancellation:</strong> Cancel your subscription within the first 30 days (if you are the first TripMate and the trip departs more than 30 days from the booking time) or within 7 days if you joined later. Get a full refund with no fees.</p>
-                    <p><strong>TripLeader Cancellation Protection:</strong> If the TripLeader cancels, we will find a replacement or ensure you get refunded.</p>
-                    <p><strong>Reimbursement Protection:</strong> Cancel your booking worry-free. We’ll ensure you get the maximum refund and handle communication with the TripLeader.</p>
+                    <p><strong>30 or 7 Days Free Cancellation:</strong> Cancel your subscription within the first 30
+                        days (if you are the first TripMate and the trip departs more than 30 days from the booking
+                        time) or within 7 days if you joined later. Get a full refund with no fees.</p>
+                    <p><strong>TripLeader Cancellation Protection:</strong> If the TripLeader cancels, we will find a
+                        replacement or ensure you get refunded.</p>
+                    <p><strong>Reimbursement Protection:</strong> Cancel your booking worry-free. We’ll ensure you get
+                        the maximum refund and handle communication with the TripLeader.</p>
                 </div>
             </div>
 
@@ -80,8 +88,8 @@
                         </div>
 
                         <% } else { %>
-                                <p>No images available for this trip</p>
-                                <% } %>
+                            <p>No images available for this trip</p>
+                            <% } %>
 
                                 <h3 class="card-title">
                                     <%= trip.location %>
@@ -89,8 +97,8 @@
 
                                 <p>
                                     <% if (trip.departure) { %>
-                                        <%= new Date(trip.departure).toLocaleDateString('en-US', { month: 'long'
-                                            , day: '2-digit' }) %> ~
+                                        <%= new Date(trip.departure).toLocaleDateString('en-US', { month: 'long' ,
+                                            day: '2-digit' }) %> ~
                                             <% } else { %>
                                                 date not available
                                                 <% } %>
@@ -102,16 +110,16 @@
 
                                 <div class="totalprice">
                                     <% if (trip.totalCost) { %>
-                                    <span>Total</span> &nbsp;<b>
-                                        <%= trip.totalCost.toLocaleString('en-IN', { style: 'currency' ,
-                                            currency: 'INR' }) %>
-                                    </b>
-                                    <% } else { %>
-                                        Price Not Available
-                                        <% } %>
-                                    </div>
-                        
-                    </div>
+                                        <span>Total</span> &nbsp;<b>
+                                            <%= trip.totalCost.toLocaleString('en-IN', { style: 'currency' ,
+                                                currency: 'INR' }) %>
+                                        </b>
+                                        <% } else { %>
+                                            Price Not Available
+                                            <% } %>
+                                </div>
+
+                </div>
             </div>
         </div>
 
@@ -120,57 +128,98 @@
 
 
 
+
+
     <script>
-    document.getElementById("payButton").addEventListener("click", async (e) => {
-        e.preventDefault();
-        
-        const options = {
-            key: "<%= process.env.RAZORPAY_KEY_ID %>",
-            amount: "<%= order.amount %>",
-            currency: "INR",
-            name: "TripMate",
-            description: "Trip Payment",
-            order_id: "<%= order.id %>",
-            handler: function (response) {
-                fetch("/payment/capture", {
+        document.getElementById("payButton").addEventListener("click", async function (e) {
+            e.preventDefault();
+
+            // Get trip details
+            const tripId = "<%= trip._id %>";
+            const userId = "<%= user._id %>";
+            const amount = <%= totalAmount %>;
+            const ticket = <%= numTickets %>;
+
+            try {
+                // 1️⃣ Create Razorpay Order from Backend
+                const response = await fetch("/create-order", {
                     method: "POST",
                     headers: { "Content-Type": "application/json" },
-                    body: JSON.stringify({
-                        razorpay_payment_id: response.razorpay_payment_id,
-                        razorpay_order_id: response.razorpay_order_id,
-                        razorpay_signature: response.razorpay_signature,
-                        tripId: "<%= trip._id %>",
-                    }),
-                }).then(() => {
-                    window.location.href = `/trips/<%= trip._id %>?payment=success`;
+                    body: JSON.stringify({ amount, tripId, userId }),
                 });
-            },
-            theme: { color: "#3399cc" },
-        };
+                const data = await response.json();
 
-        const rzp1 = new Razorpay(options);
-        rzp1.open();
-    });
-</script>
+                if (!data.success) {
+                    alert("Order creation failed!");
+                    return;
+                }
+
+                // 2️⃣ Initialize Razorpay Checkout
+                const options = {
+                    key: "<%= process.env.RAZORPAY_KEY_ID %>",
+                    amount: data.order.amount,
+                    currency: "INR",
+                    name: "Trip Booking",
+                    description: "Payment for your trip",
+                    order_id: data.order.id,
+                    handler: async function (response) {
+                        // 3️⃣ Verify Payment in Backend
+                        const verifyResponse = await fetch("/verify-payment", {
+                            method: "POST",
+                            headers: { "Content-Type": "application/json" },
+                            body: JSON.stringify({
+                                razorpay_order_id: response.razorpay_order_id,
+                                razorpay_payment_id: response.razorpay_payment_id,
+                                razorpay_signature: response.razorpay_signature,
+                                tripId,
+                                userId,
+                                amount,
+                                ticket
+                            }),
+                        });
+
+                        const verifyData = await verifyResponse.json();
+                        if (verifyData.success) {
+                            alert("Payment successful!");
+                            window.location.href = "/bookings"; // Redirect to user's booking page
+                        } else {
+                            alert("Payment verification failed!");
+                        }
+                    },
+                    theme: { color: "#528FF0" },
+                };
+
+                const rzp = new Razorpay(options);
+                rzp.open();
+            } catch (error) {
+                console.error(error);
+                alert("Something went wrong!");
+            }
+        });
+    </script>
+
+
+
+
 
 
 
 
 
     <script>
-    document.getElementById("learnMore").addEventListener("click", function () {
-        document.getElementById("popup").style.display = "flex";
-    });
+        document.getElementById("learnMore").addEventListener("click", function () {
+            document.getElementById("popup").style.display = "flex";
+        });
 
-    document.getElementById("closePopup").addEventListener("click", function () {
-        document.getElementById("popup").style.display = "none";
-    });
-
-    window.addEventListener("click", function (event) {
-        if (event.target === document.getElementById("popup")) {
+        document.getElementById("closePopup").addEventListener("click", function () {
             document.getElementById("popup").style.display = "none";
-        }
-    });
+        });
+
+        window.addEventListener("click", function (event) {
+            if (event.target === document.getElementById("popup")) {
+                document.getElementById("popup").style.display = "none";
+            }
+        });
 
 
 
@@ -190,14 +239,15 @@
 
 
 
-   
 
 
 
 
-</script>
+
+    </script>
 
 
 
 </body>
+
 </html>

@@ -1,6 +1,6 @@
 import { Router } from "express";
 import express from 'express';
-import { contactPage,showFeaturedTrips,showtoursbymonth,tourbymonths,tourbydestination,showgroupdestination ,contactUsPost , getpayment , reportTrip, showWishlist,searchTrips, deleteReview, discoverPage, mainSearch, getSecondarySearch, whislist, aboutus, addNewTrip, showAllTrips, newTripForm, showTrip, editTripForm, deleteTrip, mytrip, postEditTrip, catagariesTrips, priceFilter, reviews, fetchWhislist } from "../controllers/newTrip.controler.js";
+import { contactPage,createOrder,getUserBookings,cancelBooking,verifyPayment,showFeaturedTrips,showtoursbymonth,tourbymonths,tourbydestination,showgroupdestination ,contactUsPost , getpayment , reportTrip, showWishlist,searchTrips, deleteReview, discoverPage, mainSearch, getSecondarySearch, whislist, aboutus, addNewTrip, showAllTrips, newTripForm, showTrip, editTripForm, deleteTrip, mytrip, postEditTrip, catagariesTrips, priceFilter, reviews, fetchWhislist } from "../controllers/newTrip.controler.js";
 import { storage } from "../cloudinary.js";
 import bodyParser from 'body-parser';
 import { isLoggedIn, isAgent, isOwner } from "../middlewares.js";
@@ -79,6 +79,20 @@ router.route("/catagories")
 
 router.route("/mytrips")
     .get(isLoggedIn,isAgent, asyncWrap(mytrip));
+
+router.route("/create-order")
+    .post(createOrder)
+
+router.route("/verify-payment")
+    .post(verifyPayment)
+
+router.route("/bookings")
+    .get(getUserBookings)
+
+router.route("/cancel-booking/:id")
+    .post(cancelBooking)
+
+
 
 // Generic Routes
 router.route("/")

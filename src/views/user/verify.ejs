@@ -3,14 +3,123 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Lato&display=swap" rel="stylesheet">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Lato:wght@400;700;900&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900&display=swap"
+        rel="stylesheet">
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
+        integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA=="
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link rel="stylesheet"
+        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0" />
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Anton&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
+
+
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>
+    <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+
+
+    <link rel="stylesheet" href="/css/logo.css">
     <link rel="stylesheet" href="/css/verify.css">
     <title>Verify OTP</title>
 </head>
 <body>
-    <h2>Verify OTP</h2>
+
+    <nav>
+        <div class="logo">
+            <p class="shine">joinOurTour</p>
+        </div>
+        <div class="home">
+            <a href="/aboutus">HOME</a>
+        </div>
+    </nav>
+
+    <hr>
+
+
+    <!-- <h2>Verify OTP</h2>
     <form action="/user/verify-user" method="POST">
         <input type="text" name="otp" id="otp" placeholder="Enter OTP" required>
         <button type="submit">Verify OTP</button>
-    </form>
+    </form> -->
+
+
+
+
+    <main>
+        <!-- From Uiverse.io by kennyotsu-monochromia --> 
+<form class="form" action="/user/verify-user" method="POST">
+    <span class="close">X</span>
+  
+    <div class="info">
+    <span class="title">Two-Factor Verification</span>
+  <p class="description">Enter the two-factor authentication code provided by the authenticator app </p>
+     </div>
+      <div class="input-fields">
+      <input maxlength="1" type="tel" placeholder=""  autofocus class="otp-input">
+      <input maxlength="1" type="tel" placeholder=""   class="otp-input"> 
+      <input maxlength="1" type="tel" placeholder=""   class="otp-input">
+      <input maxlength="1" type="tel" placeholder=""   class="otp-input">
+      <input maxlength="1" type="tel" placeholder=""   class="otp-input">
+      <input maxlength="1" type="tel" placeholder=""   class="otp-input">
+    </div>
+
+     <!-- Hidden field to store combined OTP -->
+     <input type="hidden" name="otp" id="hidden-otp">
+  
+       
+
+        <button type="submit" class="action-btns"><a  class="verify">Verify</a></button>
+  
+  </form>
+    </main>
+
+
+
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            const inputs = document.querySelectorAll(".otp-input");
+            const hiddenOtpInput = document.getElementById("hidden-otp");
+            const form = document.getElementById("otp-form");
+        
+            inputs.forEach((input, index) => {
+                input.addEventListener("input", (e) => {
+                    if (e.target.value.length === 1 && index < inputs.length - 1) {
+                        inputs[index + 1].focus();
+                    }
+                    updateHiddenInput();
+                });
+        
+                input.addEventListener("keydown", (e) => {
+                    if (e.key === "Backspace" && index > 0 && !input.value) {
+                        inputs[index - 1].focus();
+                    }
+                });
+            });
+        
+            function updateHiddenInput() {
+                hiddenOtpInput.value = Array.from(inputs).map(input => input.value).join("");
+            }
+        
+            form.addEventListener("submit", (e) => {
+                updateHiddenInput();
+                if (hiddenOtpInput.value.length !== 6) {
+                    e.preventDefault();
+                    alert("Please enter a 6-digit OTP.");
+                }
+            });
+        });
+        </script>
+
+
 </body>
 </html>

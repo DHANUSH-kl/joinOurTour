@@ -1,7 +1,8 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-    <meta charset="UTF-8">
+     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -27,15 +28,53 @@
     <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
 
 
+    <link rel="stylesheet" href="/css/logo.css">
+    <link rel="stylesheet" href="/css/forgotpass.css">
 
-    <link rel="stylesheet" href="/css/username.css">
     <title>Document</title>
 </head>
 <body>
-    <form action="/user/forgot-username" method="POST">
+
+    <nav>
+        <div class="logo">
+            <p class="shine">joinOurTour</p>
+        </div>
+        <div class="home">
+            <a href="/aboutus">HOME</a>
+        </div>
+    </nav>
+
+    <hr>
+
+
+    <main>
+        <div class="form-container">
+            <div class="logo-container">
+              Forgot Username
+            </div>
+        
+            <form class="form" action="/user/forgot-username" method="POST">
+              <div class="form-group">
+                <label for="email">Email</label>
+                <input type="text" id="email" name="email" placeholder="Enter your email" required="">
+              </div>
+        
+              <button class="form-submit-btn" type="submit">Send Email</button>
+            </form>
+        
+            <p class="signup-link">
+              Don't have an account?
+              <a href="/user/signup" class="signup-link link"> Sign up now</a>
+            </p>
+          </div>
+        
+    </main>
+    
+
+    <!-- <form action="/user/forgot-username" method="POST">
         <h2>Forgot Username</h2>
         <input type="email" name="email" placeholder="Enter your email" required>
         <button type="submit">Submit</button>
-    </form>
+    </form> -->
 </body>
 </html>

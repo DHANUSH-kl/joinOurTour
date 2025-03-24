@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
+   <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -46,23 +46,55 @@
 
     <hr>
 
-    <main>
 
 
-        <div class="row">
-            <form  action="/user/signup" method="POST"  id="signupForm">
+            <!-- <form  action="/user/signup" method="POST"  id="signupForm">
                 <input type="text" name="firstName" placeholder="First Name" required>
                 <input type="text" name="lastName" placeholder="Last Name" required>
                 <input type="text" name="state" placeholder="State" required>
                 <input type="text" name="city" placeholder="City" required>
                 <input type="tel" name="phoneNumber" placeholder="Phone Number" required>
                 <button type="button" type="submit" id="nextButton">Next</button>
+            </form> -->
+
+<main>
+
+            <form class="form"  action="/user/signup" method="POST"  id="signupForm">
+                <p class="title">Register </p>
+                <p class="message">Signup now and get full access to our app. </p>
+                    <div class="flex">
+                    <label>
+                        <input required name="firstName" placeholder="" type="text" class="input">
+                        <span>Firstname</span>
+                    </label>
+            
+                    <label>
+                        <input required name="lastName" type="text" class="input">
+                        <span>Lastname</span>
+                    </label>
+                    </div>
+                    <label>
+                        <input required name="state" type="text" class="input">
+                        <span>State</span>
+                    </label>
+                    <label>
+                        <input required name="city" type="text" class="input">
+                        <span>City</span>
+                    </label>
+                    <label>
+                        <input required name="phoneNumber" type="tel" class="input">
+                        <span>Phone no</span>
+                    </label>
+                        
+                <button class="submit">Next</button>
+                <p class="signin">Already have an acount ? <a href="/user/signin">Signin</a> </p>
             </form>
-        </div>
+
+
+
         
+        </main>
 
-
-    </main>
     
     
     <!-- <script>

@@ -145,7 +145,7 @@
                                             <a href="/mytrips">MY TRIP</a>
                                             <a href="/createtrip">CREATE TRIP</a>
                                             <% } %>
-                                                <a href="/">PAYMENTS AND PAYOUTS</a>
+                                                <a href="/bookings">Booked tours</a>
                                                 <% if (!user) { %>
                                                     <a href="/user/signin">SIGN IN</a>
                                                     <a href="/user/signup">SIGN UP</a>
@@ -1032,28 +1032,36 @@
 
 
                     <script>
-                        document.addEventListener("DOMContentLoaded", function () {
-                            const header = document.querySelector("header"); // Change selector if needed
-                            const containers = document.querySelectorAll(".search-locations-container, .destinationLocation-container");
+document.addEventListener("DOMContentLoaded", function () {
+    if (window.matchMedia("(max-width: 500px)").matches) { // Apply only for small screens
+        const header = document.querySelector("header");
+        const containers = document.querySelectorAll(".search-locations-container, .destinationLocation-container");
 
-                            containers.forEach(container => {
-                                const input = container.querySelector("input"); // Get the input inside each container
+        // Add transition for smooth effect
+        header.style.transition = "height 0.3s ease";
+        containers.forEach(container => container.style.transition = "border 0.3s ease");
 
-                                input.addEventListener("focus", function () {
-                                    header.style.height = "18vh"; // Reduce header height
-                                    container.style.border = "1px solid black"; // Add border to container
-                                });
+        containers.forEach(container => {
+            const input = container.querySelector("input");
+            if (!input) return; // Skip if no input is found
 
-                                input.addEventListener("blur", function () {
-                                    header.style.height = ""; // Reset height
-                                    container.style.border = ""; // Remove border from container
-                                });
-                            });
-                        });
+            input.addEventListener("focus", function () {
+                header.style.height = "18vh"; // Reduce header height
+                container.style.border = "1px solid black"; // Add border
+            });
 
-
-
-                    </script>
+            input.addEventListener("blur", function () {
+                setTimeout(() => {
+                    if (!container.contains(document.activeElement)) { // Ensure focus isn't inside container
+                        header.style.height = ""; // Reset height
+                        container.style.border = ""; // Remove border
+                    }
+                }, 100); // Delay to prevent immediate reset if clicking inside
+            });
+        });
+    }
+});
+</script>
 
                   
              

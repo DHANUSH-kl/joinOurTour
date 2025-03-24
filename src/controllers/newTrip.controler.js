@@ -1,3 +1,4 @@
+import dotenv from 'dotenv';
 import express from 'express';
 import bodyParser from 'body-parser';
 import mongoose from 'mongoose';
@@ -8,10 +9,21 @@ import { Trip } from '../models/travel.model.js';
 import { Review } from '../models/review.model.js';
 import { Booking } from '../models/booking.model.js';
 import Admin from '../models/admin.model.js';
+import moment from 'moment';
 import nodemailer from "nodemailer";
+import { createHmac } from "crypto";  // ✅ Correct crypto import
+import Razorpay from 'razorpay';
 const upload = multer({ storage });
 const app = express();
 
+
+dotenv.config();
+
+
+const razorpay = new Razorpay({
+    key_id: process.env.RAZORPAY_KEY_ID,
+    key_secret: process.env.RAZORPAY_KEY_SECRET,
+  });
 
 app.use(express.json());
 
@@ -64,6 +76,7 @@ const addNewTrip = async (req, res) => {
             minAge,
             languages,
             deposit,
+            spots,
         } = req.body;
         // Handle arrays properly in case only one item is selected (EJS sometimes sends as a string instead of array)
         includes = Array.isArray(includes) ? includes : includes ? [includes] : [];
@@ -125,6 +138,7 @@ const addNewTrip = async (req, res) => {
             buffer,
             operatorEmail,
             status: "pending",
+            spots,
         });
 
         totalDays = totalDays[0] ? parseInt(totalDays[0]) : 0;
@@ -338,11 +352,13 @@ const postEditTrip = async (req, res) => {
             groupSize,       // New input for group size
             minAge,
             languages,
-            deposit
+            deposit,
+            spots,
         } = req.body;
 
         // Convert totalDays to integer
         totalDays = parseInt(totalDays[0]) || 0;
+        spots = parseInt(spots) || 0;
 
         maleTravelers = parseInt(maleTravelers) || 0;
         femaleTravelers = parseInt(femaleTravelers) || 0;
@@ -382,6 +398,7 @@ const postEditTrip = async (req, res) => {
 
         // Preprocess fields to replace undefined with empty string or empty array
         departure = departure || '';
+        spots = spots || '';
         fromLocation = fromLocation || '';
         endDate = endDate || '';
         categories = categories || [];
@@ -433,7 +450,8 @@ const postEditTrip = async (req, res) => {
             groupSize,  // Add group size to the merged data
             minAge,
             languages,
-            deposit
+            deposit,
+            spots,
         };
 
         // Update the trip with the merged data
@@ -1221,6 +1239,8 @@ const getpayment = async (req, res) => {
     try {
         const tripId = req.params.id; // Get trip ID from URL
 
+
+
         if (!tripId) {
             return res.status(400).send("Trip ID is required");
         }
@@ -1239,14 +1259,200 @@ const getpayment = async (req, res) => {
         // Parse totalAmount safely from query params
         const totalAmount = req.query.totalAmount ? parseFloat(req.query.totalAmount) : trip.totalCost;
 
-        res.render("trips/payment.ejs", { trip, totalAmount, user }); // Pass data to EJS template
+        const numTickets = req.query.numTickets ? parseInt(req.query.numTickets, 10) : 1; // Default to 1
+
+        res.render("trips/payment.ejs", { trip, totalAmount, user ,numTickets}); // Pass data to EJS template
     } catch (error) {
         console.error("Error in getPayment:", error);
         res.status(500).send("Server Error");
     }
 
+
 }
 
+
+const createOrder = async(req,res) => {
+    try {
+        const { amount, tripId, userId } = req.body;
+
+        if (!amount || !tripId || !userId) {
+            return res.status(400).json({ success: false, message: "Invalid request data" });
+        }
+
+        const options = {
+            amount: amount * 100, // Razorpay accepts amount in paise
+            currency: "INR",
+            receipt: `trip_${tripId.slice(-6)}_${Date.now().toString().slice(-6)}`,
+        };
+
+        const order = await razorpay.orders.create(options);
+
+        if (!order) {
+            return res.status(500).json({ success: false, message: "Failed to create order" });
+        }
+
+        res.status(200).json({ success: true, order });
+    } catch (error) {
+        console.error("❌ Order Creation Error:", error);
+        res.status(500).json({ 
+            success: false, 
+            message: "Order creation failed!", 
+            error: error.message, 
+            details: error 
+        });
+    }
+    
+}
+
+
+const verifyPayment = async (req, res) => {
+    try {
+        console.log("🔹 Payment Verification Request Received:", req.body);
+
+        const { razorpay_order_id, razorpay_payment_id, razorpay_signature, tripId, userId, amount ,ticket} = req.body;
+
+        // ✅ Validate Required Fields
+        if (!razorpay_order_id || !razorpay_payment_id || !razorpay_signature || !tripId || !userId || !amount) {
+            console.error("❌ Missing required fields:", req.body);
+            return res.status(400).json({ success: false, message: "Missing required fields" });
+        }
+
+        // ✅ Ensure Razorpay Secret Key Exists
+        if (!process.env.RAZORPAY_KEY_SECRET) {
+            console.error("❌ RAZORPAY_KEY_SECRET is missing in .env");
+            return res.status(500).json({ success: false, message: "Server configuration error" });
+        }
+
+        // ✅ Generate Expected Signature
+        const secret = process.env.RAZORPAY_KEY_SECRET;
+        const generated_signature = createHmac("sha256", secret)
+            .update(`${razorpay_order_id}|${razorpay_payment_id}`)
+            .digest("hex");
+
+        console.log("🔑 Expected Signature:", generated_signature);
+        console.log("🔑 Received Signature:", razorpay_signature);
+
+        // ✅ Verify Signature
+        if (generated_signature !== razorpay_signature) {
+            console.error("❌ Payment verification failed");
+            return res.status(400).json({ success: false, message: "Payment verification failed" });
+        }
+
+        console.log("✅ Payment Verified! Checking user and trip...");
+
+        // ✅ Verify Payment from Razorpay API
+        const razorpayResponse = await fetch(`https://api.razorpay.com/v1/payments/${razorpay_payment_id}`, {
+            method: "GET",
+            headers: {
+                "Authorization": `Basic ${Buffer.from(`${process.env.RAZORPAY_KEY_ID}:${process.env.RAZORPAY_KEY_SECRET}`).toString("base64")}`
+            }
+        });
+
+        const paymentData = await razorpayResponse.json();
+
+        if (paymentData.status !== "captured") {
+            console.error("❌ Payment not captured yet:", paymentData);
+            return res.status(400).json({ success: false, message: "Payment not captured yet" });
+        }
+
+        // ✅ Check if User Exists
+        const user = await User.findById(userId);
+        if (!user) {
+            console.error("❌ User not found:", userId);
+            return res.status(404).json({ success: false, message: "User not found" });
+        }
+
+        // ✅ Fetch Trip Data
+        const trip = await Trip.findById(tripId);
+        if (!trip) {
+            console.error("❌ Trip not found:", tripId);
+            return res.status(404).json({ success: false, message: "Trip not found" });
+        }
+
+        console.log("✅ User and Trip Found. Checking available spots...");
+
+        // ✅ Check Available Spots
+        if (trip.spots < ticket) {
+            console.error("❌ Not enough spots available. Requested:", ticket, "Available:", trip.spots);
+            return res.status(400).json({ success: false, message: "Not enough spots available" });
+        }
+
+        // ✅ Reduce Spots by Ticket Count
+        trip.spots -= ticket;
+        await trip.save(); // Save updated trip data
+
+        console.log(`✅ Spots updated successfully. Remaining Spots: ${trip.spots}`);
+
+         // ✅ Create Booking in Database with Payment Details
+         const newBooking = await Booking.create({
+            user: userId,
+            trip: tripId,
+            totalAmount: amount,
+            status: "booked",
+            payment: {
+                orderId: razorpay_order_id,
+                paymentId: razorpay_payment_id,
+                signature: razorpay_signature,
+                status: "captured",
+            }
+        });
+
+        console.log("✅ Booking Created Successfully:", newBooking);
+
+        return res.json({ success: true, message: "Payment successful!", booking: newBooking });
+
+    } catch (error) {
+        console.error("❌ Error in Payment Verification:", error);
+        return res.status(500).json({ success: false, message: "Internal Server Error", error: error.message });
+    }
+};
+
+const getUserBookings = async (req, res) => {
+    try {
+      const userId = req.user._id;
+      const bookings = await Booking.find({ user: userId }).populate("trip");
+  
+      console.log("User Bookings:", bookings); // Debugging
+
+      res.render("trips/bookings", { bookings });
+    } catch (error) {
+      console.error("Error fetching bookings:", error);
+      res.status(500).send("Internal Server Error");
+    }
+};
+
+
+const cancelBooking = async (req, res) => {
+    try {
+      const bookingId = req.params.id; // ✅ Get booking ID from URL params
+  
+      console.log("Cancel Request for Booking ID:", bookingId); // Debugging
+  
+      const booking = await Booking.findById(bookingId);
+      if (!booking) {
+        console.error("❌ Booking not found:", bookingId);
+        return res.status(404).send("Booking not found");
+      }
+
+      console.log("🔹 Current Booking Status:", booking.status); // Debugging status
+  
+      if (booking.status !== "booked") {
+        console.error("❌ Cannot cancel unpaid booking:", bookingId);
+        return res.status(400).send("Cannot cancel an unpaid booking");
+      }
+  
+      // ✅ Mark as "Refund Requested" (Admin will process refunds)
+      booking.status = "Refund Requested";
+      await booking.save();
+  
+      console.log("✅ Booking marked for refund:", booking);
+  
+      res.redirect("/bookings");
+    } catch (error) {
+      console.error("❌ Error canceling booking:", error);
+      res.status(500).send("Internal Server Error");
+    }
+};
 
 
 const contactPage = async (req, res) => {
@@ -1536,5 +1742,6 @@ const showFeaturedTrips = async (req, res) => {
 
 
 
-export { contactUsPost, showFeaturedTrips, showtoursbymonth, tourbymonths, showgroupdestination, tourbydestination, contactPage, getpayment, reportTrip, showWishlist, fetchWhislist, deleteReview, discoverPage, mainSearch, getSecondarySearch, aboutus, reviews, whislist, searchTrips, newTripForm, showAllTrips, addNewTrip, editTripForm, showTrip, deleteTrip, mytrip, postEditTrip, catagariesTrips, priceFilter };
+
+export { contactUsPost,getUserBookings,cancelBooking,createOrder,verifyPayment, showFeaturedTrips, showtoursbymonth, tourbymonths, showgroupdestination, tourbydestination, contactPage, getpayment, reportTrip, showWishlist, fetchWhislist, deleteReview, discoverPage, mainSearch, getSecondarySearch, aboutus, reviews, whislist, searchTrips, newTripForm, showAllTrips, addNewTrip, editTripForm, showTrip, deleteTrip, mytrip, postEditTrip, catagariesTrips, priceFilter };
 

@@ -1,3 +1,4 @@
+import dotenv from 'dotenv';
 import express from 'express';
 import methodOverride from 'method-override'
 import bodyParser from 'body-parser';
@@ -8,13 +9,24 @@ const app = express();
 import { User } from '../models/user.model.js';
 import Admin from '../models/admin.model.js';
 import { Trip } from '../models/travel.model.js';
+import { Booking } from '../models/booking.model.js';
+import { Payment } from "../models/payment.model.js";  // Adjust path if needed
 import { Review } from '../models/review.model.js';
+import moment from 'moment';
 import nodemailer from 'nodemailer';
+import Razorpay from 'razorpay';
 
+dotenv.config();
 
 app.use(bodyParser.urlencoded({ extended: true }));
 
 app.use(methodOverride('_method'));
+
+
+const razorpay = new Razorpay({
+    key_id: process.env.RAZORPAY_KEY_ID,
+    key_secret: process.env.RAZORPAY_KEY_SECRET
+});
 
 
 // Create a transporter instance
@@ -156,7 +168,7 @@ const posttripPackage = async (req, res) => {
     console.log(displayPackage)
 }
 
-const editAdminForm =async (req,res) => {
+const editAdminForm = async (req, res) => {
 
     try {
         // Fetch all Admin documents and get the first one
@@ -176,7 +188,7 @@ const editAdminForm =async (req,res) => {
 
 }
 
-const editAdminPannel = async(req,res) => {
+const editAdminPannel = async (req, res) => {
 
     try {
         const updatedData = req.body;
@@ -204,14 +216,14 @@ const editAdminPannel = async(req,res) => {
 
 }
 
-const walletPage = async(req,res)=> {
+const walletPage = async (req, res) => {
 
     res.render("admin/wallet.ejs")
 
 }
 
 
-const sendCoin = async(req,res) => {
+const sendCoin = async (req, res) => {
 
     const { email, tokens } = req.body;
 
@@ -317,7 +329,7 @@ const tripManagement = async (req, res) => {
 
         console.log("Pending Trips Count:", pendingTrips.length);
 
-        res.render("admin/tripManagement.ejs" , {pendingTrips});
+        res.render("admin/tripManagement.ejs", { pendingTrips });
     } catch (error) {
         console.error("Error fetching pending trips:", error);
         res.status(500).json({ success: false, message: "Internal Server Error" });
@@ -332,67 +344,67 @@ const updateTripStatus = async (req, res) => {
     const { id } = req.params;
     const { action, rejectionReason } = req.body;
     const user = await User.findById(req.user._id);
-  
+
     try {
-      const trip = await Trip.findById(id).populate('owner');
-  
-      if (!trip) return res.status(404).send('Trip not found');
-  
-      if (action === 'accept') {
-        trip.status = 'accepted';
-       // Deduct 100 tokens from the user's wallet after creating the trip
-        user.wallet -= 100;
-        await user.save(); // Save the updated user wallet
-        await trip.save();
+        const trip = await Trip.findById(id).populate('owner');
 
-      } else if (action === 'reject') {
-        trip.status = 'rejected';
-        trip.rejectionReason = rejectionReason;
+        if (!trip) return res.status(404).send('Trip not found');
 
-         // Check if the owner and email exist
-         if (!trip.owner || !trip.owner.email) {
-            return res.status(400).send('Owner email not found');
+        if (action === 'accept') {
+            trip.status = 'accepted';
+            // Deduct 100 tokens from the user's wallet after creating the trip
+            user.wallet -= 100;
+            await user.save(); // Save the updated user wallet
+            await trip.save();
+
+        } else if (action === 'reject') {
+            trip.status = 'rejected';
+            trip.rejectionReason = rejectionReason;
+
+            // Check if the owner and email exist
+            if (!trip.owner || !trip.owner.email) {
+                return res.status(400).send('Owner email not found');
+            }
+
+
+            // Get the owner's email dynamically using getOwnerEmail method
+            const ownerEmail = await trip.owner.email;
+            if (!ownerEmail) {
+                return res.status(400).send('Owner email not found');
+            }
+
+            // Send rejection email
+            const transporter = nodemailer.createTransport({
+                service: 'gmail',
+                auth: {
+                    user: process.env.EMAIL_USER, // Your email
+                    pass: process.env.EMAIL_PASS, // Your email password
+                },
+            });
+
+            await transporter.sendMail({
+                from: process.env.EMAIL_USER,
+                to: ownerEmail,
+                subject: 'Trip Rejection Notification',
+                text: `Your trip titled "${trip.title}" has been rejected. Reason: ${rejectionReason}`,
+            });
+
+            // Delete the rejected trip
+            await trip.deleteOne();  // This will remove the trip from the database
+
         }
 
-
-         // Get the owner's email dynamically using getOwnerEmail method
-         const ownerEmail = await trip.owner.email;
-         if (!ownerEmail) {
-             return res.status(400).send('Owner email not found');
-         }
-  
-        // Send rejection email
-        const transporter = nodemailer.createTransport({
-          service: 'gmail',
-          auth: {
-            user: process.env.EMAIL_USER, // Your email
-            pass: process.env.EMAIL_PASS, // Your email password
-          },
-        });
-  
-        await transporter.sendMail({
-          from: process.env.EMAIL_USER,
-          to: ownerEmail,
-          subject: 'Trip Rejection Notification',
-          text: `Your trip titled "${trip.title}" has been rejected. Reason: ${rejectionReason}`,
-        });
-
-        // Delete the rejected trip
-    await trip.deleteOne();  // This will remove the trip from the database
-
-      }
-  
-      res.redirect('/');
+        res.redirect('/');
 
     } catch (error) {
-      console.error('Error updating trip status:', error);
-      res.status(500).send('Internal Server Error');
+        console.error('Error updating trip status:', error);
+        res.status(500).send('Internal Server Error');
     }
-  };
-  
+};
 
 
-const analytics = async(req,res) => {
+
+const analytics = async (req, res) => {
 
 
     const { ratingFilter, minRatingCount, sortRevenue, page = 1 } = req.query;
@@ -498,7 +510,7 @@ const fetchTripReports = async (req, res) => {
 };
 
 
-const revokeAgent = async(req,res) => {
+const revokeAgent = async (req, res) => {
     try {
         const user = await User.findById(req.params.id);
         if (!user) return res.status(404).json({ message: "User not found" });
@@ -522,7 +534,7 @@ const revokeAgent = async(req,res) => {
 }
 
 
-const suspendAgent = async(req,res) => {
+const suspendAgent = async (req, res) => {
 
     try {
         const { days } = req.body;
@@ -538,10 +550,10 @@ const suspendAgent = async(req,res) => {
         res.status(500).json({ message: "Server Error" });
     }
 
-} 
+}
 
 
-const liftSuspension = async(req,res) => {
+const liftSuspension = async (req, res) => {
     try {
         const user = await User.findById(req.params.id);
         user.suspendedUntil = null;
@@ -564,7 +576,7 @@ const revokedPage = async (req, res) => {
 };
 
 
-const revokedData = async(req,res) => {
+const revokedData = async (req, res) => {
     try {
         const users = await User.find({
             $or: [{ isAgent: false }, { suspendedUntil: { $exists: true, $gt: new Date() } }]
@@ -577,7 +589,7 @@ const revokedData = async(req,res) => {
     }
 }
 
-const agentTrips = async(req,res) => {
+const agentTrips = async (req, res) => {
     try {
         const { type, agentId } = req.params;
         let trips = [];
@@ -663,7 +675,7 @@ const dashboard = async (req, res) => {
 
 
 
-const userInsight = async(req,res) => {
+const userInsight = async (req, res) => {
     try {
         const users = await User.find({}, 'username firstName lastName state city phoneNumber email'); // Fetch only required fields
         res.render('admin/allUsers', { users });
@@ -673,7 +685,7 @@ const userInsight = async(req,res) => {
     }
 }
 
-const agentInsight = async(req,res) => {
+const agentInsight = async (req, res) => {
     try {
         const agents = await User.find({ isAgent: true }, 'username firstName lastName state city phoneNumber email tripLeader');
         res.render('admin/agentUsers', { agents });
@@ -684,7 +696,7 @@ const agentInsight = async(req,res) => {
 }
 
 
-const userRecord = async(req,res) => {
+const userRecord = async (req, res) => {
     try {
         const users = await User.find({}, 'username firstName lastName state city phoneNumber email createdAt')
             .sort({ createdAt: -1 }); // Sort by most recent signups
@@ -697,7 +709,7 @@ const userRecord = async(req,res) => {
 }
 
 
-const togglefeaturedtours = async(req,res) => {
+const togglefeaturedtours = async (req, res) => {
     try {
         const { id } = req.params;
         const { featured } = req.body; // Get the value from the form
@@ -718,16 +730,201 @@ const togglefeaturedtours = async(req,res) => {
 
 
 const managefeatured = async (req, res) => {
-        try {
-            // Fetch all featured trips and populate owner details
-            const featuredTrips = await Trip.find({ featured: true }).populate("owner");
-    
-            res.render("admin/managefeatured.ejs", { featuredTrips });
-        } catch (error) {
-            console.error("Error fetching featured trips:", error);
-            res.status(500).send("Server error.");
-        }
+    try {
+        // Fetch all featured trips and populate owner details
+        const featuredTrips = await Trip.find({ featured: true }).populate("owner");
+
+        res.render("admin/managefeatured.ejs", { featuredTrips });
+    } catch (error) {
+        console.error("Error fetching featured trips:", error);
+        res.status(500).send("Server error.");
+    }
 };
 
 
-export {userInsight,managefeatured,togglefeaturedtours,userRecord, agentInsight ,agentTrips, dashboard , tripManagement ,revokedData, revokedPage ,  liftSuspension ,suspendAgent , revokeAgent , fetchTripReports , reportedTrips , analytics , updateTripStatus , adminPerks , walletPage , sendCoin , editAdminForm , editAdminPannel, posttripPackage, becomeOwnerForm, postOwner, agentAccessForm, postAgentAccess, tripLeaderForm, postTripLeader, displayPackages }
+const getAdminTripPayments = async (req, res) => {
+    try {
+        const trips = await Trip.find().lean();
+
+        // Fetch bookings and calculate totals
+        for (let trip of trips) {
+            const bookings = await Booking.find({ tripId: trip._id, status: "Paid" });
+            trip.totalBookings = bookings.length;
+            trip.totalRevenue = bookings.reduce((sum, b) => sum + b.amount, 0);
+        }
+
+        res.render("admin/adminTripdetails.ejs", { trips });
+    } catch (error) {
+        console.error("Error fetching trip payments:", error);
+        res.status(500).send("Internal Server Error");
+    }
+};
+
+
+const settlePayment = async (req, res) => {
+    try {
+        const { tripId, commission } = req.body;
+        const trip = await Trip.findById(tripId);
+
+        if (!trip) {
+            return res.status(404).send("Trip not found");
+        }
+
+        const bookings = await Booking.find({ tripId, status: "Paid" });
+        const totalRevenue = bookings.reduce((sum, b) => sum + b.amount, 0);
+        const profit = (totalRevenue * commission) / 100;
+        const totalPayable = totalRevenue - profit;
+
+        // Here, integrate Razorpay or other payout logic
+        console.log(`Settling ₹${totalPayable} to trip operator for trip ${trip.title}`);
+
+        res.json({ success: true, message: "Payment settled successfully!" });
+    } catch (error) {
+        console.error("Error settling payment:", error);
+        res.status(500).send("Internal Server Error");
+    }
+};
+
+
+const getrefundrequest = async (req, res) => {
+    try {
+        const refundRequests = await Booking.find({ status: "Refund Requested" })
+        .populate('user', 'username email phoneNumber')  
+        .populate('trip', 'title departure endDate')  
+        .select('totalAmount refundableAmount paymentId status'); // ✅ Add missing fields
+    
+
+
+        const today = new Date();
+
+        refundRequests.forEach(request => {
+            if (!request.trip || !request.trip.departure || !request.totalAmount) {
+                request.refundableAmount = 0; // If trip details are missing, set refund to 0
+                return;
+            }
+
+            const tripStart = new Date(request.trip.departure); // Use departure instead of startDate
+            const daysBeforeStart = Math.floor((tripStart - today) / (1000 * 60 * 60 * 24)); // Convert milliseconds to days
+
+            console.log(`Trip Title: ${request.trip.title}`);
+            console.log(`Departure Date: ${request.trip.departure}`);
+            console.log(`Days Before Start: ${daysBeforeStart}`);
+            console.log(`Total Amount: ${request.totalAmount}`);
+
+            if (daysBeforeStart > 30) {
+                request.refundableAmount = request.totalAmount; // Full refund
+            } else if (daysBeforeStart > 7) {
+                request.refundableAmount = request.totalAmount * 0.70; // 70% refund
+            } else {
+                request.refundableAmount = request.totalAmount * 0.50; // 50% refund
+            }
+
+            request.refundableAmount = parseFloat(request.refundableAmount.toFixed(2)); // Format to 2 decimal places
+            console.log(`Refundable Amount: ${request.refundableAmount}`);
+        });
+
+        console.log("Refund Requests Data:", refundRequests);
+
+
+        res.render('admin/adminrefunds.ejs', { refundRequests });
+    } catch (error) {
+        console.error("Error fetching refund requests:", error);
+        res.status(500).send("Internal Server Error");
+    }
+};
+
+
+
+const settleRefund = async (req, res) => {
+    try {
+        console.log("Received Refund Request:", req.body);
+
+        const { bookingId, email, amount } = req.body;
+
+        if (!bookingId || !email || !amount) {
+            console.log("❌ Missing required fields");
+            return res.status(400).send("Missing required fields");
+        }
+
+        // ✅ Fetch booking details and populate trip data
+        const booking = await Booking.findById(bookingId).populate('trip');
+        if (!booking) {
+            console.log("❌ Booking not found");
+            return res.status(404).send("Booking not found");
+        }
+
+        const trip = booking.trip;
+        if (!trip) {
+            console.log("❌ Trip not found");
+            return res.status(404).send("Trip not found");
+        }
+
+        // ✅ Get total cost per ticket and calculate the number of tickets refunded
+        const totalCostPerTicket = trip.totalCost;
+        if (!totalCostPerTicket || totalCostPerTicket <= 0) {
+            console.log("❌ Invalid trip cost");
+            return res.status(400).send("Invalid trip cost");
+        }
+
+        const numTickets = Math.round(booking.totalAmount / totalCostPerTicket);
+        console.log(`✅ Number of tickets to restore: ${numTickets}`);
+
+        // ✅ Get Razorpay Payment ID
+        const razorpayPaymentId = booking.payment?.paymentId;
+        if (!razorpayPaymentId) {
+            console.log("❌ Razorpay Payment ID not found for this booking");
+            return res.status(400).send("Razorpay Payment ID not found for this booking");
+        }
+
+        console.log(`✅ Processing refund for Payment ID: ${razorpayPaymentId}, Amount: ₹${amount}`);
+
+        // ✅ Initiate Razorpay refund
+        const razorpayResponse = await razorpay.payments.refund(razorpayPaymentId, {
+            amount: Math.round(amount * 100), // Convert to paisa
+            speed: "normal",
+            notes: { reason: "Trip cancellation refund" }
+        });
+
+        console.log("✅ Razorpay Refund Success:", razorpayResponse);
+
+        // ✅ Update trip spots (restore tickets)
+        trip.spots += numTickets;
+        await trip.save();
+        console.log(`✅ Updated trip spots: ${trip.spots}`);
+
+        // ✅ Update booking status
+        booking.payment.status = "Refunded";
+        booking.status = "refunded";
+        await booking.save();
+
+        // ✅ Send Email Confirmation (optional)
+        await sendRefundEmail(email, amount);
+
+        res.send({ success: true, message: "Refund processed successfully!" });
+    } catch (error) {
+        console.error("❌ Error processing refund:", error);
+        res.status(500).send("Internal Server Error");
+    }
+};
+
+// Function to Send Email Notification
+async function sendRefundEmail(email, amount) {
+    let transporter = nodemailer.createTransport({
+        service: 'gmail',
+        auth: {
+            user: process.env.EMAIL_USER,
+            pass: process.env.EMAIL_PASS
+        }
+    });
+
+    let mailOptions = {
+        from: process.env.EMAIL_USER,
+        to: email,
+        subject: "Refund Processed Successfully",
+        text: `Your refund of ₹${amount} has been successfully processed. It will be credited within 3-5 working days.`
+    };
+
+    await transporter.sendMail(mailOptions);
+}
+
+export { userInsight, settleRefund, getAdminTripPayments, getrefundrequest, settlePayment, managefeatured, togglefeaturedtours, userRecord, agentInsight, agentTrips, dashboard, tripManagement, revokedData, revokedPage, liftSuspension, suspendAgent, revokeAgent, fetchTripReports, reportedTrips, analytics, updateTripStatus, adminPerks, walletPage, sendCoin, editAdminForm, editAdminPannel, posttripPackage, becomeOwnerForm, postOwner, agentAccessForm, postAgentAccess, tripLeaderForm, postTripLeader, displayPackages }

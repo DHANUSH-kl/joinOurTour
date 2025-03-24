@@ -1,5 +1,5 @@
 import { Router } from "express";
-import {agentTrips,managefeatured ,agentInsight ,togglefeaturedtours,userRecord, userInsight , tripManagement, dashboard ,revokedPage,revokedData,liftSuspension,suspendAgent,revokeAgent, fetchTripReports , reportedTrips , analytics , updateTripStatus , adminPerks , sendCoin , walletPage , editAdminForm ,editAdminPannel, posttripPackage , displayPackages,becomeOwnerForm, postOwner, agentAccessForm, postAgentAccess, tripLeaderForm, postTripLeader } from "../controllers/admin.controller.js";
+import {agentTrips,managefeatured,getrefundrequest,settleRefund ,settlePayment,agentInsight,getAdminTripPayments ,togglefeaturedtours,userRecord, userInsight , tripManagement, dashboard ,revokedPage,revokedData,liftSuspension,suspendAgent,revokeAgent, fetchTripReports , reportedTrips , analytics , updateTripStatus , adminPerks , sendCoin , walletPage , editAdminForm ,editAdminPannel, posttripPackage , displayPackages,becomeOwnerForm, postOwner, agentAccessForm, postAgentAccess, tripLeaderForm, postTripLeader } from "../controllers/admin.controller.js";
 import { asyncWrap } from "../constants.js";
 import { isAgent, isLoggedIn, isOwner } from "../middlewares.js";
 import multer from 'multer';
@@ -96,5 +96,16 @@ router.route("/sendCoins")
     .get(walletPage)
     .post(sendCoin)
 
+router.route("/getAdminTripPayments")
+    .get(getAdminTripPayments)
+
+router.route("/settle-payment")
+    .post(settlePayment)
+
+router.route("/refund-requests")
+    .get(getrefundrequest)
+
+router.route("/settle-refund")
+    .post(settleRefund)
 
 export default router;

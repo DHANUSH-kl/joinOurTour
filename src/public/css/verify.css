@@ -4,70 +4,190 @@
         margin: 0;
         padding: 0;
         box-sizing: border-box;
+        font-family: poppins;
        }
        
-       /* General Body Styling */
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #f3f4f6;
-            margin: 0;
-            padding: 0;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-            flex-direction: column;
-            gap: 0.5rem;
-        }
+       body{
+        width: 100%;
+      height: 100%;
+      --color: #E1E1E1;
+      background-color: #F3F3F3;
+      background-image: linear-gradient(0deg, transparent 24%, var(--color) 25%, var(--color) 26%, transparent 27%,transparent 74%, var(--color) 75%, var(--color) 76%, transparent 77%,transparent), linear-gradient(90deg, transparent 24%, var(--color) 25%, var(--color) 26%, transparent 27%,transparent 74%, var(--color) 75%, var(--color) 76%, transparent 77%,transparent);
+      background-size: 55px 55px;
+    }
+    
+    
+    
+    nav {
+        width: 100vw;
+        height: 5rem;
+        background-color:transparent;
+        padding: 1.5rem;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+    .logo h4 {
+        color: #fff;
+    }
+    
+    nav .home a {
+        font-family: Poppins;
+        font-size: 20px;
+        font-style: normal;
+        font-weight: 500;
+        line-height: normal;
+        cursor: pointer;
+        color: #05A351;
+    }
+    
+    main {
+        width: 100vw;
+        height: 80vh;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
 
-        /* Form Container */
-        form {
-            background-color: white;
-            border: 1px solid #ddd;
-            border-radius: 8px;
-            padding: 20px;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-            max-width: 400px;
-            width: 100%;
-            text-align: center;
-        }
-
-        /* Header Styling */
-        h2 {
-            color: #4CAF50;
-            margin-bottom: 20px;
-            font-size: 1.5rem;
-        }
-
-        /* Input Styling */
-        input[type="text"] {
-            width: calc(100% - 20px);
-            padding: 10px;
-            margin-bottom: 15px;
-            border: 1px solid #ddd;
-            border-radius: 4px;
-            font-size: 1rem;
-            box-sizing: border-box;
-            transition: border-color 0.3s ease-in-out;
-        }
-
-        input[type="text"]:focus {
-            outline: none;
-            border-color: #4CAF50;
-        }
-
-        /* Button Styling */
-        button {
-            background-color: #4CAF50;
-            color: white;
-            border: none;
-            border-radius: 4px;
-            padding: 10px 15px;
-            font-size: 1rem;
-            cursor: pointer;
-            transition: background-color 0.3s ease-in-out;
-        }
-
-        button:hover {
-            background-color: #43a047;
-        }
+      /* From Uiverse.io by kennyotsu-monochromia */ 
+.form {
+    --black: #000000;
+    --ch-black: #141414;
+    --eer-black: #1b1b1b;
+    --night-rider: #2e2e2e;
+    --white: #ffffff;
+    --af-white: #f3f3f3;
+    --ch-white: #e1e1e1;
+    --tomato: #fa5656;
+    font-family: Helvetica, sans-serif;
+    padding: 25px;
+    display: flex;
+    width: auto;
+    flex-direction: column;
+    align-items: center;
+    overflow: hidden;
+    color: var(--af-white);
+    background-color: var(--black);
+    border-radius: 8px;
+    position: relative;
+    box-shadow: 10px 10px 10px rgba(0, 0, 0, .1);
+  }
+  
+  /*----heading and description-----*/
+  
+  .info {
+    margin-bottom: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+  }
+  
+  .title {
+    font-size: 1.5rem;
+    font-weight: 900;
+  }
+  
+  .description {
+    margin-top: 10px;
+    font-size: 1rem;
+  }
+  
+  /*----input-fields------*/
+  
+  .form .input-fields {
+    display: flex;
+    justify-content: space-between;
+    gap: 10px;
+  }
+  
+  .form .input-fields input {
+    height: 2.5em;
+    width: 2.5em;
+    outline: none;
+    text-align: center;
+    font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+    font-size: 1.5rem;
+    color: var(--af-white);
+    border-radius: 5px;
+    border: 2.5px solid var(--eer-black);
+    background-color: var(--eer-black);
+  }
+  
+  .form .input-fields input:focus {
+    border: 1px solid var(--af-white);
+    box-shadow: inset 10px 10px 10px rgba(0, 0, 0, .15);
+    transform: scale(1.05);
+    transition: 0.5s;
+  }
+  
+  /*-----verify and clear buttons-----*/
+  
+  .action-btns {
+    display: flex;
+    margin-top: 20px;
+    gap: 0.5rem;
+  }
+  
+  .verify {
+    padding: 10px 20px;
+    text-decoration: none;
+    border-radius: 5px;
+    font-size: 1rem;
+    font-weight: 500;
+    color: var(--night-rider);
+    text-shadow: none;
+    background: var(--af-white);
+    box-shadow: transparent;
+    border: 1px solid var(--af-white);
+    transition: 0.3s ease;
+    user-select: none;
+  }
+  
+  .verify:hover,.verify:focus {
+    color: var(--night-rider);
+    background: var(--white);
+  }
+  
+  .clear {
+    padding: 10px 20px;
+    text-decoration: none;
+    border-radius: 5px;
+    font-size: 1rem;
+    font-weight: 500;
+    color: var(--ch-white);
+    text-shadow: none;
+    background: transparent;
+    border: 1px solid var(--ch-white);
+    transition: 0.3s ease;
+    user-select: none;
+  }
+  
+  .clear:hover,.clear:focus {
+    color: var(--tomato);
+    background-color: transparent;
+    border: 1px solid var(--tomato);
+  }
+  
+  /*-----close button------*/
+  
+  .close {
+    position: absolute;
+    right: 10px;
+    top: 10px;
+    background-color: var(--night-rider);
+    color: var(--ch-white);
+    height: 30px;
+    width: 30px;
+    display: grid;
+    place-items: center;
+    border-radius: 5px;
+    cursor: pointer;
+    font-weight: 600;
+    transition: .5s ease;
+  }
+  
+  .close:hover {
+    background-color: var(--tomato);
+    color: var(--white);
+  }

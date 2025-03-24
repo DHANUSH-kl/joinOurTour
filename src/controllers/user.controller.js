@@ -87,6 +87,8 @@ const verifyOtpAndSignup = async (req, res) => {
     const { otp } = req.body;
     const email = req.session.email; // Retrieve email from session
 
+    console.log("otp" , otp);
+
     if (!email) {
         return res.status(400).send('Email not found in session.');
     }

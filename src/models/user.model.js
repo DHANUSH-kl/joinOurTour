@@ -10,6 +10,7 @@ const userSchema = new Schema({
     city: { type: String, },
     phoneNumber: { type: Number, },
     email: { type: String, unique: true },
+    bookedTrips: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Booking' }],
     isAgent: {
         type: Boolean,
         default: false,

@@ -15,6 +15,9 @@ const tripSchema = new Schema({
     fromLocation : {
         type : String,
     },
+    spots : {
+        type : Number,
+    },
     endDate : {
         type : Date
     },
@@ -118,7 +121,8 @@ const tripSchema = new Schema({
     report: [{
         reason: String,
         reportedAt: { type: Date, default: Date.now }
-    }]
+    }],
+    bookings: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Booking' }]
     
 } , {timestamps:true});
 

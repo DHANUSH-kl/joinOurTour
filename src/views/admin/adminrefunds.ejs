@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin - Refund Requests</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f8f9fa;
+            margin: 0;
+            padding: 20px;
+        }
+
+        h1 {
+            text-align: center;
+            color: #2c3e50;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background: white;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            border-radius: 8px;
+            overflow: hidden;
+        }
+
+        th,
+        td {
+            padding: 12px;
+            text-align: center;
+            border-bottom: 1px solid #ddd;
+        }
+
+        th {
+            background: #34495e;
+            color: white;
+            font-weight: bold;
+        }
+
+        button {
+            padding: 8px 12px;
+            background: #2980b9;
+            color: white;
+            border: none;
+            cursor: pointer;
+            border-radius: 4px;
+            transition: background 0.3s;
+        }
+
+        button:hover {
+            background: #1c638d;
+        }
+    </style>
+</head>
+
+<body>
+
+    <h1>Admin Panel - Refund Requests</h1>
+
+    <table>
+        <thead>
+            <tr>
+                <th>User</th>
+                <th>Email</th>
+                <th>Phone</th>
+                <th>Trip Title</th>
+                <th>Amount Paid</th>
+                <th>Refundable Amount</th>
+                <th>Settle</th>
+            </tr>
+        </thead>
+        <tbody>
+            <% if (refundRequests.length> 0) { %>
+                <% refundRequests.forEach(request=> { %>
+                    <tr>
+                        <td>
+                            <%= request.user.username %>
+                        </td>
+                        <td>
+                            <%= request.user.email %>
+                        </td>
+                        <td>
+                            <%= request.user.phoneNumber %>
+                        </td>
+                        <td>
+                            <%= request.trip.title %>
+                        </td>
+                        <td>₹<%= request.totalAmount %>
+                        </td>
+                        <td id="refundable_<%= request._id %>">₹<%= request.refundableAmount %>
+                        </td>
+                        <td>
+                            <button
+                                onclick="settleRefund('<%= request._id %>', '<%= request.user.email %>', '<%= request.paymentId %>')">
+                                Settle
+                            </button>
+                        </td>
+
+
+                    </tr>
+                    <% }); %>
+                        <% } else { %>
+                            <tr>
+                                <td colspan="7">No refund requests</td>
+                            </tr>
+                            <% } %>
+        </tbody>
+    </table>
+
+    
+
+    <script>
+        async function settleRefund(bookingId, email, razorpay_payment_id) {
+            const refundableAmountText = document.getElementById(`refundable_${bookingId}`).innerText;
+            const amount = refundableAmountText.replace('₹', '').trim(); // Remove ₹ symbol and trim spaces
+    
+            if (confirm(`Are you sure you want to settle the refund of ₹${amount}?`)) {
+                try {
+                    const response = await fetch('/admin/settle-refund', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ bookingId, email, amount, razorpay_payment_id })
+                    });
+    
+                    if (response.ok) {
+                        alert("Refund Settled Successfully!");
+                        location.reload();
+                    } else {
+                        alert("Error processing refund");
+                    }
+                } catch (error) {
+                    console.error("Error:", error);
+                }
+            }
+        }
+    </script>
+    
+
+</body>
+
+</html>

@@ -119,6 +119,10 @@
                             Tour-ID: <%= trip._id %>
                         </p>
 
+                        <p class="tripID">
+                            no of spots left: <%= trip.spots %>
+                        </p>
+
 
                         <div class="shareAndWhishlist">
                             <!-- Store Trip URL as a Data Attribute -->
@@ -352,6 +356,7 @@
                                 <form id="paymentForm" action="/<%= trip._id %>/payment" method="GET">
                                     <!-- Hidden input to store total amount -->
                                     <input type="hidden" id="totalAmountInput" name="totalAmount" value="0">
+                                    <input type="hidden" id="numTicketsInput" name="numTickets" value="1">
                                     <button type="submit" class="booking-btn">Reserve Spot</button>
                                 </form>
 
@@ -442,6 +447,7 @@
                                         </li>
                                         <% }); %>
                                 </ul>
+                                
                             </div>
                         </div>
 

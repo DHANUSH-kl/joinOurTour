@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard - Trip Payments</title>
+
+    <style>
+        /* General Styles */
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f8f9fa;
+            margin: 0;
+            padding: 20px;
+            color: #333;
+        }
+        
+        /* Heading */
+        h1 {
+            text-align: center;
+            color: #2c3e50;
+            margin-bottom: 20px;
+        }
+        
+        /* Table Styles */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background: white;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            border-radius: 8px;
+            overflow: hidden;
+        }
+        
+        th, td {
+            padding: 12px;
+            text-align: center;
+            border-bottom: 1px solid #ddd;
+        }
+        
+        th {
+            background: #34495e;
+            color: white;
+            font-weight: bold;
+        }
+        
+        td {
+            background: #ffffff;
+        }
+        
+        /* Inputs */
+        input[type="number"] {
+            width: 60px;
+            padding: 5px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            text-align: center;
+        }
+        
+        /* Buttons */
+        button {
+            padding: 8px 12px;
+            background: #2980b9;
+            color: white;
+            border: none;
+            cursor: pointer;
+            border-radius: 4px;
+            transition: background 0.3s ease-in-out;
+        }
+        
+        button:hover {
+            background: #1c638d;
+        }
+        
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            table {
+                font-size: 14px;
+            }
+            
+            th, td {
+                padding: 8px;
+            }
+        
+            button {
+                padding: 6px 10px;
+            }
+        }
+    </style>
+</head>
+<body>
+    
+    <h1>Admin Dashboard - Trip Payments</h1>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Trip Title</th>
+                <th>No. of Bookings</th>
+                <th>Total Revenue</th>
+                <th>Commission (%)</th>
+                <th>Profit</th>
+                <th>Total Payable</th>
+                <th>Settle</th>
+            </tr>
+        </thead>
+        <tbody>
+            <% if (trips && trips.length > 0) { %>
+                <% trips.forEach(trip => { %>
+                    <tr>
+                        <td><%= trip.title %></td>
+                        <td><%= trip.totalBookings %></td>
+                        <td>₹<%= trip.totalRevenue %></td>
+                        <td>
+                            <input type="number" value="10" id="commission_<%= trip._id %>" 
+                                   oninput="calculateProfit('<%= trip._id %>', <%= trip.totalRevenue %>)">
+                        </td>
+                        <td id="profit_<%= trip._id %>">₹0</td>
+                        <td id="payable_<%= trip._id %>">₹0</td>
+                        <td>
+                            <button onclick="settlePayment('<%= trip._id %>')">Settle</button>
+                        </td>
+                    </tr>
+                <% }); %>
+            <% } else { %>
+                <tr>
+                    <td colspan="7">No trips found</td>
+                </tr>
+            <% } %>
+        </tbody>
+    </table>
+    
+    <script>
+        function calculateProfit(tripId, totalRevenue) {
+            let commissionInput = document.getElementById(`commission_${tripId}`);
+            if (!commissionInput) return;
+
+            let commission = parseFloat(commissionInput.value) || 0;
+            let profit = (totalRevenue * commission) / 100;
+            let totalPayable = totalRevenue - profit;
+
+            document.getElementById(`profit_${tripId}`).innerText = `₹${profit.toFixed(2)}`;
+            document.getElementById(`payable_${tripId}`).innerText = `₹${totalPayable.toFixed(2)}`;
+        }
+    </script>
+
+</body>
+</html>

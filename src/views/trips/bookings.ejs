@@ -1,0 +1,45 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    
+
+    <h1>Your Booked Trips</h1>
+
+<table>
+    <tr>
+        <th>Trip</th>
+        <th>Date</th>
+        <th>Amount</th>
+        <th>Status</th>
+        <th>Action</th>
+    </tr>
+
+    <% bookings.forEach(booking => { %>
+        <tr>
+            <td><%= booking.trip.location %></td>
+            <td><%= new Date(booking.trip.departure).toLocaleDateString() %></td>
+            <td>₹ <%= booking.totalAmount || "N/A" %></td>
+            <td><%= booking.status %></td>
+            <td>
+                <% if (booking.status === "booked") { %>
+                    <form action="/cancel-booking/<%= booking._id %>" method="POST">
+                        <button type="submit" class="cancel-btn">Cancel</button>
+                    </form>
+                <% } else { %>
+                    <span class="text-muted">Cancelled</span>
+                <% } %>
+            </td>
+        </tr>
+    <% }); %>
+
+</table>
+
+
+</body>
+</html>
