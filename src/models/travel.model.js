@@ -114,6 +114,11 @@ const tripSchema = new Schema({
         enum: ['pending', 'accepted', 'rejected'],
         default: 'pending', // All newly created trips are pending by default
       },
+      tripState: {
+        type: String,
+        enum: ["upcoming", "ongoing", "completed"],
+        default: "upcoming",
+    },
     
     rejectionReason: String, // Store rejection reason if rejected
     operatorEmail: String, // Store the trip operator's email
@@ -126,6 +131,23 @@ const tripSchema = new Schema({
     
 } , {timestamps:true});
 
+
+
+
+// ✅ Auto-update tripState based on departure and endDate
+tripSchema.pre("save", function (next) {
+    const today = new Date();
+
+    if (this.endDate < today) {
+        this.tripState = "completed";
+    } else if (this.departure <= today && this.endDate >= today) {
+        this.tripState = "ongoing";
+    } else {
+        this.tripState = "upcoming";
+    }
+
+    next();
+});
 
 
 

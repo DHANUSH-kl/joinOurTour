@@ -18,9 +18,10 @@ import tripRoutes from './routes/trip.route.js';
 import userRoutes from './routes/user.route.js';
 import adminRoutes from './routes/admin.route.js';
 import authRoutes from './routes/auth.route.js';
+import "./jobs/completedTripsCron.js";
 import Razorpay from "razorpay";
 import flash from "connect-flash";
-
+import "./jobs/completedTripsCron.js";
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 

@@ -9,6 +9,7 @@ import { Trip } from '../models/travel.model.js';
 import { Review } from '../models/review.model.js';
 import { Booking } from '../models/booking.model.js';
 import Admin from '../models/admin.model.js';
+import { CompletedTrip } from '../models/CompletedTrip.model.js';
 import moment from 'moment';
 import nodemailer from "nodemailer";
 import { createHmac } from "crypto";  // ✅ Correct crypto import
@@ -171,13 +172,12 @@ const showAllTrips = async (req, res) => {
 
     const userWishlist = req.user ? req.user.wishlist : [];
 
-    const today = new Date();
-    today.setHours(0, 0, 0, 0); // Reset time to compare only date
+   
 
     // Get the total number of accepted trips (instead of all trips)
-    const totalTrips = await Trip.countDocuments({ status: 'accepted' , departure: { $gte: today }}); // Count only accepted trips
+    const totalTrips = await Trip.countDocuments({ status: 'accepted'}); // Count only accepted trips
 
-    const allTrips = await Trip.find({ status: 'accepted', departure: { $gte: today }})
+    const allTrips = await Trip.find({ status: 'accepted'})
         .populate("reviews")
         .populate("owner")
         .skip((perPage * page) - perPage) // Skip trips to get the correct page
