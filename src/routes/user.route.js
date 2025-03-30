@@ -43,6 +43,7 @@ router.route("/save-signup-data")
 router.route("/auth")
     .get(auth)
     .post(authdata)
+    
 
 router.route("/signup")
     .get(asyncWrap(signupForm))

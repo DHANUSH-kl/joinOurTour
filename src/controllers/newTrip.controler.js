@@ -171,11 +171,13 @@ const showAllTrips = async (req, res) => {
 
     const userWishlist = req.user ? req.user.wishlist : [];
 
+    const today = new Date();
+    today.setHours(0, 0, 0, 0); // Reset time to compare only date
 
     // Get the total number of accepted trips (instead of all trips)
-    const totalTrips = await Trip.countDocuments({ status: 'accepted' }); // Count only accepted trips
+    const totalTrips = await Trip.countDocuments({ status: 'accepted' , departure: { $gte: today }}); // Count only accepted trips
 
-    const allTrips = await Trip.find({ status: 'accepted' })
+    const allTrips = await Trip.find({ status: 'accepted', departure: { $gte: today }})
         .populate("reviews")
         .populate("owner")
         .skip((perPage * page) - perPage) // Skip trips to get the correct page
@@ -1410,11 +1412,13 @@ const verifyPayment = async (req, res) => {
 const getUserBookings = async (req, res) => {
     try {
       const userId = req.user._id;
+
+      const user = await User.find(userId);
       const bookings = await Booking.find({ user: userId }).populate("trip");
   
       console.log("User Bookings:", bookings); // Debugging
 
-      res.render("trips/bookings", { bookings });
+      res.render("trips/bookings", { bookings ,user});
     } catch (error) {
       console.error("Error fetching bookings:", error);
       res.status(500).send("Internal Server Error");

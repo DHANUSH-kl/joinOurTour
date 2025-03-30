@@ -33,6 +33,8 @@ const razorpay = new Razorpay({
 
 const app = express();
 
+
+
 // Connect to database
 connectDB()
   .then(() => {
@@ -78,34 +80,39 @@ passport.deserializeUser(User.deserializeUser());
 // Google OAuth Strategy
 passport.use(
   new GoogleStrategy(
-      {
-          clientID: process.env.GOOGLE_CLIENT_ID,
-          clientSecret: process.env.GOOGLE_CLIENT_SECRET,
-          callbackURL: process.env.GOOGLE_CALLBACK_URL,
-          passReqToCallback: true,
-      },
-      async (req, accessToken, refreshToken, profile, done) => {
-          try {
-              // Find or create user in database
-              let user = await User.findOne({ email: profile.emails[0].value });
+    {
+      clientID: process.env.GOOGLE_CLIENT_ID,
+      clientSecret: process.env.GOOGLE_CLIENT_SECRET,
+      callbackURL: process.env.GOOGLE_CALLBACK_URL,
+      passReqToCallback: true,
+    },
+    async (req, accessToken, refreshToken, profile, done) => {
 
-              if (!user) {
-                  user = new User({
-                      firstName: profile.name.givenName,
-                      lastName: profile.name.familyName,
-                      email: profile.emails[0].value,
-                      googleId: profile.id,
-                  });
-                  await user.save();
-              }
+      try {
+        let user = await User.findOne({ email: profile.emails[0].value });
 
-              return done(null, user);
-          } catch (error) {
-              return done(error, null);
-          }
+        if (!user) {
+          user = new User({
+            firstName: profile.name.givenName,
+            lastName: profile.name.familyName,
+            email: profile.emails[0].value,
+            googleId: profile.id,
+          });
+
+          await user.save();
+        }
+
+        return done(null, user);
+      } catch (error) {
+        console.error("❌ Google Auth Error:", error);
+        return done(error, null);
       }
+    }
   )
 );
+
+
+
 
 
 
@@ -146,7 +153,7 @@ app.use((req, res, next) => {
 app.use('/', tripRoutes);
 app.use('/user', userRoutes);
 app.use('/admin', adminRoutes);
-app.use('/', authRoutes);
+app.use('/googleauth', authRoutes);
 
 app.get("/favicon.ico", (req, res) => res.status(204));
 

@@ -1,0 +1,161 @@
+*{
+    font-family: poppins;
+}
+
+
+.bookingh1{
+    font-size: 2rem;
+    color: #05A351;
+    margin-left: 5rem;
+}
+
+table .tripTitle a {
+    color: #05A351;
+}
+
+table .tripTitle a:hover {
+    color: blue;
+    transition: 0.15s ease-in;
+}
+
+table {
+    width: 90%;
+    border-collapse: collapse;
+    margin: 20px 0;
+    font-size: 18px;
+    text-align: left;
+    background: #ffffff;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    border-radius: 10px;
+    overflow: hidden;
+}
+
+th, td {
+    padding: 12px 15px;
+    border-bottom: 1px solid #dddddd;
+}
+
+th {
+    background: #05A351;
+    color: #ffffff;
+    text-transform: uppercase;
+}
+
+td {
+    color: #333333;
+}
+
+tr:hover {
+    background: #f1fdf7;
+}
+
+.text-muted {
+    color: #999999;
+    font-style: italic;
+}
+
+.cancel-btn {
+    background: #ff4d4d;
+    color: #ffffff;
+    border: none;
+    padding: 8px 12px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-weight: bold;
+    transition: background 0.3s ease;
+}
+
+.cancel-btn:hover {
+    background: #e60000;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/* Modal Styling */
+.modal {
+    display: none;
+    position: fixed;
+    z-index: 1000;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.4);
+    justify-content: center;
+    align-items: center;
+}
+
+.modal-content {
+    background: white;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    text-align: center;
+    max-width: 400px;
+    width: 80%;
+    position: relative;
+    animation: fadeIn 0.3s ease-in-out;
+}
+
+/* Fade-in animation */
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(-20px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.close {
+    position: absolute;
+    right: 15px;
+    top: 10px;
+    font-size: 20px;
+    cursor: pointer;
+}
+
+.confirm-btn {
+    background: #ff4d4d;
+    color: white;
+    padding: 10px 15px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-right: 10px;
+    transition: background 0.3s ease;
+}
+
+.confirm-btn:hover {
+    background: #e60000;
+}
+
+.cancel-modal-btn {
+    background: #05A351;
+    color: white;
+    padding: 10px 15px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background 0.3s ease;
+}
+
+.cancel-modal-btn:hover {
+    background: #038a41;
+}
+
+
+#bookingTable {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}

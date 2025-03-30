@@ -5,24 +5,30 @@ import {User} from '../models/user.model.js';
 
 
 
-// Google Authentication Route
+
 router.get('/auth/google', 
     passport.authenticate('google', { scope: ['profile', 'email'] })
 );
 
+
+// Google Authentication Callback
 // Google Authentication Callback
 router.get('/auth/google/callback', 
     passport.authenticate('google', { failureRedirect: '/user/signin' }), 
     async (req, res) => {
-        const { email } = req.user;
-        const emailLower = email.toLowerCase();
+
+        if (!req.user) {
+            return res.redirect('/user/signup');
+        }
 
         try {
+            const emailLower = req.user.email.toLowerCase();
             let user = await User.findOne({ email: emailLower });
 
             if (!user) {
-                // If no user exists and no signupData is present, redirect to signup
-                if (!req.session.signupData) return res.redirect('/user/signup');
+                if (!req.session.signupData) {
+                    return res.redirect('/user/signup');
+                }
 
                 // Create a new user
                 user = new User({ 
@@ -38,17 +44,18 @@ router.get('/auth/google/callback',
             // Log the user in
             req.login(user, (err) => {
                 if (err) {
-                    console.error('Login Error:', err);
+                    console.error("❌ Login Error:", err);
                     return res.redirect('/user/signin');
                 }
-                return res.redirect('/'); // Redirect to home after login
+                return res.redirect('/');
             });
 
         } catch (error) {
-            console.error('Google Signup Error:', error);
+            console.error("❌ Google Signup Error:", error);
             res.redirect('/user/auth');
         }
     }
 );
+
 
 export default router;

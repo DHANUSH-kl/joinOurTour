@@ -746,19 +746,40 @@ const getAdminTripPayments = async (req, res) => {
     try {
         const trips = await Trip.find().lean();
 
-        // Fetch bookings and calculate totals
-        for (let trip of trips) {
-            const bookings = await Booking.find({ tripId: trip._id, status: "Paid" });
-            trip.totalBookings = bookings.length;
-            trip.totalRevenue = bookings.reduce((sum, b) => sum + b.amount, 0);
-        }
+        // Fetch all non-refunded bookings at once
+        const bookings = await Booking.find({
+            trip: { $in: trips.map(trip => trip._id) },
+            status: { $nin: ["refunded"] },  // Exclude only fully refunded bookings
+            "payment.status": "captured"
+        }).lean();
+
+        // Create a mapping of trip revenue and bookings count
+        const tripRevenueMap = {};
+
+        bookings.forEach(booking => {
+            const tripId = booking.trip.toString();
+            if (!tripRevenueMap[tripId]) {
+                tripRevenueMap[tripId] = { totalBookings: 0, totalRevenue: 0 };
+            }
+            tripRevenueMap[tripId].totalBookings += 1;
+            tripRevenueMap[tripId].totalRevenue += booking.totalAmount;
+        });
+
+        // Attach revenue & booking count to each trip
+        trips.forEach(trip => {
+            const tripId = trip._id.toString();
+            trip.totalBookings = tripRevenueMap[tripId]?.totalBookings || 0;
+            trip.totalRevenue = tripRevenueMap[tripId]?.totalRevenue || 0;
+        });
 
         res.render("admin/adminTripdetails.ejs", { trips });
     } catch (error) {
-        console.error("Error fetching trip payments:", error);
+        console.error("❌ Error fetching trip payments:", error);
         res.status(500).send("Internal Server Error");
     }
 };
+
+
 
 
 const settlePayment = async (req, res) => {
@@ -837,7 +858,7 @@ const getrefundrequest = async (req, res) => {
 
 const settleRefund = async (req, res) => {
     try {
-        console.log("Received Refund Request:", req.body);
+        console.log("🔄 Received Refund Request:", req.body);
 
         const { bookingId, email, amount } = req.body;
 
@@ -859,15 +880,11 @@ const settleRefund = async (req, res) => {
             return res.status(404).send("Trip not found");
         }
 
-        // ✅ Get total cost per ticket and calculate the number of tickets refunded
-        const totalCostPerTicket = trip.totalCost;
-        if (!totalCostPerTicket || totalCostPerTicket <= 0) {
-            console.log("❌ Invalid trip cost");
-            return res.status(400).send("Invalid trip cost");
+        // ✅ Ensure the refund is still pending
+        if (booking.status !== "Refund Requested") {
+            console.log("❌ Refund request is not pending");
+            return res.status(400).send("Refund request is not pending");
         }
-
-        const numTickets = Math.round(booking.totalAmount / totalCostPerTicket);
-        console.log(`✅ Number of tickets to restore: ${numTickets}`);
 
         // ✅ Get Razorpay Payment ID
         const razorpayPaymentId = booking.payment?.paymentId;
@@ -879,33 +896,43 @@ const settleRefund = async (req, res) => {
         console.log(`✅ Processing refund for Payment ID: ${razorpayPaymentId}, Amount: ₹${amount}`);
 
         // ✅ Initiate Razorpay refund
-        const razorpayResponse = await razorpay.payments.refund(razorpayPaymentId, {
-            amount: Math.round(amount * 100), // Convert to paisa
-            speed: "normal",
-            notes: { reason: "Trip cancellation refund" }
-        });
+        try {
+            const razorpayResponse = await razorpay.payments.refund(razorpayPaymentId, {
+                amount: Math.round(amount * 100), // Convert to paisa
+                speed: "normal",
+                notes: { reason: "Trip cancellation refund" }
+            });
 
-        console.log("✅ Razorpay Refund Success:", razorpayResponse);
+            console.log("✅ Razorpay Refund Success:", razorpayResponse);
 
-        // ✅ Update trip spots (restore tickets)
-        trip.spots += numTickets;
-        await trip.save();
-        console.log(`✅ Updated trip spots: ${trip.spots}`);
+            // ✅ Restore trip spots (tickets)
+            const totalCostPerTicket = trip.totalCost;
+            const numTickets = Math.round(booking.totalAmount / totalCostPerTicket);
+            trip.spots += numTickets;
+            await trip.save();
+            console.log(`✅ Updated trip spots: ${trip.spots}`);
 
-        // ✅ Update booking status
-        booking.payment.status = "Refunded";
-        booking.status = "refunded";
-        await booking.save();
+            // ✅ Update booking status
+            booking.payment.status = "Refunded";
+            booking.status = "refunded";
+            await booking.save();
+            console.log("✅ Booking status updated to refunded");
 
-        // ✅ Send Email Confirmation (optional)
-        await sendRefundEmail(email, amount);
+            // ✅ Send Email Confirmation
+            await sendRefundEmail(email, amount);
 
-        res.send({ success: true, message: "Refund processed successfully!" });
+            return res.send({ success: true, message: "Refund processed successfully!" });
+
+        } catch (razorpayError) {
+            console.error("❌ Error processing refund:", razorpayError);
+            return res.status(500).send("Failed to process refund. Please try again.");
+        }
     } catch (error) {
-        console.error("❌ Error processing refund:", error);
+        console.error("❌ Internal Server Error:", error);
         res.status(500).send("Internal Server Error");
     }
 };
+
 
 // Function to Send Email Notification
 async function sendRefundEmail(email, amount) {

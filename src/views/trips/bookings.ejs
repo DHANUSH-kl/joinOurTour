@@ -1,45 +1,210 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Bookings</title>
+
+    <!-- Fonts & Icons -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Lato:wght@400;700;900&family=Poppins:wght@100;400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    
+    <!-- jQuery & Swiper -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>
+    <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
+
+    <!-- CSS Files -->
+    <link rel="stylesheet" href="/css/mytrip.css">
+    <link rel="stylesheet" href="/css/logo.css">
+    <link rel="stylesheet" href="/css/nav.css">
+    <link rel="stylesheet" href="/css/showAll.css">
+    <link rel="stylesheet" href="/css/searchBar.css">
+    <link rel="stylesheet" href="/css/mainSearch.css">
+    <link rel="stylesheet" href="/css/account.css">
+    <link rel="stylesheet" href="/css/footer.css">
+    <link rel="stylesheet" href="/css/contactUs.css">
+    <link rel="stylesheet" href="/css/bookingHistory.css">
 </head>
 <body>
+    <nav id="showall-nav" >
+        <div class="logo">
     
+            <p class="shine">joinOurTour</p>
+            <!-- From Uiverse.io by devkatyall -->
+            <!-- <div class="shine">joinOurTour</div> -->
+    
+    
+        </div>
+        <div class="home">
+            <a href="/aboutus">HOME</a>
+        </div>
+        <div class="right">
+            <img src="../images/account_circle.png" alt="" class="account-icon">
+            <!-- <img src="../images/search.png" alt=""> -->
+    
+            <div class="account-container acc-hide">
+                <div class="close">
+                    <i class="fa-solid fa-xmark" id="close"></i>
+                </div>
+                <div class="user-info-container">
+                    <% if(!currUser) { %>
+    
+                        <% } else { %>
+                            <div class="profile"></div>
+                            <p>
+                                <%= currUser.username %>
+                            </p>
+    
+                            <p>
+                                Wallet Balance: <%= currUser.wallet %> tokens
+                            </p>
+    
+    
+                            <% } %>
+                </div>
+                <div class="nav-links">
+                    <% if (user && user.isAgent) { %>
+                        <a href="/mytrips">MY TRIP</a>
+                        <a href="/createtrip">CREATE TRIP</a>
+                        <% } %>
+                            <a href="/">PAYMENTS AND PAYOUTS</a>
+                            <% if (!user) { %>
+                                <a href="/user/signin">SIGN IN</a>
+                                <a href="/user/signup">SIGN UP</a>
+                                <% } else { %>
+                                    <a href="/user/logout">SIGN OUT</a>
+                                    <% } %>
+                                        <a href="/showWishlist">WISHLIST &nbsp; <i
+                                                class="fa-solid fa-heart"
+                                                style="cursor: pointer;"></i></a>
+                                        <% if (user && user.isOwner) { %>
+                                            <a href="/admin/adminpannel">ADMIN PANNEL</a>
+    
+                                            <% } %>
+                                                <p></p>
+                </div>
+            </div>
+            
+    
+        </div>
+    </nav>
+    <hr>
 
-    <h1>Your Booked Trips</h1>
+    <h1 class="bookingh1">Your Booked Trips</h1>
+    <main id="bookingTable">
 
-<table>
-    <tr>
-        <th>Trip</th>
-        <th>Date</th>
-        <th>Amount</th>
-        <th>Status</th>
-        <th>Action</th>
-    </tr>
-
-    <% bookings.forEach(booking => { %>
+    
+    <table>
         <tr>
-            <td><%= booking.trip.location %></td>
-            <td><%= new Date(booking.trip.departure).toLocaleDateString() %></td>
-            <td>₹ <%= booking.totalAmount || "N/A" %></td>
-            <td><%= booking.status %></td>
-            <td>
-                <% if (booking.status === "booked") { %>
-                    <form action="/cancel-booking/<%= booking._id %>" method="POST">
-                        <button type="submit" class="cancel-btn">Cancel</button>
-                    </form>
-                <% } else { %>
-                    <span class="text-muted">Cancelled</span>
-                <% } %>
-            </td>
+            <th>Trip</th>
+            <th>Date</th>
+            <th>Amount</th>
+            <th>Status</th>
+            <th>Action</th>
         </tr>
-    <% }); %>
+        <% bookings.forEach(booking => { %>
+            <tr>
+                <td class="tripTitle"><a href="/tour/<%= booking.trip._id %> "><%= booking.trip.location %></a></td>
+                <td><%= new Date(booking.trip.departure).toLocaleDateString() %></td>
+                <td>₹ <%= booking.totalAmount || "N/A" %></td>
+                <td><%= booking.status %></td>
+                <td>
+                    <% if (booking.status === "booked") { %>
+                        <button type="button" class="cancel-btn" onclick="openCancelModal('<%= booking._id %>')">Cancel</button>
+                    <% } else { %>
+                        <span class="text-muted">Cancelled</span>
+                    <% } %>
+                </td>
+            </tr>
+        <% }); %>
+    </table>
 
-</table>
+</main>
+
+<footer>
+
+    <div class="sec1">
+        <div class="logo"></div>
+        <p>Book your trip in minute, get full Control for much longer.</p>
+    </div>
+    <div class="sec2">
+        <div class="col1">
+            <h3>Company</h3>
+            <div class="links">
+                <a href="">How it works</a>
+                <a href="/">Find a trip</a>
+                <a href="/createtrip">Create a trip</a>
+            </div>
 
 
+        </div>
+        <div class="col2">
+            <h3>EXPLORE</h3>
+            <div class="links">
+                <a href="/tourbydestination">Group trips by destination </a>
+                <a href="/tourbymonths">Group trips by Month </a>
+                <a href="/featuredtrips">Featured trips</a>
+            </div>
+        </div>
+        <div class="col3">
+            <h3>Join Our Tour</h3>
+            <div class="links">
+                <a href="">Blog </a>
+                <a href="">About us</a>
+                <a href="/contactUs">Contact us</a>
+            </div>
+        </div>
+
+
+    </div>
+    <div class="sec3">
+
+        <img src="../images/f.svg" alt="">
+        <img src="../images/i.svg" alt="">
+        <img src="../images/t.svg" alt="">
+
+
+    </div>
+
+    <p class="cc">All rights reserved@travelgoo.co</p>
+
+
+</footer>
+
+    <!-- Cancel Modal -->
+    <div id="cancelModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeCancelModal()">&times;</span>
+            <h2>Confirm Cancellation</h2>
+            <p>Are you sure you want to cancel this booking?</p>
+            <form id="cancelForm" method="POST">
+                <button type="button" class="confirm-btn" onclick="submitCancelForm()">Yes, Cancel</button>
+                <button type="button" class="cancel-modal-btn" onclick="closeCancelModal()">No, Keep</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- JavaScript -->
+    <script>
+        function openCancelModal(bookingId) {
+            document.getElementById("cancelModal").style.display = "flex";
+            document.getElementById("cancelForm").setAttribute("data-booking-id", bookingId);
+        }
+
+        function closeCancelModal() {
+            document.getElementById("cancelModal").style.display = "none";
+        }
+
+        function submitCancelForm() {
+            const bookingId = document.getElementById("cancelForm").getAttribute("data-booking-id");
+            document.getElementById("cancelForm").action = `/cancel-booking/${bookingId}`;
+            document.getElementById("cancelForm").submit();
+        }
+    </script>
+    <script src="/js/dropdown.js"></script>
 </body>
 </html>
