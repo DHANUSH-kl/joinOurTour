@@ -1,148 +1,189 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Admin Dashboard - Trip Payments</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Trip Transactions</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background-color: #f9f9f9;
+      margin: 20px;
+      color: #333;
+    }
 
-    <style>
-        /* General Styles */
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #f8f9fa;
-            margin: 0;
-            padding: 20px;
-            color: #333;
-        }
-        
-        /* Heading */
-        h1 {
-            text-align: center;
-            color: #2c3e50;
-            margin-bottom: 20px;
-        }
-        
-        /* Table Styles */
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            background: white;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-            border-radius: 8px;
-            overflow: hidden;
-        }
-        
-        th, td {
-            padding: 12px;
-            text-align: center;
-            border-bottom: 1px solid #ddd;
-        }
-        
-        th {
-            background: #34495e;
-            color: white;
-            font-weight: bold;
-        }
-        
-        td {
-            background: #ffffff;
-        }
-        
-        /* Inputs */
-        input[type="number"] {
-            width: 60px;
-            padding: 5px;
-            border: 1px solid #ccc;
-            border-radius: 4px;
-            text-align: center;
-        }
-        
-        /* Buttons */
-        button {
-            padding: 8px 12px;
-            background: #2980b9;
-            color: white;
-            border: none;
-            cursor: pointer;
-            border-radius: 4px;
-            transition: background 0.3s ease-in-out;
-        }
-        
-        button:hover {
-            background: #1c638d;
-        }
-        
-        /* Responsive Design */
-        @media (max-width: 768px) {
-            table {
-                font-size: 14px;
-            }
-            
-            th, td {
-                padding: 8px;
-            }
-        
-            button {
-                padding: 6px 10px;
-            }
-        }
-    </style>
+    h2 {
+      margin-top: 40px;
+      font-size: 24px;
+      color: #2c3e50;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 10px;
+      background-color: #fff;
+      box-shadow: 0 0 8px rgba(0,0,0,0.05);
+      border-radius: 8px;
+      overflow: hidden;
+    }
+
+    thead {
+      background-color: #1abc9c;
+      color: white;
+    }
+
+    th, td {
+      padding: 12px 16px;
+      text-align: left;
+      border-bottom: 1px solid #eee;
+    }
+
+    tr:hover {
+      background-color: #f1f1f1;
+    }
+
+    input[type="number"] {
+      padding: 6px 10px;
+      width: 70px;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+      outline: none;
+      font-size: 14px;
+    }
+
+    a {
+      color: #3498db;
+      text-decoration: none;
+    }
+
+    button {
+      background-color: #1abc9c;
+      border: none;
+      padding: 8px 14px;
+      border-radius: 6px;
+      color: white;
+      cursor: pointer;
+      font-size: 14px;
+      transition: background-color 0.2s ease;
+    }
+
+    button:hover {
+      background-color: #16a085;
+    }
+
+    @media screen and (max-width: 768px) {
+      table, thead, tbody, th, td, tr {
+        display: block;
+      }
+
+      thead {
+        display: none;
+      }
+
+      tr {
+        margin-bottom: 20px;
+        border: 1px solid #ddd;
+        border-radius: 8px;
+        padding: 10px;
+      }
+
+      td {
+        display: flex;
+        justify-content: space-between;
+        padding: 8px 10px;
+      }
+
+      td::before {
+        content: attr(data-label);
+        font-weight: bold;
+      }
+    }
+  </style>
 </head>
 <body>
-    
-    <h1>Admin Dashboard - Trip Payments</h1>
 
-    <table>
-        <thead>
-            <tr>
-                <th>Trip Title</th>
-                <th>No. of Bookings</th>
-                <th>Total Revenue</th>
-                <th>Commission (%)</th>
-                <th>Profit</th>
-                <th>Total Payable</th>
-                <th>Settle</th>
-            </tr>
-        </thead>
-        <tbody>
-            <% if (trips && trips.length > 0) { %>
-                <% trips.forEach(trip => { %>
-                    <tr>
-                        <td><%= trip.title %></td>
-                        <td><%= trip.totalBookings %></td>
-                        <td>₹<%= trip.totalRevenue %></td>
-                        <td>
-                            <input type="number" value="10" id="commission_<%= trip._id %>" 
-                                   oninput="calculateProfit('<%= trip._id %>', <%= trip.totalRevenue %>)">
-                        </td>
-                        <td id="profit_<%= trip._id %>">₹0</td>
-                        <td id="payable_<%= trip._id %>">₹0</td>
-                        <td>
-                            <button onclick="settlePayment('<%= trip._id %>')">Settle</button>
-                        </td>
-                    </tr>
-                <% }); %>
-            <% } else { %>
-                <tr>
-                    <td colspan="7">No trips found</td>
-                </tr>
-            <% } %>
-        </tbody>
-    </table>
-    
-    <script>
-        function calculateProfit(tripId, totalRevenue) {
-            let commissionInput = document.getElementById(`commission_${tripId}`);
-            if (!commissionInput) return;
+  <h2>Ongoing Trips</h2>
+  <table>
+    <thead>
+      <tr>
+        <th>Trip</th><th>Bookings</th><th>Revenue</th><th>Advance Paid</th><th>Settle Advance</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% ongoingTrips.forEach(trip => { %>
+        <tr>
+          <td><%= trip.title %></td>
+          <td><%= trip.totalBookings %></td>
+          <td>₹<%= trip.totalRevenue %></td>
+          <td>₹<%= trip.advancePaid %></td>
+          <td>
+            <button onclick="settleAdvance('<%= trip._id %>')">Settle</button>
+          </td>
+        </tr>
+      <% }) %>
+    </tbody>
+  </table>
 
-            let commission = parseFloat(commissionInput.value) || 0;
-            let profit = (totalRevenue * commission) / 100;
-            let totalPayable = totalRevenue - profit;
+  <h2>Completed Trips</h2>
+  <table>
+    <thead>
+      <tr>
+        <th>Trip</th><th>Revenue</th><th>Advance Paid</th><th>Commission (%)</th>
+        <th>Fixed Charges</th><th>Payable</th><th>Profit</th><th>Settle Final</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% completedTrips.forEach(trip => { %>
+        <tr>
+          <td><a href="/tour/<%= trip.originalTripId %>"><%= trip.title %></a></td>
+          <td>₹<%= trip.totalRevenue %></td>
+          <td>₹<%= trip.advancePaid %></td>
+          <td>
+            <input type="number" value="<%= trip.commissionRate %>" 
+              onchange="updateCommission('<%= trip.originalTripId %>', this.value)">
+          </td>
+          <td>
+            <input type="number" value="<%= trip.fixedCharges %>" 
+              onchange="updateFixedCharges('<%= trip.originalTripId %>', this.value)">
+          </td>
+          <td>₹<%= trip.finalSettlementAmount.toFixed(2) %></td>
+          <td>₹<%= trip.profit.toFixed(2) %></td>
+          <td><button onclick="settleFinal('<%= trip.originalTripId %>')">Pay</button></td>
+        </tr>
+      <% }) %>
+    </tbody>
+  </table>
 
-            document.getElementById(`profit_${tripId}`).innerText = `₹${profit.toFixed(2)}`;
-            document.getElementById(`payable_${tripId}`).innerText = `₹${totalPayable.toFixed(2)}`;
-        }
-    </script>
+  <script>
+    function settleAdvance(tripId) {
+      const amount = prompt("Enter amount to settle (Advance):");
+      if (!amount || isNaN(amount)) return alert("Invalid amount");
+      // You would trigger Razorpay here or redirect to a backend endpoint
+      window.location.href = `/admin/settle-advance/${tripId}?amount=${amount}`;
+    }
 
+    function settleFinal(tripId) {
+      const amount = prompt("Enter final amount to pay:");
+      if (!amount || isNaN(amount)) return alert("Invalid amount");
+      window.location.href = `/admin/settle-final/${tripId}?amount=${amount}`;
+    }
+
+    function updateCommission(tripId, newRate) {
+      fetch(`/admin/update-commission/${tripId}`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ commissionRate: newRate })
+      }).then(() => location.reload());
+    }
+
+    function updateFixedCharges(tripId, newCharge) {
+      fetch(`/admin/update-fixed-charges/${tripId}`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ fixedCharges: newCharge })
+      }).then(() => location.reload());
+    }
+  </script>
 </body>
 </html>

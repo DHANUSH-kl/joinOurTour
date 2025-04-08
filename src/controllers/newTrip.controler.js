@@ -15,6 +15,7 @@ import nodemailer from "nodemailer";
 import { createHmac } from "crypto";  // ✅ Correct crypto import
 import Razorpay from 'razorpay';
 const upload = multer({ storage });
+const memoryStorage  = multer.memoryStorage ();
 const app = express();
 
 
@@ -84,6 +85,23 @@ const addNewTrip = async (req, res) => {
         excludes = Array.isArray(excludes) ? excludes : excludes ? [excludes] : [];
         languages = Array.isArray(languages) ? languages : languages ? [languages] : [];
 
+       
+
+          // ✅ Properly parse 2D meals array from req.body.meals
+          let mealsPerDay = [];
+
+          if (req.body.meals) {
+              // Handle case: meals = { 0: [...], 1: [...], 2: [...] }
+              const mealsRaw = req.body.meals;
+  
+              mealsPerDay = Object.keys(mealsRaw)
+                  .sort((a, b) => parseInt(a) - parseInt(b)) // Ensure order
+                  .map(key => {
+                      const value = mealsRaw[key];
+                      return Array.isArray(value) ? value : [value];
+                  });
+          }
+
         // Extract the trip and stop images from req.files
         const tripImages = req.files.tripImages
             ? req.files.tripImages.map((file) => ({
@@ -140,6 +158,7 @@ const addNewTrip = async (req, res) => {
             operatorEmail,
             status: "pending",
             spots,
+            mealsPerDay
         });
 
         totalDays = totalDays[0] ? parseInt(totalDays[0]) : 0;
@@ -182,6 +201,28 @@ const showAllTrips = async (req, res) => {
         .populate("owner")
         .skip((perPage * page) - perPage) // Skip trips to get the correct page
         .limit(perPage); // Limit the number of trips per page
+
+          // Count trips for each category
+          const categories = ["nature", "party", "foods", "beach", "culture", "sports", "adventure", "hiking", "roadtrip", "other"];
+          const tripCounts = {};
+          
+          try {
+            for (const category of categories) {
+                tripCounts[category] = await Trip.countDocuments({
+                    status: 'accepted',
+                    categories: { $in: [category] }
+                });
+            }
+        } catch (err) {
+            console.error("❌ Error building tripCounts:", err);
+            // fallback in case DB fails
+            tripCounts = categories.reduce((acc, cat) => {
+                acc[cat] = 0;
+                return acc;
+            }, {});
+        }
+          
+
 
     // Calculate average ratings for each trip
     allTrips.forEach(trip => {
@@ -238,6 +279,8 @@ const showAllTrips = async (req, res) => {
 
     const tripPackages = [tripPackage1, tripPackage2, tripPackage3, tripPackage4]
 
+    
+
     // Render the page with the correct pagination
     res.render("trips/showAll", {
         allTrips,
@@ -248,7 +291,8 @@ const showAllTrips = async (req, res) => {
         userWishlist,
         sort: req.query.sort || '',
         exploreTrips,
-        tripPackages
+        tripPackages,
+        tripCounts 
     });
 
 };
@@ -299,6 +343,9 @@ const showTrip = async (req, res) => {
     }
 
     const userWishlist = req.user ? req.user.wishlist : [];
+
+    console.log(trip.mealsPerDay);
+
 
     res.render("trips/trip.ejs", {
         trip, id: req.params.id,
@@ -1191,6 +1238,8 @@ const fetchWhislist = async (req, res) => {
 }
 
 const discoverPage = async (req, res) => {
+    const perPage = 6; // Number of trips per page
+    const page = parseInt(req.query.page) || 1; // Current page number
 
     const tripId = req.body.tripId;
     const trip = await Trip.findById(tripId);
@@ -1199,16 +1248,78 @@ const discoverPage = async (req, res) => {
         return res.status(404).json({ message: "Trip not found" });
     }
 
+    const userWishlist = req.user ? req.user.wishlist : [];
 
-    // Step 2: Extract the location and find all trips with the same location
+    // Find trips by the same location
     const location = trip.location;
-    const tripsByLocation = await Trip.find({ location: new RegExp(`^${location}$`, 'i') });
+    const totalTrips = await Trip.countDocuments({ location: new RegExp(`^${location}$`, 'i'), status: 'accepted' });
 
+    const tripsByLocation = await Trip.find({ location: new RegExp(`^${location}$`, 'i'), status: 'accepted' })
+        .populate("reviews")
+        .populate("owner")
+        .skip((perPage * page) - perPage)
+        .limit(perPage);
 
-    res.render("trips/discover.ejs", { tripsByLocation })
+    // Calculate ratings and ratios for each trip
+    tripsByLocation.forEach(trip => {
+        let totalRatings = 0;
+        let count = 0;
 
+        trip.reviews.forEach(review => {
+            const locationRating = review.locationRating || 0;
+            const amenitiesRating = review.amenitiesRating || 0;
+            const foodRating = review.foodRating || 0;
+            const roomRating = review.roomRating || 0;
+            const priceRating = review.priceRating || 0;
+            const operatorRating = review.operatorRating || 0;
 
-}
+            const overallRating = (locationRating + amenitiesRating + foodRating + roomRating + priceRating + operatorRating) / 6;
+
+            totalRatings += overallRating;
+            count++;
+        });
+
+        trip.averageRating = count > 0 ? (totalRatings / count).toFixed(1) : 0;
+
+        // Calculate male-to-female ratio
+        const totalTravelers = trip.maleTravelers + trip.femaleTravelers;
+        trip.maleRatio = totalTravelers > 0 ? ((trip.maleTravelers / totalTravelers) * 100).toFixed(1) : 0;
+        trip.femaleRatio = totalTravelers > 0 ? ((trip.femaleTravelers / totalTravelers) * 100).toFixed(1) : 0;
+    });
+
+    const allData = await Admin.find();
+    const adminData = allData[0];
+
+    const { d1, d2, d3, d4, p1, p2, p3, p4 } = adminData;
+
+    const isValidObjectId = (id) => mongoose.Types.ObjectId.isValid(id?.trim());
+
+    const tripPackage1 = isValidObjectId(p1) ? await Trip.findById(p1.trim()) : null;
+    const tripPackage2 = isValidObjectId(p2) ? await Trip.findById(p2.trim()) : null;
+    const tripPackage3 = isValidObjectId(p3) ? await Trip.findById(p3.trim()) : null;
+    const tripPackage4 = isValidObjectId(p4) ? await Trip.findById(p4.trim()) : null;
+
+    const exploreTrips1 = isValidObjectId(d1) ? await Trip.findById(d1.trim()) : null;
+    const exploreTrips2 = isValidObjectId(d2) ? await Trip.findById(d2.trim()) : null;
+    const exploreTrips3 = isValidObjectId(d3) ? await Trip.findById(d3.trim()) : null;
+    const exploreTrips4 = isValidObjectId(d4) ? await Trip.findById(d4.trim()) : null;
+
+    const exploreTrips = [exploreTrips1, exploreTrips2, exploreTrips3, exploreTrips4];
+    const tripPackages = [tripPackage1, tripPackage2, tripPackage3, tripPackage4];
+
+    res.render("trips/discover", {
+        tripsByLocation,
+        currentPage: page,
+        totalPages: Math.ceil(totalTrips / perPage),
+        user: req.user,
+        totalTrips,
+        userWishlist,
+        sort: req.query.sort || '',
+        exploreTrips,
+        tripPackages
+    });
+};
+
 
 
 
@@ -1313,6 +1424,9 @@ const verifyPayment = async (req, res) => {
 
         const { razorpay_order_id, razorpay_payment_id, razorpay_signature, tripId, userId, amount ,ticket} = req.body;
 
+        // Assuming you have aadhaarNumbers and aadhaarImages (buffers) stored temporarily
+    const { aadhaarNumbers, aadhaarFiles } = req.session || {}; // Or wherever you stored them
+
         // ✅ Validate Required Fields
         if (!razorpay_order_id || !razorpay_payment_id || !razorpay_signature || !tripId || !userId || !amount) {
             console.error("❌ Missing required fields:", req.body);
@@ -1400,6 +1514,42 @@ const verifyPayment = async (req, res) => {
         });
 
         console.log("✅ Booking Created Successfully:", newBooking);
+
+        if (aadhaarNumbers && aadhaarFiles) {
+            const attachments = aadhaarFiles.map((file, i) => ({
+                filename: `aadhaar_passenger_${i + 1}.jpg`,
+                content: file.buffer
+            }));
+        
+            const htmlBody = aadhaarNumbers.map((num, i) => `
+                <p><b>Passenger ${i + 1}</b><br/>Aadhaar: ${num}</p>
+            `).join("");
+        
+            htmlBody += `
+                <hr />
+                <p><b>Trip ID:</b> ${trip._id}</p>
+                <p><b>User Email:</b> ${user.email}</p>
+                <p><b>Payment ID:</b> ${razorpay_payment_id}</p>
+            `;
+        
+            const transporter = nodemailer.createTransport({
+                service: "Gmail",
+                auth: {
+                    user: process.env.EMAIL_USER,
+                    pass: process.env.EMAIL_PASS,
+                },
+            });
+        
+            await transporter.sendMail({
+                from: process.env.EMAIL_USER,
+                to: "dhanuchandu1232@gmail.com",
+                subject: `🧾 Aadhaar + Booking Confirmation for Trip ID: ${trip._id}`,
+                html: htmlBody,
+                attachments,
+            });
+        
+            console.log("✅ Aadhaar details emailed after successful booking.");
+        }
 
         return res.json({ success: true, message: "Payment successful!", booking: newBooking });
 
@@ -1742,10 +1892,62 @@ const showFeaturedTrips = async (req, res) => {
 
 
 
+const uploadaadhaar = async (req, res) => {
+    try {
+        const { tripId, userEmail, paymentId } = req.body;
+        const aadhaarNumbers = Array.isArray(req.body.aadhaarNumbers)
+          ? req.body.aadhaarNumbers
+          : [req.body.aadhaarNumbers];
+        const aadhaarFiles = req.files;
+    
+        if (!tripId || !userEmail || !paymentId || !aadhaarNumbers.length || !aadhaarFiles.length) {
+          return res.status(400).json({ success: false, message: "Missing Aadhaar or payment data." });
+        }
+    
+        const attachments = aadhaarFiles.map((file, i) => ({
+          filename: `aadhaar_passenger_${i + 1}.jpg`,
+          content: file.buffer
+        }));
+    
+        const htmlBody = aadhaarNumbers.map((num, i) => `
+          <p><b>Passenger ${i + 1}</b><br/>Aadhaar: ${num}</p>
+        `).join("") + `
+          <hr />
+          <p><b>Trip ID:</b> ${tripId}</p>
+          <p><b>User Email:</b> ${userEmail}</p>
+          <p><b>Payment ID:</b> ${paymentId}</p>
+        `;
+    
+        const transporter = nodemailer.createTransport({
+          service: "Gmail",
+          auth: {
+            user: process.env.EMAIL_USER,
+            pass: process.env.EMAIL_PASS,
+          },
+        });
+    
+        await transporter.sendMail({
+          from: process.env.EMAIL_USER,
+          to: "dhanuchandu1232@gmail.com",
+          subject: `🧾 Aadhaar + Booking Confirmation for Trip ID: ${tripId}`,
+          html: htmlBody,
+          attachments,
+        });
+    
+        console.log("✅ Aadhaar details emailed from /upload-aadhaar");
+        res.json({ success: true, message: "Aadhaar uploaded and emailed!" });
+    
+      } catch (err) {
+        console.error("❌ Error uploading Aadhaar:", err);
+        res.status(500).json({ success: false, message: "Server error", error: err.message });
+      }
+  };
+  
 
 
 
 
 
-export { contactUsPost,getUserBookings,cancelBooking,createOrder,verifyPayment, showFeaturedTrips, showtoursbymonth, tourbymonths, showgroupdestination, tourbydestination, contactPage, getpayment, reportTrip, showWishlist, fetchWhislist, deleteReview, discoverPage, mainSearch, getSecondarySearch, aboutus, reviews, whislist, searchTrips, newTripForm, showAllTrips, addNewTrip, editTripForm, showTrip, deleteTrip, mytrip, postEditTrip, catagariesTrips, priceFilter };
+
+export { uploadaadhaar,contactUsPost,getUserBookings,cancelBooking,createOrder,verifyPayment, showFeaturedTrips, showtoursbymonth, tourbymonths, showgroupdestination, tourbydestination, contactPage, getpayment, reportTrip, showWishlist, fetchWhislist, deleteReview, discoverPage, mainSearch, getSecondarySearch, aboutus, reviews, whislist, searchTrips, newTripForm, showAllTrips, addNewTrip, editTripForm, showTrip, deleteTrip, mytrip, postEditTrip, catagariesTrips, priceFilter };
 

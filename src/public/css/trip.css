@@ -1596,3 +1596,13 @@ nav{
   display: block;
   border-radius: 5px;
 }
+
+
+.meals-box {
+  margin-top: 10px;
+  font-size: 14px;
+  font-family: poppins;
+  margin-top: 1rem;
+  display: flex;
+  gap: 0.5rem;
+}

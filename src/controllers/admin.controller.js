@@ -12,6 +12,8 @@ import { Trip } from '../models/travel.model.js';
 import { Booking } from '../models/booking.model.js';
 import { Payment } from "../models/payment.model.js";  // Adjust path if needed
 import { Review } from '../models/review.model.js';
+import { CompletedTrip } from '../models/CompletedTrip.model.js';
+import { TripPayout } from "../models/tripPayout.model.js";
 import moment from 'moment';
 import nodemailer from 'nodemailer';
 import Razorpay from 'razorpay';
@@ -651,11 +653,55 @@ const dashboard = async (req, res) => {
             { $sort: { _id: 1 } }
         ]);
 
-        console.log("Monthly Signups", monthlySignups);
-        console.log("Total Users", totalUsers);
-        console.log("Total Agents", totalAgents);
-        console.log("Category Data", categoryData);
-        console.log("monthlySignups", monthlySignups);
+        // console.log("Monthly Signups", monthlySignups);
+        // console.log("Total Users", totalUsers);
+        // console.log("Total Agents", totalAgents);
+        // console.log("Category Data", categoryData);
+        // console.log("monthlySignups", monthlySignups);
+
+      
+        // Step 1: Aggregate total revenue per trip from Booking
+        const revenueData = await Booking.aggregate([
+            {
+                $match: { status: "booked" } // ✅ Only confirmed bookings
+            },
+            {
+                
+                $group: {
+                    _id: "$trip",
+                    totalRevenue: { $sum: "$totalAmount" }
+                }
+            },
+            {
+                $sort: { totalRevenue: -1 }
+            }
+        ]);
+
+        // Step 2: Fetch trip titles from both Trip and CompletedTrip models
+        const tripIds = revenueData.map(item => item._id);
+        const activeTrips = await Trip.find({ _id: { $in: tripIds } }, "_id title");
+        const completedTrips = await CompletedTrip.find({ _id: { $in: tripIds } }, "_id title");
+
+        // Merge all trips into a lookup map for easy access
+        const tripTitleMap = new Map();
+        [...activeTrips, ...completedTrips].forEach(trip => {
+            tripTitleMap.set(trip._id.toString(), trip.title);
+        });
+
+        // Step 3: Prepare final topRevenueData array
+        const topRevenueData = revenueData.map(item => ({
+            _id: item._id,
+            totalRevenue: item.totalRevenue,
+            title: tripTitleMap.get(item._id.toString()) || "Unknown Trip"
+        }));
+
+        console.log("Revenue Aggregation:", revenueData);
+        console.log("Trip IDs from Booking:", tripIds);
+        console.log("Active Trips:", activeTrips);
+        console.log("Completed Trips:", completedTrips);
+        
+        
+
 
         res.render('admin/dashboard', {
             userSignups: monthlySignups, // Fixed structure
@@ -664,6 +710,7 @@ const dashboard = async (req, res) => {
             totalAgents,
             categoryData,
             durationData,
+            topRevenueData
         });
 
     } catch (error) {
@@ -671,6 +718,7 @@ const dashboard = async (req, res) => {
         res.status(500).send("Internal Server Error");
     }
 };
+
 
 
 
@@ -744,40 +792,103 @@ const managefeatured = async (req, res) => {
 
 const getAdminTripPayments = async (req, res) => {
     try {
-        const trips = await Trip.find().lean();
-
-        // Fetch all non-refunded bookings at once
-        const bookings = await Booking.find({
-            trip: { $in: trips.map(trip => trip._id) },
-            status: { $nin: ["refunded"] },  // Exclude only fully refunded bookings
+        // Ongoing Trips
+        const ongoingTrips = await Trip.find().populate('owner').lean();
+        const ongoingBookings = await Booking.find({
+            trip: { $in: ongoingTrips.map(t => t._id) },
+            status: 'booked',
             "payment.status": "captured"
         }).lean();
 
-        // Create a mapping of trip revenue and bookings count
-        const tripRevenueMap = {};
-
-        bookings.forEach(booking => {
-            const tripId = booking.trip.toString();
-            if (!tripRevenueMap[tripId]) {
-                tripRevenueMap[tripId] = { totalBookings: 0, totalRevenue: 0 };
-            }
-            tripRevenueMap[tripId].totalBookings += 1;
-            tripRevenueMap[tripId].totalRevenue += booking.totalAmount;
+        const ongoingMap = {};
+        ongoingBookings.forEach(b => {
+            const id = b.trip.toString();
+            if (!ongoingMap[id]) ongoingMap[id] = { revenue: 0, count: 0 };
+            ongoingMap[id].revenue += b.totalAmount;
+            ongoingMap[id].count += 1;
         });
 
-        // Attach revenue & booking count to each trip
-        trips.forEach(trip => {
-            const tripId = trip._id.toString();
-            trip.totalBookings = tripRevenueMap[tripId]?.totalBookings || 0;
-            trip.totalRevenue = tripRevenueMap[tripId]?.totalRevenue || 0;
+        // Completed Trips
+        const completedTrips = await CompletedTrip.find().populate('owner').lean();
+        const completedBookings = await Booking.find({
+            trip: { $in: completedTrips.map(t => t.originalTripId) },
+            status: 'booked',
+            "payment.status": "captured"
+        }).lean();
+
+        const completedMap = {};
+        completedBookings.forEach(b => {
+            const id = b.trip.toString();
+            if (!completedMap[id]) completedMap[id] = { revenue: 0 };
+            completedMap[id].revenue += b.totalAmount;
         });
 
-        res.render("admin/adminTripdetails.ejs", { trips });
-    } catch (error) {
-        console.error("❌ Error fetching trip payments:", error);
+        const payouts = await TripPayout.find().lean();
+        const payoutMap = {};
+        payouts.forEach(p => {
+            payoutMap[p.trip.toString()] = p;
+        });
+
+        // Attach data
+        ongoingTrips.forEach(trip => {
+            const id = trip._id.toString();
+            trip.totalRevenue = ongoingMap[id]?.revenue || 0;
+            trip.totalBookings = ongoingMap[id]?.count || 0;
+            trip.advancePaid = payoutMap[id]?.advancePaid || 0;
+        });
+
+        completedTrips.forEach(trip => {
+            const id = trip.originalTripId.toString();
+            trip.totalRevenue = completedMap[id]?.revenue || 0;
+
+            const payout = payoutMap[id] || {};
+            trip.advancePaid = payout.advancePaid || 0;
+            trip.finalPaid = payout.finalPaid || 0;
+            trip.commissionRate = payout.commissionRate || 10;
+            trip.fixedCharges = payout.fixedCharges || 0;
+            trip.finalSettlementAmount = trip.totalRevenue - trip.advancePaid - (trip.totalRevenue * trip.commissionRate / 100) - trip.fixedCharges;
+            trip.profit = trip.totalRevenue - trip.finalSettlementAmount;
+        });
+
+        res.render("admin/adminTripdetails.ejs", {
+            ongoingTrips,
+            completedTrips
+        });
+    } catch (err) {
+        console.error("❌ Admin trip payment error:", err);
         res.status(500).send("Internal Server Error");
     }
 };
+
+const getTransactionsPage = async (req, res) => {
+    const { month } = req.query; // format: 2025-04
+    const start = new Date(`${month}-01`);
+    const end = new Date(`${month}-31`);
+
+    const payouts = await TripPayout.find({ "transactions.date": { $gte: start, $lte: end } })
+        .populate("trip operator")
+        .lean();
+
+    const results = [];
+
+    payouts.forEach(payout => {
+        const monthTx = payout.transactions.filter(t => t.date >= start && t.date <= end);
+        const adv = monthTx.find(t => t.type === "advance");
+        const final = monthTx.find(t => t.type === "final");
+
+        results.push({
+            trip: payout.trip.title || "Trip",
+            operator: payout.operator.firstName,
+            advanceAmount: adv?.amount,
+            finalAmount: final?.amount,
+            advanceDone: !!adv,
+            finalDone: !!final
+        });
+    });
+
+    res.render("admin/transactions.ejs", { results, month });
+};
+
 
 
 
@@ -810,10 +921,10 @@ const settlePayment = async (req, res) => {
 const getrefundrequest = async (req, res) => {
     try {
         const refundRequests = await Booking.find({ status: "Refund Requested" })
-        .populate('user', 'username email phoneNumber')  
-        .populate('trip', 'title departure endDate')  
-        .select('totalAmount refundableAmount paymentId status'); // ✅ Add missing fields
-    
+            .populate('user', 'username email phoneNumber')
+            .populate('trip', 'title departure endDate')
+            .select('totalAmount refundableAmount paymentId status'); // ✅ Add missing fields
+
 
 
         const today = new Date();
@@ -954,4 +1065,4 @@ async function sendRefundEmail(email, amount) {
     await transporter.sendMail(mailOptions);
 }
 
-export { userInsight, settleRefund, getAdminTripPayments, getrefundrequest, settlePayment, managefeatured, togglefeaturedtours, userRecord, agentInsight, agentTrips, dashboard, tripManagement, revokedData, revokedPage, liftSuspension, suspendAgent, revokeAgent, fetchTripReports, reportedTrips, analytics, updateTripStatus, adminPerks, walletPage, sendCoin, editAdminForm, editAdminPannel, posttripPackage, becomeOwnerForm, postOwner, agentAccessForm, postAgentAccess, tripLeaderForm, postTripLeader, displayPackages }
+export { userInsight, getTransactionsPage, settleRefund, getAdminTripPayments, getrefundrequest, settlePayment, managefeatured, togglefeaturedtours, userRecord, agentInsight, agentTrips, dashboard, tripManagement, revokedData, revokedPage, liftSuspension, suspendAgent, revokeAgent, fetchTripReports, reportedTrips, analytics, updateTripStatus, adminPerks, walletPage, sendCoin, editAdminForm, editAdminPannel, posttripPackage, becomeOwnerForm, postOwner, agentAccessForm, postAgentAccess, tripLeaderForm, postTripLeader, displayPackages }

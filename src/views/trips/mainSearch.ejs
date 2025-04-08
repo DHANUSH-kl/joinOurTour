@@ -459,7 +459,11 @@
         <div class="cards-container">
             <% for(let i=0; i < exactMatchTrips.length; i++) { %>
 
-                <div class="card-container" data-id="<%= exactMatchTrips[i]._id %>">
+                <div class="card-container" data-id="<%= exactMatchTrips[i]._id %>" data-departure="<%= new Date(exactMatchTrips[i].departure).toISOString() %>">
+                    <div class="soldoutimg">
+                        <img src="../images/soldout.png" alt="sold out" class="soldimg">
+                    
+                    </div>
                     <div class="card-img">
                         <% if (exactMatchTrips[i].tripImages && exactMatchTrips[i].tripImages.length> 0 &&
                             exactMatchTrips[i].tripImages[0].path) { %>
@@ -912,6 +916,7 @@
 
 
 
+    <script src="/js/soldout.js"></script>
     <script src="/js/seemore.js"></script>
     <script src="/js/mainSearchSort.js"></script>
     <script src="/js/whislist.js"></script>

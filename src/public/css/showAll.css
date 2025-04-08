@@ -1058,3 +1058,39 @@ main {
         padding: 0 10px;
     }
   }
+
+.card-container {
+    position: relative;
+}
+
+.soldoutimg{
+    width: 100%;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%,-50%);
+    z-index: 9999;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.soldimg {
+    width: 70%;
+    display: none;
+
+}
+
+.card-container.ongoingtrip {
+    pointer-events: none;         /* Makes entire card non-clickable */
+    opacity: 0.5;                 /* Visually "disabled" look */
+    filter: grayscale(100%);      /* Optional: full grayscale */
+    cursor: not-allowed;          /* Shows blocked cursor */
+  }
+
+  .card-container.ongoingtrip a {
+    pointer-events: none;
+    text-decoration: none;
+    color: inherit;
+  }
+  

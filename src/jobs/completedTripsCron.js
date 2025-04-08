@@ -2,7 +2,7 @@ import cron from "node-cron";
 import { Trip } from "../models/travel.model.js";
 import { CompletedTrip } from "../models/completedTrip.model.js";
 
-cron.schedule("* * * * *", async () => { // Runs every night at midnight
+cron.schedule("0 0 * * *", async () => { // Runs every night at midnight
     console.log("🔄 Running completed trips job...");
 
     const expiredTrips = await Trip.find({ endDate: { $lt: new Date() } });

@@ -1,6 +1,6 @@
 import { Router } from "express";
 import express from 'express';
-import { contactPage,createOrder,getUserBookings,cancelBooking,verifyPayment,showFeaturedTrips,showtoursbymonth,tourbymonths,tourbydestination,showgroupdestination ,contactUsPost , getpayment , reportTrip, showWishlist,searchTrips, deleteReview, discoverPage, mainSearch, getSecondarySearch, whislist, aboutus, addNewTrip, showAllTrips, newTripForm, showTrip, editTripForm, deleteTrip, mytrip, postEditTrip, catagariesTrips, priceFilter, reviews, fetchWhislist } from "../controllers/newTrip.controler.js";
+import { contactPage,createOrder,uploadaadhaar,getUserBookings,cancelBooking,verifyPayment,showFeaturedTrips,showtoursbymonth,tourbymonths,tourbydestination,showgroupdestination ,contactUsPost , getpayment , reportTrip, showWishlist,searchTrips, deleteReview, discoverPage, mainSearch, getSecondarySearch, whislist, aboutus, addNewTrip, showAllTrips, newTripForm, showTrip, editTripForm, deleteTrip, mytrip, postEditTrip, catagariesTrips, priceFilter, reviews, fetchWhislist } from "../controllers/newTrip.controler.js";
 import { storage } from "../cloudinary.js";
 import bodyParser from 'body-parser';
 import { isLoggedIn, isAgent, isOwner } from "../middlewares.js";
@@ -12,6 +12,9 @@ const upload = multer({ storage });
 
 const router = Router();
 
+const memoryStorage = multer.memoryStorage();
+const aadhaarUpload = multer({ storage: memoryStorage });
+
 // Middleware to parse form data
 router.use(express.urlencoded({ extended: true }));
 
@@ -19,6 +22,8 @@ router.use(express.urlencoded({ extended: true }));
 
 
 
+router.route("/upload-aadhaar")
+    .post(aadhaarUpload.array("aadhaarImages"),uploadaadhaar)
 
 router.route("/featuredtrips")
     .get(showFeaturedTrips)

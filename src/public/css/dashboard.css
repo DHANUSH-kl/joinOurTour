@@ -43,3 +43,20 @@ canvas {
     margin-top: 20px;
     max-width: 100%;
 }
+
+
+.trip-link-list {
+    margin-top: 1rem;
+    list-style: none;
+    padding: 0;
+}
+.trip-link-list li {
+    margin-bottom: 5px;
+}
+.trip-link-list a {
+    color: #007BFF;
+    text-decoration: none;
+}
+.trip-link-list a:hover {
+    text-decoration: underline;
+}

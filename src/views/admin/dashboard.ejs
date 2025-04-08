@@ -16,6 +16,7 @@
             <% } %>
         </select>
 
+
         <div class="stats">
             <button class="user-btn"><a href="/admin/userInsight">Total Users:</a> <%= totalUsers %></button>
             <button class="agent-btn"><a href="/admin/agentInsight">Total Agents: </a> <%= totalAgents %></button>
@@ -26,6 +27,10 @@
         <canvas id="categoryChart"></canvas>
         <canvas id="durationChart"></canvas>
 
+        <h2 style="margin-top: 40px;">Top Revenue Generating Trips</h2>
+        <canvas id="revenueChart" height="120"></canvas>
+        <ul id="revenueTripLinks" class="trip-link-list"></ul>
+
     </div>
 
     <script>
@@ -33,8 +38,8 @@
     const categoryData = <%- JSON.stringify(categoryData || []) %>;
     const durationData = <%- JSON.stringify(durationData || []) %>;
     const userSignups = <%- JSON.stringify(userSignups || []) %>;
+    const topRevenueData = <%- JSON.stringify(topRevenueData || []) %>;
 
-    console.log("User Signups Data:", userSignups);
 
     // Extracting User Signup Data (Month-wise)
     const signupLabels = userSignups.map(item => `Month ${item.month}`);
@@ -106,6 +111,59 @@
             }
         });
     }
+
+     // Revenue Chart
+     let labels = [], values = [], tripIds = [], othersTotal = 0;
+
+topRevenueData.forEach((item, index) => {
+    if (index < 10) {
+        labels.push(item.title);
+        values.push(item.totalRevenue);
+        tripIds.push(item._id);
+    } else {
+        othersTotal += item.totalRevenue;
+    }
+});
+
+if (othersTotal > 0) {
+    labels.push("Others");
+    values.push(othersTotal);
+}
+
+const ctxRevenue = document.getElementById("revenueChart")?.getContext("2d");
+if (ctxRevenue && topRevenueData.length > 0) {
+    new Chart(ctxRevenue, {
+        type: 'bar',
+        data: {
+            labels: labels,
+            datasets: [{
+                label: "Revenue (₹)",
+                data: values,
+                backgroundColor: '#4CAF50'
+            }]
+        },
+        options: {
+            scales: {
+                x: { title: { display: true, text: 'Trips' } },
+                y: { title: { display: true, text: 'Revenue (₹)' }, beginAtZero: true }
+            }
+        }
+    });
+}
+
+// Clickable Trip Links
+const tripLinkList = document.getElementById("revenueTripLinks");
+if (tripLinkList && tripIds.length > 0) {
+    tripIds.forEach((id, index) => {
+        const li = document.createElement("li");
+        const a = document.createElement("a");
+        a.href = `/tour/${id}`;
+        a.target = "_blank";
+        a.textContent = labels[index];
+        li.appendChild(a);
+        tripLinkList.appendChild(li);
+    });
+}
 
     // Year Selector Event
     document.getElementById("year-selector").addEventListener("change", function () {

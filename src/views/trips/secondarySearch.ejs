@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -417,7 +418,11 @@
         <div class="cards-container">
             <% for(let i=0; i < allTrips.length; i++) { %>
 
-                <div class="card-container" data-id="<%= allTrips[i]._id %>">
+                <div class="card-container" data-id="<%= allTrips[i]._id %>" data-departure="<%= new Date(allTrips[i].departure).toISOString() %>">
+                    <div class="soldoutimg">
+                        <img src="../images/soldout.png" alt="sold out" class="soldimg">
+                    
+                    </div>
                     <div class="card-img">
                         <% if (allTrips[i].tripImages && allTrips[i].tripImages.length> 0 &&
                             allTrips[i].tripImages[0].path) { %>
@@ -653,6 +658,7 @@
 
     </script>
 
+    <script src="/js/soldout.js"></script>
     <script src="/js/whislist.js"></script>
     <script src="/js/seemore.js"></script>
     <script src="/js/dropdown.js"></script>

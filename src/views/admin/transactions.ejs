@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Trip Transactions</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f4f4f4;
+      padding: 20px;
+    }
+    h1 {
+      text-align: center;
+      margin-bottom: 30px;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      background: #fff;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+      border-radius: 10px;
+      overflow: hidden;
+    }
+    th, td {
+      padding: 12px;
+      border-bottom: 1px solid #eee;
+      text-align: center;
+    }
+    th {
+      background-color: #2c3e50;
+      color: white;
+    }
+    tr:nth-child(even) {
+      background-color: #f9f9f9;
+    }
+    select {
+      margin-bottom: 20px;
+      padding: 6px 12px;
+      border-radius: 4px;
+      border: 1px solid #ccc;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>Trip Payout Transactions</h1>
+
+  <form method="GET" action="/admin/transactions">
+    <label for="month">Filter by Month:</label>
+    <select name="month" id="month" onchange="this.form.submit()">
+      <% 
+        const currentMonth = new Date().getMonth() + 1;
+        const currentYear = new Date().getFullYear();
+        for (let i = 0; i < 12; i++) {
+          const monthNum = i + 1;
+          const padded = String(monthNum).padStart(2, '0');
+          const value = `${currentYear}-${padded}`;
+      %>
+        <option value="<%= value %>" <%= month === value ? "selected" : "" %>>
+          <%= new Date(`${value}-01`).toLocaleString('default', { month: 'long', year: 'numeric' }) %>
+        </option>
+      <% } %>
+    </select>
+  </form>
+
+  <table>
+    <thead>
+      <tr>
+        <th>Trip</th>
+        <th>Operator</th>
+        <th>Advance Payment</th>
+        <th>Final Payment</th>
+        <th>Total Paid</th>
+        <th>Commission</th>
+        <th>Fixed Charges</th>
+        <th>Profit</th>
+        <th>Settlement</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% if (payouts.length === 0) { %>
+        <tr>
+          <td colspan="9">No transactions for selected month.</td>
+        </tr>
+      <% } else { %>
+        <% payouts.forEach(p => { %>
+          <tr>
+            <td>
+              <a href="/admin/completed-trip/<%= p.trip._id %>" target="_blank">
+                <%= p.trip.title %>
+              </a>
+            </td>
+            <td><%= p.operator.firstName %> (<%= p.operator.phoneNumber %>)</td>
+            <td>
+              <% const adv = p.transactions.find(t => t.type === 'advance'); %>
+              <%= adv ? `₹${adv.amount}` : '—' %>
+            </td>
+            <td>
+              <% const final = p.transactions.find(t => t.type === 'final'); %>
+              <%= final ? `₹${final.amount}` : '—' %>
+            </td>
+            <td>₹<%= (p.advancePaid + p.finalPaid).toFixed(2) %></td>
+            <td><%= p.commissionRate %>%</td>
+            <td>₹<%= p.fixedCharges.toFixed(2) %></td>
+            <td>₹<%= p.profit.toFixed(2) %></td>
+            <td>₹<%= p.finalSettlementAmount.toFixed(2) %></td>
+          </tr>
+        <% }); %>
+      <% } %>
+    </tbody>
+  </table>
+
+</body>
+</html>

@@ -145,12 +145,12 @@
                                             <a href="/mytrips">MY TRIP</a>
                                             <a href="/createtrip">CREATE TRIP</a>
                                             <% } %>
-                                                <a href="/bookings">Booked tours</a>
-                                                <% if (!user) { %>
-                                                    <a href="/user/signin">SIGN IN</a>
-                                                    <a href="/user/signup">SIGN UP</a>
-                                                    <% } else { %>
-                                                        <a href="/user/logout">SIGN OUT</a>
+                                            <% if (!user) { %>
+                                                <a href="/user/signin">SIGN IN</a>
+                                                <a href="/user/signup">SIGN UP</a>
+                                                <% } else { %>
+                                                    <a href="/user/logout">SIGN OUT</a>
+                                                    <a href="/bookings">Booked tours</a>
                                                         <% } %>
                                                             <a href="/showWishlist">WISHLIST &nbsp; <i
                                                                     class="fa-solid fa-heart"
@@ -341,32 +341,57 @@
                                                                 class="style-img"><input type="checkbox"
                                                                 class="categoryCheckbox" name="category" value="nature"
                                                                 id="nature" onclick="toggleCategory('nature')">
-                                                            Nature</label>
+                                                            Nature
+                                                            <div class="typecount">
+                                                                (<span id="nature-count"><%=(tripCounts && tripCounts.nature )  || 0 %></span>)
+
+                                                            </div>
+                                                        </label>
                                                         <label for="party"><img src="../images/party.png" alt=""
                                                                 class="style-img"><input type="checkbox"
                                                                 class="categoryCheckbox" name="category" value="party"
                                                                 id="party" onclick="toggleCategory('party')">
-                                                            Party</label>
+                                                                Party 
+                                                                <div class="typecount">
+                                                                    (<span id="party-count"><%= (tripCounts &&  tripCounts.party )  || 0 %></span>)
+                                                                </div>
+                                                        </label>
                                                         <label for="foods"><img src="../images/food.png" alt=""
                                                                 class="style-img"><input type="checkbox"
                                                                 class="categoryCheckbox" name="category" value="foods"
                                                                 id="foods" onclick="toggleCategory('foods')">
-                                                            Food</label>
+                                                                Food 
+                                                                <div class="typecount">
+                                                                    (<span id="foods-count"><%= (tripCounts &&  tripCounts.foods )  || 0 %></span>)
+                                                                </div>
+                                                        </label>
                                                         <label for="beach"><img src="../images/beach.png" alt=""
                                                                 class="style-img"><input type="checkbox"
                                                                 class="categoryCheckbox" name="category" value="beach"
                                                                 id="beach" onclick="toggleCategory('beach')">
-                                                            Beach</label>
+                                                                Beach 
+                                                                <div class="typecount">
+                                                                    (<span id="beach-count"><%= (tripCounts && tripCounts.beach ) || 0 %></span>)
+                                                                </div>
+                                                        </label>
                                                         <label for="culture"><img src="../images/culture.png" alt=""
                                                                 class="style-img"><input type="checkbox"
                                                                 class="categoryCheckbox" name="category" value="culture"
                                                                 id="culture" onclick="toggleCategory('culture')">
-                                                            Culture</label>
+                                                                culture
+                                                                <div class="typecount">
+                                                                    (<span id="culture-count"><%= (tripCounts && tripCounts.culture )  || 0 %></span>)
+                                                                </div>
+                                                        </label>
                                                         <label for="sports"><img src="../images/sports.png" alt=""
                                                                 class="style-img"><input type="checkbox"
                                                                 class="categoryCheckbox" name="category" value="sports"
                                                                 id="sports" onclick="toggleCategory('sports')">
-                                                            Sports</label>
+                                                                Sports 
+                                                                <div class="typecount">
+                                                                    (<span id="sports-count"><%= (tripCounts && tripCounts.sports )  || 0 %></span>)
+                                                                </div>
+                                                        </label>
                                                         <p id="seeMoreText" class="see-more-text"
                                                             onclick="toggleSeeMore()">See More</p>
 
@@ -538,7 +563,12 @@
                         <div class="cards-container">
                             <% for(let i=0; i < allTrips.length; i++) { %>
 
-                                <div class="card-container" data-id="<%= allTrips[i]._id %>">
+                                <div class="card-container" data-id="<%= allTrips[i]._id %>"  data-departure="<%= new Date(allTrips[i].departure).toISOString() %>"
+                                    >
+                                    <div class="soldoutimg">
+                                        <img src="../images/soldout.png" alt="sold out" class="soldimg">
+                                    
+                                    </div>
                                     <div class="card-img">
                                         <% if (allTrips[i].tripImages && allTrips[i].tripImages.length> 0 &&
                                             allTrips[i].tripImages[0].path) { %>
@@ -568,6 +598,7 @@
                                                 <% } %>
                                     </div>
                                     <div class="card-body">
+                                       
                                         <div class="route">
                                             <img src="../images/route.svg" alt="">
                                             <h3 class="card-title">
@@ -679,79 +710,60 @@
 
 
 
-                    <div class="destination-container dest-cont">
-                        <div class="find">
-                            <h1>Find your destination</h1>
-                            <p>Browse some of our most popular tours of the month.</p>
-                        </div>
-                        <div class="destination-carousal">
+                    <% if (exploreTrips && exploreTrips.filter(trip => trip).length > 0) { %>
+    <div class="destination-container dest-cont">
+        <div class="find">
+            <h1>Find your destination</h1>
+            <p>Browse some of our most popular tours of the month.</p>
+        </div>
+        <div class="destination-carousal">
+            <div class="swiffy-slider slider-item-show2 slider-nav-autoplay">
+                <ul class="slider-container">
+                    <% exploreTrips.forEach((trip) => { %>
+                        <% if (trip) { %> <!-- Ensure trip is valid -->
+                            <li>
+                                <img src="<%= trip.tripImages?.[0]?.path || 'placeholder-image.jpg' %>" alt="Explore Trip">
+                                <button class="explore-trip">
+                                    <a href="/tour/<%= trip._id %>">Explore Tour</a>
+                                </button>
+                            </li>
+                        <% } %>
+                    <% }); %>
+                </ul>
+
+                <button type="button" class="slider-nav"></button>
+                <button type="button" class="slider-nav slider-nav-next"></button>
+            </div>
+        </div>
+    </div>
+<% } %>
 
 
-                            <div class="swiffy-slider slider-item-show2 slider-nav-autoplay">
-                                <ul class="slider-container">
-                                    <% for (let i=0; i < 4; i++) { %>
-                                        <li>
-                                            <% if (exploreTrips[i]) { %>
-                                                <!-- Render actual explore trip details if available -->
-                                                <img src="<%= exploreTrips[i].tripImages[0]?.path %>"
-                                                    alt="Explore Trip">
-                                                <button class="explore-trip">
-                                                    <a href="/tour/<%= exploreTrips[i]._id %>">Explore Tour</a>
-                                                </button>
-                                                <% } else { %>
-                                                    <!-- Render a placeholder if no explore trip is available -->
-                                                    <img src="placeholder-image.jpg" alt="No Explore Trip Available">
-                                                    <button class="explore-trip">
-                                                        <a href="#">Explore Tour</a>
-                                                    </button>
-                                                    <% } %>
-                                        </li>
-                                        <% } %>
 
-                                </ul>
+<% if (tripPackages && tripPackages.filter(pkg => pkg).length > 0) { %>
+    <div class="package">
+        <div class="ptext">
+            <h1>Explore packages</h1>
+            <p>Find, what suits you best</p>
+        </div>
 
-                                <button type="button" class="slider-nav"></button>
-                                <button type="button" class="slider-nav slider-nav-next"></button>
-
-
-                            </div>
-
-                        </div>
-
+        <div class="package-cards" data-scroll-container>
+            <% tripPackages.forEach((pkg, i) => { %>
+                <% if (pkg) { %> <!-- Ensure package is valid -->
+                    <div class="card card<%= i %>" data-scroll data-scroll-call="animate-card">
+                        <img src="<%= pkg.tripImages?.[0]?.path || 'placeholder-image.jpg' %>" alt="">
+                        <p><%= pkg.title %></p>
+                        <form action="/discover" method="POST">
+                            <input type="hidden" name="tripId" value="<%= pkg._id %>">
+                            <button type="submit">Discover more</button>
+                        </form>
                     </div>
+                <% } %>
+            <% }); %>
+        </div>
+    </div>
+<% } %>
 
-                    <div class="package">
-                        <div class="ptext">
-                            <h1>Explore packages</h1>
-                            <p>Find, what suites you best</p>
-                        </div>
-
-                        <div class="package-cards" data-scroll-container>
-
-                            <% for (let i=0; i < 4; i++) { %>
-                                <div class="card card<%= i %>" data-scroll data-scroll-call="animate-card">
-                                    <% if (tripPackages[i]) { %>
-                                        <!-- Render actual trip details if available -->
-                                        <img src="<%= tripPackages[i].tripImages[0]?.path %>" alt="">
-                                        <p>
-                                            <%= tripPackages[i].title %>
-                                        </p>
-                                        <form action="/discover" method="POST">
-                                            <input type="hidden" name="tripId" value="<%= tripPackages[i]._id %>">
-                                            <button type="submit">Discover more</button>
-                                        </form>
-                                        <% } else { %>
-                                            <!-- Render placeholder card if trip is not available -->
-                                            <img src="placeholder-image.jpg" alt="No Trip Available">
-                                            <p>Trip Not Available</p>
-                                            <form action="#" method="POST">
-                                                <button type="submit" disabled>Discover more</button>
-                                            </form>
-                                            <% } %>
-                                </div>
-                                <% } %>
-                        </div>
-                    </div>
 
 
 
@@ -1063,10 +1075,29 @@ document.addEventListener("DOMContentLoaded", function () {
 });
 </script>
 
-                  
+                 
+
+
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const tripCounts = <%= JSON.stringify(tripCounts) %>;
+
+        document.getElementById('nature-count').innerText = tripCounts.nature || 0;
+        document.getElementById('party-count').innerText = tripCounts.party || 0;
+        document.getElementById('foods-count').innerText = tripCounts.foods || 0;
+        document.getElementById('beach-count').innerText = tripCounts.beach || 0;
+        document.getElementById('culture-count').innerText = tripCounts.culture || 0;
+        document.getElementById('sports-count').innerText = tripCounts.sports || 0;
+    });
+</script>
+
              
 
 
+
+
+
+                    <script src="/js/soldout.js"></script>
                     <script src="/js/flash.js"></script>
                     <script src="/js/seemore.js"></script>
                     <script src="/js/whislist.js"></script>

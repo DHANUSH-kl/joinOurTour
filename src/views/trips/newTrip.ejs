@@ -2,690 +2,1210 @@
 <html lang="en">
 
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link
-        href="https://fonts.googleapis.com/css2?family=Lato:wght@400;700;900&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"
-        rel="stylesheet">
-        <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Lato:wght@400;700;900&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"
+    rel="stylesheet" />
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
+    integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA=="
+    crossorigin="anonymous" referrerpolicy="no-referrer" />
+  <!-- jQuery UI (required for autocomplete) -->
+  <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css" />
+  <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
 
-<!-- jQuery UI (required for autocomplete) -->
-<link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
-<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
-
-    <link rel="stylesheet" href="/css/autoSuggestions.css">
-    <link rel="stylesheet" href="/css/style.css">
-    <title>Document</title>
+  <link rel="stylesheet" href="/css/autoSuggestions.css" />
+  <link rel="stylesheet" href="/css/style.css" />
+  <title>Document</title>
 </head>
 
-<body>
+<body class="container">
+  <nav>
+    <div class="logo">
+      <h4><b>TRAVELER</b></h4>
+    </div>
+    <div class="home">
+      <a href="/">ALL TRIPS</a>
+    </div>
+  </nav>
 
-    <nav>
-        <div class="logo">
-            <h4><b>TRAVELER</b></h4>
+  <hr />
+
+  <div class="form-container">
+    <form action="/createtrip" method="POST" enctype="multipart/form-data">
+      <!-- <h1>CREATE YOUR TRIP</h1> -->
+      <h3 class="td">CREATE YOUR TRIP</h3>
+
+
+      <!-- From Uiverse.io by arafatrahat94 -->
+      <div class="inputBox">
+        <input type="text" name="title" id="title" />
+        <span> Enter trip name</span>
+      </div>
+
+      <div class="wrap">
+        <div class="inputBox">
+
+          <span>Starting Location</span>
+
+          <input type="text" name="fromLocation" id="fromLocation" class="form__group_oneform__field w-100" required />
         </div>
-        <div class="home">
-            <a href="/">ALL TRIPS</a>
+
+        <div class="inputBox">
+          <span for="location" class="form-label mb-2">End Location</span>
+          <input type="text" name="location" id="location" class="form-control" required />
         </div>
-    </nav>
+      </div>
 
-    <hr>
+      <div class="wrap">
+        <div class="inputBox">
+          <span for="departure" class="form-label mb-2">Trip Starting Date</span>
+          <input type="date" name="departure" id="departure" class="form-control tripDate"
+            onchange="calculateDurationAndAddStops()" required />
+        </div>
+        <div class="inputBox">
+          <span for="endDate" class="form-label mb-2">Trip Ending Date</span>
+          <input type="date" name="endDate" id="endDate" class="form-control" onchange="calculateDurationAndAddStops()"
+            required />
+        </div>
+      </div>
 
+      <div class="wrap">
+        <div class="inputBox">
+          <span for="maxTripmates" class="form-label mb-2">Max Number of People Allowed</span>
+          <input min="1" type="number" name="maxTripmates" id="maxTripmates" class="form-control" required />
+        </div>
 
-    
+        <div class="inputBox">
+          <span for="minTripmates" class="form-label mb-2">Number of travellers already booked</span>
+          <input min="1" type="number" name="minTripmates" id="minTripmates" class="form-control" required />
+        </div>
+      </div>
 
-    <div class="form-container">
-        <form action="/createtrip" method="POST" enctype="multipart/form-data">
-            <h1>CREATE YOUR TRIP</h1>
-            <h3 class="td">Trip Details</h3>
+      <div class="wrap">
+        <div class="inputBox">
+          <span for="maleTravelers" class="form-label mb-2">Number of Male Travelers Booked</span>
+          <input type="number" name="maleTravelers" id="maleTravelers" class="form-control" required />
+        </div>
 
+        <div class="inputBox">
+          <span for="femaleTravelers" class="form-label mb-2">Number of Female Travelers Booked</span>
+          <input type="number" name="femaleTravelers" id="femaleTravelers" class="form-control" required />
+        </div>
+      </div>
 
-            <div class="title-container">
-                <label for="title" class="form-label mb-2">Trip Name</label>
-                <input type="text" name="title" id="title" class="form-control " placeholder="Enter trip name" required>
-            </div>
+      <div class="inputBox">
+        <span for="tripImages" class="form-label mb-2">Trip images</span>
+        <input type="file" name="tripImages" id="tripImages" class="form-control" multiple required />
+      </div>
 
-            <div class="wrap">
-
-                <div class="location-container">
-                    <label for="fromLocation" class="form-label mb-2">Starting Location</label>
-                    <input type="text" name="fromLocation" id="fromLocation" class="form-control " required>
-                </div>
-
-                <div class="location-container">
-                    <label for="location" class="form-label mb-2">End Location</label>
-                    <input type="text" name="location" id="location" class="form-control " required>
-                </div>
-    
-                
-    
-            </div>
-
-            <div class="wrap">
-                <div class="days-container">
-                    <label for="departure" class="form-label mb-2">Trip Starting Date</label>
-                    <input type="date" name="departure" id="departure" class="form-control tripDate"
-                        onchange="calculateDurationAndAddStops()" required>
-                </div>
-                <div class="days-container">
-                    <label for="endDate" class="form-label mb-2">Trip Ending Date</label>
-                    <input type="date" name="endDate" id="endDate" class="form-control "
-                        onchange="calculateDurationAndAddStops()" required>
-                </div>
-    
-            </div>
-
-
-            <div class=" wrap">
-
-                <div class="conatiner">
-                    <label for="maxTripmates" class="form-label mb-2">Max Number of People Allowed</label>
-                    <input min="1" type="number" name="maxTripmates" id="maxTripmates" class="form-control " required>
-                </div>
-
-                <div class="conatiner">
-                    <label for="minTripmates" class="form-label mb-2">Number of travellers already booked</label>
-                    <input min="1" type="number" name="minTripmates" id="minTripmates" class="form-control " required>
-                </div>
-
-            
-            </div>
-
-            <div class="wrap">
-                <div class="maleTravelers-container">
-                    <label for="maleTravelers" class="form-label mb-2">Number of Male Travelers Booked</label>
-                    <input type="number" name="maleTravelers" id="maleTravelers" class="form-control" required>
-                </div>
-                
-                <div class="femaleTravelers-container">
-                    <label for="femaleTravelers" class="form-label mb-2">Number of Female Travelers Booked</label>
-                    <input type="number" name="femaleTravelers" id="femaleTravelers" class="form-control" required>
-                </div>
-    
-            </div>
-
-            <div class="images-container">
-                <label for="tripImages" class="form-label mb-2">Trip images</label>
-                <input type="file" name="tripImages" id="tripImages" class="form-control" multiple required>
-            </div>
-            
-
-            <!-- <div class="yturl-container">
+      <!-- <div class="yturl-container">
                 <label for="youtubeUrl">YouTube Video URL</label>
                 <input type="text" name="youtubeUrl" id="youtubeUrl" placeholder="Enter YouTube URL">
             </div> -->
 
-            <div class="description-container ">
-                <span class="input-group-text">Trip description</span>
-                <textarea class="form-control input-container-textarea" name="tripDescription"
-                    aria-label="With textarea"
-                    placeholder="Write an overview of the trip giving a unique selling point.." required></textarea>
-            </div>
+      <div class="inputBox">
+        <span class="input-group-text">Trip description</span>
+        <input class="form-control input-container-textarea" name="tripDescription" aria-label="With textarea"
+          placeholder="Write an overview of the trip giving a unique selling point.." required></input>
+      </div>
 
-            <div class="totalDays-container">
-                <label for="totalDays" class="form-label mb-2">Total days</label>
-                <input type="number" name="totalDays" id="totalDays" class="form-control " required>
-            </div>
+      <div class="inputBox">
+        <span for="totalDays" class="form-label mb-2">Total days</span>
+        <input type="number" name="totalDays" id="totalDays" class="form-control" required />
+      </div>
 
-            <!-- <div class="groupSize-container">
+      <!-- <div class="groupSize-container">
                 <label for="groupSize" class="form-label mb-2">Group Size</label>
                 <input type="number" name="groupSize" id="groupSize" class="form-control" required>
             </div> -->
-            
-            <div class="minAge-container">
-                <label class="form-label mb-2">Minimum Age</label>
-                <div class="form-check">
-                    <input type="radio" name="minAge" id="age_18_25" class="form-check-input" value="18-25" required>
-                    <label for="age_18_25" class="form-check-label">18-25</label>
-                </div>
-                <div class="form-check">
-                    <input type="radio" name="minAge" id="age_25_30" class="form-check-input" value="25-30">
-                    <label for="age_25_30" class="form-check-label">25-30</label>
-                </div>
-                <div class="form-check">
-                    <input type="radio" name="minAge" id="age_30_45" class="form-check-input" value="30-45">
-                    <label for="age_30_45" class="form-check-label">30-45</label>
-                </div>
-                <div class="form-check">
-                    <input type="radio" name="minAge" id="age_45_plus" class="form-check-input" value="45+">
-                    <label for="age_45_plus" class="form-check-label">45+</label>
-                </div>
+
+
+      <!-- From Uiverse.io by 00Kubi -->
+
+
+      <div class="radio-inputs">
+        <div class="inputBox" id="minAge">
+
+          <span>Average Age</span>
+        </div>
+        <label class="radio">
+
+          <input type="radio" name="minAge" id="age_18_25" class="form-check-input" value="18-25" required checked="" />
+
+          <span class="name">18-25</span>
+        </label>
+        <label class="radio">
+          <input type="radio" name="minAge" id="age_25_30" class="form-check-input" value="25-30" />
+          <span class="name">25-30</span>
+        </label>
+        <label class="radio">
+          <input type="radio" name="minAge" id="age_30_45" class="form-check-input" value="30-45" />
+          <span class="name">30-45</span>
+        </label>
+
+        <label class="radio">
+          <input type="radio" type="radio" name="minAge" id="age_45_plus" class="form-check-input" value="45+" />
+          <span class="name">45+</span>
+        </label>
+
+      </div>
+
+
+
+      <!-- <div class="">
+          <label class="form-label mb-2">Minimum Age</label>
+          <div class="form-check">
+            <input
+              type="radio"
+              name="minAge"
+              id="age_18_25"
+              class="form-check-input"
+              value="18-25"
+              required
+            />
+            <label for="age_18_25" class="form-check-label">18-25</label>
+          </div>
+          <div class="form-check">
+            <input
+              type="radio"
+              name="minAge"
+              id="age_25_30"
+              class="form-check-input"
+              value="25-30"
+            />
+            <label for="age_25_30" class="form-check-label">25-30</label>
+          </div>
+          <div class="form-check">
+            <input
+              type="radio"
+              name="minAge"
+              id="age_30_45"
+              class="form-check-input"
+              value="30-45"
+            />
+            <label for="age_30_45" class="form-check-label">30-45</label>
+          </div>
+          <div class="form-check">
+            <input
+              type="radio"
+              name="minAge"
+              id="age_45_plus"
+              class="form-check-input"
+              value="45+"
+            />
+            <label for="age_45_plus" class="form-check-label">45+</label>
+          </div>
+        </div> -->
+
+
+      <div class="inputBox" id="catid">
+        <span id="tripcat">Trip Categories</span>
+
+      </div>
+      <!-- <h2 class="catagaries-text lang">Trip Categories</h2> -->
+      <div class="catagaries-container">
+
+
+
+        <!-- From Uiverse.io by Bodyhc -->
+        <div class="checkbox-wrapper-16">
+          <label class="checkbox-wrapper">
+            <input class="checkbox-input" type="checkbox" id="one" autocomplete="off" value="foods" name="categories">
+            <span class="checkbox-tile">
+              <span class="checkbox-icon">
+                <i class="fa-solid fa-burger"></i>
+
+              </span>
+              <span class="checkbox-label">Food</span>
+            </span>
+          </label>
+        </div>
+
+        <div class="checkbox-wrapper-16">
+          <label class="checkbox-wrapper">
+            <input class="checkbox-input" type="checkbox" id="two" autocomplete="off" value="beach" name="categories">
+            <span class="checkbox-tile">
+              <span class="checkbox-icon">
+                <i class="fa-solid fa-umbrella-beach"></i>
+
+              </span>
+              <span class="checkbox-label">Beach</span>
+            </span>
+          </label>
+        </div>
+
+        <div class="checkbox-wrapper-16">
+          <label class="checkbox-wrapper">
+            <input class="checkbox-input" type="checkbox" id="three" autocomplete="off" value="culture"
+              name="categories">
+            <span class="checkbox-tile">
+              <span class="checkbox-icon">
+                <i class="fa-brands fa-fort-awesome"></i>
+
+              </span>
+              <span class="checkbox-label">culture</span>
+            </span>
+          </label>
+        </div>
+
+        <div class="checkbox-wrapper-16">
+          <label class="checkbox-wrapper">
+            <input class="checkbox-input" type="checkbox" id="four" autocomplete="off" value="party" name="categories">
+            <span class="checkbox-tile">
+              <span class="checkbox-icon">
+                <i class="fa-solid fa-champagne-glasses"></i>
+
+              </span>
+              <span class="checkbox-label">party</span>
+            </span>
+          </label>
+        </div>
+
+
+        <div class="checkbox-wrapper-16">
+          <label class="checkbox-wrapper">
+            <input class="checkbox-input" type="checkbox" id="five" autocomplete="off" value="sports" name="categories">
+            <span class="checkbox-tile">
+              <span class="checkbox-icon">
+                <i class="fa-solid fa-volleyball"></i>
+
+              </span>
+              <span class="checkbox-label">sports</span>
+            </span>
+          </label>
+        </div>
+
+        <div class="checkbox-wrapper-16">
+          <label class="checkbox-wrapper">
+            <input class="checkbox-input" type="checkbox" id="six" autocomplete="off" value="nature" name="categories">
+            <span class="checkbox-tile">
+              <span class="checkbox-icon">
+                <i class="fa-solid fa-mountain-sun"></i>
+
+              </span>
+              <span class="checkbox-label">nature</span>
+            </span>
+          </label>
+        </div>
+
+        <div class="checkbox-wrapper-16">
+          <label class="checkbox-wrapper">
+            <input class="checkbox-input" type="checkbox" id="seven" autocomplete="off" value="adventure"
+              name="categories">
+            <span class="checkbox-tile">
+              <span class="checkbox-icon">
+                <i class="fa-solid fa-utensils"></i>
+
+              </span>
+              <span class="checkbox-label">adventure</span>
+            </span>
+          </label>
+        </div>
+
+        <div class="checkbox-wrapper-16">
+          <label class="checkbox-wrapper">
+            <input class="checkbox-input" type="checkbox" id="eight" autocomplete="off" value="hiking"
+              name="categories">
+            <span class="checkbox-tile">
+              <span class="checkbox-icon">
+                <i class="fa-solid fa-utensils"></i>
+
+              </span>
+              <span class="checkbox-label">hiking</span>
+            </span>
+          </label>
+        </div>
+
+
+        <div class="checkbox-wrapper-16">
+          <label class="checkbox-wrapper">
+            <input class="checkbox-input" type="checkbox" id="nine" autocomplete="off" value="roadtrip"
+              name="categories">
+            <span class="checkbox-tile">
+              <span class="checkbox-icon">
+                <i class="fa-solid fa-utensils"></i>
+
+              </span>
+              <span class="checkbox-label">roadtrip</span>
+            </span>
+          </label>
+        </div>
+
+        <div class="checkbox-wrapper-16">
+          <label class="checkbox-wrapper">
+            <input class="checkbox-input" type="checkbox" id="ten" autocomplete="off" value="other" name="categories">
+            <span class="checkbox-tile">
+              <span class="checkbox-icon">
+                <i class="fa-solid fa-question"></i>
+
+              </span>
+              <span class="checkbox-label">other</span>
+            </span>
+          </label>
+        </div>
+
+        <!-- <div class="checkbox-wrapper-16">
+            <input
+              type="checkbox"
+              class="input-btns"
+              id="one"
+              autocomplete="off"
+              value="foods"
+              name="categories"
+            />
+            <label class="label-btns" for="one"
+              ><i class="fa-solid fa-utensils"></i> Foods</label
+            >
+          </div> -->
+
+
+        <!-- <div>
+            <input
+              type="checkbox"
+              class="input-btns"
+              id="two"
+              autocomplete="off"
+              value="beach"
+              name="categories"
+            />
+            <label class="label-btns" for="two"
+              ><i class="fa-solid fa-umbrella-beach"></i> Beach</label
+            >
+          </div> -->
+
+        <!-- <div>
+            <input
+              type="checkbox"
+              class="input-btns"
+              id="three"
+              autocomplete="off"
+              value="culture"
+              name="categories"
+            />
+            <label class="label-btns" for="three"
+              ><i class="fa-brands fa-fort-awesome"></i> Culture</label
+            >
+          </div> -->
+
+        <!-- <div>
+            <input
+              type="checkbox"
+              class="input-btns"
+              id="four"
+              autocomplete="off"
+              value="party"
+              name="categories"
+            />
+            <label class="label-btns" for="four"
+              ><i class="fa-solid fa-champagne-glasses"></i> Party</label
+            >
+          </div> -->
+
+        <!-- <div>
+            <input
+              type="checkbox"
+              class="input-btns"
+              id="five"
+              autocomplete="off"
+              value="sports"
+              name="categories"
+            />
+            <label class="label-btns" for="five"
+              ><i class="fa-solid fa-volleyball"></i> Sports</label
+            >
+          </div> -->
+
+        <!-- <div>
+            <input
+              type="checkbox"
+              class="input-btns"
+              id="six"
+              autocomplete="off"
+              value="nature"
+              name="categories"
+            />
+            <label class="label-btns" for="six"
+              ><i class="fa-solid fa-mountain-sun"></i> Nature</label
+            >
+          </div> -->
+
+        <!-- <div>
+            <input
+              type="checkbox"
+              class="input-btns"
+              id="seven"
+              autocomplete="off"
+              value="adventure"
+              name="categories"
+            />
+            <label class="label-btns" for="seven"
+              ><i class="fa-solid fa-utensils"></i> Adventure</label
+            >
+          </div> -->
+
+        <!-- <div>
+            <input
+              type="checkbox"
+              class="input-btns"
+              id="eight"
+              autocomplete="off"
+              value="hiking"
+              name="categories"
+            />
+            <label class="label-btns" for="eight"
+              ><i class="fa-solid fa-utensils"></i> Hiking</label
+            >
+          </div> -->
+
+        <!-- <div>
+            <input
+              type="checkbox"
+              class="input-btns"
+              id="nine"
+              autocomplete="off"
+              value="roadtrip"
+              name="categories"
+            />
+            <label class="label-btns" for="nine"
+              ><i class="fa-solid fa-utensils"></i> Road Trip</label
+            >
+          </div> -->
+
+        <!-- <div>
+            <input
+              type="checkbox"
+              class="input-btns"
+              id="ten"
+              autocomplete="off"
+              value="other"
+              name="categories"
+            />
+            <label class="label-btns" for="ten"
+              ><i class="fa-solid fa-utensils"></i> other</label
+            >
+          </div> -->
+      </div>
+
+
+      <div class="inputBox" id="catid">
+        <span id="tripcat">Accommodation Type</span>
+
+      </div>
+
+      <!-- <h2 class="catagaries-text lang">Accommodation Type</h2> -->
+
+      <div class="accomodations-container mt-3">
+        <div class="cb-container">
+
+
+          <!-- From Uiverse.io by Shoh2008 -->
+          <div class="checkbox-wrapper-12">
+            <div class="cbx">
+              <input type="checkbox" value="hotel" id="1" name="accomodations">
+              <label for="cbx-12"></label>
+              <svg fill="none" viewBox="0 0 15 14" height="14" width="15">
+                <path d="M2 8.36364L6.23077 12L13 2"></path>
+              </svg>
             </div>
-            
+
+            <svg version="1.1" xmlns="http://www.w3.org/2000/svg">
+              <defs>
+                <filter id="goo-12">
+                  <feGaussianBlur result="blur" stdDeviation="4" in="SourceGraphic"></feGaussianBlur>
+                  <feColorMatrix result="goo-12" values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 22 -7" mode="matrix"
+                    in="blur"></feColorMatrix>
+                  <feBlend in2="goo-12" in="SourceGraphic"></feBlend>
+                </filter>
+              </defs>
+            </svg>
+          </div>
 
 
-            
+          <!-- <input type="checkbox" value="hotel" id="1" name="accomodations" /> -->
+          <label for="1"> Hotels </label>
+        </div>
 
-           
-            
-
-            
-
-           
-
-
-            <h2 class="catagaries-text lang">Trip Categories</h2>
-            <div class="catagaries-container">
-                <div>
-                    <input type="checkbox" class="input-btns" id="one" autocomplete="off" value="foods"
-                    name="categories">
-                    <label class="label-btns" for="one"><i class="fa-solid fa-utensils"></i> Foods</label>
-
-                </div>
-                <div>
-                    <input type="checkbox" class="input-btns" id="two" autocomplete="off" value="beach"
-                    name="categories">
-                    <label class="label-btns" for="two"><i class="fa-solid fa-umbrella-beach"></i> Beach</label>
-
-                </div>
-                <div>
-                    <input type="checkbox" class="input-btns" id="three" autocomplete="off" value="culture"
-                    name="categories">
-                    <label class="label-btns" for="three"><i class="fa-brands fa-fort-awesome"></i> Culture</label>
-
-
-                </div>
-                
-                <div>
-                    <input type="checkbox" class="input-btns" id="four" autocomplete="off" value="party"
-                    name="categories">
-                    <label class="label-btns" for="four"><i class="fa-solid fa-champagne-glasses"></i> Party</label>
-
-                </div>
-                <div>
-                    <input type="checkbox" class="input-btns" id="five" autocomplete="off" value="sports"
-                    name="categories">
-                    <label class="label-btns" for="five"><i class="fa-solid fa-volleyball"></i> Sports</label>
-
-                </div>
-                <div>
-                    <input type="checkbox" class="input-btns" id="six" autocomplete="off" value="nature"
-                    name="categories">
-                    <label class="label-btns" for="six"><i class="fa-solid fa-mountain-sun"></i> Nature</label>
-                </div>
-
-                <div>
-                    <input type="checkbox" class="input-btns" id="seven" autocomplete="off" value="adventure"
-                    name="categories">
-                    <label class="label-btns" for="seven"><i class="fa-solid fa-utensils"></i> Adventure</label>
-
-                </div>
-
-                <div>
-                    <input type="checkbox" class="input-btns" id="eight" autocomplete="off" value="hiking"
-                    name="categories">
-                    <label class="label-btns" for="eight"><i class="fa-solid fa-utensils"></i> Hiking</label>
-
-                </div>
-
-                <div>
-                    <input type="checkbox" class="input-btns" id="nine" autocomplete="off" value="roadtrip"
-                    name="categories">
-                    <label class="label-btns" for="nine"><i class="fa-solid fa-utensils"></i> Road Trip</label>
-
-                </div>
-
-                <div>
-                    <input type="checkbox" class="input-btns" id="ten" autocomplete="off" value="other"
-                    name="categories">
-                    <label class="label-btns" for="ten"><i class="fa-solid fa-utensils"></i> other</label>
-
-                </div>
-
-
-
-
+        <div  class="cb-container">
+          <div class="checkbox-wrapper-12">
+            <div class="cbx">
+              <input type="checkbox" value="hostels" id="2" name="accomodations">
+              <label for="cbx-12"></label>
+              <svg fill="none" viewBox="0 0 15 14" height="14" width="15">
+                <path d="M2 8.36364L6.23077 12L13 2"></path>
+              </svg>
             </div>
 
+            <svg version="1.1" xmlns="http://www.w3.org/2000/svg">
+              <defs>
+                <filter id="goo-12">
+                  <feGaussianBlur result="blur" stdDeviation="4" in="SourceGraphic"></feGaussianBlur>
+                  <feColorMatrix result="goo-12" values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 22 -7" mode="matrix"
+                    in="blur"></feColorMatrix>
+                  <feBlend in2="goo-12" in="SourceGraphic"></feBlend>
+                </filter>
+              </defs>
+            </svg>
+          </div>
+          <!-- <input type="checkbox" value="hostels" id="2" name="accomodations" /> -->
+          <label for="2"> Hostels </label>
+        </div>
 
-            <h2 class="catagaries-text lang">Accommodation Type</h2>
-            <div class="accomodations-container mt-3">
-                <div>
-                    <input type="checkbox" value="hotel" id="1" name="accomodations">
-                    <label for="1">
-                        Hotels
-                    </label>
-                </div>
-                <div>
-                    <input type="checkbox" value="hostels" id="2" name="accomodations">
-                    <label for="2">
-                        Hostels
-                    </label>
-                </div>
-                <div>
-                    <input class="form-check-input acc-input" type="checkbox" value="homestays" id="3"
-                        name="accomodations">
-                    <label for="3">
-                        Homestays
-                    </label>
-                    
-                </div>
-                <div>
-                    <input class="form-check-input acc-input" type="checkbox" value="luxurious stays" id="4"
-                        name="accomodations">
-                    <label class="form-check-label" for="4">
-                        Luxurious Stays
-                    </label>
-                    
-                </div>
-                <div>
-                    <input class="form-check-input acc-input" type="checkbox" value="budget stays" id="5"
-                        name="accomodations">
-                    <label class="form-check-label" for="5">
-                        Budget Stays
-                    </label>
-                    
-                </div>
-
-                <div>
-                    <input class="form-check-input acc-input" type="checkbox" value="other" id="6"
-                        name="accomodations">
-                    <label class="form-check-label" for="6">
-                        Other
-                    </label>
-                    
-                </div>
-
+        <div  class="cb-container">
+          <div class="checkbox-wrapper-12">
+            <div class="cbx">
+              <input  type="checkbox" value="homestays" id="3" name="accomodations">
+              <label for="cbx-12"></label>
+              <svg fill="none" viewBox="0 0 15 14" height="14" width="15">
+                <path d="M2 8.36364L6.23077 12L13 2"></path>
+              </svg>
             </div>
 
+            <svg version="1.1" xmlns="http://www.w3.org/2000/svg">
+              <defs>
+                <filter id="goo-12">
+                  <feGaussianBlur result="blur" stdDeviation="4" in="SourceGraphic"></feGaussianBlur>
+                  <feColorMatrix result="goo-12" values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 22 -7" mode="matrix"
+                    in="blur"></feColorMatrix>
+                  <feBlend in2="goo-12" in="SourceGraphic"></feBlend>
+                </filter>
+              </defs>
+            </svg>
+          </div>
+          <!-- <input class="form-check-input acc-input" type="checkbox" value="homestays" id="3" name="accomodations" /> -->
+          <label for="3"> Homestays </label>
+        </div>
+
+        <div  class="cb-container">
+
+          <div class="checkbox-wrapper-12">
+            <div class="cbx">
+              <input  type="checkbox"value="luxurious stays" id="4" name="accomodations">
+              <label for="cbx-12"></label>
+              <svg fill="none" viewBox="0 0 15 14" height="14" width="15">
+                <path d="M2 8.36364L6.23077 12L13 2"></path>
+              </svg>
+            </div>
+
+            <svg version="1.1" xmlns="http://www.w3.org/2000/svg">
+              <defs>
+                <filter id="goo-12">
+                  <feGaussianBlur result="blur" stdDeviation="4" in="SourceGraphic"></feGaussianBlur>
+                  <feColorMatrix result="goo-12" values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 22 -7" mode="matrix"
+                    in="blur"></feColorMatrix>
+                  <feBlend in2="goo-12" in="SourceGraphic"></feBlend>
+                </filter>
+              </defs>
+            </svg>
+          </div>
+
+          <!-- <input class="form-check-input acc-input" type="checkbox" value="luxurious stays" id="4"name="accomodations" /> -->
+          <label class="form-check-label" for="4"> Luxurious Stays </label>
+        </div>
+
+        <div  class="cb-container">
+          <div class="checkbox-wrapper-12">
+            <div class="cbx">
+              <input  type="checkbox"  value="budget stays" id="5" name="accomodations">
+              <label for="cbx-12"></label>
+              <svg fill="none" viewBox="0 0 15 14" height="14" width="15">
+                <path d="M2 8.36364L6.23077 12L13 2"></path>
+              </svg>
+            </div>
+
+            <svg version="1.1" xmlns="http://www.w3.org/2000/svg">
+              <defs>
+                <filter id="goo-12">
+                  <feGaussianBlur result="blur" stdDeviation="4" in="SourceGraphic"></feGaussianBlur>
+                  <feColorMatrix result="goo-12" values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 22 -7" mode="matrix"
+                    in="blur"></feColorMatrix>
+                  <feBlend in2="goo-12" in="SourceGraphic"></feBlend>
+                </filter>
+              </defs>
+            </svg>
+          </div>
+          <!-- <input class="form-check-input acc-input" type="checkbox" value="budget stays" id="5" name="accomodations" /> -->
+          <label class="form-check-label" for="5"> Budget Stays </label>
+        </div>
+
+        <div  class="cb-container">
+
+          <div class="checkbox-wrapper-12">
+            <div class="cbx">
+              <input  type="checkbox"   value="other" id="6" name="accomodations">
+              <label for="cbx-12"></label>
+              <svg fill="none" viewBox="0 0 15 14" height="14" width="15">
+                <path d="M2 8.36364L6.23077 12L13 2"></path>
+              </svg>
+            </div>
+
+            <svg version="1.1" xmlns="http://www.w3.org/2000/svg">
+              <defs>
+                <filter id="goo-12">
+                  <feGaussianBlur result="blur" stdDeviation="4" in="SourceGraphic"></feGaussianBlur>
+                  <feColorMatrix result="goo-12" values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 22 -7" mode="matrix"
+                    in="blur"></feColorMatrix>
+                  <feBlend in2="goo-12" in="SourceGraphic"></feBlend>
+                </filter>
+              </defs>
+            </svg>
+          </div>
+
+          <!-- <input class="form-check-input acc-input" type="checkbox" value="other" id="6" name="accomodations" /> -->
+          <label class="form-check-label" for="6"> Other </label>
+        </div>
+      </div>
+
+
+      <div class="inputBox" id="catid">
+        <span id="tripcat">Languages Spoken by Trip Leader</span>
+
+      </div>
+
+      <!-- <h3 class="lang">Languages Spoken by Trip Leader</h3> -->
+      <div id="languages-container" class="languages-container">
 
 
 
-            <h3 class="lang">Languages Spoken by Trip Leader</h3>
-<div id="languages-container" class="languages-container">
-    <label><input type="checkbox" name="languages" value="English"> English</label>
-    <label><input type="checkbox" name="languages" value="Hindi"> Hindi</label>
-    <label><input type="checkbox" name="languages" value="Kannada"> Kannada</label>
-    <label><input type="checkbox" name="languages" value="Marathi"> Marathi</label>
-    <label><input type="checkbox" name="languages" value="Tamil"> Tamil</label>
-</div>
-<div class="lang-input-cont">
-    <input type="text" id="newLanguageInput" placeholder="Add new language">
-    <button type="button" onclick="addCheckbox('languages-container', 'languages', 'newLanguageInput')">Add</button>
-</div>
-
-
-           
         
-           
-            
-            <h3 class="lang">Enter Inclusions</h3>
+        
 
-            <div id="includes-container" class="languages-container">
-                <label><input type="checkbox" name="includes" value="Accommodation"> Accommodation</label>
-                <label><input type="checkbox" name="includes" value="Meals"> Meals</label>
-                <label><input type="checkbox" name="includes" value="Local Transport"> Local Transportation</label>
-                <label><input type="checkbox" name="includes" value="Guided Tours & Sightseeing"> Guided Tours & Sightseeing</label>
-                <label><input type="checkbox" name="includes" value="Entry Fees & Permits"> Entry Fees & Permits</label>
-                <label><input type="checkbox" name="includes" value="Travel Insurance (Basic)"> Travel Insurance (Basic)</label>
-                <label><input type="checkbox" name="includes" value="Tour Leader or Guide Services"> Tour Leader or Guide Services</label>
-                <label><input type="checkbox" name="includes" value="Group Activities"> Group Activities</label>
-                <label><input type="checkbox" name="includes" value="Welcome & Farewell Events"> Welcome & Farewell Events</label>
-                <label><input type="checkbox" name="includes" value="Emergency Assistance"> Emergency Assistance</label>
-            </div>
-            <div class="lang-input-cont">
-                <input type="text" id="newIncludeInput" placeholder="Add new include">
-                <button type="button" onclick="addCheckbox('includes-container', 'includes', 'newIncludeInput')">Add</button>
-            </div>
-            
+        <label><input type="checkbox" name="languages" value="English" />
+          English</label>
+        <label><input type="checkbox" name="languages" value="Hindi" />
+          Hindi</label>
+        <label><input type="checkbox" name="languages" value="Kannada" />
+          Kannada</label>
+        <label><input type="checkbox" name="languages" value="Marathi" />
+          Marathi</label>
+        <label><input type="checkbox" name="languages" value="Tamil" />
+          Tamil</label>
+      </div>
+      <div class="lang-input-cont inputBox">
+        <input type="text" id="newLanguageInput" placeholder="Add new language" />
+        <button type="button" onclick="addCheckbox('languages-container', 'languages', 'newLanguageInput')">
+          Add
+        </button>
+      </div>
 
 
-            <h3 class="lang">Enter Exclusions</h3>
+      
 
-            <div id="excludes-container" class="languages-container">
-                <label><input type="checkbox" name="excludes" value="Meals Not Mentioned"> Meals Not Mentioned</label>
-                <label><input type="checkbox" name="excludes" value="Personal Expenses"> Personal Expenses</label>
-                <label><input type="checkbox" name="excludes" value="Optional Activities & Excursions"> Optional Activities & Excursions</label>
-                <label><input type="checkbox" name="excludes" value="Travel Insurance (Comprehensive)"> Travel Insurance (Comprehensive)</label>
-                <label><input type="checkbox" name="excludes" value="Tips & Gratuities"> Tips & Gratuities</label>
-                <label><input type="checkbox" name="excludes" value="Extra Baggage Fees"> Extra Baggage Fees</label>
-                <label><input type="checkbox" name="excludes" value="Medical Expenses"> Medical Expenses</label>
-                <label><input type="checkbox" name="excludes" value="Transportation Outside Itinerary"> Transportation Outside Itinerary</label>
-                <label><input type="checkbox" name="excludes" value="Internet & Communication Costs"> Internet & Communication Costs</label>
-                <label><input type="checkbox" name="excludes" value="Pre/Post-Trip Accommodation"> Pre/Post-Trip Accommodation</label>
-            </div>
-            <div class="lang-input-cont">
-                <input type="text" id="newExcludeInput" placeholder="Add new exclude">
-                <button type="button" onclick="addCheckbox('excludes-container', 'excludes', 'newExcludeInput')">Add</button>
-            </div>
-            
+      <div class="inputBox" id="catid">
+        <span id="tripcat">Enter Inclusions</span>
 
-           
+      </div>
 
-            <!-- <div class="days-container">
+      <!-- <h3 class="lang">Enter Inclusions</h3> -->
+
+      <div id="includes-container" class="languages-container">
+        <label><input type="checkbox" name="includes" value="Accommodation" />
+          Accommodation</label>
+        <label><input type="checkbox" name="includes" value="Meals" />
+          Meals</label>
+        <label><input type="checkbox" name="includes" value="Local Transport" />
+          Local Transportation</label>
+        <label><input type="checkbox" name="includes" value="Guided Tours & Sightseeing" />
+          Guided Tours & Sightseeing</label>
+        <label><input type="checkbox" name="includes" value="Entry Fees & Permits" />
+          Entry Fees & Permits</label>
+        <label><input type="checkbox" name="includes" value="Travel Insurance (Basic)" />
+          Travel Insurance (Basic)</label>
+        <label><input type="checkbox" name="includes" value="Tour Leader or Guide Services" />
+          Tour Leader or Guide Services</label>
+        <label><input type="checkbox" name="includes" value="Group Activities" />
+          Group Activities</label>
+        <label><input type="checkbox" name="includes" value="Welcome & Farewell Events" />
+          Welcome & Farewell Events</label>
+        <label><input type="checkbox" name="includes" value="Emergency Assistance" />
+          Emergency Assistance</label>
+      </div>
+      <div class="lang-input-cont inputBox">
+        <input type="text" id="newIncludeInput" placeholder="Add new include" />
+        <button type="button" onclick="addCheckbox('includes-container', 'includes', 'newIncludeInput')">
+          Add
+        </button>
+      </div>
+
+      <div class="inputBox" id="catid">
+        <span id="tripcat">Enter Exclusions</span>
+
+      </div>
+      <!-- <h3 class="lang">Enter Exclusions</h3> -->
+
+      <div id="excludes-container" class="languages-container">
+        <label><input type="checkbox" name="excludes" value="Meals Not Mentioned" />
+          Meals Not Mentioned</label>
+        <label><input type="checkbox" name="excludes" value="Personal Expenses" />
+          Personal Expenses</label>
+        <label><input type="checkbox" name="excludes" value="Optional Activities & Excursions" />
+          Optional Activities & Excursions</label>
+        <label><input type="checkbox" name="excludes" value="Travel Insurance (Comprehensive)" />
+          Travel Insurance (Comprehensive)</label>
+        <label><input type="checkbox" name="excludes" value="Tips & Gratuities" />
+          Tips & Gratuities</label>
+        <label><input type="checkbox" name="excludes" value="Extra Baggage Fees" />
+          Extra Baggage Fees</label>
+        <label><input type="checkbox" name="excludes" value="Medical Expenses" />
+          Medical Expenses</label>
+        <label><input type="checkbox" name="excludes" value="Transportation Outside Itinerary" />
+          Transportation Outside Itinerary</label>
+        <label><input type="checkbox" name="excludes" value="Internet & Communication Costs" />
+          Internet & Communication Costs</label>
+        <label><input type="checkbox" name="excludes" value="Pre/Post-Trip Accommodation" />
+          Pre/Post-Trip Accommodation</label>
+      </div>
+      <div class="lang-input-cont inputBox">
+        <input type="text" id="newExcludeInput" placeholder="Add new exclude" />
+        <button type="button" onclick="addCheckbox('excludes-container', 'excludes', 'newExcludeInput')">
+          Add
+        </button>
+      </div>
+
+      <!-- <div class="days-container">
                 <label for="departure" class="form-label mb-2">departure</label>
-                <input type="date" name="departure" id="departure" class="form-control tripDate"
-                    onchange="calculateDurationAndAddStops()" required>
-            </div>
-            <div class="days-container">
-                <label for="endDate" class="form-label mb-2">end date</label>
-                <input type="date" name="endDate" id="endDate" class="form-control "
-                    onchange="calculateDurationAndAddStops()" required>
-            </div> -->
-            <!-- <button type="button" class="btn" id="addStopBtn" onclick="addStop()">Add Stop</button> -->
-
-            <h3 class="lang">Day-wise itenerary  </h3>
-
-
-            <div class="stop-container" id="stops-container">
-                <!-- Initial stop section for Stop 1 -->
-                <div class="stop-section">
-                    <h3>Stop 1</h3>
-                    <label for="stopImages" class="form-label mb-2">Upload Image</label>
-                    <input type="file" name="stopImages" class="form-control">
-
-                    <label for="stopLocation" class="form-label mb-2">Enter Location</label>
-                    <input type="text" name="stopLocation" class="form-control">
-
-                    <label for="stopDescription" class="form-label mb-2">Tell Us More</label>
-                    <input type="text" name="stopDescription" class="form-control">
-
+                    <input type="date" name="departure" id="departure" class="form-control tripDate" onchange="calculateDurationAndAddStops()" required>
                 </div>
-            </div>
-            <button type="button" class="btn add-stop" onclick="addStop()">Add Stop</button>
+                <div class="days-container">
+                    <label for="endDate" class="form-label mb-2">end date</label>
+                    <input type="date" name="endDate" id="endDate" class="form-control " onchange="calculateDurationAndAddStops()" required>
+                </div> -->
+      <!-- <button type="button" class="btn" id="addStopBtn" onclick="addStop()">Add Stop</button> -->
 
-            <!-- <div class="transport-container">
+
+      <div class="inputBox" id="catid">
+        <span id="tripcat">Day-wise itenerary</span>
+
+      </div>
+      <!-- <h3 class="lang">Day-wise itenerary</h3> -->
+
+      <div class="stop-container" id="stops-container">
+        <!-- Initial stop section for Stop 1 -->
+        <div class="stop-section">
+          <h3>Day 1</h3>
+          <div class="ovinp">
+            <div class="left">
+              <div class="inputBox">
+                <span for="stopImages" class="form-label mb-2">Upload Image</span>
+                <input type="file" name="stopImages" class="form-control" />
+    
+              </div>
+            </div>
+           
+  
+            <div class="right">
+              <div class="inputBox">
+                <span for="stopLocation" class="form-label mb-2">Enter Location</span>
+                <input type="text" name="stopLocation" class="form-control" />  
+              </div>
+              
+              <div class="inputBox">
+                <span for="stopDescription" class="form-label mb-2">Tell Us More</span>
+                <input type="text" name="stopDescription" class="form-control" />
+      
+              </div>
+
+              <div class="inputBox">
+                <span class="form-label mb-2">Meals</span>
+              
+                <div class="form-check">
+                  <input class="form-check-input" type="checkbox" name="meals[0][]" value="breakfast" id="breakfast-1" />
+                  <label class="form-check-label" for="breakfast-1">Breakfast</label>
+                </div>
+              
+                <div class="form-check">
+                  <input class="form-check-input" type="checkbox" name="meals[0][]" value="lunch" id="lunch-1" />
+                  <label class="form-check-label" for="lunch-1">Lunch</label>
+                </div>
+              
+                <div class="form-check">
+                  <input class="form-check-input" type="checkbox" name="meals[0][]" value="dinner" id="dinner-1" />
+                  <label class="form-check-label" for="dinner-1">Dinner</label>
+                </div>
+              </div>
+              
+
+            </div>
+          </div>
+         
+
+         
+
+
+        </div>
+      </div>
+      <button type="button" class="btn add-stop" onclick="addStop()">
+        Add Stop
+      </button>
+
+      <!-- <div class="transport-container">
                 <h2>PLEASE SELECT THE MODE OF transport</h2>
                 <label for="flight" >FLIGHT</label>
-                <input type="checkbox" name="transport" id="flight" value="flight">
+                        <input type="checkbox" name="transport" id="flight" value="flight">
 
-                <label for="train" >TRAIN</label>
-                <input type="checkbox" name="transport" id="train" value="train">
+                        <label for="train">TRAIN</label>
+                        <input type="checkbox" name="transport" id="train" value="train">
 
-                <label for="car" >CAR</label>
-                <input type="checkbox" name="transport" id="car" value="car">
+                        <label for="car">CAR</label>
+                        <input type="checkbox" name="transport" id="car" value="car">
 
-                <label for="walk" >WALK</label>
-                <input type="checkbox" name="transport" id="walk" value="walk">
+                        <label for="walk">WALK</label>
+                        <input type="checkbox" name="transport" id="walk" value="walk">
 
-            </div> -->
+                    </div> -->
 
-
-            <h2 class="lang ">TRIP COST PER TRIPMATE</h2>
-
-            <div class="trip-calculator-conatiner">
-
-
-
-                <div class="travel-cost-container">
-
-
-                    <div class="total-cost">
-                        <label for="totalCost" class="form-label mb-2">Cost of the Trip: </label>
-                        <input type="number" name="totalCost" class="form-control" required>
+                    <div class="inputBox" id="catid">
+                      <span id="tripcat">TRIP COST PER TRIPMATE</span>
+              
                     </div>
 
-                    <div class="total-cost">
-                        <label for="buffer" class="form-label mb-2">Buffer % (for discounts):</label>
-                        <input type="number" name="buffer" min="0" max="15" class="form-control" required>
-                    </div><br>
 
-                    <div class="total-cost">
-                        <label for="deposit" class="form-label mb-2">Minimum Booking Amount (Flight/Train)</label>
-                        <input type="number" name="deposit" class="form-control">
-                    </div>
+      <!-- <h2 class="lang">TRIP COST PER TRIPMATE</h2> -->
 
-                </div>
+          <div class=" inputBox">
+            <span for="totalCost" class="form-label mb-2">Cost of the Trip:
+            </span>
+            <input type="number" name="totalCost" class="form-control" required />
+          </div>
 
-            </div>
+          <div class="inputBox">
+            <span for="buffer" class="form-label mb-2">Buffer % (for discounts):</span>
+            <input type="number" name="buffer" min="0" max="15" class="form-control" required />
+          </div>
+          
 
-            
-        
-           
-
-            <button class="submit-btn">SUBMIT</button>
-        </form>
-
-    </div>
+          <div class="inputBox">
+            <span for="deposit" class="form-label mb-2">Minimum Booking Amount (Flight/Train)</span>
+            <input type="number" name="deposit" class="form-control" />
+          </div>
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
+          <!-- Disclaimer Modal -->
+<!-- Disclaimer Modal -->
+<div id="disclaimerModal" class="modal">
+  <div class="modal-content">
+    <span class="close">&times;</span>
+    <h2>Disclaimer for Creating a Trip on JoinOurTour.com</h2>
+    <p>Before listing a trip on JoinOurTour.com, all tour operators must read, acknowledge, and agree to the following terms.</p>
     
-<script>
+    <h3>1. Booking & Payment Terms</h3>
+    <p>Tour operators will receive <b id="immediateAmount">₹0.00</b> (10% of the total trip cost) immediately after a customer confirms a booking.</p>
+    <p>The remaining amount, <b id="pendingAmount">₹0.00</b>, will be paid within 3-5 business days or on the 1st, 15th, or 28th of each month, whichever comes first.</p>
 
-function calculateDurationAndAddStops() {
+    <h3>2. Commission & Additional Fees</h3>
+    <p>JoinOurTour.com will deduct a <b id="commissionCharges">₹0.00</b> commission from the total booking amount.</p>
+
+    <h3>3. Cancellation & Refund Policy</h3>
+    <p>JoinOurTour.com follows a Standard Cancellation Policy for all trips.</p>
+
+    <h3>4. Compliance & Responsibilities</h3>
+    <ul>
+      <li><b>Legal Registration:</b> Operators must provide proof of legal business registration before listing any trip.</li>
+      <li><b>Safety Standards:</b> Operators must follow industry-standard safety guidelines and ensure traveler safety during trips.</li>
+      <li><b>Trip Information:</b> Operators must provide accurate details about itinerary, pricing, and inclusions/exclusions.</li>
+    </ul>
+
+    <h3>5. Liability & Dispute Resolution</h3>
+    <ul>
+      <li><b>Platform Liability:</b> JoinOurTour.com acts only as an aggregator and is not responsible for trip quality, safety, or execution.</li>
+      <li>Any legal claims or disputes between customers and tour operators must be resolved directly between them.</li>
+      <li><b>Dispute Handling:</b> We may act as a neutral mediator but are not legally obligated to intervene.</li>
+      <li><b>Legal Disclaimer:</b> We do not provide legal support if a customer sues a tour operator. Operators are responsible for legal, financial, and operational risks.</li>
+    </ul>
+
+    <h3>6. Document Acknowledgment & Digital Agreement</h3>
+    <ul>
+      <li><b>Vendor Contract:</b> Before listing a trip, operators must sign a Vendor Contract that details all platform policies, commissions, and dispute resolution processes.</li>
+      <li><b>Digital Acknowledgment:</b> Both operators and travelers must digitally agree to the price, commission, cancellation policy, and terms before completing a booking.</li>
+    </ul>
+
+    <p>By clicking "Create Trip", you confirm that:</p>
+    <ul>
+      <li>✅ You have read and understood all policies mentioned above.</li>
+      <li>✅ You agree to the payment structure, commission, and cancellation rules.</li>
+      <li>✅ You will comply with legal, safety, and operational requirements.</li>
+    </ul>
+
+    <button id="confirmCreateTrip" class="btn btn-primary">Confirm & Create Trip</button>
+  </div>
+</div>
+
+          
+  <button type="button" class="submit-btn">Create Trip</button>
+
+    </form>
+  </div>
+
+
+
+
+  <script>
+  document.addEventListener("DOMContentLoaded", function () {
+    const modal = document.getElementById("disclaimerModal");
+    const createTripBtn = document.querySelector(".submit-btn");
+    const closeModal = document.querySelector(".close");
+    const confirmCreateTrip = document.getElementById("confirmCreateTrip");
+    const form = document.querySelector("form"); // Ensure we get the form for submission
+
+    createTripBtn.addEventListener("click", function (event) {
+        event.preventDefault(); // Prevent immediate form submission
+
+        // Get input values safely
+        let totalCost = parseFloat(document.querySelector("input[name='totalCost']")?.value) || 0;
+        let bufferPercent = parseFloat(document.querySelector("input[name='buffer']")?.value) || 0;
+        let deposit = parseFloat(document.querySelector("input[name='deposit']")?.value) || 0;
+
+        // Calculate values
+        let commission = (totalCost * 0.10).toFixed(2); // 10% commission
+        let immediateAmount = (totalCost * 0.10).toFixed(2); // 10% upfront
+        let pendingAmount = (totalCost - commission).toFixed(2); // Remaining after commission
+
+        // Update modal content dynamically
+        document.getElementById("immediateAmount").textContent = `₹${immediateAmount}`;
+        document.getElementById("pendingAmount").textContent = `₹${pendingAmount}`;
+        document.getElementById("commissionCharges").textContent = `₹${commission}`;
+
+        // Show the modal
+        modal.style.display = "block";
+    });
+
+    // Close the modal when clicking (X)
+    if (closeModal) {
+        closeModal.addEventListener("click", function () {
+            modal.style.display = "none";
+        });
+    }
+
+    // Close the modal when clicking outside of it
+    window.addEventListener("click", function (event) {
+        if (event.target === modal) {
+            modal.style.display = "none";
+        }
+    });
+
+    // Confirm trip creation and submit form
+    confirmCreateTrip.addEventListener("click", function () {
+        modal.style.display = "none";
+        alert("Trip Created Successfully!");
+        
+        // Check if form exists before submitting
+        if (form) {
+            form.submit();
+        }
+    });
+});
+
+  </script>
+
+
+
+
+<script>
+  let stopCounter = 0;
+
+  function addStop(index) {
+    const stopsContainer = document.getElementById("stops-container");
+    const newStopSection = document.createElement("div");
+    newStopSection.classList.add("stop-section");
+
+    newStopSection.innerHTML = `
+      <h3>Day ${index + 1}</h3>
+      <div class="ovinp">
+        <div class="left">
+          <div class="inputBox">
+            <span class="form-label mb-2">Upload Image</span>
+            <input type="file" name="stopImages" class="form-control" />
+          </div>
+        </div>
+        <div class="right">
+          <div class="inputBox">
+            <span class="form-label mb-2">Enter Location</span>
+            <input type="text" name="stopLocation" class="form-control" />
+          </div>
+          <div class="inputBox">
+            <span class="form-label mb-2">Tell Us More</span>
+            <input type="text" name="stopDescription" class="form-control" />
+          </div>
+          <div class="inputBox">
+            <span class="form-label mb-2">Meals</span>
+            <div class="form-check">
+              <input class="form-check-input" type="checkbox" name="meals[${index}][]" value="breakfast" id="breakfast-${index}" />
+              <label class="form-check-label" for="breakfast-${index}">Breakfast</label>
+            </div>
+            <div class="form-check">
+              <input class="form-check-input" type="checkbox" name="meals[${index}][]" value="lunch" id="lunch-${index}" />
+              <label class="form-check-label" for="lunch-${index}">Lunch</label>
+            </div>
+            <div class="form-check">
+              <input class="form-check-input" type="checkbox" name="meals[${index}][]" value="dinner" id="dinner-${index}" />
+              <label class="form-check-label" for="dinner-${index}">Dinner</label>
+            </div>
+          </div>
+        </div>
+      </div>
+    `;
+
+    stopsContainer.appendChild(newStopSection);
+  }
+
+  function calculateDurationAndAddStops() {
     const departureInput = document.getElementById("departure");
     const endDateInput = document.getElementById("endDate");
     const totalDaysInput = document.getElementById("totalDays");
+    const stopsContainer = document.getElementById("stops-container");
 
-    // Check if both dates are selected
+    // Clear existing stops
+    stopsContainer.innerHTML = "";
+    stopCounter = 0;
+
     if (departureInput.value && endDateInput.value) {
-        const departureDate = new Date(departureInput.value);
-        const endDate = new Date(endDateInput.value);
+      const departureDate = new Date(departureInput.value);
+      const endDate = new Date(endDateInput.value);
 
-        console.log("Departure Date:", departureDate);
-        console.log("End Date:", endDate);
+      if (!isNaN(departureDate) && !isNaN(endDate)) {
+        if (endDate >= departureDate) {
+          const totalDays = Math.ceil((endDate - departureDate) / (1000 * 60 * 60 * 24)) + 1;
+          totalDaysInput.value = totalDays;
 
-        if (!isNaN(departureDate) && !isNaN(endDate)) {
-            if (endDate >= departureDate) {
-                const timeDiff = endDate - departureDate;
-                const totalDays = Math.ceil(timeDiff / (1000 * 60 * 60 * 24)) + 1; // Include both start and end date
-                totalDaysInput.value = totalDays;
-                console.log("Total Days:", totalDays);
-            } else {
-                alert("End date must be after the start date!");
-                totalDaysInput.value = "";
-            }
+          for (let i = 0; i < totalDays; i++) {
+            addStop(i);
+          }
         } else {
-            console.error("Invalid date values.");
+          alert("End date must be after the start date!");
+          totalDaysInput.value = "";
         }
+      } else {
+        console.error("Invalid date values.");
+      }
     }
-}
+  }
 
-// Ensure the event listeners trigger correctly
-document.getElementById("departure").addEventListener("change", calculateDurationAndAddStops);
-document.getElementById("endDate").addEventListener("change", calculateDurationAndAddStops);
-
-    
+  // Hook into date inputs
+  document.getElementById("departure").addEventListener("change", calculateDurationAndAddStops);
+  document.getElementById("endDate").addEventListener("change", calculateDurationAndAddStops);
 </script>
-
-
-
-    <script>
+  <script>
     function addCheckbox(containerId, name, inputId) {
-        const container = document.getElementById(containerId);
-        const inputValue = document.getElementById(inputId).value.trim();
+      const container = document.getElementById(containerId);
+      const inputValue = document.getElementById(inputId).value.trim();
 
-        if (inputValue) {
-            const label = document.createElement('label');
-            const checkbox = document.createElement('input');
-            checkbox.type = 'checkbox';
-            checkbox.name = name;
-            checkbox.value = inputValue;
-            checkbox.checked = true;
+      if (inputValue) {
+        const label = document.createElement("label");
+        const checkbox = document.createElement("input");
+        checkbox.type = "checkbox";
+        checkbox.name = name;
+        checkbox.value = inputValue;
+        checkbox.checked = true;
 
-            label.appendChild(checkbox);
-            label.appendChild(document.createTextNode(' ' + inputValue));
+        label.appendChild(checkbox);
+        label.appendChild(document.createTextNode(" " + inputValue));
 
-            container.appendChild(label);
+        container.appendChild(label);
 
-            // Clear input
-            document.getElementById(inputId).value = '';
-        } else {
-            alert('Please enter a valid value.');
-        }
+        // Clear input
+        document.getElementById(inputId).value = "";
+      } else {
+        alert("Please enter a valid value.");
+      }
     }
+  </script>
+
+<script>
+  let stopCounter = 0;
+
+  function addStop() {
+    const stopsContainer = document.getElementById("stops-container");
+    const newStopSection = document.createElement("div");
+    newStopSection.classList.add("stop-section");
+
+    const index = stopCounter;
+
+    newStopSection.innerHTML = `
+      <h3>Day ${index + 1}</h3>
+      <div class="ovinp">
+        <div class="left">
+          <div class="inputBox">
+            <span class="form-label mb-2">Upload Image</span>
+            <input type="file" name="stopImages" class="form-control" />
+          </div>
+        </div>
+        <div class="right">
+          <div class="inputBox">
+            <span class="form-label mb-2">Enter Location</span>
+            <input type="text" name="stopLocation" class="form-control" />  
+          </div>
+          <div class="inputBox">
+            <span class="form-label mb-2">Tell Us More</span>
+            <input type="text" name="stopDescription" class="form-control" />
+          </div>
+          <div class="inputBox">
+            <span class="form-label mb-2">Meals</span>
+            <div class="form-check">
+              <input class="form-check-input" type="checkbox" name="meals[${index}][]" value="breakfast" id="breakfast-${index}" />
+              <label class="form-check-label" for="breakfast-${index}">Breakfast</label>
+            </div>
+            <div class="form-check">
+              <input class="form-check-input" type="checkbox" name="meals[${index}][]" value="lunch" id="lunch-${index}" />
+              <label class="form-check-label" for="lunch-${index}">Lunch</label>
+            </div>
+            <div class="form-check">
+              <input class="form-check-input" type="checkbox" name="meals[${index}][]" value="dinner" id="dinner-${index}" />
+              <label class="form-check-label" for="dinner-${index}">Dinner</label>
+            </div>
+          </div>
+        </div>
+      </div>
+    `;
+
+    stopsContainer.appendChild(newStopSection);
+    stopCounter++;
+  }
+
+  function updateStopNumbers() {
+    const stops = document.querySelectorAll(".stop-section h3");
+    stops.forEach((h3, index) => {
+      h3.innerText = `Day ${index + 1}`;
+    });
+  }
+
+  function calculateDurationAndAddStops() {
+    const departureInput = document.getElementById("departure").value;
+    const endDateInput = document.getElementById("endDate").value;
+    const stopsContainer = document.getElementById("stops-container");
+
+    if (departureInput && endDateInput) {
+      const departureDate = new Date(departureInput);
+      const endDate = new Date(endDateInput);
+
+      if (endDate >= departureDate) {
+        const totalDays = Math.ceil((endDate - departureDate) / (1000 * 60 * 60 * 24)) + 1;
+
+        stopsContainer.innerHTML = ""; // Reset all stops
+        stopCounter = 0;
+
+        for (let i = 0; i < totalDays; i++) {
+          addStop();
+        }
+
+        console.log(`Total Days: ${totalDays}`);
+      } else {
+        alert("End date must be after or same as departure date!");
+      }
+    }
+  }
+
+  // Event listeners
+  document.getElementById("departure").addEventListener("change", calculateDurationAndAddStops);
+  document.getElementById("endDate").addEventListener("change", calculateDurationAndAddStops);
 </script>
 
-    <script>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-        let stopCounter = 1;
-    
-        function addStop() {
-            stopCounter++;
-    
-            const stopsContainer = document.getElementById('stops-container');
-    
-            const newStopSection = document.createElement('div');
-            newStopSection.className = 'stop-section';
-    
-            newStopSection.innerHTML = `
-                <h3>Stop ${stopCounter}</h3>
-    
-                ${
-                    stopCounter > 1
-                        ? `
-                        
-                    `
-                        : `
-                        <div class="transport-container">
-                            <h2>PLEASE SELECT THE MODE OF transport</h2>
-                            <label for="flight">FLIGHT</label>
-                            <input type="checkbox" name="transport" value="flight">
-    
-                            <label for="train">TRAIN</label>
-                            <input type="checkbox" name="transport" value="train">
-    
-                            <label for="car">CAR</label>
-                            <input type="checkbox" name="transport" value="car">
-    
-                            <label for="walk">WALK</label>
-                            <input type="checkbox" name="transport" value="walk">
-                        </div>
-                    `
-                }
-    
-                <label for="stopImages" class="form-label mb-2">Upload Image</label>
-                <input type="file" name="stopImages" class="form-control">
-    
-                <label for="stopLocation" class="form-label mb-2">Enter Location</label>
-                <input type="text" name="stopLocation" class="form-control">
-    
-                <label for="stopDescription" class="form-label mb-2">Tell Us More</label>
-                <input type="text" name="stopDescription" class="form-control">
-
-                <label for="transport" class="form-label mb-2">Enter Mode of Transport</label>
-                        <input type="text" name="transport" class="form-control">
-    
-                <button type="button" class="btn" onclick="deleteStop(this)">Delete Stop</button>
-            `;
-    
-            stopsContainer.appendChild(newStopSection);
-            updateStopNumbers();
-        }
-    
-        function deleteStop(button) {
-            const stopsContainer = document.getElementById('stops-container');
-            const stopSection = button.parentNode;
-            stopsContainer.removeChild(stopSection);
-            stopCounter--;
-            updateStopNumbers();
-        }
-    
-        function updateStopNumbers() {
-            const stops = document.getElementsByClassName('stop-section');
-            Array.from(stops).forEach((stop, index) => {
-                const stopNumber = index + 1;
-                stop.querySelector('h3').innerText = `Stop ${stopNumber}`;
-            });
-        }
-    
-        function calculateDurationAndAddStops() {
-            const departureDate = new Date(document.getElementById('departure').value);
-            const endDate = new Date(document.getElementById('endDate').value);
-            const durationInDays = Math.floor((endDate - departureDate) / (24 * 60 * 60 * 1000));
-            addStopsBasedOnDuration(durationInDays);
-        }
-    
-        function addStopsBasedOnDuration(duration) {
-            const stopsContainer = document.getElementById('stops-container');
-            stopsContainer.innerHTML = '';
-    
-            const initialStopSection = document.createElement('div');
-            initialStopSection.className = 'stop-section';
-            initialStopSection.innerHTML = `
-                <h3>Stop 1</h3>
-               
-                <label for="stopImages" class="form-label mb-2">Upload Image</label>
-                <input type="file" name="stopImages" class="form-control">
-                <label for="stopLocation" class="form-label mb-2">Enter Location</label>
-                <input type="text" name="stopLocation" class="form-control">
-                <label for="stopDescription" class="form-label mb-2">Tell Us More</label>
-                <input type="text" name="stopDescription" class="form-control">
-            `;
-            stopsContainer.appendChild(initialStopSection);
-    
-            for (let i = 2; i <= duration + 1; i++) {
-                const newStopSection = document.createElement('div');
-                newStopSection.className = 'stop-section';
-                newStopSection.innerHTML = `
-                    <h3>Stop ${i}</h3>
-                    
-                    <label for="stopImages" class="form-label mb-2">Upload Image</label>
-                    <input type="file" name="stopImages" class="form-control">
-                    <label for="stopLocation" class="form-label mb-2">Enter Location</label>
-                    <input type="text" name="stopLocation" class="form-control">
-                    <label for="stopDescription" class="form-label mb-2">Tell Us More</label>
-                    <input type="text" name="stopDescription" class="form-control">
-                    <label for="transport" class="form-label mb-2">Enter Mode of Transport</label>
-                    <input type="text" name="transport" class="form-control">
-                    <button type="button" class="btn" onclick="deleteStop(this)">Delete Stop</button>
-                `;
-                stopsContainer.appendChild(newStopSection);
-            }
-            updateStopNumbers();
-        }
-    </script>
-    
-
-<script src="/js/autoSuggestions.js"></script>
-<script src="/js/nav.js"></script>
-
+  <script src="/js/autoSuggestions.js"></script>
+  <script src="/js/nav.js"></script>
 </body>
 
 </html>

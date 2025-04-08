@@ -411,48 +411,58 @@
 
 
                     <div class="container">
-
-
                         <div class="rightbox">
-                            <div class="rb-container">
-                                <ul class="rb">
-                                    <% trip.stopLocation.forEach(function(location, index) { %>
-                                        <li class="rb-item <%= index === 0 ? 'active' : '' %>">
-                                            <div class="stop-title">Day <%= index + 1 %> : <%= location
-                                                        || 'Location not available' %>
-                                            </div>
-
-                                            <!-- Details Button -->
-                                            <button class="details-btn <%= index === 0 ? 'active' : '' %>">
-                                                Details <span class="material-symbols-outlined arrow">
-                                                    keyboard_arrow_down
-                                                    </span>
-                                            </button>
-
-                                            <div class="stop-details">
-                                            <div class="stop-image">
-                                                <% if (trip.stopImages[index] && trip.stopImages[index].path) { %>
-                                                    <img src="<%= trip.stopImages[index].path %>" alt="">
-                                                    <% } else { %>
-                                                        <p>Image not available</p>
-                                                        <% } %>
-                                            </div>
-                                            <div class="stop-description">
-                                                <span class="description-text">
-                                                    <%= trip.stopDescription[index] || 'Description not available' %>
-                                                </span>
-                                                <button class="show-more-btn">Show More</button>
-                                            </div>
-                                        </div
-                                        </li>
-                                        <% }); %>
-                                </ul>
-                                
-                            </div>
+                          <div class="rb-container">
+                            <ul class="rb">
+                              <% trip.stopLocation.forEach(function(location, index) { %>
+                                <li class="rb-item <%= index === 0 ? 'active' : '' %>">
+                                  <div class="stop-title">
+                                    Day <%= index + 1 %> : <%= location || 'Location not available' %>
+                                  </div>
+                      
+                                  <!-- Details Button -->
+                                  <button class="details-btn <%= index === 0 ? 'active' : '' %>">
+                                    Details
+                                    <span class="material-symbols-outlined arrow">keyboard_arrow_down</span>
+                                  </button>
+                      
+                                  <div class="stop-details">
+                                    <div class="stop-image">
+                                      <% if (trip.stopImages[index] && trip.stopImages[index].path) { %>
+                                        <img src="<%= trip.stopImages[index].path %>" alt="" />
+                                      <% } else { %>
+                                        <p>Image not available</p>
+                                      <% } %>
+                                    </div>
+                      
+                                    <div class="stop-description">
+                                      <span class="description-text">
+                                        <%= trip.stopDescription[index] || 'Description not available' %>
+                                      </span>
+                                      <button class="show-more-btn">Show More</button>
+                                    </div>
+                      
+                                    <!-- ✅ Meals section inside the loop -->
+                                    <% if (trip.mealsPerDay && trip.mealsPerDay[index] && trip.mealsPerDay[index].length > 0) { %>
+                                        <div class="meals-box">
+                                          <strong>Meals:</strong>
+                                          <p>
+                                            <%= trip.mealsPerDay[index]
+                                              .map(meal => meal.charAt(0).toUpperCase() + meal.slice(1))
+                                              .join(" , ") %>
+                                          </p>
+                                        </div>
+                                      <% } %>
+                                      
+                                      
+                                  </div>
+                                </li>
+                              <% }) %>
+                            </ul>
+                          </div>
                         </div>
-
-                    </div>
-
+                      </div>
+                      
 
                     <div class="customer-rev">
                         <h1>Customer Reviews</h1>

@@ -457,7 +457,11 @@
         <div class="cards-container">
             <% for(let i=0; i < allTrips.length; i++) { %>
 
-                <div class="card-container" data-id="<%= allTrips[i]._id %>">
+                <div class="card-container" data-id="<%= allTrips[i]._id %>"  data-departure="<%= new Date(exactMatchTrips[i].departure).toISOString() %>">
+                    <div class="soldoutimg">
+                        <img src="../images/soldout.png" alt="sold out" class="soldimg">
+                    
+                    </div>
                     <div class="card-img">
                         <% if (allTrips[i].tripImages && allTrips[i].tripImages.length> 0 &&
                             allTrips[i].tripImages[0].path) { %>
@@ -879,6 +883,7 @@
 
 
     </script>
+    <script src="/js/soldout.js"></script>
     <script src="/js/flash.js"></script>
     <script src="/js/seemore.js"></script>
     <script src="/js/whislist.js"></script>

@@ -8,9 +8,14 @@ const imageSchema = new mongoose.Schema({
     // Add other properties if needed
    });
 
+
 const tripSchema = new Schema({
     departure : {
         type : Date,
+    },
+    mealsPerDay: {
+        type: [[String]], // Array of arrays of meals (e.g. [["breakfast"], ["breakfast", "lunch"]])
+        default: [],
     },
     fromLocation : {
         type : String,

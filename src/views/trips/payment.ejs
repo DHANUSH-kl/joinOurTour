@@ -53,8 +53,9 @@
 
 
             <form id="paymentForm">
-                <button id="payButton">Pay Now</button>
+                <button id="payButton" style="display:none;">Pay Now</button>
             </form>
+            <button id="showAadhaarModalBtn">Pay Now</button>
 
             <div class="tripcover">
                 <h3>Your Booking includes free protection from Trip cancellations. <span id="learnMore">Learn
@@ -126,77 +127,145 @@
     </main>
 
 
+    <div id="aadhaarModal" class="modal">
+        <form id="aadhaarForm" enctype="multipart/form-data">
+            <div id="aadhaarFields"></div>
+            <button type="submit">Submit & Pay</button>
+            <span id="btnSpinner" class="spinner" style="display: none;"></span>
+        </form>
+    </div>
 
 
 
 
     <script>
-        document.getElementById("payButton").addEventListener("click", async function (e) {
-            e.preventDefault();
+  document.getElementById("aadhaarForm").addEventListener("submit", function (e) {
+    const btn = document.getElementById("submitPayBtn");
+    const btnText = document.getElementById("btnText");
+    const spinner = document.getElementById("btnSpinner");
 
-            // Get trip details
-            const tripId = "<%= trip._id %>";
-            const userId = "<%= user._id %>";
-            const amount = <%= totalAmount %>;
-            const ticket = <%= numTickets %>;
+    // Show spinner, disable button
+    btn.disabled = true;
+    btnText.textContent = "Processing...";
+    spinner.style.display = "inline-block";
+  });
+</script>
 
-            try {
-                // 1️⃣ Create Razorpay Order from Backend
-                const response = await fetch("/create-order", {
+
+
+
+<script>
+    const numTickets = <%= numTickets %>;
+    const showAadhaarModalBtn = document.getElementById("showAadhaarModalBtn");
+    let aadhaarFormData = null; // Store Aadhaar data here
+
+    // Show Aadhaar Modal
+    showAadhaarModalBtn.addEventListener("click", (e) => {
+        e.preventDefault();
+        const fields = document.getElementById("aadhaarFields");
+        fields.innerHTML = "";
+        for (let i = 0; i < numTickets; i++) {
+            fields.innerHTML += `
+                <div>
+                    <label>Aadhaar Number (Passenger ${i + 1}):</label>
+                    <input type="text" name="aadhaarNumbers" pattern="\\d{12}" required />
+                    <label>Upload Aadhaar Image:</label>
+                    <input type="file" name="aadhaarImages" accept="image/*" required />
+                </div>`;
+        }
+        document.getElementById("aadhaarModal").style.display = "flex";
+    });
+
+    // Aadhaar Form Submission
+    document.getElementById("aadhaarForm").addEventListener("submit", function (e) {
+        e.preventDefault();
+        aadhaarFormData = new FormData(this); // Save Aadhaar data for later
+        document.getElementById("aadhaarModal").style.display = "none";
+        launchRazorpay(); // Start payment
+    });
+
+    // Razorpay Flow
+    async function launchRazorpay() {
+        const tripId = "<%= trip._id %>";
+        const userId = "<%= user._id %>";
+        const amount = <%= totalAmount %>;
+        const ticket = <%= numTickets %>;
+
+        const res = await fetch("/create-order", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ amount, tripId, userId }),
+        });
+
+        const data = await res.json();
+        if (!data.success) {
+            alert("Order creation failed.");
+            return;
+        }
+
+        const options = {
+            key: "<%= process.env.RAZORPAY_KEY_ID %>",
+            amount: data.order.amount,
+            currency: "INR",
+            name: "Trip Booking",
+            description: "Payment for your trip",
+            order_id: data.order.id,
+            handler: async function (response) {
+                // ✅ Step 1: Verify Payment
+                const verifyRes = await fetch("/verify-payment", {
                     method: "POST",
                     headers: { "Content-Type": "application/json" },
-                    body: JSON.stringify({ amount, tripId, userId }),
+                    body: JSON.stringify({
+                        razorpay_order_id: response.razorpay_order_id,
+                        razorpay_payment_id: response.razorpay_payment_id,
+                        razorpay_signature: response.razorpay_signature,
+                        tripId,
+                        userId,
+                        amount,
+                        ticket
+                    }),
                 });
-                const data = await response.json();
 
-                if (!data.success) {
-                    alert("Order creation failed!");
-                    return;
+                const verifyData = await verifyRes.json();
+
+                if (verifyData.success) {
+                    // ✅ Step 2: Now send Aadhaar data to backend
+                    aadhaarFormData.append("tripId", tripId);
+                    aadhaarFormData.append("userEmail", "<%= user.email %>");
+                    aadhaarFormData.append("paymentId", response.razorpay_payment_id);
+                    aadhaarFormData.append("userName", "<%= user.name %>");
+
+                    await fetch("/upload-aadhaar", {
+                        method: "POST",
+                        body: aadhaarFormData
+                    });
+
+                    alert("Payment successful!");
+                    window.location.href = "/bookings";
+                } else {
+                    alert("Payment verification failed!");
                 }
+            },
+            theme: { color: "#528FF0" },
+        };
 
-                // 2️⃣ Initialize Razorpay Checkout
-                const options = {
-                    key: "<%= process.env.RAZORPAY_KEY_ID %>",
-                    amount: data.order.amount,
-                    currency: "INR",
-                    name: "Trip Booking",
-                    description: "Payment for your trip",
-                    order_id: data.order.id,
-                    handler: async function (response) {
-                        // 3️⃣ Verify Payment in Backend
-                        const verifyResponse = await fetch("/verify-payment", {
-                            method: "POST",
-                            headers: { "Content-Type": "application/json" },
-                            body: JSON.stringify({
-                                razorpay_order_id: response.razorpay_order_id,
-                                razorpay_payment_id: response.razorpay_payment_id,
-                                razorpay_signature: response.razorpay_signature,
-                                tripId,
-                                userId,
-                                amount,
-                                ticket
-                            }),
-                        });
+        const rzp = new Razorpay(options);
+        rzp.open();
+    }
 
-                        const verifyData = await verifyResponse.json();
-                        if (verifyData.success) {
-                            alert("Payment successful!");
-                            window.location.href = "/bookings"; // Redirect to user's booking page
-                        } else {
-                            alert("Payment verification failed!");
-                        }
-                    },
-                    theme: { color: "#528FF0" },
-                };
-
-                const rzp = new Razorpay(options);
-                rzp.open();
-            } catch (error) {
-                console.error(error);
-                alert("Something went wrong!");
-            }
-        });
-    </script>
+    // Learn More Modal Logic
+    document.getElementById("learnMore").addEventListener("click", () => {
+        document.getElementById("popup").style.display = "flex";
+    });
+    document.getElementById("closePopup").addEventListener("click", () => {
+        document.getElementById("popup").style.display = "none";
+    });
+    window.addEventListener("click", (e) => {
+        if (e.target === document.getElementById("popup")) {
+            document.getElementById("popup").style.display = "none";
+        }
+    });
+</script>
 
 
 
@@ -220,30 +289,6 @@
                 document.getElementById("popup").style.display = "none";
             }
         });
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
     </script>
 
 
